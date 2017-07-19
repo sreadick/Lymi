@@ -22,3 +22,4 @@ accounts-password@1.4.0
 session@1.1.7
 fourseven:scss@=3.13.0
 dynamic-import
+react-meteor-data

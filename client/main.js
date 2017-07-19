@@ -6,6 +6,8 @@ import { Session } from 'meteor/session';
 import { routes, onAuthChange } from '../imports/routes/routes';
 import '../imports/startup/simple-schema-configuration';
 
+import { SelectedSymptoms } from '../imports/api/ui';
+
 Tracker.autorun(() => {
   const isAuthenticated = !!Meteor.userId();
   onAuthChange(isAuthenticated);

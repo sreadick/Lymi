@@ -1,3 +1,43 @@
+export const symptomsByCategory = [
+  {
+    category: "Head/Face/Neck",
+    symptoms: [
+      "Headache",
+      "Facial paralysis",
+      "Facial tingling",
+      "Stiff neck",
+      "Sore throat",
+      "Heightened allergies",
+      "Facial Twitching",
+      "Jaw pain/stiffness",
+      "Changes in smell/taste"
+    ]
+  },
+  {
+    category: "Digestive/excretory System",
+    symptoms: [
+      "Upset stomach",
+      "Irritable bladder",
+      "Weight loss",
+      "Weight gain",
+      "Loss of appetite",
+      "Anorexia"
+    ]
+  },
+  {
+    category: "Respiratory/Circulatory Systems",
+    symptoms: [
+      "Difficulty breathing",
+      "Night sweats",
+      "Unexplained chills",
+      "Heart palpitations",
+      "Diminished exercise tolerance",
+      "Heart block/murmurs",
+      "Chest pain/rib soreness"
+    ]
+  }
+];
+
 export const commonSymptoms = [
   {name: "Headache", category: "Head/Face/Neck"},
   {name: "Facial paralysis", category: "Head/Face/Neck"},
