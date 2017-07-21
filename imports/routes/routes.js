@@ -6,13 +6,13 @@ import createBrowserHistory from 'history/createBrowserHistory';
 
 import Signup from '../ui/Signup';
 import Login from '../ui/Login';
-import SelectSymptomsPage from '../ui/SelectSymptomsPage';
+import Home from '../ui/Home';
 import NotFound from '../ui/NotFound';
 
 const history = createBrowserHistory();
 
 const unauthenticatedPages = ['/', '/signup'];
-const authenticatedPages = ['/select_symptoms'];
+const authenticatedPages = ['/home'];
 
 export const onAuthChange = (isAuthenticated) => {
   const pathname = history.location.pathname;
@@ -20,7 +20,7 @@ export const onAuthChange = (isAuthenticated) => {
   const isAuthenticatedPage = authenticatedPages.includes(pathname);
 
   if (isUnauthenticatedPage && isAuthenticated) {
-    history.replace('/select_symptoms');
+    history.replace('/home');
   } else if (isAuthenticatedPage && !isAuthenticated) {
     history.replace('/');
   }
@@ -29,12 +29,12 @@ export const routes = (
   <Router history={history}>
     <Switch>
       <Route exact path="/" render={() => {
-        return Meteor.userId() ? <Redirect to="/select_symptoms" /> : <Login/>
+        return Meteor.userId() ? <Redirect to="/home" /> : <Login/>
       }} />
       <Route path="/signup" render={() => {
-        return Meteor.userId() ? <Redirect to="/select_symptoms" /> : <Signup/>
+        return Meteor.userId() ? <Redirect to="/home" /> : <Signup/>
       }} />
-      <Route path="/select_symptoms" component={SelectSymptomsPage} />
+      <Route path="/home" component={Home} />
       <Route path="*" component={NotFound}/>
     </Switch>
   </Router>

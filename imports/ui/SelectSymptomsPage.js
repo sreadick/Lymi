@@ -1,13 +1,11 @@
 import React from 'react';
 import { symptomsByCategory } from '../public/resources/commonSymptoms';
 import { Meteor } from 'meteor/meteor';
-import { Tracker } from 'meteor/tracker';
 import { createContainer } from 'meteor/react-meteor-data';
 
 import { UserSymptoms } from '../api/user-symptoms';
 
 import SymptomCheckbox from './SymptomCheckbox';
-import PrivateHeader from './PrivateHeader';
 
 class SelectSymptomsPage extends React.Component {
   renderCommonSymptomsList() {
@@ -29,7 +27,7 @@ class SelectSymptomsPage extends React.Component {
 
   showSelectedSymptoms() {
     Meteor.subscribe('userSymptoms');
-    return this.props.UserSymptoms.map((symptom) => {
+    return this.props.userSymptoms.map((symptom) => {
       return <p key={symptom._id}>{symptom.name}</p>
     });
   }
@@ -37,7 +35,6 @@ class SelectSymptomsPage extends React.Component {
   render() {
     return (
       <div>
-        <PrivateHeader title="Lymi"/>
         <div className="page-content">
           <h1>Common Symptoms</h1>
           <div>
@@ -56,8 +53,9 @@ class SelectSymptomsPage extends React.Component {
 };
 
 export default createContainer(() => {
+
   return {
-    UserSymptoms: UserSymptoms.find().fetch(),
+    userSymptoms: UserSymptoms.find().fetch(),
     userSymptomNames: UserSymptoms.find().fetch().map((symptom) => symptom.name)
   }
 }, SelectSymptomsPage);
