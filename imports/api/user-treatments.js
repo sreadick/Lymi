@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import SimpleSchema from 'simpl-schema';
+import moment from 'moment';
 
 export const UserTreatments = new Mongo.Collection('userTreatments');
 
@@ -11,42 +12,82 @@ if (Meteor.isServer) {
 }
 
 Meteor.methods({
-  'user-treatments.insert'(treatment) {
+  'userTreatments.insert'() {
     if (!this.userId) {
       throw new Meteor.Error("not-authorized");
     }
 
-    treatment.amount = parseInt(treatment.amount);
-    treatment.dose = parseInt(treatment.dose);
-    treatment.frequency = parseInt(treatment.frequency);
-    console.log(treatment)
+    UserTreatments.insert({
+      name: '',
+      amount: 1,
+      dose: 0,
+      dose_type: 'milligrams',
+      frequency: 1,
+      createdAt: moment().valueOf(),
+      userId: this.userId
+    });
+  },
+
+  'userTreatments.update'(_id, updates) {
+    if (!this.userId) {
+      throw new Meteor.Error("not-authorized");
+    }
+    if (Object.keys(updates).includes("amount") || Object.keys(updates).includes("dose") || Object.keys(updates).includes("frequency")) {
+      updates[Object.keys(updates)[0]] = parseInt(updates[Object.keys(updates)[0]]) || 0;
+    }
 
     new SimpleSchema({
+      _id: {
+        type: String,
+        min: 1
+      },
       name: {
         type: String,
-        min: 3
+        optional: true
       },
       amount: {
         type: Number,
-        min: 1
+        optional: true
       },
       dose: {
-        type: Number
+        type: Number,
+        optional: true
+      },
+      dose_type: {
+        type: String,
+        optional: true
       },
       frequency: {
         type: Number,
+        optional: true
+      }
+    }).validate({
+      _id,
+      ...updates
+    });
+
+    UserTreatments.update({
+      _id, userId: this.userId
+    }, {
+      $set: {
+        ...updates,
+        userId: this.userId
+      }
+    });
+  },
+  'userTreatments.remove'(_id) {
+    if (!this.userId) {
+      throw new Meteor.Error("not-authorized");
+    }
+
+    new SimpleSchema({
+      _id: {
+        type: String,
         min: 1
       }
     }).validate({
-      name: treatment.name,
-      amount: treatment.amount,
-      dose: treatment.dose,
-      frequency: treatment.frequency
+      _id
     });
-
-    UserTreatments.insert({
-      ...treatment,
-      userId: this.userId
-    });
+    UserTreatments.remove({_id, userId: this.userId});
   }
 });

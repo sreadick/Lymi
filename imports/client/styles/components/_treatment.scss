@@ -1,0 +1,25 @@
+.treatment-item {
+  margin: $space 0;
+  border: 2px solid transparent;
+}
+
+.treatment-item__header {
+  color: $dark-grey;
+  text-align: center;
+  height: 3rem;
+  margin: 0;
+}
+
+.treatment-item__remove-icon {
+  cursor: pointer;
+  visibility: hidden;
+}
+
+.treatment-item:hover {
+  border: 2px solid white;
+  border-color: fade-in($item-border, 1);
+}
+
+.treatment-item:hover .treatment-item__remove-icon {
+  visibility: visible;
+}
