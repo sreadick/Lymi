@@ -1,40 +1,33 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import FlipMove from 'react-flip-move';
 
-import { UserTreatments } from '../api/user-treatments';
+import { UserTreatments } from '../../api/user-treatments';
 
-import { TreatmentItem } from './TreatmentItem';
-
-{/* <FlipMove duration={700} easing="ease-out">
-  {this.props.userTreatments.map((treatment) =>
-    <div className="treatment-item" key={treatment._id}>
-      <TreatmentItem treatment={treatment}/>
-    </div>
-  )}
-</FlipMove> */}
+import { TreatmentItem } from '../components/TreatmentItem';
 
 class SelectTreatmentsPage extends React.Component {
   renderUserTreatments() {
     return (
       <FlipMove duration={700} easing="ease-out">
         {this.props.userTreatments.length === 0
-        ?
-          <div className="ui message">
-            <div className="header">Click the green button to add new treatments</div>
-            <p>All changes are automatically saved and you can edit the list anytime</p>
+        ? <div className="ui container">
+            <div className="ui message">
+              <div className="header">Click the green button to add new treatments</div>
+              <p>All changes are automatically saved and you can edit the list anytime</p>
+            </div>
           </div>
-
-        :
-          this.props.userTreatments.map((treatment) =>
+        : this.props.userTreatments.map((treatment) =>
             <div className="treatment-item" key={treatment._id}>
               <TreatmentItem treatment={treatment}/>
             </div>
           )
         }
         <div>
-          <button className={"ui " + (this.props.userTreatments.length > 0 ? "blue" : "grey") + " fluid button"}>
+          <button className={"ui " + (this.props.userTreatments.length > 0 ? "blue" : "grey") + " fluid button"}
+             onClick={() => {<Redirect to="/dashboard" />}}>
             {this.props.userTreatments.length > 0 ? "NEXT" : "SKIP FOR NOW"}
           </button>
         </div>

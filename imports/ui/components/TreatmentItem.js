@@ -45,7 +45,7 @@ export class TreatmentItem extends React.Component {
             </div>
             <div className="field">
               <label>Name</label>
-              <input type="text" name="name" value={this.state.name} placeholder="Medication/Supplement" onChange={this.handleChange.bind(this)}/>
+              <input type="text" name="name" value={this.state.name} placeholder="Medication/Supplement" onChange={this.handleChange.bind(this)} autoFocus/>
             </div>
 
             <div className="fields">

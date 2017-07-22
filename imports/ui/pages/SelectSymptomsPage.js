@@ -1,11 +1,11 @@
 import React from 'react';
-import { symptomsByCategory } from '../public/resources/commonSymptoms';
+import { symptomsByCategory } from '../../public/resources/commonSymptoms';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 
-import { UserSymptoms } from '../api/user-symptoms';
+import { UserSymptoms } from '../../api/user-symptoms';
 
-import SymptomCheckbox from './SymptomCheckbox';
+import SymptomCheckbox from '../components/SymptomCheckbox';
 
 class SelectSymptomsPage extends React.Component {
   renderCommonSymptomsList() {
