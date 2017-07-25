@@ -1,8 +1,9 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
+import Toggle from 'react-toggle';
 
 export default class SymptomCheckbox extends React.Component {
-  handleOnChange() {
+  handleChange() {
     if (this.props.isChecked) {
       Meteor.call('userSymptoms.remove', this.props.symptom);
     } else {
@@ -12,12 +13,23 @@ export default class SymptomCheckbox extends React.Component {
   render() {
     return (
       <div>
-        <label>{this.props.symptom}
-          <input type="checkbox" checked={this.props.isChecked} value={this.props.symptom} onChange={() => {
-            this.handleOnChange();
-          }}/>
+        <label className="item">
+          <Toggle
+            checked={this.props.isChecked}
+            icons={false}
+            onChange={this.handleChange.bind(this)} />
+          <span className="item__title">{this.props.symptom}</span>
         </label>
       </div>
+
     );
   }
 };
+
+// <div>
+//   <label>{this.props.symptom}
+//     <input type="checkbox" checked={this.props.isChecked} value={this.props.symptom} onChange={() => {
+//       this.handleChange();
+//     }}/>
+//   </label>
+// </div>

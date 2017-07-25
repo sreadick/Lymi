@@ -4,11 +4,13 @@ import PropTypes from 'prop-types';
 
 import PrivateHeader from '../components/PrivateHeader';
 
-const AuthenticatedRoute = ({ loggingIn, authenticated, component }) => {
+const AuthenticatedRoute = ({ loggingIn, authenticated, component, ...rest }) => {
   return (
     <Route render={(props) => {
       // if (loggingIn) {
-      //   return (React.createElement('div', null, 'Please wait...'));
+      //   return (
+      //     <div>loading</div>
+      //   );
       // }
       return (
         authenticated ?

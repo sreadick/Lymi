@@ -7,6 +7,7 @@ export const UserSymptoms = new Mongo.Collection('userSymptoms');
 if (Meteor.isServer) {
   Meteor.publish('userSymptoms', function() {
     return UserSymptoms.find({ userId: this.userId });
+    this.ready();
   });
 }
 

@@ -1,8 +1,21 @@
 .item {
-  background: $item-bg;
-  border: 1px solid $item-border;
-  margin-bottom: $space;
-  padding: $space;
+  // background: $item-bg;
+  // border: 1px solid $item-border;
+  // margin-bottom: $space;
+  // padding: $space;
+  // background: $grey;
+  // height: 5rem;
+  margin: $space / 2;
+  display: flex;
+}
+
+.item__title {
+  margin-left: $space / 4;
+}
+
+.category {
+  color: $dark-grey;
+  margin-left: $space / 2;
 }
 
 .item__message {

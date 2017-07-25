@@ -1,7 +1,8 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
+import { Session } from 'meteor/session';
 import FlipMove from 'react-flip-move';
 
 import { UserTreatments } from '../../api/user-treatments';
@@ -9,6 +10,29 @@ import { UserTreatments } from '../../api/user-treatments';
 import { TreatmentItem } from '../components/TreatmentItem';
 
 class SelectTreatmentsPage extends React.Component {
+  componentDidMount() {
+    Session.set('showErrors', false);
+  }
+
+  handleAddTreatment() {
+    const hasErrors = this.validateTreatments();
+    if (hasErrors) {
+      Session.set('showErrors', true);
+    } else {
+      Session.set('showErrors', false);
+      Meteor.call('userTreatments.insert');
+    }
+  }
+
+  validateTreatments() {
+    for (let i = 0; i < this.props.userTreatments.length; ++i) {
+      if (Object.keys(this.props.userTreatments[i].errors).length > 0) {
+        return true
+      }
+    }
+    return false
+  }
+
   renderUserTreatments() {
     return (
       <FlipMove duration={700} easing="ease-out">
@@ -21,14 +45,20 @@ class SelectTreatmentsPage extends React.Component {
           </div>
         : this.props.userTreatments.map((treatment) =>
             <div className="treatment-item" key={treatment._id}>
-              <TreatmentItem treatment={treatment}/>
+              <TreatmentItem
+                treatment={treatment}
+                showErrors={this.props.showErrors}/>
             </div>
           )
         }
         <div>
-          <button className={"ui " + (this.props.userTreatments.length > 0 ? "blue" : "grey") + " fluid button"}
-             onClick={() => {<Redirect to="/dashboard" />}}>
-            {this.props.userTreatments.length > 0 ? "NEXT" : "SKIP FOR NOW"}
+          <Link className="ui blue left floated button" to="/home/selectsymptoms">Back</Link>
+          <button className={"ui purple right floated " + (this.props.userTreatments.length > 0 ? "button" : "disabled button")}
+             onClick={() => {
+               const hasErrors = this.validateTreatments();
+               hasErrors ? Session.set('showErrors', true) : this.props.history.push('/home/dashboard')
+             }}>
+             Next
           </button>
         </div>
       </FlipMove>
@@ -42,7 +72,7 @@ class SelectTreatmentsPage extends React.Component {
         <div className="page-content">
           <h1 className="ui centered header">Select Treatments</h1>
           <button className="ui positive basic button"
-            onClick={() => Meteor.call('userTreatments.insert')}>
+            onClick={this.handleAddTreatment.bind(this)}>
             New Treatment
           </button>
           {this.renderUserTreatments()}
@@ -54,8 +84,8 @@ class SelectTreatmentsPage extends React.Component {
 
 export default createContainer(() => {
   Meteor.subscribe('userTreatments');
-
   return {
-    userTreatments: UserTreatments.find({}, {sort: {createdAt: -1}}).fetch()
+    userTreatments: UserTreatments.find({}, {sort: {createdAt: -1}}).fetch(),
+    showErrors: Session.get('showErrors')
   }
 }, SelectTreatmentsPage);

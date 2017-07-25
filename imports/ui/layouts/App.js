@@ -13,6 +13,7 @@ import Login from '../pages/Login';
 import Home from '../pages/Home';
 import SelectSymptomsPage from '../pages/SelectSymptomsPage';
 import SelectTreatmentsPage from '../pages/SelectTreatmentsPage';
+import Dashboard from '../pages/Dashboard';
 import NotFound from '../pages/NotFound';
 
 
@@ -25,6 +26,7 @@ const App = appProps => (
       <AuthenticatedRoute exact path="/home" component={Home} {...appProps} />
       <AuthenticatedRoute exact path="/home/selectsymptoms" component={SelectSymptomsPage} {...appProps} />
       <AuthenticatedRoute exact path="/home/selecttreatments" component={SelectTreatmentsPage} {...appProps} />
+      <AuthenticatedRoute exact path="/home/dashboard" component={Dashboard} {...appProps} />
 
       <Route path="*" component={NotFound}/>
     </Switch>

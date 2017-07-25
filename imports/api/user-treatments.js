@@ -8,6 +8,7 @@ export const UserTreatments = new Mongo.Collection('userTreatments');
 if (Meteor.isServer) {
   Meteor.publish('userTreatments', function() {
     return UserTreatments.find({ userId: this.userId });
+    this.ready();
   });
 }
 
@@ -23,6 +24,7 @@ Meteor.methods({
       dose: 0,
       dose_type: 'milligrams',
       frequency: 1,
+      errors: {},
       createdAt: moment().valueOf(),
       userId: this.userId
     });
@@ -32,8 +34,10 @@ Meteor.methods({
     if (!this.userId) {
       throw new Meteor.Error("not-authorized");
     }
-    if (Object.keys(updates).includes("amount") || Object.keys(updates).includes("dose") || Object.keys(updates).includes("frequency")) {
+    if (Object.keys(updates).includes("amount") || Object.keys(updates).includes("frequency")) {
       updates[Object.keys(updates)[0]] = parseInt(updates[Object.keys(updates)[0]]) || 0;
+    } else if (Object.keys(updates).includes("dose")) {
+      updates[Object.keys(updates)[0]] = parseFloat(updates[Object.keys(updates)[0]]) || 0;
     }
 
     new SimpleSchema({
@@ -60,6 +64,11 @@ Meteor.methods({
       frequency: {
         type: Number,
         optional: true
+      },
+      errors: {
+        type: Object,
+        optional: true,
+        blackbox: true
       }
     }).validate({
       _id,

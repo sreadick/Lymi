@@ -35,6 +35,142 @@ export const symptomsByCategory = [
       "Heart block/murmurs",
       "Chest pain/rib soreness"
     ]
+  },
+  {
+    category: "Pyschiatric Symptoms",
+    symptoms: [
+      "Mood swings",
+      "Irritability/agitation",
+      "Depression",
+      "Anxierty",
+      "Aggressive behavior",
+      "Impulsiveness",
+      "Suicidal thoughts",
+      "Excessive crying",
+      "Insomnia",
+      "Hypersomnia",
+      // "Paranoia",
+      // "Hallucinations",
+      // "Obsessive-compulsive behavior",
+      // "Bipolar disorder/manic behavior",
+      // "Schizophrenic-like symptoms or behavior",
+    ]
+  },
+  {
+    category: "Cognitive Symptoms",
+    symptoms: [
+      "Dementia",
+      "short term memory loss",
+      "long term memory loss",
+      "Poor school or work performance",
+      "Distractibility/attention deficit problems",
+      "Confusion",
+      "Difficulty with concentration",
+      "Difficulty reading",
+      "Difficulty spelling",
+      "Disorientation/feeling lost"
+    ]
+  },
+  // {
+  //   category: "Reproduction/Sexuality: Women",
+  //   symptoms: [
+  //     "Menstrual pain",
+  //     "Menstrual Irregularity",
+  //     "Pregnancy-related issues",
+  //     "Extreme PMS symptoms",
+  //   ]
+  // },
+  // {
+  //   category: "Reproduction/Sexuality: Men",
+  //   symptoms: [
+  //     "Testicular pain",
+  //     "Pulvic pain"
+  //   ]
+  // },
+  {
+    category: "Eyes/Vision",
+    symptoms: [
+      "Double/blurry vission",
+      "Vision Changes",
+      "Wandaring/lazy eye",
+      "Pink eye",
+      "Light sensitivity",
+      "Eye pain/swelling",
+      "Floaters",
+      "Red Eyes"
+    ]
+  },
+  {
+    category: "Ears/Hearing",
+    symptoms: [
+      "Decreased hearing",
+      "Ringing/buzzing",
+      "Sound sensitivity",
+      "Ear pain"
+    ]
+  },
+  {
+    category: "Musculoskeletal System",
+    symptoms: [
+      "Joint pain",
+      "Joint swelling",
+      "Stiffness",
+      "Muscle pain",
+      "Cramps",
+      "Poor muscle coordination",
+      "Muscle weakness"
+    ]
+  },
+  {
+    category: "Neurologic System",
+    symptoms: [
+      "Numbness in body/tingling",
+      "Burning/stabbing sensations",
+      "Burning in feet",
+      "Weakness of limbs",
+      "Body paralysis",
+      "Tremors/unexplained shaking",
+      // "Seizures",
+      // "Strokes",
+      // "Poor balance",
+      // "Dizziness",
+      // "Increased motion sickness",
+      // "Lightheadedness",
+      // "Fainting",
+      // "Encephalopathy",
+      // "Brain inflamation",
+      // "Meningitis",
+      // "Academic or vocational decline",
+      // "Difficulty with multitasking",
+      // "Organizational difficulty",
+      // "Auditory processing problems",
+      // "Visiual processing problems"
+    ]
+  },
+  {
+    category: "Skin Problems",
+    symptoms: [
+      "Benign tumor-like nodules",
+      "Rash"
+    ]
+  },
+  {
+    category: "General Well-being",
+    symptoms: [
+      "Decreased recreational interest",
+      "Fatigue",
+      "Exhaustion",
+      "Fevers",
+      "Flu-like symptoms"
+    ]
+  },
+  {
+    category: "Organ Problems",
+    symptoms: [
+      "Thyroid disfunction",
+      "Kidney related issues/bed wetting",
+      "Liver inflamation"
+    ]
   }
 ];
 

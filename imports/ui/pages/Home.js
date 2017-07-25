@@ -6,43 +6,28 @@ import { Route, Redirect } from 'react-router-dom';
 import { UserSymptoms } from '../../api/user-symptoms';
 import { UserTreatments } from '../../api/user-treatments';
 
-import PrivateHeader from '../components/PrivateHeader';
-import SelectSymptomsPage from '../pages/SelectSymptomsPage';
-import SelectTreatmentsPage from '../pages/SelectTreatmentsPage';
+import { Meteor } from 'meteor/meteor';
 
-class Home extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isFetching: true
-    };
+
+const Home = (props) => {
+  if (props.isFetching) {
+    return <div></div>;
+  } else if (props.userSymptoms.length > 0 && props.userTreatments.length > 0) {
+    return <Redirect to="/home/dashboard" />
+  } else if (props.userSymptoms.length > 0) {
+    return <Redirect to="/home/selecttreatments" />
+  } else {
+    return <Redirect to="/home/selectsymptoms" />
   }
-  componentDidUpdate() {
-    if (this.props.UserSymptoms) {
-      this.setState({
-        isFetching: false
-      });
-    }
-  }
-  render() {
-    return (
-      <div>
-        <PrivateHeader title='Lymi'/>
-        {(!this.state.isFetching && this.props.userSymptoms.length === 0)
-          ? <Redirect to="/home/selectsymptoms" />
-          : <Redirect to="/home/selecttreatments" />
-        }
-      </div>
-    )
-  }
-};
+}
+
 
 export default createContainer(() => {
-  Meteor.subscribe('userSymptoms');
-  Meteor.subscribe('userTreatments');
-
+  let symptomsHandle = Meteor.subscribe('userSymptoms');
+  let treatmentsHandle = Meteor.subscribe('userTreatments');
   return {
     userSymptoms: UserSymptoms.find().fetch(),
-    // userTreatments: UserTreatments.find().fetch(),
+    userTreatments: UserTreatments.find().fetch(),
+    isFetching: (!symptomsHandle.ready() || !treatmentsHandle.ready())
   };
 }, Home);
