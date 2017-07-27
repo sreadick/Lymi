@@ -22,29 +22,9 @@ Accounts.onCreateUser((options, user) => {
   CheckinHistories.insert({
     userId: user._id,
     dailyCompleted: false,
-    checkins: [
-
-    ]
+    lastCheckin: undefined,
+    checkins: []
   });
 
   return user;
 })
-
-// if (Meteor.isServer) {
-//   Meteor.publish('Meteor.users.checkinHistories', function() {
-//
-//     new SimpleSchema({
-//       _id: {
-//         type: String,
-//         min: 1
-//       }
-//     }).validate({_id: this.userId});
-//
-//     const options = {
-//       fields: {
-//         checkinHistory: 1
-//       }
-//     }
-//     return Meteor.users.find({ _id: this.userId }, options)
-//   })
-// }

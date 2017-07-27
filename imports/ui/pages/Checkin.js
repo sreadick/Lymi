@@ -16,10 +16,10 @@ const Checkin = (props) => (
     <h2 className="ui center aligned large black header">Check in for {moment().format('MMMM Do YYYY')}</h2>
     <Switch>
       <Route exact path="/home/checkin/symptoms" render={() => {
-        return <SymptomsCheckin symptomCheckinItems={props.symptomCheckinItems} />
+        return <SymptomsCheckin symptomCheckinItems={props.symptomCheckinItems} {...props} />
       }} />
       <Route exact path="/home/checkin/treatments" render={() => {
-        return <TreatmentsCheckin treatmentCheckinItems={props.treatmentCheckinItems} />
+        return <TreatmentsCheckin treatmentCheckinItems={props.treatmentCheckinItems} {...props} />
       }} />
     </Switch>
     <Link to="/home/checkin/symptoms">symptoms</Link>
@@ -28,6 +28,7 @@ const Checkin = (props) => (
 )
 
 export default createContainer(() => {
+
   Meteor.subscribe('userSymptoms');
   Meteor.subscribe('userTreatments')
   const checkinHandle = Meteor.subscribe('checkinHistories');
@@ -35,7 +36,7 @@ export default createContainer(() => {
   let todaysCheckin = checkinHandle.ready() ? CheckinHistories.findOne().checkins.find((checkin) => checkin.date === currentDate) : undefined;
 
   if (checkinHandle.ready() && !todaysCheckin) {
-    Meteor.call('checkinHistories.addCheckin', {
+    Meteor.call('checkinHistories.checkins.update', {
       date: currentDate,
       symptoms: UserSymptoms.find().fetch(),
       treatments: UserTreatments.find().fetch(),
@@ -44,6 +45,6 @@ export default createContainer(() => {
 
   return {
     symptomCheckinItems: todaysCheckin ? todaysCheckin.symptoms : [],
-    treatmentCheckinItems: todaysCheckin ? todaysCheckin.treatments : []
+    treatmentCheckinItems: todaysCheckin ? todaysCheckin.treatments : [],
   }
 }, Checkin)

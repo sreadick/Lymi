@@ -2,6 +2,7 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Redirect, Link } from 'react-router-dom';
+import moment from 'moment';
 
 import { UserSymptoms } from '../../api/user-symptoms';
 import { UserTreatments } from '../../api/user-treatments';
@@ -36,7 +37,7 @@ const Dashboard = (props) => {
           );
         })}
       </div>
-      <Link className="ui big teal button" to="/home/checkin">{props.checkinHistory.dailyCompleted ? "Edit Checkin" : "Checkin"}</Link>
+      <Link className="ui big teal button" to="/home/checkin">{props.checkinHistory.dailyCompleted ? `Last checked in ${moment(props.checkinHistory.lastCheckin).fromNow()}...Edit Checkin` : "Checkin"}</Link>
     </div>
   );
 };
@@ -48,7 +49,7 @@ export default createContainer(() => {
   return {
     userSymptoms: UserSymptoms.find().fetch(),
     userTreatments: UserTreatments.find().fetch(),
-    checkinHistory: CheckinHistories.find().fetch(),
+    checkinHistory: CheckinHistories.findOne(),
     isFetching: (!checkinHandle.ready() || !symptomsHandle.ready() || !treatmentsHandle.ready()),
   };
 }, Dashboard);

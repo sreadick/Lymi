@@ -1,18 +1,20 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
+import { Link, Redirect } from 'react-router-dom';
 import { createContainer } from 'meteor/react-meteor-data';
 import moment from 'moment';
+
 
 import { CheckinHistories } from '../../api/checkin-histories';
 
 class SymptomsCheckin extends React.Component {
   renderSeveritySquares(symptom) {
     return (
-      <div ref={`${symptom.name}_container`} className="severity_container">
+      <div ref={`${symptom.name}_symptom_container`} className="checkin-item__answer-group">
         {[1,2,3,4,5].map((severityNumber) =>
-          <div className={`severity_square ${severityNumber <= symptom.severity ? "selected" : ""}`} key={severityNumber}
-            onClick={() => this.changeSeverity(symptom, severityNumber)}
-            onMouseOver={() => this.handleMouseOver(symptom, severityNumber)}
+          <div className={`severity checkin-item__answer-square ${severityNumber <= symptom.severity ? "selected" : ""}`} key={severityNumber}
+            onClick={() => this.chooseSeverity(symptom, severityNumber)}
+            onMouseOver={(e) => this.handleMouseOver(e, symptom, severityNumber)}
             onMouseOut={() => this.handleMouseOut(symptom)}>
             {severityNumber}
           </div>
@@ -21,9 +23,11 @@ class SymptomsCheckin extends React.Component {
     );
   }
 
-  handleMouseOver(symptom, severity) {
-    for (i = 0; i < severity; ++i) {
-      this.refs[`${symptom.name}_container`].childNodes[i].classList.add('highlighted');
+  handleMouseOver(e, symptom, severityNumber) {
+    for (i = 0; i < severityNumber; ++i) {
+      if (parseInt(e.target.innerHTML) !== symptom.severity) {
+        this.refs[`${symptom.name}_symptom_container`].childNodes[i].classList.add('highlighted');
+      }
     }
   }
 
@@ -31,13 +35,13 @@ class SymptomsCheckin extends React.Component {
     this.removeHighlight(symptom);
   }
 
-  changeSeverity(symptom, severity) {
-    Meteor.call('checkinHistories.symptom.update', symptom, severity, moment().format('MMMM Do YYYY'))
+  chooseSeverity(symptom, severityNumber) {
+    Meteor.call('checkinHistories.symptom.update', symptom, severityNumber, moment().format('MMMM Do YYYY'))
     this.removeHighlight(symptom);
   }
 
   removeHighlight(symptom) {
-    this.refs[`${symptom.name}_container`].childNodes.forEach((node) => {
+    this.refs[`${symptom.name}_symptom_container`].childNodes.forEach((node) => {
       node.classList.remove('highlighted');
     })
   }
@@ -45,17 +49,21 @@ class SymptomsCheckin extends React.Component {
   render() {
     if (this.props.symptomCheckinItems.length === 0) return <div>fetching...</div>
     return (
-        <div className="ui container">
-          <h4 className="ui center aligned large brown header">How were your symptoms today?</h4>
-          <div className="symptom-checkin-item">
-            {this.props.symptomCheckinItems.map((symptom) => (
-              <div className="ui very padded container segment" key={symptom.name}>
-                <h3 className="ui grey header">{symptom.name}</h3>
-                {this.renderSeveritySquares(symptom)}
-              </div>
-            ))}
-          </div>
+      <div className="ui container">
+        <h4 className="ui center aligned large brown header">How were your symptoms today?</h4>
+        <div className="checkin-item__container">
+          {this.props.symptomCheckinItems.map((symptom) => (
+            <div className="ui very padded container segment" key={symptom.name}>
+              <h3 className="ui grey header">{symptom.name}</h3>
+              {this.renderSeveritySquares(symptom)}
+            </div>
+          ))}
         </div>
+        <Link className={`ui basic green button ${!this.props.symptomCheckinCompleted && 'disabled'}`}
+          to={this.props.symptomCheckinCompleted ? "/home/checkin/treatments" : "#"}>
+          Next
+        </Link>
+      </div>
     );
   }
 };
@@ -63,8 +71,10 @@ class SymptomsCheckin extends React.Component {
 export default createContainer(() => {
   const currentDate = moment().format('MMMM Do YYYY');
   const checkinHandle = Meteor.subscribe('checkinHistories');
+  const checkinItems = checkinHandle.ready() ? CheckinHistories.findOne().checkins.find((checkin) => checkin.date === currentDate) : {};
 
   return {
-    symptomCheckinItems: checkinHandle.ready() ? CheckinHistories.findOne().checkins.find((checkin) => checkin.date === currentDate).symptoms : [],
+    symptomCheckinItems: checkinItems.symptoms || [],
+    symptomCheckinCompleted: (checkinHandle.ready() && checkinItems.symptoms.filter((symptom) => symptom.severity > 0).length === checkinItems.symptoms.length)
   }
 }, SymptomsCheckin)
