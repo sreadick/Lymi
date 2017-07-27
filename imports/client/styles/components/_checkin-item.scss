@@ -1,0 +1,44 @@
+.symptom-checkin-item {
+
+}
+
+.severity_container {
+  margin: 0 auto;
+  width: 85%;
+  height: 50px;
+}
+
+.symptom-checkin-item {
+  max-width: 650px;
+  margin: 30px auto;
+  text-align: center;
+}
+
+.severity_square {
+  text-align: center;
+  display: inline-block;
+  margin: 0 1%;
+  border-radius: 10px;
+  width: 13%;
+  min-width: 45px;
+  height: 100%;
+  border: 2px solid #ddd;
+  line-height: 50px;
+
+  transition: background .5s ease, border .5s ease, color .5s ease;
+}
+
+.severity_square:hover {
+  cursor: pointer;
+}
+
+.selected {
+  background: #8DB2E3;
+  color: white;
+}
+
+.highlighted {
+  border: 2px solid #8DB2E3;
+  background: lighten(#8DB2E3, 7%);
+  color: white;
+}

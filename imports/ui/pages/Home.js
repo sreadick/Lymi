@@ -1,7 +1,7 @@
 import React from 'react';
 import { Mongo } from 'meteor/mongo';
 import { createContainer } from 'meteor/react-meteor-data';
-import { Route, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 import { UserSymptoms } from '../../api/user-symptoms';
 import { UserTreatments } from '../../api/user-treatments';

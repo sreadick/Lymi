@@ -52,8 +52,8 @@ class SelectTreatmentsPage extends React.Component {
           )
         }
         <div>
-          <Link className="ui blue left floated button" to="/home/selectsymptoms">Back</Link>
-          <button className={"ui purple right floated " + (this.props.userTreatments.length > 0 ? "button" : "disabled button")}
+          <Link className="ui large blue left floated button" to="/home/selectsymptoms">Back</Link>
+          <button className={"ui large green right floated " + (this.props.userTreatments.length > 0 ? "button" : "disabled button")}
              onClick={() => {
                const hasErrors = this.validateTreatments();
                hasErrors ? Session.set('showErrors', true) : this.props.history.push('/home/dashboard')
@@ -68,8 +68,8 @@ class SelectTreatmentsPage extends React.Component {
 
   render() {
     return (
-      <div>
-        <div className="page-content">
+      <div className="ui centered container">
+        <div className="page-content__treatments">
           <h1 className="ui centered header">Select Treatments</h1>
           <button className="ui positive basic button"
             onClick={this.handleAddTreatment.bind(this)}>

@@ -34,11 +34,17 @@ class SelectSymptomsPage extends React.Component {
   }
 
   showSelectedSymptoms() {
-
     return this.props.userSymptoms.map((symptom) => {
       return (
         <div key={symptom._id}>
-          <h3>{symptom.name}</h3>
+          <h3 className="user-symptom">{symptom.name}
+            <span className="user-symptom__remove-icon"
+              onClick={() => {
+                Meteor.call('userSymptoms.remove', symptom.name);
+              }}>
+              <i className="remove large right floated red icon"></i>
+            </span>
+          </h3>
         </div>
       )
     });
@@ -54,25 +60,34 @@ class SelectSymptomsPage extends React.Component {
               {this.renderCommonSymptomsList()}
               <div className="ui padded container">
                 <div className="ui large input">
-                  <input type="text" placeholder="Other..." />
+                  <input ref="otherSymptom" type="text" placeholder="Other..." />
                 </div>
-                <button className="ui green button">Add</button>
+                <div className="ui padded container">
+                  <button className="ui basic black button"
+                    onClick={() => {
+                      if (this.refs.otherSymptom.value.trim().length > 0) {
+                        Meteor.call('userSymptoms.insert', this.refs.otherSymptom.value.trim());
+                      }
+                    }}>
+                    Add
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
         <div className="page-content__segment">
           <div className="ui container">
-            <div>
-              <h2>Selected: </h2>
-              <div>
+            <div className="ui vertical stripe segment">
+              <h2 className="ui header">Selected: </h2>
+              <Link className={"ui large green right floated " + (this.props.userSymptoms.length > 0 ? "button" : "disabled button")}
+                to={this.props.userSymptoms.length > 0 ? "/home/selecttreatments" : "#"}>
+                Next
+              </Link>
+              <div className="ui container">
                 {this.showSelectedSymptoms()}
               </div>
             </div>
-            <Link className={"ui purple left floated " + (this.props.userSymptoms.length > 0 ? "button" : "disabled button")}
-              to={this.props.userSymptoms.length > 0 ? "/home/selecttreatments" : "#"}>
-              Next
-            </Link>
           </div>
         </div>
       </div>

@@ -1,0 +1,13 @@
+.user-symptom {
+  width: 40rem;
+  color: #446;
+}
+
+.user-symptom__remove-icon {
+  visibility: hidden;
+  cursor: pointer;
+}
+
+.user-symptom:hover .user-symptom__remove-icon {
+  visibility: visible;
+}
