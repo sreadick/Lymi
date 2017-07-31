@@ -47,22 +47,23 @@ class SymptomsCheckin extends React.Component {
   }
 
   render() {
+    console.log(this.props)
     if (this.props.symptomCheckinItems.length === 0) return <div>fetching...</div>
     return (
       <div className="ui container">
-        <h4 className="ui center aligned large brown header">How were your symptoms today?</h4>
-        <div className="checkin-item__container">
+        <h4 className="ui center aligned large grey header">How were your symptoms today?</h4>
+        <div>
           {this.props.symptomCheckinItems.map((symptom) => (
             <div className="ui very padded container segment" key={symptom.name}>
               <h3 className="ui grey header">{symptom.name}</h3>
               {this.renderSeveritySquares(symptom)}
             </div>
           ))}
+          <Link className={`ui black button ${!this.props.symptomCheckinCompleted && 'disabled'}`}
+            to={this.props.symptomCheckinCompleted ? "/home/checkin/treatments" : "#"}>
+            Next
+          </Link>
         </div>
-        <Link className={`ui basic green button ${!this.props.symptomCheckinCompleted && 'disabled'}`}
-          to={this.props.symptomCheckinCompleted ? "/home/checkin/treatments" : "#"}>
-          Next
-        </Link>
       </div>
     );
   }

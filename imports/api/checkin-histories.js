@@ -52,10 +52,10 @@ Meteor.methods({
       }
     });
   },
-  'checkinHistories.dailyCompleted.update'() {
+  'checkinHistories.dailyCompleted.update'(completed) {
     CheckinHistories.update({userId: this.userId}, {
       $set: {
-        dailyCompleted: true,
+        dailyCompleted: completed,
         lastCheckin: new Date()
       }
     });

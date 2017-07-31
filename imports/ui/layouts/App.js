@@ -6,6 +6,8 @@ import { createContainer } from 'meteor/react-meteor-data';
 import AuthenticatedRoute from '../auth/AuthenticatedRoute';
 import PublicRoute from '../auth/PublicRoute';
 
+
+import Landing from '../pages/Landing';
 import Signup from '../pages/Signup';
 import Login from '../pages/Login';
 import Home from '../pages/Home';
@@ -13,14 +15,13 @@ import SelectSymptomsPage from '../pages/SelectSymptomsPage';
 import SelectTreatmentsPage from '../pages/SelectTreatmentsPage';
 import Dashboard from '../pages/Dashboard';
 import Checkin from '../pages/Checkin';
-// import SymptomCheckin from '../components/SymptomCheckin';
 import NotFound from '../pages/NotFound';
 
 
 const App = appProps => (
   <Router history={history}>
     <Switch>
-      <Route exact path="/" render={() => <Redirect to="/login" />} />
+      <PublicRoute exact path="/" component={Landing} {...appProps} />
       <PublicRoute path="/login" component={Login} {...appProps} />
       <PublicRoute path="/signup" component={Signup} {...appProps} />
       <AuthenticatedRoute exact path="/home" component={Home} {...appProps} />

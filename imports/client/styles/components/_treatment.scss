@@ -23,3 +23,11 @@
 .treatment-item:hover .treatment-item__remove-icon {
   visibility: visible;
 }
+
+.select-treatment-bottom-error {
+  display: none;
+}
+
+.select-treatment-bottom-error.revealed {
+  display: block;
+}

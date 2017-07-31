@@ -27,6 +27,10 @@ class SelectTreatmentsPage extends React.Component {
   validateTreatments() {
     for (let i = 0; i < this.props.userTreatments.length; ++i) {
       if (Object.keys(this.props.userTreatments[i].errors).length > 0) {
+        this.refs.errorMessage.classList.add('revealed');
+        setTimeout(() => {
+          this.refs.errorMessage.classList.remove('revealed');
+        }, 5000);
         return true
       }
     }
@@ -38,10 +42,12 @@ class SelectTreatmentsPage extends React.Component {
       <FlipMove duration={700} easing="ease-out">
         {this.props.userTreatments.length === 0
         ? <div className="ui container">
+            <div className="ui hidden divider"></div>
             <div className="ui message">
-              <div className="header">Click the green button to add new treatments</div>
+              <div className="header">Click the button above to add new treatments</div>
               <p>All changes are automatically saved and you can edit the list anytime</p>
             </div>
+            <div className="ui hidden divider"></div>
           </div>
         : this.props.userTreatments.map((treatment) =>
             <div className="treatment-item" key={treatment._id}>
@@ -60,6 +66,8 @@ class SelectTreatmentsPage extends React.Component {
              }}>
              Next
           </button>
+          <div className="ui small center aligned black header select-treatment-bottom-error" ref="errorMessage">check above for errors and try again...</div>
+          <div className="ui hidden fitted clearing divider"></div>
         </div>
       </FlipMove>
     );
@@ -68,10 +76,10 @@ class SelectTreatmentsPage extends React.Component {
 
   render() {
     return (
-      <div className="ui centered container">
+      <div className="page-content">
         <div className="page-content__treatments">
-          <h1 className="ui centered header">Select Treatments</h1>
-          <button className="ui positive basic button"
+          <h1 className="ui center aligned header">Select Treatments</h1>
+          <button className="ui basic black button"
             onClick={this.handleAddTreatment.bind(this)}>
             New Treatment
           </button>

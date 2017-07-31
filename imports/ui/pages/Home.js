@@ -8,7 +8,6 @@ import { UserTreatments } from '../../api/user-treatments';
 
 import { Meteor } from 'meteor/meteor';
 
-
 const Home = (props) => {
   if (props.isFetching) {
     return <div></div>;
@@ -28,6 +27,7 @@ export default createContainer(() => {
   return {
     userSymptoms: UserSymptoms.find().fetch(),
     userTreatments: UserTreatments.find().fetch(),
-    isFetching: (!symptomsHandle.ready() || !treatmentsHandle.ready())
+    isFetching: (!symptomsHandle.ready() || !treatmentsHandle.ready()),
+    // currentDate: moment().format('MMMM Do YYYY')
   };
 }, Home);

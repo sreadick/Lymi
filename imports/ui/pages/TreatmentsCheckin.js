@@ -40,22 +40,22 @@ class TreatmentCheckin extends React.Component {
     if (this.props.treatmentCheckinItems.length === 0) return <div>fetching...</div>
     return (
       <div className="ui container">
-        <h4 className="ui center aligned large brown header">Did you take your medications?</h4>
-        <div className="checkin-item__container">
-          {this.props.treatmentCheckinItems.map((treatment) => (
-            <div className="ui very padded container segment" key={treatment.name}>
-              <h3 className="ui grey header">{treatment.name}</h3>
-              {this.renderAnswerSquares(treatment)}
-            </div>
-          ))}
-        </div>
-        <button className={`ui basic green button ${!this.props.treatmentCheckinCompleted && 'disabled'}`}
+        <h4 className="ui center aligned large grey header">Did you take your medications?</h4>
+        <Link className="ui small blue basic button" to="/home/checkin/symptoms">Back to symptoms</Link>
+        {this.props.treatmentCheckinItems.map((treatment) => (
+          <div className="ui very padded container segment" key={treatment.name}>
+            <h3 className="ui grey header">{treatment.name}</h3>
+            {this.renderAnswerSquares(treatment)}
+          </div>
+        ))}
+
+        <button className={`ui black button ${!this.props.treatmentCheckinCompleted && 'disabled'}`}
           onClick={() => {
             if (this.props.treatmentCheckinCompleted) {
-              Meteor.call('checkinHistories.dailyCompleted.update')
+              Meteor.call('checkinHistories.dailyCompleted.update', true)
               this.props.history.replace("/home/dashboard");
             }
-          }}>Finish
+          }}>Finish!
         </button>
       </div>
     );
