@@ -8,6 +8,8 @@ import { UserSymptoms } from '../../api/user-symptoms';
 import { UserTreatments } from '../../api/user-treatments';
 import { CheckinHistories } from '../../api/checkin-histories';
 
+import SymptomChart from '../components/SymptomChart';
+
 const Dashboard = (props) => {
   if (props.isFetching) {
     return <div>FETCHING</div>
@@ -51,6 +53,7 @@ const Dashboard = (props) => {
             );
           })}
         </div>
+        <SymptomChart checkins={props.checkinHistory.checkins}/>
       </div>
 
 
