@@ -76,15 +76,15 @@ class SelectSymptomsPage extends React.Component {
             </div>
           </div>
         </div>
-        <div className="page-content__segment">
+        <div className="page-content__select-symptoms-segment">
           <div className="ui container">
-            <div className="ui vertical stripe segment">
+            <div className="ui vertical segment">
               <h2 className="ui header">Selected: </h2>
               <Link className={"ui large green right floated " + (this.props.userSymptoms.length > 0 ? "button" : "disabled button")}
                 to={this.props.userSymptoms.length > 0 ? "/home/selecttreatments" : "#"}>
                 Next
               </Link>
-              <div className="ui container">
+              <div className="select_symptoms_container">
                 {this.showSelectedSymptoms()}
               </div>
             </div>

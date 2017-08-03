@@ -18,57 +18,63 @@ const Dashboard = (props) => {
   }
 
   return (
-    <div className="ui container">
-        {props.checkinHistory.dailyCompleted ?
-          <div className="ui positive message">
-            {moment(props.checkinHistory.lastCheckin).fromNow() === "a few seconds ago" ? "Thanks for checking in!"
-            : `Last checked in ${moment(props.checkinHistory.lastCheckin).fromNow()}`
-            }
-          </div>
-        : <div className="ui message">
-            <div className="ui centered grid">
-              <div className="row">
-                <div className="ui header">You haven't checked in today</div>
-              </div>
-              <div className="row">
-                <Link className="ui black button" to="/home/checkin/symptoms">
-                  Check in now
-                </Link>
+    <div className="page-content">
+
+
+      <div className="ui container">
+          {props.checkinHistory.dailyCompleted ?
+            <div className="ui positive message">
+              {moment(props.checkinHistory.lastCheckin).fromNow() === "a few seconds ago" ? "Thanks for checking in!"
+              : `Last checked in ${moment(props.checkinHistory.lastCheckin).fromNow()}`
+              }
+            </div>
+          : <div className="ui message">
+              <div className="ui centered grid">
+                <div className="row">
+                  <div className="ui header">You haven't checked in today</div>
+                </div>
+                <div className="row">
+                  <Link className="ui black button" to="/home/checkin/symptoms">
+                    Check in now
+                  </Link>
+                </div>
               </div>
             </div>
+          }
+
+
+
+        <div className="ui segment">
+          <Link className="ui small blue right floated button" to="/home/selectsymptoms">edit</Link>
+          <span className="ui big header">Symptoms: </span>
+          <div className="ui big ordered list">
+            {props.userSymptoms.map((symptom) => {
+              return (
+                <div className="item" key={symptom._id}>
+                  <div className="header">{symptom.name}</div>
+                </div>
+              );
+            })}
           </div>
-        }
-
-
-
-      <div className="ui segment">
-        <Link className="ui small blue right floated button" to="/home/selectsymptoms">edit</Link>
-        <span className="ui big header">Symptoms: </span>
-        <div className="ui big ordered list">
-          {props.userSymptoms.map((symptom) => {
-            return (
-              <div className="item" key={symptom._id}>
-                <div className="header">{symptom.name}</div>
-              </div>
-            );
-          })}
+          <div className="ui raised segment">
+            <SymptomChart checkins={props.checkinHistory.checkins}/>
+          </div>
         </div>
-        <SymptomChart checkins={props.checkinHistory.checkins}/>
-      </div>
 
 
-      <div className="ui segment">
-        <Link className="ui small blue right floated button" to="/home/selecttreatments">edit</Link>
-        <span className="ui big header">Treatments: </span>
-        <div className="ui big ordered list">
-          {props.userTreatments.map((treatment) => {
-            return (
-              <div className="item" key={treatment._id}>
-                <div className="header">{treatment.name}</div>
-                <div className="description">{treatment.amount} X {treatment.dose}{treatment.dose_type} {treatment.frequency}/day</div>
-              </div>
-            );
-          })}
+        <div className="ui segment">
+          <Link className="ui small blue right floated button" to="/home/selecttreatments">edit</Link>
+          <span className="ui big header">Treatments: </span>
+          <div className="ui big ordered list">
+            {props.userTreatments.map((treatment) => {
+              return (
+                <div className="item" key={treatment._id}>
+                  <div className="header">{treatment.name}</div>
+                  <div className="description">{treatment.amount} X {treatment.dose}{treatment.dose_type} {treatment.frequency}/day</div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>
@@ -76,26 +82,25 @@ const Dashboard = (props) => {
 };
 
 export default createContainer(() => {
-  let symptomsHandle = Meteor.subscribe('userSymptoms');
-  let treatmentsHandle = Meteor.subscribe('userTreatments');
-  let checkinHandle = Meteor.subscribe('checkinHistories');
-
+  const symptomsHandle = Meteor.subscribe('userSymptoms');
+  const treatmentsHandle = Meteor.subscribe('userTreatments');
+  const checkinHandle = Meteor.subscribe('checkinHistories');
+  const checkinHistoryIsReady = checkinHandle.ready() && !!CheckinHistories.findOne();
   const currentDate = moment().format('MMMM Do YYYY');
-  let todaysCheckin = checkinHandle.ready() ? CheckinHistories.findOne().checkins.find((checkin) => checkin.date === currentDate) : undefined;
+  const todaysCheckin = checkinHistoryIsReady ? CheckinHistories.findOne().checkins.find((checkin) => checkin.date === currentDate) : undefined;
 
-  if (checkinHandle.ready() && !todaysCheckin) {
-    console.log(1);
-  Meteor.call('checkinHistories.checkins.update', {
-    date: currentDate,
-    symptoms: UserSymptoms.find().fetch(),
-    treatments: UserTreatments.find().fetch(),
-  })
+  if (checkinHistoryIsReady && !todaysCheckin) {
+    Meteor.call('checkinHistories.checkins.update', {
+      date: currentDate,
+      symptoms: UserSymptoms.find().fetch(),
+      treatments: UserTreatments.find().fetch(),
+    });
     Meteor.call('checkinHistories.dailyCompleted.update', false)
   }
   return {
     userSymptoms: UserSymptoms.find().fetch(),
     userTreatments: UserTreatments.find().fetch(),
     checkinHistory: CheckinHistories.findOne(),
-    isFetching: (!checkinHandle.ready() || !symptomsHandle.ready() || !treatmentsHandle.ready()),
+    isFetching: (!checkinHistoryIsReady || !symptomsHandle.ready() || !treatmentsHandle.ready()),
   };
 }, Dashboard);

@@ -62,13 +62,13 @@ class TreatmentCheckin extends React.Component {
   }
 };
 
-export default createContainer(() => {
+export default createContainer(props => {
   const currentDate = moment().format('MMMM Do YYYY');
-  const checkinHandle = Meteor.subscribe('checkinHistories');
-  const checkinItems = checkinHandle.ready() ? CheckinHistories.findOne().checkins.find((checkin) => checkin.date === currentDate) : {};
+  // const checkinHandle = Meteor.subscribe('checkinHistories');
+  const checkinItems = props.checkinHistoryIsReady ? CheckinHistories.findOne().checkins.find((checkin) => checkin.date === currentDate) : {};
 
   return {
     treatmentCheckinItems: checkinItems.treatments || [],
-    treatmentCheckinCompleted: (checkinHandle.ready() && checkinItems.treatments.filter((treatment) => treatment.compliance !== null).length === checkinItems.treatments.length)
+    treatmentCheckinCompleted: (props.checkinHistoryIsReady && checkinItems.treatments.filter((treatment) => treatment.compliance !== null).length === checkinItems.treatments.length)
   }
 }, TreatmentCheckin)

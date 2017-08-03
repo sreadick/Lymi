@@ -15,5 +15,5 @@ import { SelectedSymptoms } from '../imports/api/ui';
 // });
 
 Meteor.startup(() => {
-  ReactDom.render(<App />, document.getElementById('app'));
+  ReactDom.render(<App/>, document.getElementById('app'));
 });

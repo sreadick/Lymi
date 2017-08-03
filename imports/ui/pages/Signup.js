@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Accounts } from 'meteor/accounts-base';
 
-
 export default class Signup extends React.Component {
   constructor(props, state) {
     super(props, state);
@@ -29,18 +28,18 @@ export default class Signup extends React.Component {
   }
   render() {
     return (
-      <div className="boxed-view">
-        <div className="boxed-view__box">
-          <h1>Join</h1>
-
-          {this.state.error ? <p>{this.state.error}</p> : undefined}
-
-          <form onSubmit={this.onSubmit.bind(this)} noValidate className="boxed-view__form">
-            <input type="email" ref="email" name="email" placeholder="Email"/>
-            <input type="password" ref="password" name="password" placeholder="Password"/>
-            <button className="button">Create Account</button>
-          </form>
-          <Link to="/login">Have an account?</Link>
+      <div>
+        <div className="boxed-view signup">
+          <div className="boxed-view__box signup">
+            <h1>Join</h1>
+            {this.state.error ? <p>{this.state.error}</p> : undefined}
+            <form onSubmit={this.onSubmit.bind(this)} noValidate className="boxed-view__form">
+              <input type="email" ref="email" name="email" placeholder="Email"/>
+              <input type="password" ref="password" name="password" placeholder="Password"/>
+              <button className="button button--auth landing">Create Account</button>
+            </form>
+            <Link to="/login">Have an account?</Link>
+          </div>
         </div>
       </div>
     );

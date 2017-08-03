@@ -47,7 +47,6 @@ class SymptomsCheckin extends React.Component {
   }
 
   render() {
-    console.log(this.props)
     if (this.props.symptomCheckinItems.length === 0) return <div>fetching...</div>
     return (
       <div className="ui container">
@@ -69,13 +68,13 @@ class SymptomsCheckin extends React.Component {
   }
 };
 
-export default createContainer(() => {
+export default createContainer(props => {
   const currentDate = moment().format('MMMM Do YYYY');
-  const checkinHandle = Meteor.subscribe('checkinHistories');
-  const checkinItems = checkinHandle.ready() ? CheckinHistories.findOne().checkins.find((checkin) => checkin.date === currentDate) : {};
+  // const checkinHandle = Meteor.subscribe('checkinHistories');
+  const checkinItems = props.checkinHistoryIsReady ? CheckinHistories.findOne().checkins.find((checkin) => checkin.date === currentDate) : {};
 
   return {
     symptomCheckinItems: checkinItems.symptoms || [],
-    symptomCheckinCompleted: (checkinHandle.ready() && checkinItems.symptoms.filter((symptom) => symptom.severity > 0).length === checkinItems.symptoms.length)
+    symptomCheckinCompleted: (props.checkinHistoryIsReady && checkinItems.symptoms.filter((symptom) => symptom.severity > 0).length === checkinItems.symptoms.length)
   }
 }, SymptomsCheckin)

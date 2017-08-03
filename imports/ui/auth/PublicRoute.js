@@ -2,14 +2,18 @@ import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
+import PublicHeader from '../components/PublicHeader';
+
+
 const PublicRoute = ({ loggingIn, authenticated, component, ...rest }) => {
   return (
     <Route {...rest} render={(props) => {
-      // if (loggingIn) {
-      //   return (React.createElement('div', null, 'Please wait...'));
-      // }
       return (
-        !authenticated ? (React.createElement(component, {...props}))
+        !authenticated ?
+          <div>
+            <PublicHeader />
+            {(React.createElement(component, {...props}))}
+          </div>
         : <Redirect to="/home" />
       );
     }}/>

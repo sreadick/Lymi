@@ -7,17 +7,12 @@ import PrivateHeader from '../components/PrivateHeader';
 const AuthenticatedRoute = ({ loggingIn, authenticated, component, ...rest }) => {
   return (
     <Route render={(props) => {
-      // if (loggingIn) {
-      //   return (
-      //     <div>loading</div>
-      //   );
-      // }
       return (
         authenticated ?
-        <div>
-          <PrivateHeader title="Lymi"/>
-          {(React.createElement(component, {...props}))}
-        </div>
+          <div>
+            <PrivateHeader title="Lymi"/>
+            {(React.createElement(component, {...props}))}
+          </div>
         : <Redirect to="/login" />
       );
     }}/>

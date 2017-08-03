@@ -3,13 +3,20 @@
   padding: 0;
 }
 
-html {
-  font-size: 62.5%;
+html, body {
+  // overflow: auto;
+  // height: auto !important;
 }
 
 body {
-  font-family: Helvetica, Arial, sans-serif;
+  font-family: 'Source Sans Pro', sans-serif;
   font-size: $base-font-size;
+  margin: 0px;
+
+
+  /* edit back */
+  // overflow: auto;
+  // height: 100%;
 }
 
 h1 {
@@ -34,4 +41,8 @@ input[type=text], input[type=email], input[type=password] {
   font-size: $base-font-size;
   margin-bottom: $space;
   padding: $input-spacing;
+}
+
+.ui.grid {
+  margin: 0 !important;
 }

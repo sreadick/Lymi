@@ -1,5 +1,9 @@
 // Colors
-$brand-primary: #71CD77;
+$navy: #0F1626;
+$leather: #AB987A;
+$violet: #A58EB7;
+$eggshell: #F5F5F5;
+$brand-primary: $leather;
 $grey: #dddddd;
 $light-grey: #f9f9f9;
 $dark-grey: #777777;
@@ -17,8 +21,8 @@ $input-border: $grey;
 $input-spacing: 1rem;
 
 // Boxed view
-$boxed-view-overlay-bg: $grey;
-$boxed-view-bg: white;
+$boxed-view-overlay-bg: $navy;
+$boxed-view-bg: $eggshell;
 
 // Button
 $button-bg: $brand-primary;
@@ -29,8 +33,9 @@ $button-secondary-color: $dark-grey;
 $button-secondary-border-color: $grey;
 
 // Header
-$header-bg: $brand-primary;
-$header-color: white;
+$header-bg: $eggshell;
+$header-color: $leather;
+$header-height: 4.5rem;
 
 // item
 $item-bg: $light-grey;

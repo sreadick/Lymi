@@ -72,7 +72,7 @@ export class TreatmentItem extends React.Component {
       <div className="ui raised fluid card">
         <div className="content">
           <div className="ui form">
-            <div className="treatment-item__header">
+            <div className="treatment-item__heading">
               <span className="treatment-item__remove-icon" onClick={this.handleRemove.bind(this)}><i className="remove right floated big red icon"></i></span>
               <h2>{this.state.name}</h2>
             </div>

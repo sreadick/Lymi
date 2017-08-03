@@ -1,11 +1,6 @@
-$landing-max-width: 75rem;
-$navy: #0F1626;
-$leather: #AB987A;
-$coral: #A58EB7;
-$eggshell: #F5F5F5;
 // $navy: #0F1626;
 // $leather: #AB987A;
-// $coral: #FF533D;
+// $violet: #FF533D;
 // $eggshell: #F5F5F5;
 
 @mixin link-font-style {
@@ -21,51 +16,9 @@ $eggshell: #F5F5F5;
   font-family: 'Source Sans Pro', sans-serif;
 }
 
-.landing__header {
-  // mix-blend-mode: difference
-  // background: $navy;
-
-  background: transparent;
-  // border-bottom: .5px solid $navy;
-  // background: transparentize($navy, .2);
-  font-family: 'Roboto', sans-serif;
-}
-
-.landing__header__wrapper {
-  width: 100vw;
-  position: fixed;
-}
-
-.landing__header__content {
-  color: $navy;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  max-width: $landing-max-width;
-  margin: 0 auto;
-
-  @include link-font-style;
-}
-
-.landing__header__title {
-  margin: 0;
-  // background: $coral;
-}
-
-.landing__header__button {
-  color: $leather;
-}
-
-.landing__header__button:hover {
-  color: $navy;
-  cursor: pointer;
-}
-
 .landing__section {
   height: 100vh;
   background: $eggshell;
-
-
 
 
     //
@@ -136,9 +89,11 @@ $eggshell: #F5F5F5;
   font-weight: 300;
   font-size: 2.8rem;
   margin: 0;
+  margin-bottom: 3rem;
+
 
   span {
-    color: $coral;
+    color: $violet;
     // font-size: 39px;
   }
 }
@@ -150,7 +105,8 @@ $eggshell: #F5F5F5;
   line-height: 2.4rem;
   font-size: 18px;
   font-weight: 300;
-  margin: 3rem 0;
+  margin: 0;
+  margin-bottom: 3rem;
 }
 
 .landing__button {
@@ -161,15 +117,17 @@ $eggshell: #F5F5F5;
   width: 11rem;
   @include link-font-style;
   border-radius: 140px;
+
+  transition: background .5s ease, color .5s ease;
 }
 
-.landing__button:hover {
+.landing__button:hover, {
   background: $navy;
-  color: $eggshell;
+  color: $violet;
 }
 
 .down_icon {
-  color: $coral;
+  color: $violet;
 
   position: absolute;
   top: 90vh;
@@ -180,36 +138,16 @@ $eggshell: #F5F5F5;
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .landing__section2 {
 
   height: 100vh;
   background: $leather;
 
+}
 
+
+@media (max-width: 800px) {
+  .landing__section p {
+    display: none;
+  }
 }

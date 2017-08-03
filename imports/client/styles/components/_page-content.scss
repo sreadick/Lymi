@@ -4,12 +4,20 @@
   // padding: $space;
   // margin-top: $space;
   background-color: #f9f9f9;
-  padding: $space * 2;
-  padding-bottom: $space;
+  padding: $space;
+  // margin-top: $header-height;
+  background: $navy;
+
+  // min-height: calc(100vh - #{$header-height});
+  min-height: 100vh;
+  padding-top: $header-height + $space;
+  // margin-top: -4.5rem;
 }
 
-.page-content__segment {
-  margin-top: $space;
+.page-content__select-symptoms-segment {
+  // margin-top: $space;
+  padding-top: $space;
+  min-height: 10rem;
 }
 
 .page-content__treatments {
