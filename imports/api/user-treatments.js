@@ -22,7 +22,7 @@ Meteor.methods({
       name: '',
       amount: 1,
       dose: 0,
-      dose_type: 'milligrams',
+      dose_type: 'mg',
       frequency: 1,
       errors: {},
       createdAt: moment().valueOf(),
@@ -38,6 +38,10 @@ Meteor.methods({
       updates[Object.keys(updates)[0]] = parseInt(updates[Object.keys(updates)[0]]) || 0;
     } else if (Object.keys(updates).includes("dose")) {
       updates[Object.keys(updates)[0]] = parseFloat(updates[Object.keys(updates)[0]]) || 0;
+    } else if (Object.keys(updates).includes("dose_type")) {
+      if (updates.dose_type === 'pills') {
+        updates.dose = 0;
+      }
     }
 
     new SimpleSchema({

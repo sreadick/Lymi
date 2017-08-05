@@ -9,9 +9,11 @@ const AuthenticatedRoute = ({ loggingIn, authenticated, component, ...rest }) =>
     <Route render={(props) => {
       return (
         authenticated ?
-          <div>
+          <div className="page">
             <PrivateHeader title="Lymi"/>
+            <div className="page-content">
             {(React.createElement(component, {...props}))}
+            </div>
           </div>
         : <Redirect to="/login" />
       );

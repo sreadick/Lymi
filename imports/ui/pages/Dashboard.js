@@ -10,71 +10,80 @@ import { CheckinHistories } from '../../api/checkin-histories';
 
 import SymptomChart from '../components/SymptomChart';
 
+// ToDo //
+
+// transition/animation compat //
+// materialize //
+
 const Dashboard = (props) => {
   if (props.isFetching) {
-    return <div>FETCHING</div>
+    return <div></div>
   } else if (props.userSymptoms.length === 0 || props.userTreatments.length === 0) {
-    return <Redirect to="/home"/>
+    return <Redirect to="/home" />
+  } else if (props.userTreatments.find((treatment) => Object.keys(treatment.errors).length > 0)) {
+    return <Redirect to="/home/selecttreatments" />
   }
 
   return (
-    <div className="page-content">
-
-
-      <div className="ui container">
-          {props.checkinHistory.dailyCompleted ?
-            <div className="ui positive message">
-              {moment(props.checkinHistory.lastCheckin).fromNow() === "a few seconds ago" ? "Thanks for checking in!"
-              : `Last checked in ${moment(props.checkinHistory.lastCheckin).fromNow()}`
-              }
+    <div className="ui container">
+      <div className="page-content__main-heading">Dashboard</div>
+      {props.checkinHistory.dailyCompleted ?
+        <div className="ui positive message">
+          {moment(props.checkinHistory.lastCheckin).fromNow() === "a few seconds ago" ? "Thanks for checking in"
+          : `Last checked in ${moment(props.checkinHistory.lastCheckin).fromNow()}`
+          }
+        </div>
+      : <div className="ui message">
+          <div className="ui centered grid">
+            <div className="row">
+              <div className="ui header">You haven't checked in today</div>
             </div>
-          : <div className="ui message">
-              <div className="ui centered grid">
-                <div className="row">
-                  <div className="ui header">You haven't checked in today</div>
-                </div>
-                <div className="row">
-                  <Link className="ui black button" to="/home/checkin/symptoms">
-                    Check in now
-                  </Link>
+            <div className="row">
+              <Link className="ui black button" to="/home/checkin/symptoms">
+                Check in now
+              </Link>
+            </div>
+          </div>
+        </div>}
+
+
+
+      <div className="ui segment">
+        <Link className="ui small blue right floated button" to="/home/selectsymptoms">edit</Link>
+        <div className="page-content__subheading">Symptoms: </div>
+        <div className="ui big ordered list">
+          {props.userSymptoms.map((symptom) => {
+            return (
+              <div className="item" key={symptom._id}>
+                <div className="item__label">{symptom.name}</div>
+              </div>
+            );
+          })}
+        </div>
+        <div className="ui raised segment">
+          <SymptomChart checkins={props.checkinHistory.checkins}/>
+        </div>
+      </div>
+
+
+      <div className="ui segment">
+        <Link className="ui small blue right floated button" to="/home/selecttreatments">edit</Link>
+        <div className="page-content__subheading">Treatments: </div>
+        <div className="ui big ordered list">
+          {props.userTreatments.map((treatment) => {
+            return (
+              <div className="item" key={treatment._id}>
+                <div className="item__label">{treatment.name.charAt(0).toUpperCase() + treatment.name.slice(1)}</div>
+                <div className="item__content">
+                  {`
+                    ${treatment.amount}
+                    ${treatment.dose_type !== "pills" ? `x ${treatment.dose}${treatment.dose_type}` : treatment.amount === 1 ? "pill" : "pills"}
+                    ${treatment.frequency}/day
+                  `}
                 </div>
               </div>
-            </div>
-          }
-
-
-
-        <div className="ui segment">
-          <Link className="ui small blue right floated button" to="/home/selectsymptoms">edit</Link>
-          <span className="ui big header">Symptoms: </span>
-          <div className="ui big ordered list">
-            {props.userSymptoms.map((symptom) => {
-              return (
-                <div className="item" key={symptom._id}>
-                  <div className="header">{symptom.name}</div>
-                </div>
-              );
-            })}
-          </div>
-          <div className="ui raised segment">
-            <SymptomChart checkins={props.checkinHistory.checkins}/>
-          </div>
-        </div>
-
-
-        <div className="ui segment">
-          <Link className="ui small blue right floated button" to="/home/selecttreatments">edit</Link>
-          <span className="ui big header">Treatments: </span>
-          <div className="ui big ordered list">
-            {props.userTreatments.map((treatment) => {
-              return (
-                <div className="item" key={treatment._id}>
-                  <div className="header">{treatment.name}</div>
-                  <div className="description">{treatment.amount} X {treatment.dose}{treatment.dose_type} {treatment.frequency}/day</div>
-                </div>
-              );
-            })}
-          </div>
+            );
+          })}
         </div>
       </div>
     </div>

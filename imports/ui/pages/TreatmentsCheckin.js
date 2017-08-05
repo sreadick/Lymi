@@ -37,7 +37,7 @@ class TreatmentCheckin extends React.Component {
     e.target.classList.remove("highlighted")
   }
   render() {
-    if (this.props.treatmentCheckinItems.length === 0) return <div>fetching...</div>
+    if (this.props.treatmentCheckinItems.length === 0) return <div></div>
     return (
       <div className="ui container">
         <h4 className="ui center aligned large grey header">Did you take your medications?</h4>

@@ -1,3 +1,46 @@
+.symptom-group {
+  // border: 1px dotted #eee;
+  width: 25%;
+  text-align: center;
+  padding: $space 0;
+  font-family: 'Source Sans Pro', sans-serif;
+  // background: $eggshell;
+}
+
+.symptom-group__container {
+  border: 1px solid $grey;
+  border-radius: 20px;
+  box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
+  display: flex;
+  // background: $eggshell;
+  flex-direction: row;
+  flex-wrap: wrap;
+  // height: 80rem;
+  justify-content: center;
+  // align-items: baseline;
+  margin: $space 0;
+}
+
+.symptom-group__item {
+  margin: $space / 2 $space;
+  display: flex;
+}
+
+.symptom-group__category {
+  color: $navy;
+  font-size: 1.2rem;
+  font-weight: 300;
+  margin-left: $space / 2;
+}
+
+.symptom-group__item__title {
+  color: #444;
+  font-size: 1rem;
+  margin-left: $space / 4;
+  text-align: left;
+
+}
+
 .user-symptom {
   width: 40rem;
   color: #446;
@@ -10,12 +53,4 @@
 
 .user-symptom:hover .user-symptom__remove-icon {
   visibility: visible;
-}
-
-.symptom-chart-wrapper {
-  // background: black;
-  // max-width: 80%;
-  // margin: 0 auto;
-  // text-align: center;
-  // margin-bottom: 20px;
 }

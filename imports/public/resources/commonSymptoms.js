@@ -60,8 +60,8 @@ export const symptomsByCategory = [
     category: "Cognitive Symptoms",
     symptoms: [
       "Dementia",
-      "short term memory loss",
-      "long term memory loss",
+      "Short term memory loss",
+      "Long term memory loss",
       "Poor school or work performance",
       "Distractibility/attention deficit problems",
       "Confusion",

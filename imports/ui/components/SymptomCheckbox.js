@@ -13,12 +13,12 @@ export default class SymptomCheckbox extends React.Component {
   render() {
     return (
       <div>
-        <label className="item">
+        <label className="symptom-group__item">
           <Toggle
             checked={this.props.isChecked}
             icons={false}
             onChange={this.handleChange.bind(this)} />
-          <span className="item__title">{this.props.symptom}</span>
+          <span className="symptom-group__item__title">{this.props.symptom}</span>
         </label>
       </div>
 

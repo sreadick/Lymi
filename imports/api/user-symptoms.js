@@ -1,6 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import SimpleSchema from 'simpl-schema';
+import moment from 'moment';
+
 
 export const UserSymptoms = new Mongo.Collection('userSymptoms');
 
@@ -19,7 +21,8 @@ Meteor.methods({
 
     UserSymptoms.insert({
       name: symptomName,
-      userId: this.userId
+      userId: this.userId,
+      createdAt: moment().valueOf(),
     });
   },
   'userSymptoms.remove'(symptomName) {

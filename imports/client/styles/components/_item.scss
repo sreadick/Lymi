@@ -5,17 +5,10 @@
   // padding: $space;
   // background: $grey;
   // height: 5rem;
-  margin: $space / 2;
-  display: flex;
 }
 
 .item__title {
-  margin-left: $space / 4;
-}
-
-.category {
-  color: $dark-grey;
-  margin-left: $space / 2;
+  // margin-left: $space / 4;
 }
 
 .item__message {
@@ -27,4 +20,19 @@
   font-style: italic;
   text-align: center;
   margin: 0;
+}
+
+.item__label {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #222;
+}
+
+.item__content {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  color: #353535;
+  line-height: .9rem;
 }

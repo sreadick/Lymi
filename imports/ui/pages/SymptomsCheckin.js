@@ -47,7 +47,7 @@ class SymptomsCheckin extends React.Component {
   }
 
   render() {
-    if (this.props.symptomCheckinItems.length === 0) return <div>fetching...</div>
+    if (this.props.symptomCheckinItems.length === 0) return <div></div>
     return (
       <div className="ui container">
         <h4 className="ui center aligned large grey header">How were your symptoms today?</h4>
