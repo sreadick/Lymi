@@ -29,7 +29,7 @@ const Dashboard = (props) => {
       <div className="page-content__main-heading">Dashboard</div>
       {props.checkinHistory.dailyCompleted ?
         <div className="ui positive message">
-          {moment(props.checkinHistory.lastCheckin).fromNow() === "a few seconds ago" ? "Thanks for checking in"
+          {moment(props.checkinHistory.lastCheckin).fromNow() === "a few seconds ago" ? "Thanks for checking in. Come back tomorrow."
           : `Last checked in ${moment(props.checkinHistory.lastCheckin).fromNow()}`
           }
         </div>

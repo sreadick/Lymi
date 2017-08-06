@@ -53,7 +53,6 @@ export class TreatmentItem extends React.Component {
   uppercase(treatmentName) {
     const words = treatmentName.split(' ');
     return words.map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-
   }
 
   getErrors() {
@@ -77,17 +76,6 @@ export class TreatmentItem extends React.Component {
     return (
       <div className="ui raised fluid card">
         <div className="content">
-          <form>
-            Quantity (between 1 and 5):
-            <div className="ui input">
-              <input className="" type="number" name="quantity" min="1" max="5" />
-            </div>
-            <select className="ui dropdown">
-              <option value="">Gender</option>
-              <option value="1">Male</option>
-              <option value="0">Female</option>
-            </select>
-          </form>
 
           <div className="ui form">
             <div className="treatment-item__heading">
@@ -125,7 +113,7 @@ export class TreatmentItem extends React.Component {
                   <div>
                     <select className="ui basic dropdown" ref="dose_type" name="dose_type" value={this.state.dose_type} onChange={this.handleChange.bind(this)}>
                       <option value="mg">mg</option>
-                      <option value="units">iu</option>
+                      <option value="iu">iu</option>
                       <option value="pills">pills</option>
                     </select>
                   </div>
