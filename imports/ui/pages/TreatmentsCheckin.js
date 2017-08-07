@@ -40,11 +40,11 @@ class TreatmentCheckin extends React.Component {
     if (this.props.treatmentCheckinItems.length === 0) return <div></div>
     return (
       <div className="ui container">
-        <h4 className="ui center aligned large grey header">Did you take your medications?</h4>
+        <h4 className="ui center aligned medium grey header">Did you take your medications?</h4>
         <Link className="ui small blue basic button" to="/home/checkin/symptoms">Back to symptoms</Link>
         {this.props.treatmentCheckinItems.map((treatment) => (
           <div className="ui very padded container segment" key={treatment.name}>
-            <h3 className="ui grey header">{treatment.name}</h3>
+            <h3 className="ui black header">{treatment.name}</h3>
             {this.renderAnswerSquares(treatment)}
           </div>
         ))}
@@ -52,7 +52,7 @@ class TreatmentCheckin extends React.Component {
         <button className={`ui black button ${!this.props.treatmentCheckinCompleted && 'disabled'}`}
           onClick={() => {
             if (this.props.treatmentCheckinCompleted) {
-              Meteor.call('checkinHistories.dailyCompleted.update', true)
+              Meteor.call('checkinHistories.dailyCompleted.update', "yes")
               this.props.history.replace("/home/dashboard");
             }
           }}>Finish!
@@ -64,7 +64,6 @@ class TreatmentCheckin extends React.Component {
 
 export default createContainer(props => {
   const currentDate = moment().format('MMMM Do YYYY');
-  // const checkinHandle = Meteor.subscribe('checkinHistories');
   const checkinItems = props.checkinHistoryIsReady ? CheckinHistories.findOne().checkins.find((checkin) => checkin.date === currentDate) : {};
 
   return {

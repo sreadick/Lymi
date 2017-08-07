@@ -23,24 +23,25 @@ const Dashboard = (props) => {
   } else if (props.userTreatments.find((treatment) => Object.keys(treatment.errors).length > 0)) {
     return <Redirect to="/home/selecttreatments" />
   }
-
   return (
     <div className="ui container">
       <div className="page-content__main-heading">Dashboard</div>
-      {props.checkinHistory.dailyCompleted ?
+      {props.checkinHistory.dailyCompleted === 'yes' ?
         <div className="ui positive message">
           {moment(props.checkinHistory.lastCheckin).fromNow() === "a few seconds ago" ? "Thanks for checking in. Come back tomorrow."
           : `Last checked in ${moment(props.checkinHistory.lastCheckin).fromNow()}`
           }
         </div>
-      : <div className="ui message">
+      : <div className={`ui ${props.checkinHistory.dailyCompleted === 'partial' && "warning"} message`}>
           <div className="ui centered grid">
             <div className="row">
-              <div className="ui header">You haven't checked in today</div>
+              <div className="ui header">
+                {props.checkinHistory.dailyCompleted === 'partial' ? "Your check in is incomplete" : "You haven't checked in today"}
+              </div>
             </div>
             <div className="row">
               <Link className="ui black button" to="/home/checkin/symptoms">
-                Check in now
+                {props.checkinHistory.dailyCompleted === 'partial' ? "Finish checking in" : "Check in now"}
               </Link>
             </div>
           </div>
@@ -60,7 +61,7 @@ const Dashboard = (props) => {
             );
           })}
         </div>
-        <div className="ui raised segment">
+        <div className={window.innerWidth > 1200 && "ui raised segment"}>
           <SymptomChart checkins={props.checkinHistory.checkins}/>
         </div>
       </div>
@@ -104,7 +105,7 @@ export default createContainer(() => {
       symptoms: UserSymptoms.find().fetch(),
       treatments: UserTreatments.find().fetch(),
     });
-    Meteor.call('checkinHistories.dailyCompleted.update', false)
+    Meteor.call('checkinHistories.dailyCompleted.update', 'no')
   }
   return {
     userSymptoms: UserSymptoms.find().fetch(),

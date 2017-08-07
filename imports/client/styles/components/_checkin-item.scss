@@ -46,8 +46,9 @@
 
 .checkin-item__answer-group {
   margin: 0 auto;
-  width: 85%;
+  // width: 85%;
   height: 50px;
+  // padding: 1rem 0;
 }
 
 .checkin-item__answer-square {
@@ -55,13 +56,15 @@
   display: inline-block;
   margin: 0 1%;
   border-radius: 10px;
-  width: 13%;
-  min-width: 45px;
+  width: 10%;
   height: 100%;
   line-height: 50px;
 
+  -webkit-transition: background .4s ease, border .4s ease, color .4s ease;
   transition: background .4s ease, border .4s ease, color .4s ease;
 }
+
+
 
 .checkin-item__answer-square:hover {
   cursor: pointer;
@@ -69,6 +72,7 @@
 
 .checkin-item__answer-square.severity {
   border: 1px solid $severity-checkin-answer-primary;
+  min-width: 2.7rem;
 }
 
 .checkin-item__answer-square.highlighted, .checkin-item__answer-square.selected {
@@ -86,6 +90,7 @@
 
 .checkin-item__answer-square.Yes {
   border: 1px solid $yes-checkin-answer-primary;
+  min-width: 3.7rem;
 }
 
 .checkin-item__answer-square.selected.Yes {
@@ -99,6 +104,7 @@
 
 .checkin-item__answer-square.No {
   border: 1px solid $no-checkin-answer-primary;
+  min-width: 3.7rem;
 }
 
 .checkin-item__answer-square.selected.No {

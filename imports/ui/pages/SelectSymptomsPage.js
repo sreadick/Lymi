@@ -43,7 +43,7 @@ class SelectSymptomsPage extends React.Component {
               onClick={() => {
                 Meteor.call('userSymptoms.remove', symptom.name);
               }}>
-              <i className="remove large right floated red icon"></i>
+              <i className="remove right floated red icon"></i>
             </span>
           </h3>
         </div>
@@ -61,41 +61,38 @@ class SelectSymptomsPage extends React.Component {
             <p onClick={() => this.refs.intro_message_container.classList.add('closed')}><span>Got it</span></p>
           </div>
         }
-        <div className="ui container">
+        <div className="">
           <div className="page-content__main-heading">Common Symptoms</div>
 
           <div className="symptom-group__container">
             {this.renderCommonSymptomsList()}
+            <div className="ui action input">
+              <input ref="otherSymptom" type="text" placeholder="Other..." />
+              <button className="ui button"
+                onClick={() => {
+                  const handledSymptom = this.refs.otherSymptom.value.charAt(0).toUpperCase() + this.refs.otherSymptom.value.slice(1).toLowerCase().trim();
+                  console.log(handledSymptom)
+                  if (handledSymptom.length > 0 && !this.props.userSymptoms.find(symptom => symptom.name.toLowerCase() === handledSymptom.toLowerCase())) {
+                    Meteor.call('userSymptoms.insert', handledSymptom);
+                  }
+                }}>
+                Add
+              </button>
+            </div>
           </div>
 
-            <div className="ui padded container">
-              <div className="ui large action input">
-                <input ref="otherSymptom" type="text" placeholder="Other..." />
-                <button className="ui black button"
-                  onClick={() => {
-                    const handledSymptom = this.refs.otherSymptom.value.charAt(0).toUpperCase() + this.refs.otherSymptom.value.slice(1).toLowerCase().trim();
-                    console.log(handledSymptom)
-                    if (handledSymptom.length > 0 && !this.props.userSymptoms.find(symptom => symptom.name.toLowerCase() === handledSymptom.toLowerCase())) {
-                      Meteor.call('userSymptoms.insert', handledSymptom);
-                    }
-                  }}>
-                  Add
-                </button>
-              </div>
-            </div>
+
           <div className="page-content__user-selected-symptoms-container">
-            <div className="ui container">
-              <div className="ui vertical segment">
-                <h2 className="ui header">Selected: </h2>
-                <Link className={"ui large green right floated " + (this.props.userSymptoms.length > 0 ? "button" : "disabled button")}
-                  to={this.props.userSymptoms.length > 0 ? "/home/selecttreatments" : "#"}>
-                  Next
-                </Link>
-                <div>
-                  {this.showSelectedSymptoms()}
-                </div>
+            {/* <div className="ui container"> */}
+              <Link className={"ui large green right floated " + (this.props.userSymptoms.length > 0 ? "button" : "disabled button")}
+                to={this.props.userSymptoms.length > 0 ? "/home/selecttreatments" : "#"}>
+                Next
+              </Link>
+              <div className="page-content__subheading">Selected: </div>
+              <div>
+                {this.showSelectedSymptoms()}
               </div>
-            </div>
+            {/* </div> */}
           </div>
         </div>
       </div>

@@ -21,7 +21,7 @@ Accounts.onCreateUser((options, user) => {
 
   CheckinHistories.insert({
     userId: user._id,
-    dailyCompleted: false,
+    dailyCompleted: 'no',
     lastCheckin: undefined,
     checkins: []
   });

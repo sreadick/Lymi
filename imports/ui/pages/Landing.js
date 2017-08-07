@@ -10,16 +10,16 @@ export default Landing = (props) => (
         <h1 className="main_heading">Lyme Disease Management, Made <span>Easy</span>.</h1>
         <p>Lymi is your personal tool for simplifying your treatment process while faciliating recovery, all in a convenient and user-friendly interface.</p>
         <Link className="landing__button" to="/Signup">Sign up now</Link>
-        <Link className="down_icon" to="#2"><i className="huge angle double down icon"></i></Link>
+        {/* <Link className="down_icon" to="#2"><i className="huge angle double down icon"></i></Link> */}
       </div>
 
     </div>
 
-    <div id="2" className="landing__section2">
+    {/* <div id="2" className="landing__section2">
       <div className="flex-wrapper">
         <h1>[Features]</h1>
       </div>
-    </div>
+    </div> */}
 
   </div>
 );

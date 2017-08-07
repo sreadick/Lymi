@@ -14,7 +14,7 @@ export const symptomsByCategory = [
     ]
   },
   {
-    category: "Digestive/excretory System",
+    category: "Digestive System",
     symptoms: [
       "Upset stomach",
       "Irritable bladder",
@@ -25,7 +25,7 @@ export const symptomsByCategory = [
     ]
   },
   {
-    category: "Respiratory/Circulatory Systems",
+    category: "Respiratory System",
     symptoms: [
       "Difficulty breathing",
       "Night sweats",

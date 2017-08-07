@@ -78,7 +78,7 @@ export default class SymptomChart extends React.Component {
             fontSize: 10,
             fontStyle: 'bold',
             fontColor: '#444',
-            usePointStyle: true
+            usePointStyle: true,
           },
           position: 'top'
         },
@@ -101,7 +101,7 @@ export default class SymptomChart extends React.Component {
             //   color: '#aaa',
             // },
 						scaleLabel: {
-							display: true,
+							display: window.innerWidth > 700 ? true : false,
 							labelString: 'Severity'
 						},
             ticks: {

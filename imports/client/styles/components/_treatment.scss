@@ -12,7 +12,11 @@
 
 .treatment-item__remove-icon {
   cursor: pointer;
-  visibility: hidden;
+  visibility: visible;
+
+  @media screen and (min-width: 90rem) {
+    visibility: hidden;
+  }
 }
 
 .treatment-item:hover {
@@ -30,4 +34,12 @@
 
 .select-treatment-bottom-error.revealed {
   display: block;
+}
+
+.add-treatment-button {
+  width: 100%;
+
+  @media screen and (min-width: 38.75rem) {
+    width: auto;
+  }
 }

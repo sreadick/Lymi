@@ -8,6 +8,7 @@
   line-height: 1.2;
   margin-bottom: $space;
   padding: $input-spacing;
+  -webkit-transition: background .5s ease, color .5s ease;
   transition: background .5s ease, color .5s ease;
 
   font-family: 'Roboto', sans-serif;

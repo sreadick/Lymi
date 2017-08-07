@@ -14,7 +14,7 @@ import TreatmentsCheckin from './TreatmentsCheckin';
 const Checkin = (props) => {
   if (props.isFetching) {
     return <div></div>
-  } else if (CheckinHistories.findOne().dailyCompleted === true) {
+  } else if (CheckinHistories.findOne().dailyCompleted === 'yes') {
     return <Redirect to="/home"/>
   }
   return (

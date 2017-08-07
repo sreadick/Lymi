@@ -15,8 +15,9 @@ export default class SymptomCheckbox extends React.Component {
       <div>
         <label className="symptom-group__item">
           <Toggle
+            className="symptom_toggle"
             checked={this.props.isChecked}
-            icons={false}
+            value="yes"
             onChange={this.handleChange.bind(this)} />
           <span className="symptom-group__item__title">{this.props.symptom}</span>
         </label>

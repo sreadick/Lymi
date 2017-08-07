@@ -50,16 +50,17 @@
 
 
 .nav-header.private {
-  background: transparentize($navy, .2);
-  mix-blend-mode: difference;
+  background: transparentize($navy, .1);
+  // mix-blend-mode: difference;
 
-  border-bottom: 1px solid rgba(100, 100, 100, .8);
+  // border-bottom: 1px solid rgba(100, 100, 100, .8);
 
-  .nav-header__link, .nav-header__link--title {
-    color: $light-grey;
-
-
+  .nav-header__link--title, .nav-header__link, {
+    // color: $light-grey;
+    color: transparentize($light-grey, .3);
   }
+
+
   .nav-header__link:hover, {
     color: $grey;
   }

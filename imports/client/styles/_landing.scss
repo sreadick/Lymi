@@ -98,8 +98,6 @@
   }
 }
 
-
-
 .landing__section p {
   color: #252236;
   line-height: 2.4rem;
@@ -117,7 +115,7 @@
   width: 11rem;
   @include link-font-style;
   border-radius: 140px;
-
+  -webkit-transition: background .5s ease, color .5s ease;
   transition: background .5s ease, color .5s ease;
 }
 
@@ -145,7 +143,7 @@
 
 }
 
-
+// need to edit
 @media (max-width: 800px) {
   .landing__section p {
     display: none;
