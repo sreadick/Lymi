@@ -42,7 +42,8 @@ class SymptomsCheckin extends React.Component {
   }
 
   removeHighlight(symptom) {
-    this.refs[`${symptom.name}_symptom_container`].childNodes.forEach((node) => {
+    const nodeArray = Array.from(this.refs[`${symptom.name}_symptom_container`].childNodes);
+    nodeArray.forEach((node) => {
       node.classList.remove('highlighted');
     })
   }

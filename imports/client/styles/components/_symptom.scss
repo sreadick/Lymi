@@ -9,10 +9,10 @@
   // edit
   width: 100%;
 
-  @media screen and (min-width: 38.75rem) {
+  @media screen and (min-width: $tablet-breakpoint) {
     width: 50%;
   }
-  @media screen and (min-width: 70rem) {
+  @media screen and (min-width: $desktop-breakpoint) {
     width: 25%;
   }
 }
@@ -31,15 +31,11 @@
   margin: $space 0;
   padding-bottom: $space * 2;
 
-  // edit
-  @media screen and (min-width: 38.75rem) {
-    // margin: $space 5%;
-  }
-
   button {
     color: #ccc !important;
     background: $coral !important;
   }
+
 }
 
 .symptom-group__item {
@@ -79,7 +75,7 @@
   visibility: visible;
   cursor: pointer;
 
-  @media screen and (min-width: 90rem) {
+  @media screen and (min-width: $desktop-breakpoint) {
     visibility: hidden;
   }
 }

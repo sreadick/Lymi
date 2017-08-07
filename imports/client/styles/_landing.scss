@@ -105,6 +105,11 @@
   font-weight: 300;
   margin: 0;
   margin-bottom: 3rem;
+  display: none;
+
+  @media screen and (min-width: $tablet-breakpoint) {
+    display: block;
+  }
 }
 
 .landing__button {
@@ -141,11 +146,4 @@
   height: 100vh;
   background: $leather;
 
-}
-
-// need to edit
-@media (max-width: 800px) {
-  .landing__section p {
-    display: none;
-  }
 }

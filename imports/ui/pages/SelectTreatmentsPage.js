@@ -76,9 +76,9 @@ class SelectTreatmentsPage extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="ui container">
         <div className="page-content__main-heading">Select Treatments</div>
-          <div className="ui container">
+          <div>
           <button className="ui basic black button add-treatment-button"
             onClick={this.handleAddTreatment.bind(this)}>
             New Treatment
