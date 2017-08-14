@@ -72,7 +72,6 @@ class SymptomsCheckin extends React.Component {
 
 export default createContainer(props => {
   const currentDate = moment().format('MMMM Do YYYY');
-  // const checkinHandle = Meteor.subscribe('checkinHistories');
   const checkinItems = props.checkinHistoryIsReady ? CheckinHistories.findOne().checkins.find((checkin) => checkin.date === currentDate) : {};
 
   return {

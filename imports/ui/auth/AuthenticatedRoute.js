@@ -4,6 +4,9 @@ import PropTypes from 'prop-types';
 
 import PrivateHeader from '../components/PrivateHeader';
 
+// ToDo
+// create high level container for subscriptions
+
 const AuthenticatedRoute = ({ loggingIn, authenticated, component, ...rest }) => {
   return (
     <Route render={(props) => {

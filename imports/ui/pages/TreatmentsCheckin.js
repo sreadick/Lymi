@@ -23,7 +23,6 @@ class TreatmentCheckin extends React.Component {
   }
 
   handleMouseOver(e) {
-    console.log(e.target.className)
     if (!e.target.className.includes("selected")) {
       e.target.classList.add("highlighted")
     }

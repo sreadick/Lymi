@@ -24,7 +24,10 @@ Meteor.methods({
       dose: 0,
       dose_type: 'mg',
       frequency: 1,
-      errors: {},
+      errors: {
+        name: "needs to be at least three characters.",
+        dose: "should be a positive number"
+      },
       createdAt: moment().valueOf(),
       userId: this.userId
     });

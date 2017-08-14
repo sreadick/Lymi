@@ -8,28 +8,19 @@ import { UserSymptoms } from '../../api/user-symptoms';
 import { CheckinHistories } from '../../api/checkin-histories';
 
 import SymptomCheckbox from '../components/SymptomCheckbox';
+import { SymptomGroup } from '../components/SymptomGroup';
 
 class SelectSymptomsPage extends React.Component {
 
   renderCommonSymptomsList() {
-    const userSymptomNames = this.props.userSymptoms.map((us) => us.name);
-
     return symptomsByCategory.map((symptomGroup) => {
       return (
-        <div className="symptom-group" key={symptomGroup.category}>
-          <h4 className="symptom-group__category">{ symptomGroup.category }</h4>
-          <div className=''>
-            {symptomGroup.symptoms.map((symptom) => {
-              return (
-                <SymptomCheckbox
-                  key={symptom}
-                  symptom={symptom}
-                  isChecked={userSymptomNames.includes(symptom)}
-                />
-              )
-            })}
-          </div>
-        </div>
+        <SymptomGroup
+          key={symptomGroup.category}
+          category={symptomGroup.category}
+          symptoms={symptomGroup.symptoms}
+          userSymptoms={this.props.userSymptoms}>
+        </SymptomGroup>
       )
     });
   }
@@ -57,7 +48,7 @@ class SelectSymptomsPage extends React.Component {
         {(this.props.checkinHistoryIsReady && this.props.checkinHistory.checkins.length === 0)
           && <div className="intro_message_container" ref="intro_message_container">
             <h1>Welcome to Lymi</h1>
-            <p>To get started select your symptoms from the list below. If your symptom isn't listed you can enter it at the botom of the page.</p>
+            <p>To get started select your symptoms from the list below. If your symptom isn't listed you can enter it at the bottom of the page.</p>
             <p onClick={() => this.refs.intro_message_container.classList.add('closed')}><span>Got it</span></p>
           </div>
         }
@@ -83,16 +74,14 @@ class SelectSymptomsPage extends React.Component {
 
 
           <div className="page-content__user-selected-symptoms-container">
-            {/* <div className="ui container"> */}
-              <Link className={"ui large green right floated " + (this.props.userSymptoms.length > 0 ? "button" : "disabled button")}
-                to={this.props.userSymptoms.length > 0 ? "/home/selecttreatments" : "#"}>
-                Next
-              </Link>
-              <div className="page-content__subheading">Selected: </div>
-              <div>
-                {this.showSelectedSymptoms()}
-              </div>
-            {/* </div> */}
+            <Link className={"ui large green right floated " + (this.props.userSymptoms.length > 0 ? "button" : "disabled button")}
+              to={this.props.userSymptoms.length > 0 ? "/home/selecttreatments" : "#"}>
+              Next
+            </Link>
+            <div className="page-content__subheading">Selected: </div>
+            <div>
+              {this.showSelectedSymptoms()}
+            </div>
           </div>
         </div>
       </div>
@@ -101,7 +90,7 @@ class SelectSymptomsPage extends React.Component {
 };
 
 export default createContainer(() => {
-  Meteor.subscribe('userSymptoms');
+  const symptomHandle = Meteor.subscribe('userSymptoms');
   const checkinHandle = Meteor.subscribe('checkinHistories')
 
   const checkinHistoryIsReady = checkinHandle.ready() && !!CheckinHistories.findOne();

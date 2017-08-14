@@ -12,11 +12,11 @@ if (Meteor.isServer) {
 }
 
 Meteor.methods({
-  'checkinHistories.checkins.update'({ date, symptoms, treatments }) {
+  'checkinHistories.checkins.create'({ date, symptoms, treatments }) {
     if (!this.userId) {
       throw new Meteor.Error('not-authorized');
     }
-    CheckinHistories.update({ userId: this.userId}, {
+    CheckinHistories.update({ userId: this.userId }, {
       $push: {
         checkins: {
           date,
@@ -27,6 +27,36 @@ Meteor.methods({
             return { name: treatment.name, compliance: undefined }
           }),
         }
+      }
+    });
+  },
+  'checkinHistories.checkins.symptoms.update'({ date, symptoms }) {
+    if (!this.userId) {
+      throw new Meteor.Error('not-authorized');
+    }
+    const dateIndex = CheckinHistories.findOne({userId: this.userId}).checkins.findIndex((checkin) => checkin.date === date);
+    const fieldPath = `checkins.${dateIndex}.symptoms`;
+
+    CheckinHistories.update({userId: this.userId}, {
+      $set: {
+        [fieldPath] : symptoms.map((symptom) => {
+          return { name: symptom.name, severity: 0 }
+        }),
+      }
+    });
+  },
+  'checkinHistories.checkins.treatments.update'({ date, treatments }) {
+    if (!this.userId) {
+      throw new Meteor.Error('not-authorized');
+    }
+    const dateIndex = CheckinHistories.findOne({userId: this.userId}).checkins.findIndex((checkin) => checkin.date === date);
+    const fieldPath = `checkins.${dateIndex}.treatments`;
+
+    CheckinHistories.update({userId: this.userId}, {
+      $set: {
+        [fieldPath] : treatments.map((treatment) => {
+          return { name: treatment.name, compliance: undefined }
+        }),
       }
     });
   },
