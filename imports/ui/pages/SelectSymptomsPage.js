@@ -62,7 +62,6 @@ class SelectSymptomsPage extends React.Component {
               <button className="ui button"
                 onClick={() => {
                   const handledSymptom = this.refs.otherSymptom.value.charAt(0).toUpperCase() + this.refs.otherSymptom.value.slice(1).toLowerCase().trim();
-                  console.log(handledSymptom)
                   if (handledSymptom.length > 0 && !this.props.userSymptoms.find(symptom => symptom.name.toLowerCase() === handledSymptom.toLowerCase())) {
                     Meteor.call('userSymptoms.insert', handledSymptom);
                   }
@@ -76,7 +75,7 @@ class SelectSymptomsPage extends React.Component {
           <div className="page-content__user-selected-symptoms-container">
             <Link className={"ui large green right floated " + (this.props.userSymptoms.length > 0 ? "button" : "disabled button")}
               to={this.props.userSymptoms.length > 0 ? "/home/selecttreatments" : "#"}>
-              Next
+              Treatments
             </Link>
             <div className="page-content__subheading">Selected: </div>
             <div>
@@ -95,6 +94,7 @@ export default createContainer(() => {
 
   const checkinHistoryIsReady = checkinHandle.ready() && !!CheckinHistories.findOne();
 
+  console.log(UserSymptoms.find({}, {sort: {createdAt: -1}}).fetch());
 
   return {
     userSymptoms: UserSymptoms.find({}, {sort: {createdAt: -1}}).fetch(),

@@ -12,7 +12,8 @@ import SymptomChart from '../components/SymptomChart';
 
 // ToDo //
 
-// materialize //
+// materialize
+// react production build
 
 class Dashboard extends React.Component {
   render() {
@@ -61,9 +62,9 @@ class Dashboard extends React.Component {
               );
             })}
           </div>
-          {this.props.checkinHistory.dailyCompleted === 'yes' &&
-            <div className={window.innerWidth > 1200 && "ui raised segment"}>
-            <SymptomChart checkins={this.props.checkinHistory.checkins}/>
+          {this.props.checkinHistory.checkins.length > 0 &&
+          <div className={window.innerWidth > 1200 && "ui raised segment"}>
+            <SymptomChart allSymptoms={this.props.userSymptoms.map(symptom => symptom.name)} checkins={this.props.checkinHistory.checkins}/>
           </div>}
         </div>
 

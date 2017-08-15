@@ -9,10 +9,6 @@ import { UserTreatments } from '../../api/user-treatments';
 import { TreatmentList } from '../components/TreatmentList';
 
 class SelectTreatmentsPage extends React.Component {
-  constructor(props) {
-    super(props);
-
-  }
 
   componentDidMount() {
     Session.set('showErrors', false);
@@ -55,13 +51,13 @@ class SelectTreatmentsPage extends React.Component {
             New Treatment
           </button>
           <TreatmentList userTreatments={this.props.userTreatments} showErrors={this.props.showErrors}/>
-          <Link className="ui large blue left floated button" to="/home/selectsymptoms">Back</Link>
+          <Link className="ui large blue left floated button" to="/home/selectsymptoms">Symptoms</Link>
           <button className={"ui large green right floated " + (this.props.userTreatments.length > 0 ? "button" : "disabled button")}
              onClick={() => {
                const hasErrors = this.validateTreatments();
                hasErrors ? Session.set('showErrors', true) : this.props.history.push('/home/dashboard')
              }}>
-             Next
+             Dashboard
           </button>
           <div className="ui small center aligned black header select-treatment-bottom-error" ref="errorMessage">check above for errors and try again...</div>
           <div className="ui hidden fitted clearing divider"></div>

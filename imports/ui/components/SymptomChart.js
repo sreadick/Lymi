@@ -15,16 +15,18 @@ export default class SymptomChart extends React.Component {
     );
     const colorsArray = ['#E17575', '#E275E2', '#7575E2', '#75E2E2', '#75E275', '#E2E275', '#E2AC75', '#B26161', '#5B5B8C', '#707070', '#26622E'];
 
-    const allSymptoms = [];
-    props.checkins.forEach((checkin) => {
-      checkin.symptoms.forEach((symptom) => {
-        if (!allSymptoms.includes(symptom.name)) {
-          allSymptoms.push(symptom.name);
-        }
-      })
-    });
+    // const allSymptoms = [];
+    // props.checkins.forEach((checkin) => {
+    //   checkin.symptoms.forEach((symptom) => {
+    //     // if (!allSymptoms.includes(symptom.name)) {
+    //     if (!allSymptoms.includes(symptom.name) && props.currentSymptoms.includes(symptom.name)) {
+    //       allSymptoms.push(symptom.name);
+    //     }
+    //   })
+    // });
 
-    const symptomDatasets = allSymptoms.map((symptom, index) => {
+    // const symptomDatasets = allSymptoms.map((symptom, index) => {
+    const symptomDatasets = props.allSymptoms.map((symptom, index) => {
       return {
         label: symptom,
         backgroundColor: colorsArray[index],
