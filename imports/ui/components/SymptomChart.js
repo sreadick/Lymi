@@ -7,26 +7,82 @@ import { Line } from 'react-chartjs-2';
 export default class SymptomChart extends React.Component {
   constructor(props) {
     super(props);
-    const startDate = moment(props.checkins[0].date, 'MMMM Do YYYY');
-    const lastDate = moment(props.checkins[props.checkins.length - 1].date, 'MMMM Do YYYY');
+    this.state = {
+      chartData: {},
+      chartOptions: {}
+    }
+  }
+
+  componentDidMount() {
+
+    this.setState({
+      chartData: {
+        labels: this.getData().dateLabels,
+        datasets: this.getData().symptomDatasets,
+      },
+      chartOptions: {
+        maintainAspectRatio: false,
+				responsive: true,
+        legend: {
+          display: false,
+          labels: {
+            fontSize: 10,
+            fontStyle: 'bold',
+            fontColor: '#444',
+            usePointStyle: true,
+          },
+          position: 'top'
+        },
+				scales: {
+					xAxes: [{
+						display: true,
+					}],
+					yAxes: [{
+						display: true,
+						scaleLabel: {
+							display: window.innerWidth > 700 ? true : false,
+              fontColor: this.props.symptomNames.length === 1 ? this.props.symptomColors[0] : 'grey',
+							labelString: this.props.symptomNames.length === 1 ? this.props.symptomNames[0] : 'Severity',
+						},
+            ticks: {
+              min: 1,
+              max: 5,
+              stepSize: 1
+            }
+					}]
+				},
+        tooltips: {
+          mode: 'point',
+          titleFontSize: 20,
+          callbacks: {
+            title: ((tooltips, data) => this.props.checkins[tooltips[0].index] ? this.props.checkins[tooltips[0].index].date : '')
+          }
+        }
+			}
+    });
+  }
+
+  componentDidUpdate(prevProps) {
+    // if (prevProps.chartData !== this.props.chart)
+    if (prevProps.symptomNames !== this.props.symptomNames) {
+      this.setState({
+        chartData: {
+          labels: this.getData().dateLabels,
+          datasets: this.getData().symptomDatasets,
+        }
+      })
+    }
+  }
+
+  getData() {
+    const startDate = moment(this.props.checkins[0].date, 'MMMM Do YYYY');
+    const lastDate = moment(this.props.checkins[this.props.checkins.length - 1].date, 'MMMM Do YYYY');
     const totalDatesNumber = lastDate.diff(startDate , 'days') + 1;
     const dateLabels = [...Array(totalDatesNumber).keys()].map((dateOffset) =>
       moment(startDate).add(dateOffset, "d").format('M/D/YY')
     );
-    const colorsArray = ['#E17575', '#E275E2', '#7575E2', '#75E2E2', '#75E275', '#E2E275', '#E2AC75', '#B26161', '#5B5B8C', '#707070', '#26622E'];
-
-    // const allSymptoms = [];
-    // props.checkins.forEach((checkin) => {
-    //   checkin.symptoms.forEach((symptom) => {
-    //     // if (!allSymptoms.includes(symptom.name)) {
-    //     if (!allSymptoms.includes(symptom.name) && props.currentSymptoms.includes(symptom.name)) {
-    //       allSymptoms.push(symptom.name);
-    //     }
-    //   })
-    // });
-
-    // const symptomDatasets = allSymptoms.map((symptom, index) => {
-    const symptomDatasets = props.allSymptoms.map((symptom, index) => {
+    const colorsArray = this.props.symptomColors || ['#E17575', '#E275E2', '#7575E2', '#75E2E2', '#75E275', '#E2E275', '#E2AC75', '#B26161', '#5B5B8C', '#707070', '#26622E'];
+    const symptomDatasets = this.props.symptomNames.map((symptom, index) => {
       return {
         label: symptom,
         backgroundColor: colorsArray[index],
@@ -34,7 +90,7 @@ export default class SymptomChart extends React.Component {
         borderColor: colorsArray[index],
         fill: false,
         cubicInterpolationMode: 'monotone',
-        data: props.checkins.map((checkin) => {
+        data: this.props.checkins.map((checkin) => {
           const targetSymptomCheckin = checkin.symptoms.find((checkinSymptom) => {
             return checkinSymptom.name === symptom;
           });
@@ -57,7 +113,7 @@ export default class SymptomChart extends React.Component {
 
     const dummyLabel = '';
 
-    if (props.checkins.length === 1) {
+    if (this.props.checkins.length === 1) {
       symptomDatasets.forEach((dataset) => {
         dataset.data.push(dummyDataset);
         dataset.data.unshift(dummyDataset);
@@ -66,62 +122,9 @@ export default class SymptomChart extends React.Component {
       dateLabels.unshift(dummyLabel);
     }
 
-    this.state = {
-
-      chartData: {
-        labels: dateLabels,
-        datasets: symptomDatasets,
-      },
-      chartOptions: {
-        maintainAspectRatio: false,
-				responsive: true,
-        legend: {
-          labels: {
-            fontSize: 10,
-            fontStyle: 'bold',
-            fontColor: '#444',
-            usePointStyle: true,
-          },
-          position: 'top'
-        },
-				scales: {
-					xAxes: [{
-						display: true,
-            // gridLines: {
-            //   // zeroLineColor: '#333'
-            //
-            //   // drawOnChartArea: false,
-            //   lineWidth: .4,
-            //   color: '#aaa'
-            // }
-					}],
-					yAxes: [{
-						display: true,
-            // gridLines: {
-            //   lineWidth: .4,
-            //   drawOnChartArea: false,
-            //   color: '#aaa',
-            // },
-						scaleLabel: {
-							display: window.innerWidth > 700 ? true : false,
-							labelString: 'Severity'
-						},
-            ticks: {
-              min: 1,
-              max: 5,
-              stepSize: 1
-            }
-					}]
-				},
-        tooltips: {
-          mode: 'point',
-          titleFontSize: 20,
-          callbacks: {
-            title: ((tooltips, data) => props.checkins[tooltips[0].index] ? props.checkins[tooltips[0].index].date : '')
-          }
-        }
-			}
-    };
+    return {
+      symptomDatasets, dateLabels
+    }
   }
 
   render() {
@@ -130,7 +133,7 @@ export default class SymptomChart extends React.Component {
         <Line
           data={this.state.chartData}
           options={this.state.chartOptions}
-          height={200}
+          height={55}
           // width='100'
         />
       </div>

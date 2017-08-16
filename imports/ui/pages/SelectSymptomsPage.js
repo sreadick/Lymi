@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { UserSymptoms } from '../../api/user-symptoms';
 import { CheckinHistories } from '../../api/checkin-histories';
 
-import SymptomCheckbox from '../components/SymptomCheckbox';
+// import SymptomCheckbox from '../components/SymptomCheckbox';
 import { SymptomGroup } from '../components/SymptomGroup';
 
 class SelectSymptomsPage extends React.Component {
@@ -29,7 +29,7 @@ class SelectSymptomsPage extends React.Component {
     return this.props.userSymptoms.map((symptom) => {
       return (
         <div key={symptom._id}>
-          <h3 className="user-symptom">{symptom.name}
+          <h3 className="user-symptom" style={{color: symptom.color}}>{symptom.name}
             <span className="user-symptom__remove-icon"
               onClick={() => {
                 Meteor.call('userSymptoms.remove', symptom.name);
@@ -93,8 +93,6 @@ export default createContainer(() => {
   const checkinHandle = Meteor.subscribe('checkinHistories')
 
   const checkinHistoryIsReady = checkinHandle.ready() && !!CheckinHistories.findOne();
-
-  console.log(UserSymptoms.find({}, {sort: {createdAt: -1}}).fetch());
 
   return {
     userSymptoms: UserSymptoms.find({}, {sort: {createdAt: -1}}).fetch(),

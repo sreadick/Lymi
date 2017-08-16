@@ -22,6 +22,7 @@ Meteor.methods({
     UserSymptoms.insert({
       name: symptomName,
       userId: this.userId,
+      color: '#' + Math.random().toString(16).substr(-6),
       createdAt: moment().valueOf(),
     });
   },

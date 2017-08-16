@@ -53,19 +53,28 @@ class Dashboard extends React.Component {
         <div className="ui segment">
           <Link className="ui small blue right floated button" to="/home/selectsymptoms">edit</Link>
           <div className="page-content__subheading">Symptoms: </div>
-          <div className="ui big ordered list">
+          {/* <div className="ui big ordered list"> */}
+          <div className="">
             {this.props.userSymptoms.map((symptom) => {
               return (
                 <div className="item" key={symptom._id}>
-                  <div className="item__label">{symptom.name}</div>
+                  <div className="item__label" style={{color: symptom.color}}>
+                    {symptom.name}
+                  </div>
                 </div>
               );
             })}
           </div>
+          <Link className='ui basic button' to="/home/history/symptoms">Full History</Link>
           {this.props.checkinHistory.checkins.length > 0 &&
-          <div className={window.innerWidth > 1200 && "ui raised segment"}>
-            <SymptomChart allSymptoms={this.props.userSymptoms.map(symptom => symptom.name)} checkins={this.props.checkinHistory.checkins}/>
-          </div>}
+            <div className={window.innerWidth > 1200 && "ui raised segment"}>
+              <SymptomChart
+                symptomNames={this.props.userSymptoms.map(symptom => symptom.name)}
+                checkins={this.props.checkinHistory.checkins}
+                symptomColors={this.props.userSymptoms.map(symptom => symptom.color)}
+              />
+            </div>
+          }
         </div>
 
 

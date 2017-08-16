@@ -81,15 +81,10 @@ export default createContainer(() => {
   const currentDate = moment().format('MMMM Do YYYY');
   let todaysCheckin = checkinHistoryIsReady ? CheckinHistories.findOne().checkins.find((checkin) => checkin.date === currentDate) : undefined;
 
-  // edit
   const userSymptoms = UserSymptoms.find().fetch();
   const userTreatments = UserTreatments.find().fetch();
   const checkinSymptomNames = todaysCheckin ? todaysCheckin.symptoms.map((symptom) => symptom.name) : [];
   const checkinTreatmentNames = todaysCheckin ? todaysCheckin.treatments.map((treatment) => treatment.name) : [];
-
-  if (checkinHistoryIsReady) {
-
-  }
 
   if (checkinHistoryIsReady ) {
     if (!todaysCheckin) {

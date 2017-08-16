@@ -24,9 +24,13 @@
 
 .item__label {
   font-family: 'Source Sans Pro', sans-serif;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #222;
+  font-size: 1.8rem;
+  font-weight: 400;
+  margin: $space 0;
+}
+
+.item__label.deleted {
+  text-decoration: line-through;
 }
 
 .item__content {

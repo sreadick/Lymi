@@ -67,6 +67,7 @@ export default createContainer(() => {
   const userSymptoms = UserSymptoms.find().fetch();
   const userTreatments = UserTreatments.find().fetch();
   const checkinHistory = CheckinHistories.findOne();
+
   return {
     userSymptoms,
     userTreatments,
@@ -93,6 +94,11 @@ export default createContainer(() => {
       {
         name: "Treatments",
         path: "/home/selecttreatments"
+      },
+      {
+        name: "Symptom History",
+        path: "/home/history/symptoms",
+        errorMessage: (CheckinHistories.findOne() && checkinHistory.checkins.length === 0) ? "No history to report" : undefined
       }
     ]
   }

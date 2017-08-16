@@ -21,7 +21,6 @@ export default class SymptomCheckbox extends React.Component {
 
   handleChange(e) {
     // if (!e.target.checked) {
-    console.log(this.props);
     if (this.props.isChecked) {
       Meteor.call('userSymptoms.remove', this.props.symptom);
     } else {
