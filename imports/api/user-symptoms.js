@@ -3,6 +3,7 @@ import { Mongo } from 'meteor/mongo';
 import SimpleSchema from 'simpl-schema';
 import moment from 'moment';
 
+import { getNextColor } from '../utils/utils';
 
 export const UserSymptoms = new Mongo.Collection('userSymptoms');
 
@@ -19,10 +20,12 @@ Meteor.methods({
       throw new Meteor.Error('not-authorized');
     }
 
+    let userSymptomsLength = UserSymptoms.find({userId: this.userId}).fetch().length;
+    let currentColor = userSymptomsLength > 0 ? UserSymptoms.find({userId: this.userId}).fetch()[userSymptomsLength - 1].color : '#558B2F';
     UserSymptoms.insert({
       name: symptomName,
       userId: this.userId,
-      color: '#' + Math.random().toString(16).substr(-6),
+      color: getNextColor(currentColor),
       createdAt: moment().valueOf(),
     });
   },

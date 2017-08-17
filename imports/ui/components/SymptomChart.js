@@ -42,7 +42,7 @@ export default class SymptomChart extends React.Component {
 						scaleLabel: {
 							display: window.innerWidth > 700 ? true : false,
               fontColor: this.props.symptomNames.length === 1 ? this.props.symptomColors[0] : 'grey',
-							labelString: this.props.symptomNames.length === 1 ? this.props.symptomNames[0] : 'Severity',
+							labelString: this.props.symptomNames.length === 1 ? this.props.symptomNames[0] : '',
 						},
             ticks: {
               min: 1,
@@ -81,13 +81,15 @@ export default class SymptomChart extends React.Component {
     const dateLabels = [...Array(totalDatesNumber).keys()].map((dateOffset) =>
       moment(startDate).add(dateOffset, "d").format('M/D/YY')
     );
-    const colorsArray = this.props.symptomColors || ['#E17575', '#E275E2', '#7575E2', '#75E2E2', '#75E275', '#E2E275', '#E2AC75', '#B26161', '#5B5B8C', '#707070', '#26622E'];
+    // const colorsArray = this.props.symptomColors || ['#E17575', '#E275E2', '#7575E2', '#75E2E2', '#75E275', '#E2E275', '#E2AC75', '#B26161', '#5B5B8C', '#707070', '#26622E'];
+    // const colorsArray = this.props.symptomColors;
     const symptomDatasets = this.props.symptomNames.map((symptom, index) => {
       return {
         label: symptom,
-        backgroundColor: colorsArray[index],
+        backgroundColor: this.props.symptomColors[index] || 'pink',
         // lineTension: .2,
-        borderColor: colorsArray[index],
+        borderColor: this.props.symptomColors[index] || 'pink',
+        borderDash: this.props.currentSymptomNames && !this.props.currentSymptomNames.includes(symptom) ? [5, 10] : undefined,
         fill: false,
         cubicInterpolationMode: 'monotone',
         data: this.props.checkins.map((checkin) => {

@@ -90,7 +90,7 @@ class SelectSymptomsPage extends React.Component {
 
 export default createContainer(() => {
   const symptomHandle = Meteor.subscribe('userSymptoms');
-  const checkinHandle = Meteor.subscribe('checkinHistories')
+  const checkinHandle = Meteor.subscribe('checkinHistories');
 
   const checkinHistoryIsReady = checkinHandle.ready() && !!CheckinHistories.findOne();
 

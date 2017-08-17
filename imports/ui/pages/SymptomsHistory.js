@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Redirect, Link } from 'react-router-dom';
 import { Session } from 'meteor/session';
+import { getNextColor } from '../../utils/utils';
 
 import { UserSymptoms } from '../../api/user-symptoms';
 import { UserTreatments } from '../../api/user-treatments';
@@ -52,18 +53,18 @@ class SymptomsHistory extends React.Component {
         <div className="page-content__main-heading">History: Symptoms</div>
 
         <div className='history-options-button-container'>
-          <button className={`ui toggle button ${this.props.groupSymptoms ? 'black' : ''}`}
+          <button className={`ui small toggle button ${this.props.groupSymptoms ? 'black' : ''}`}
             onClick={() => Session.set('groupSymptoms', !Session.get('groupSymptoms'))}>
             {this.props.groupSymptoms ?  'Ungroup' : 'Group'}
           </button>
 
-          <button className={`ui toggle button ${this.props.includeDeleted ? 'black' : ''}`}
+          <button className={`ui small toggle button ${this.props.includeDeleted ? 'black' : ''}`}
             onClick={() => Session.set('includeDeleted', !Session.get('includeDeleted'))}>
             {this.props.includeDeleted ?  'Exclude Deleted' : 'Include Deleted'}
           </button>
         </div>
         {this.props.displayedSymptoms.length > 0 ?
-          this.props.displayedSymptoms.map((symptom) => {
+          this.props.displayedSymptoms.map((symptom, index) => {
             return (
               <div className="item" key={symptom.name}>
                 <div
@@ -83,28 +84,31 @@ class SymptomsHistory extends React.Component {
           </div>
         }
 
-        <div className="">
-          {/* {this.props.checkinHistory.checkins.length > 0 && */}
-          {this.props.displayedSymptoms.length > 0 &&
-            this.props.groupSymptoms ?
-            <div className={window.innerWidth > 1200 && "ui raised segment"}>
-              <SymptomChart
-                symptomNames={this.props.displayedSymptoms.map(symptom => symptom.name)}
-                symptomColors={this.props.displayedSymptoms.map(symptom => symptom.color)}
-                checkins={this.props.checkinHistory.checkins}
-              />
-            </div>
-            : this.props.displayedSymptoms.map((symptom) => (
-              <div className={window.innerWidth > 1200 && "ui raised segment"} key={symptom.name}>
+        {this.props.checkinHistory.checkins.length > 0 &&
+          <div className="">
+
+              {/* {this.props.displayedSymptoms.length > 0 && */}
+              {this.props.groupSymptoms ?
+              <div className={window.innerWidth > 1200 && "ui raised segment"}>
                 <SymptomChart
-                  symptomNames={[symptom.name]}
-                  symptomColors={[symptom.color]}
+                  symptomNames={this.props.displayedSymptoms.map(symptom => symptom.name)}
+                  symptomColors={this.props.displayedSymptoms.map(symptom => symptom.color)}
                   checkins={this.props.checkinHistory.checkins}
+                  currentSymptomNames={this.props.userSymptoms.map(userSymptom => userSymptom.name)}
                 />
               </div>
-            ))
-          }
-        </div>
+              : this.props.displayedSymptoms.map((symptom, index) => (
+                <div className={window.innerWidth > 1200 && "ui raised segment"} key={symptom.name}>
+                  <SymptomChart
+                    symptomNames={[symptom.name]}
+                    symptomColors={[symptom.color]}
+                    checkins={this.props.checkinHistory.checkins}
+                    currentSymptomNames={this.props.userSymptoms.map(userSymptom => userSymptom.name)}
+                  />
+                </div>
+              ))}
+          </div>
+        }
       </div>
     );
   }
@@ -122,11 +126,19 @@ export default createContainer((props) => {
     CheckinHistories.findOne().checkins.forEach((checkin) => {
       checkin.symptoms.forEach((symptom) => {
         if (!currentAndDeletedSymptoms.map(anySymptom => anySymptom.name).includes(symptom.name)) {
-          currentAndDeletedSymptoms.push(symptom);
+          currentAndDeletedSymptoms.push({
+            color: getNextColor(currentAndDeletedSymptoms.map(symptom => symptom.color)[currentAndDeletedSymptoms.length - 1]),
+            ...symptom
+          });
         }
       })
     });
   }
+  // const allSymptomColors = currentSymptoms.map(symptom => symptom.color);
+  // for (let i = 0; i < currentAndDeletedSymptoms.length - currentSymptoms.length; ++i) {
+  //   allSymptomColors.push(getNextColor(allSymptomColors[allSymptomColors.length - 1]));
+  // }
+  // console.log(allSymptomColors);
   return {
     userSymptoms: UserSymptoms.find().fetch(),
     userTreatments: UserTreatments.find().fetch(),
@@ -135,6 +147,7 @@ export default createContainer((props) => {
     groupSymptoms: Session.get('groupSymptoms') || false,
     includeDeleted: Session.get('includeDeleted') || false,
     displayedSymptoms: Session.get('includeDeleted') ? currentAndDeletedSymptoms : currentSymptoms,
+    // displayedSymptomColors: allSymptomColors
   };
 
 }, SymptomsHistory);

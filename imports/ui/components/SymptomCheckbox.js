@@ -3,21 +3,25 @@ import { Meteor } from 'meteor/meteor';
 import Toggle from 'react-toggle';
 
 export default class SymptomCheckbox extends React.Component {
-  // constructor(props) {
-  //   super(props);
-  //
-  //   this.state = {
-  //     isChecked: props.isChecked
-  //   }
-  // }
+  constructor(props) {
+    super(props);
 
-  // componentDidUpdate(prevProps) {
-  //   if (prevProps.isChecked !== this.props.isChecked) {
-  //     // console.log(prevProps)
-  //     // console.log(this.props)
-  //     this.setState({ isChecked: this.props.isChecked })
-  //   }
-  // }
+    this.state = {
+      isChecked: false
+    }
+  }
+
+  componentDidMount() {
+    this.setState({ isChecked: this.props.isChecked});
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.isChecked !== this.props.isChecked) {
+      // console.log(prevProps)
+      // console.log(this.props)
+      this.setState({ isChecked: this.props.isChecked })
+    }
+  }
 
   handleChange(e) {
     // if (!e.target.checked) {
@@ -26,6 +30,7 @@ export default class SymptomCheckbox extends React.Component {
     } else {
       Meteor.call('userSymptoms.insert', this.props.symptom)
     }
+    this.setState({ isChecked: this.props.isChecked});
   }
 
   render() {
@@ -34,11 +39,12 @@ export default class SymptomCheckbox extends React.Component {
         <label className="symptom-group__item">
           <Toggle
             className="symptom_toggle"
-            checked={this.props.isChecked}
+            checked={this.state.isChecked}
             value="yes"
-            onChange={this.handleChange.bind(this)} />
+            onClick={this.handleChange.bind(this)} />
           <span className="symptom-group__item__title">{this.props.symptom}</span>
         </label>
+        {/* <label onClick={this.handleChange.bind(this)}><input type='checkbox' checked={this.props.isChecked}/>{this.props.symptom}</label> */}
       </div>
 
     );
