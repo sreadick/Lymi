@@ -38,7 +38,7 @@ class SymptomsCheckin extends React.Component {
   chooseSeverity(symptom, severityNumber) {
     Meteor.call('checkinHistories.symptom.update', symptom, severityNumber, moment().format('MMMM Do YYYY'))
     this.removeHighlight(symptom);
-    Meteor.call('checkinHistories.dailyCompleted.update', "partial")
+    // Meteor.call('checkinHistories.dailyCompleted.update', "partial")
   }
 
   removeHighlight(symptom) {
@@ -51,16 +51,17 @@ class SymptomsCheckin extends React.Component {
   render() {
     if (this.props.symptomCheckinItems.length === 0) return <div></div>
     return (
-      <div className="ui container">
-        <h4 className="ui center aligned medium grey header">How were your symptoms today?</h4>
+      <div className="page-content">
+        <h4 className="grey-text">Check in for {moment().format('MMMM Do YYYY')}</h4>
+        <h5 className="black-text">How were your symptoms today?</h5>
         <div>
           {this.props.symptomCheckinItems.map((symptom) => (
-            <div className="ui very padded container segment" key={symptom.name}>
-              <h3 className="ui black header">{symptom.name}</h3>
+            <div className="card section" key={symptom.name}>
+              <p>{symptom.name}</p>
               {this.renderSeveritySquares(symptom)}
             </div>
           ))}
-          <Link className={`ui black button ${!this.props.symptomCheckinCompleted && 'disabled'}`}
+          <Link className={`black btn ${!this.props.symptomCheckinCompleted && 'disabled'}`}
             to={this.props.symptomCheckinCompleted ? "/home/checkin/treatments" : "#"}>
             Next
           </Link>

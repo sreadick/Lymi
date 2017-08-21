@@ -37,18 +37,15 @@ export class TreatmentList extends React.Component {
     return (
       <FlipMove duration={700} easing="ease-out">
         {this.props.userTreatments.length === 0
-        ? <div className="">
-            <div className="ui hidden divider"></div>
-            <div className="ui message">
-              <div className="header">Click the button above to add new treatments</div>
-              <p>All changes are automatically saved and you can edit the list anytime</p>
-            </div>
-            <div className="ui hidden divider"></div>
+        ? <div className="section">
+            <h5 className="header">Click the button above to add new treatments</h5>
+            <p>All changes are automatically saved and you can edit the list anytime</p>
           </div>
         :
         this.props.userTreatments.map((treatment, index) => {
           return (
-            <div className="treatment-item" key={treatment._id}>
+            // <div className="treatment-item" key={treatment._id}>
+            <div className="" key={treatment._id}>
               <TreatmentItem
                 treatment={treatment}
                 errors={treatment.errors}

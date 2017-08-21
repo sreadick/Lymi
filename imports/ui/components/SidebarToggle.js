@@ -5,6 +5,7 @@ export const SidebarToggle = () => (
   <span
     className="sidebar-icon"
     onClick={() => Session.set('toggled', !Session.get('toggled')) }>
-    <i className={Session.get('toggled') === true ? "large chevron left icon" : "large sidebar icon"}></i>
+    {/* <i className={Session.get('toggled') === true ? "large chevron left icon" : "large sidebar icon"}></i> */}
+    <i className='material-icons'>menu</i>
   </span>
 );

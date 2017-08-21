@@ -30,7 +30,7 @@ Meteor.methods({
       }
     });
   },
-  'checkinHistories.checkins.symptoms.update'({ date, symptoms }) {
+  'checkinHistories.checkins.symptoms.update'({ date, symptoms, todaysCheckinSymptoms }) {
     if (!this.userId) {
       throw new Meteor.Error('not-authorized');
     }
@@ -40,12 +40,15 @@ Meteor.methods({
     CheckinHistories.update({userId: this.userId}, {
       $set: {
         [fieldPath] : symptoms.map((symptom) => {
-          return { name: symptom.name, severity: 0 }
+          return {
+            name: symptom.name,
+            severity: todaysCheckinSymptoms.find((checkinSymptom) => symptom.name === checkinSymptom.name) ? todaysCheckinSymptoms.find((checkinSymptom) => symptom.name === checkinSymptom.name).severity : 0
+          }
         }),
       }
     });
   },
-  'checkinHistories.checkins.treatments.update'({ date, treatments }) {
+  'checkinHistories.checkins.treatments.update'({ date, treatments, todaysCheckinTreatments }) {
     if (!this.userId) {
       throw new Meteor.Error('not-authorized');
     }
@@ -55,7 +58,10 @@ Meteor.methods({
     CheckinHistories.update({userId: this.userId}, {
       $set: {
         [fieldPath] : treatments.map((treatment) => {
-          return { name: treatment.name, compliance: undefined }
+          return {
+            name: treatment.name,
+            compliance: todaysCheckinTreatments.find((checkinTreatment) => treatment.name === checkinTreatment.name) ? todaysCheckinTreatments.find((checkinTreatment) => treatment.name === checkinTreatment.name).compliance : undefined
+           }
         }),
       }
     });

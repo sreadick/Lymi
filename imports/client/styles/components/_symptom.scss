@@ -3,7 +3,7 @@
   // width: 25%;
   text-align: center;
   padding: $space 0;
-  font-family: 'Source Sans Pro', sans-serif;
+  // font-family: 'Source Sans Pro', sans-serif;
   // background: $eggshell;
 
   // edit
@@ -18,9 +18,7 @@
 }
 
 .symptom-group__container {
-  border: 1px solid $grey;
-  // border-radius: 20px;
-  box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
+
   display: flex;
   // background: $eggshell;
   flex-direction: row;
@@ -29,13 +27,11 @@
   justify-content: center;
   // align-items: baseline;
   margin: $space 0;
-  padding-bottom: $space * 2;
+  // padding-bottom: $space * 2;
 
-  button {
-    color: #ccc !important;
-    background: $coral !important;
-  }
 
+  // border: 1px solid $grey;
+  // box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
 }
 
 .symptom-group__item {
@@ -44,12 +40,12 @@
 }
 
 .symptom-group__category {
-  color: #d32f2f;
+  color: black;
   font-size: 1.2rem;
   font-weight: 300;
   // margin-left: $space / 2;
 
-  font-family: 'Roboto', sans-serif;
+  // font-family: 'Roboto', sans-serif;
   font-weight: 500;
   font-size: 1.2rem;
   padding: .9rem 1.3rem;
@@ -65,7 +61,7 @@
 }
 
 .user-symptom {
-  font-family: 'Source Sans Pro', sans-serif;
+  // font-family: 'Source Sans Pro', sans-serif;
   color: #111;
   font-size: 1.2rem;
   font-weight: 600;
@@ -80,7 +76,7 @@
   }
 }
 
-.user-symptom:hover .user-symptom__remove-icon {
+.collection-item.user-symptom:hover .user-symptom__remove-icon {
   visibility: visible;
 }
 

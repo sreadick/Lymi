@@ -1,8 +1,8 @@
 .page {
-  background: $navy;
+  // background: $navy;
   width: 100%;
   min-height: 100vh;
-  min-width: 100vw;
+  // min-width: 100vw;
 
 }
 
@@ -14,7 +14,6 @@
   padding: $header-height 0 $space 0;
   width: $site-max-width;
   margin: 0 auto;
-
 
   -webkit-animation: page_content_fadein 2s ease;
   -moz-animation: page_content_fadein 2s ease;
@@ -42,8 +41,8 @@
   width: 100%;
 
   @media screen and (min-width: $tablet-breakpoint) {
-    width: 89%;
-    padding: $header-height 4% $space 4%;
+    width: 95%;
+    padding: $header-height 4% 0 4%;
   }
 }
 
@@ -72,19 +71,19 @@
 
 .page-content__main-heading {
   margin: 2rem auto;
-  font-family: 'Source Sans Pro', sans-serif;
-  font-weight: bold;
-  color: #9E9E9E;
+  // font-family: 'Source Sans Pro', sans-serif;
+  // font-weight: bold;
+  color: $deep-purple-lighten-3;
   // background: #26a69a;
-  font-size: 2rem;
-  font-weight: 400;
+  font-size: 2.5rem;
+  font-weight: 500;
   // text-decoration: underline;
   text-align: center;
   // width: 0%;
   @media screen and (min-width: $tablet-breakpoint) {
     text-align: left;
     // width: 96%;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid $deep-purple-darken-1;
     padding: .5rem $space;
   }
 }
@@ -133,7 +132,7 @@
 
 
   h1, p, span {
-    font-family: 'Source Sans Pro', sans-serif;
+    // font-family: 'Source Sans Pro', sans-serif;
   }
   h1 {
     // font-size: 3.2rem;
@@ -188,14 +187,115 @@
 
 .page-content--overlay {
   height: 100vh;
-  width: 80vw;
+  width: 100vw;
   overflow: hidden;
   position: fixed;
   margin: 0;
   padding: 0;
-  left: 20vw;
-  z-index: 1;
+  // right: 20vw;
+  // bottom: $header-height;
+  z-index: 3;
   background: transparentize(black, .5);
 
   // top: 10vh;
+}
+
+.input-response {
+  height: .7rem;
+  font-size: .7rem;
+  margin-bottom: $space / 2;
+  position: relative;
+  bottom: 1rem;
+}
+
+.dashboard-user-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 5rem;
+
+  height: calc(100vh - 4rem);
+  background-image: url('http://wallpaperclicker.com/storage/wallpaper/beauty-night-landscape-68406808.jpg');
+  background-size: 100% 100%;
+  margin-top: 4rem;
+}
+
+.dashboard-user-info__name {
+  color: white;
+  text-align: center;
+  text-transform: capitalize;
+  font-weight: 500;
+}
+
+.dashboard-user-info__tasks-box {
+  width: 40%;
+  margin: 0 auto;
+  background: transparentize(white, .1);
+  min-height: 20rem;
+  border: 2px solid $deep-purple-lighten-2;
+  border-radius: 10px;
+  padding: 0 1rem;
+
+  p {
+    font-size: 1.2rem;
+  }
+
+  h6 {
+    font-weight: 500;
+  }
+
+  span {
+    font-size: 1rem;
+    margin-left: $space / 2;
+  }
+}
+
+.dashboard-chart-section {
+  // background: pink;
+  padding: $space 2rem;
+  min-height: 25rem;
+
+  margin-bottom: 0 !important;
+
+  .btn:first-of-type {
+    margin-right: $space;
+  }
+}
+
+.dashboard-chart-section.treatments {
+  background: $deep-purple-lighten-2;
+}
+
+.dashboard-chart-section__list {
+  // background: blue;
+  height: 24rem;
+  overflow-y: auto;
+  margin-bottom: $space;
+  li {
+    // background: pink !important;
+    font-size: 1.2rem;
+    padding-top: .4rem !important;
+    padding-bottom: .4rem !important;
+  }
+}
+
+.dashboard-chart-section__chart__wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 24rem;
+  width: 100%;
+
+  border: 1px solid #aaa;
+  border-radius: 10px;
+}
+
+.dashboard-chart-section__chart {
+  // background: pink;
+
+  // height: 100%;
+  width: 100%;
+  // padding-top: 5rem;
+  // padding: 2rem;
 }

@@ -33,6 +33,9 @@ export default class SymptomChart extends React.Component {
           },
           position: 'top'
         },
+        layout: {
+          padding: this.props.padding || 0
+        },
 				scales: {
 					xAxes: [{
 						display: true,
@@ -135,7 +138,7 @@ export default class SymptomChart extends React.Component {
         <Line
           data={this.state.chartData}
           options={this.state.chartOptions}
-          height={55}
+          height={this.props.height || 55}
           // width='100'
         />
       </div>

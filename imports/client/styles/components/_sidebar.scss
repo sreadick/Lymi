@@ -58,8 +58,9 @@
 }
 
 .sidebar-menu__link.selected {
-  border-left: 6px solid $violet;
-  text-decoration: underline;
+  // border-left: 6px solid $violet;
+  // text-decoration: underline;
+  background: $green;
 }
 
 .sidebar-menu__link__tooltip {

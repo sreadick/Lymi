@@ -9,15 +9,17 @@ import { CheckinHistories } from '../../api/checkin-histories';
 class TreatmentCheckin extends React.Component {
   renderAnswerSquares(treatment) {
     return (
-      <div className="checkin-item__answer-group">
-        {['Yes', 'No'].map((answer) =>
-          <div className={`${answer} checkin-item__answer-square ${answer === treatment.compliance ? "selected" : ""}`} key={answer}
-            onClick={(e) => this.chooseAnswer(e, treatment, answer)}
-            onMouseOver={(e) => this.handleMouseOver(e)}
-            onMouseOut={(e) => this.handleMouseOut(e)}>
-            {answer}
-          </div>
-        )}
+      <div className="checkin-item__container">
+        <div className="checkin-item__answer-group">
+          {['Yes', 'No'].map((answer) =>
+            <div className={`${answer} checkin-item__answer-square ${answer === treatment.compliance ? "selected" : ""}`} key={answer}
+              onClick={(e) => this.chooseAnswer(e, treatment, answer)}
+              onMouseOver={(e) => this.handleMouseOver(e)}
+              onMouseOut={(e) => this.handleMouseOut(e)}>
+              {answer}
+            </div>
+          )}
+        </div>
       </div>
     );
   }
@@ -39,17 +41,18 @@ class TreatmentCheckin extends React.Component {
   render() {
     if (this.props.treatmentCheckinItems.length === 0) return <div></div>
     return (
-      <div className="ui container">
-        <h4 className="ui center aligned medium grey header">Did you take your medications?</h4>
-        <Link className="ui small blue basic button" to="/home/checkin/symptoms">Back to symptoms</Link>
+      <div className="page-content">
+        <h4 className="grey-text">Check in for {moment().format('MMMM Do YYYY')}</h4>
+        <h5 className="black-text">Did you take your medications?</h5>
+        <Link className="blue btn" to="/home/checkin/symptoms">Back to symptoms</Link>
         {this.props.treatmentCheckinItems.map((treatment) => (
-          <div className="ui very padded container segment" key={treatment.name}>
-            <h3 className="ui black header">{treatment.name}</h3>
+          <div className="card section" key={treatment.name}>
+            <p>{treatment.name}</p>
             {this.renderAnswerSquares(treatment)}
           </div>
         ))}
 
-        <button className={`ui black button ${!this.props.treatmentCheckinCompleted && 'disabled'}`}
+        <button className={`black btn ${!this.props.treatmentCheckinCompleted && 'disabled'}`}
           onClick={() => {
             if (this.props.treatmentCheckinCompleted) {
               Meteor.call('checkinHistories.dailyCompleted.update', "yes")

@@ -28,23 +28,36 @@ export default class SymptomCheckbox extends React.Component {
     if (this.props.isChecked) {
       Meteor.call('userSymptoms.remove', this.props.symptom);
     } else {
-      Meteor.call('userSymptoms.insert', this.props.symptom)
+      Meteor.call('userSymptoms.insert', {
+        name: this.props.symptom,
+        color: this.props.nextColor
+      });
     }
     this.setState({ isChecked: this.props.isChecked});
   }
 
   render() {
     return (
-      <div>
-        <label className="symptom-group__item">
-          <Toggle
-            className="symptom_toggle"
+      // <div>
+      //   <label className="symptom-group__item">
+      //     <Toggle
+      //       className="symptom_toggle"
+      //       checked={this.state.isChecked}
+      //       value="yes"
+      //       onClick={this.handleChange.bind(this)} />
+      //     <span className="symptom-group__item__title">{this.props.symptom}</span>
+      //   </label>
+      //   {/* <label onClick={this.handleChange.bind(this)}><input type='checkbox' checked={this.props.isChecked}/>{this.props.symptom}</label> */}
+      // </div>
+      <div className="switch">
+        <label className={this.state.isChecked ? 'green-text text-darken-2' : 'black-text'}>
+          {this.props.symptom}
+          <input
+            type="checkbox"
             checked={this.state.isChecked}
-            value="yes"
             onClick={this.handleChange.bind(this)} />
-          <span className="symptom-group__item__title">{this.props.symptom}</span>
+          <span className="lever"></span>
         </label>
-        {/* <label onClick={this.handleChange.bind(this)}><input type='checkbox' checked={this.props.isChecked}/>{this.props.symptom}</label> */}
       </div>
 
     );

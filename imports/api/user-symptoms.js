@@ -3,7 +3,7 @@ import { Mongo } from 'meteor/mongo';
 import SimpleSchema from 'simpl-schema';
 import moment from 'moment';
 
-import { getNextColor } from '../utils/utils';
+// import { getNextColor } from '../utils/utils';
 
 export const UserSymptoms = new Mongo.Collection('userSymptoms');
 
@@ -15,17 +15,17 @@ if (Meteor.isServer) {
 }
 
 Meteor.methods({
-  'userSymptoms.insert'(symptomName) {
+  'userSymptoms.insert'(symptom) {
     if (!this.userId) {
       throw new Meteor.Error('not-authorized');
     }
 
-    let userSymptomsLength = UserSymptoms.find({userId: this.userId}).fetch().length;
-    let currentColor = userSymptomsLength > 0 ? UserSymptoms.find({userId: this.userId}).fetch()[userSymptomsLength - 1].color : '#558B2F';
+    // let userSymptomsLength = UserSymptoms.find({userId: this.userId}).fetch().length;
+    // let currentColor = userSymptomsLength > 0 ? UserSymptoms.find({userId: this.userId}).fetch()[userSymptomsLength - 1].color : '#558B2F';
     UserSymptoms.insert({
-      name: symptomName,
+      name: symptom.name,
       userId: this.userId,
-      color: getNextColor(currentColor),
+      color: symptom.color,
       createdAt: moment().valueOf(),
     });
   },

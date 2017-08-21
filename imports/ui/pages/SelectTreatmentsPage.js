@@ -43,24 +43,26 @@ class SelectTreatmentsPage extends React.Component {
       return <div></div>
     }
     return (
-      <div className="ui container">
+      // <div className="ui container">
+      <div className="page-content">
         <div className="page-content__main-heading">Select Treatments</div>
           <div>
-          <button className="ui basic black button add-treatment-button"
+          <button className="waves-effect waves-light black btn add-treatment-button"
             onClick={this.handleAddTreatment.bind(this)}>
             New Treatment
           </button>
           <TreatmentList userTreatments={this.props.userTreatments} showErrors={this.props.showErrors}/>
-          <Link className="ui large blue left floated button" to="/home/selectsymptoms">Symptoms</Link>
-          <button className={"ui large green right floated " + (this.props.userTreatments.length > 0 ? "button" : "disabled button")}
-             onClick={() => {
-               const hasErrors = this.validateTreatments();
-               hasErrors ? Session.set('showErrors', true) : this.props.history.push('/home/dashboard')
-             }}>
-             Dashboard
-          </button>
-          <div className="ui small center aligned black header select-treatment-bottom-error" ref="errorMessage">check above for errors and try again...</div>
-          <div className="ui hidden fitted clearing divider"></div>
+          <div className='row'>
+            <Link className="col s2 waves-effect waves-light btn-large purple lighten-2" to="/home/selectsymptoms">Back: Symptoms</Link>
+            <span className="col s8 center-align select-treatment-bottom-error grey-text" ref="errorMessage">Check above for errors and try again...</span>
+            <button className={"col s2 right waves-effect waves-light green " + (this.props.userTreatments.length > 0 ? "btn-large" : "btn-large disabled")}
+               onClick={() => {
+                 const hasErrors = this.validateTreatments();
+                 hasErrors ? Session.set('showErrors', true) : this.props.history.push('/home/dashboard')
+               }}>
+               Next: Dashboard
+            </button>
+          </div>
         </div>
       </div>
     );

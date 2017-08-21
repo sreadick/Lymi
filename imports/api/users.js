@@ -19,6 +19,12 @@ Accounts.validateNewUser((user) => {
 
 Accounts.onCreateUser((options, user) => {
 
+  console.log(options)
+  user.profile = options.profile || {};
+
+  user.profile.firstName = options.firstName;
+  user.profile.lastName = options.lastName;
+
   CheckinHistories.insert({
     userId: user._id,
     dailyCompleted: 'no',

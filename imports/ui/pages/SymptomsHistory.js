@@ -49,16 +49,16 @@ class SymptomsHistory extends React.Component {
       return <div></div>
     }
     return (
-      <div className="ui container">
+      <div className="page-content">
         <div className="page-content__main-heading">History: Symptoms</div>
 
         <div className='history-options-button-container'>
-          <button className={`ui small toggle button ${this.props.groupSymptoms ? 'black' : ''}`}
+          <button className={`btn ${this.props.groupSymptoms ? 'deep-purple lighten-1' : 'grey'}`}
             onClick={() => Session.set('groupSymptoms', !Session.get('groupSymptoms'))}>
             {this.props.groupSymptoms ?  'Ungroup' : 'Group'}
           </button>
 
-          <button className={`ui small toggle button ${this.props.includeDeleted ? 'black' : ''}`}
+          <button className={`btn ${this.props.includeDeleted ? 'deep-purple lighten-1' : 'grey'}`}
             onClick={() => Session.set('includeDeleted', !Session.get('includeDeleted'))}>
             {this.props.includeDeleted ?  'Exclude Deleted' : 'Include Deleted'}
           </button>
@@ -66,12 +66,12 @@ class SymptomsHistory extends React.Component {
         {this.props.displayedSymptoms.length > 0 ?
           this.props.displayedSymptoms.map((symptom, index) => {
             return (
-              <div className="item" key={symptom.name}>
-                <div
-                  className={`item__label ${!this.props.userSymptoms.map(userSymptom => userSymptom.name).find(userSymptomName => userSymptomName === symptom.name) ? 'deleted' : ''}`}
+              <div className="" key={symptom.name}>
+                <span
+                  className={`${!this.props.userSymptoms.map(userSymptom => userSymptom.name).find(userSymptomName => userSymptomName === symptom.name) ? 'deleted' : ''}`}
                   style={{color: symptom.color}}>
                   {symptom.name}
-                </div>
+                </span>
               </div>
             );
           })
@@ -89,21 +89,23 @@ class SymptomsHistory extends React.Component {
 
               {/* {this.props.displayedSymptoms.length > 0 && */}
               {this.props.groupSymptoms ?
-              <div className={window.innerWidth > 1200 && "ui raised segment"}>
+              <div className={window.innerWidth > 1200 && "card"}>
                 <SymptomChart
                   symptomNames={this.props.displayedSymptoms.map(symptom => symptom.name)}
                   symptomColors={this.props.displayedSymptoms.map(symptom => symptom.color)}
                   checkins={this.props.checkinHistory.checkins}
                   currentSymptomNames={this.props.userSymptoms.map(userSymptom => userSymptom.name)}
+                  padding={{top: 30, right: 30, bottom: 10, left: 0}}
                 />
               </div>
               : this.props.displayedSymptoms.map((symptom, index) => (
-                <div className={window.innerWidth > 1200 && "ui raised segment"} key={symptom.name}>
+                <div className={window.innerWidth > 1200 && "card"} key={symptom.name}>
                   <SymptomChart
                     symptomNames={[symptom.name]}
                     symptomColors={[symptom.color]}
                     checkins={this.props.checkinHistory.checkins}
                     currentSymptomNames={this.props.userSymptoms.map(userSymptom => userSymptom.name)}
+                    padding={{top: 30, right: 30, bottom: 10, left: 0}}
                   />
                 </div>
               ))}
@@ -127,18 +129,14 @@ export default createContainer((props) => {
       checkin.symptoms.forEach((symptom) => {
         if (!currentAndDeletedSymptoms.map(anySymptom => anySymptom.name).includes(symptom.name)) {
           currentAndDeletedSymptoms.push({
-            color: getNextColor(currentAndDeletedSymptoms.map(symptom => symptom.color)[currentAndDeletedSymptoms.length - 1]),
+            // color: getNextColor(currentAndDeletedSymptoms.map(symptom => symptom.color)[currentAndDeletedSymptoms.length - 1]),
+            color: getNextColor(currentAndDeletedSymptoms.length),
             ...symptom
           });
         }
       })
     });
   }
-  // const allSymptomColors = currentSymptoms.map(symptom => symptom.color);
-  // for (let i = 0; i < currentAndDeletedSymptoms.length - currentSymptoms.length; ++i) {
-  //   allSymptomColors.push(getNextColor(allSymptomColors[allSymptomColors.length - 1]));
-  // }
-  // console.log(allSymptomColors);
   return {
     userSymptoms: UserSymptoms.find().fetch(),
     userTreatments: UserTreatments.find().fetch(),
