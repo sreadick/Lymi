@@ -68,7 +68,7 @@ class SymptomsHistory extends React.Component {
             return (
               <div className="" key={symptom.name}>
                 <span
-                  className={`${!this.props.userSymptoms.map(userSymptom => userSymptom.name).find(userSymptomName => userSymptomName === symptom.name) ? 'deleted' : ''}`}
+                  className={`checkin-symptom-item ${!this.props.userSymptoms.map(userSymptom => userSymptom.name).find(userSymptomName => userSymptomName === symptom.name) ? 'deleted' : ''}`}
                   style={{color: symptom.color}}>
                   {symptom.name}
                 </span>

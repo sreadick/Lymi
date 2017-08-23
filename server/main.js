@@ -5,6 +5,7 @@ import '../imports/api/users';
 import '../imports/api/user-symptoms';
 import '../imports/api/user-treatments';
 import '../imports/api/checkin-histories';
+import '../imports/api/images';
 
 import '../imports/startup/simple-schema-configuration';
 

@@ -13,7 +13,7 @@ const SidebarLink = ({ to, children, className, errorMessage, ...rest }) => (
     to={!errorMessage ? to : '#'}
     onClick={() => {
       if (!errorMessage) {
-        Session.set('toggled', false);
+        Session.set('sidebarToggled', false);
       } else {
         return;
       }
@@ -25,9 +25,9 @@ const SidebarLink = ({ to, children, className, errorMessage, ...rest }) => (
 class SidebarMenu extends React.Component {
   render() {
     return (
-      <div className={`sidebar-menu__wrapper ${this.props.toggled ? "open" : "closed"}`}>
+      <div className={`sidebar-menu__wrapper ${this.props.sidebarToggled ? "open" : "closed"}`}>
         <div className='sidebar-menu'>
-          <span className="sidebar-icon" onClick={() => Session.set('toggled', false)}>
+          <span className="sidebar-icon" onClick={() => Session.set('sidebarToggled', false)}>
             <i className="large grey remove icon"></i>
           </span>
           <div className="sidebar-menu__link__container">
@@ -85,7 +85,12 @@ export default createContainer(() => {
       {
         name: "Check in",
         path: "/home/checkin",
-        errorMessage: (CheckinHistories.findOne() && checkinHistory.dailyCompleted === "yes") ? "You already checked in today" : undefined
+        errorMessage: (collectionsAreReady && (userSymptoms.length === 0 && userTreatments.length === 0)) ?
+          <span>You need to have at least 1 <SidebarLink to="/home/selectsymptoms">symptom</SidebarLink> and <SidebarLink to="/home/selecttreatments">treatment</SidebarLink></span>
+        : (collectionsAreReady && (userSymptoms.length === 0)) ? <span>You need to have at least 1 <SidebarLink to="/home/selectsymptoms">symptom</SidebarLink></span>
+        : (collectionsAreReady && (userTreatments.length === 0)) ? <span>You need to have at least 1 <SidebarLink to="/home/selecttreatments">treatment</SidebarLink></span>
+        : userTreatments.find((treatment) => Object.keys(treatment.errors).length > 0) ? "Treatments contain one or more errors"
+        : undefined
       },
       {
         name: "Symptoms",

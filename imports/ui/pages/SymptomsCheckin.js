@@ -38,7 +38,6 @@ class SymptomsCheckin extends React.Component {
   chooseSeverity(symptom, severityNumber) {
     Meteor.call('checkinHistories.symptom.update', symptom, severityNumber, moment().format('MMMM Do YYYY'))
     this.removeHighlight(symptom);
-    // Meteor.call('checkinHistories.dailyCompleted.update', "partial")
   }
 
   removeHighlight(symptom) {
@@ -58,6 +57,10 @@ class SymptomsCheckin extends React.Component {
           {this.props.symptomCheckinItems.map((symptom) => (
             <div className="card section" key={symptom.name}>
               <p>{symptom.name}</p>
+              {
+                (this.props.yesterdaysCheckin && !!this.props.yesterdaysCheckin.symptoms.find((yesterdaysCheckinSymptom) => yesterdaysCheckinSymptom.name === symptom.name && yesterdaysCheckinSymptom.severity > 0))
+                && <span>Yesterday: {this.props.yesterdaysCheckin.symptoms.find((yesterdaysCheckinSymptom) => yesterdaysCheckinSymptom.name === symptom.name).severity}</span>
+              }
               {this.renderSeveritySquares(symptom)}
             </div>
           ))}

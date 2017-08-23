@@ -87,3 +87,35 @@
 .boxed-view a:hover {
   color: $violet;
 }
+
+.boxed-view__box--profile-background-model__wrapper {
+  // width: 100%;
+  // height: 100vh;
+  display: flex;
+  justify-content: center;
+  // align-items: center;
+}
+.boxed-view__box--profile-background-model {
+  position: fixed;
+  margin: 0 auto;
+  background: white;
+  z-index: 5;
+  height: 25vh;
+  width: 30vw;
+  padding: $space / 4 $space / 2;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  // justify-content: center;
+
+  top: 40%;
+
+  i {
+    align-self: flex-end;
+  }
+
+  i:hover {
+    cursor: pointer;
+  }
+}

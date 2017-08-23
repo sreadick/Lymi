@@ -73,7 +73,8 @@ Meteor.methods({
 
     CheckinHistories.update({userId: this.userId}, {
       $set: {
-        [fieldPath] : severity
+        [fieldPath] : severity,
+        lastCheckin: new Date()
       }
     });
   },
@@ -84,16 +85,17 @@ Meteor.methods({
 
     CheckinHistories.update({userId: this.userId}, {
       $set: {
-        [fieldPath] : answer
-      }
-    });
-  },
-  'checkinHistories.dailyCompleted.update'(completed) {
-    CheckinHistories.update({userId: this.userId}, {
-      $set: {
-        dailyCompleted: completed,
+        [fieldPath] : answer,
         lastCheckin: new Date()
       }
     });
-  }
+  },
+  // 'checkinHistories.dailyCompleted.update'(completed) {
+  //   CheckinHistories.update({userId: this.userId}, {
+  //     $set: {
+  //       dailyCompleted: completed,
+  //       lastCheckin: new Date()
+  //     }
+  //   });
+  // }
 })

@@ -24,6 +24,7 @@ Accounts.onCreateUser((options, user) => {
 
   user.profile.firstName = options.firstName;
   user.profile.lastName = options.lastName;
+  user.profile.backgroundURL = 'http://i2.cdn.turner.com/cnn/dam/assets/141202112409-profile-background-stock.jpg';
 
   CheckinHistories.insert({
     userId: user._id,

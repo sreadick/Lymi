@@ -3,20 +3,46 @@ import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Redirect, Link } from 'react-router-dom';
 import moment from 'moment';
+import { Session } from 'meteor/session';
 
 import { UserSymptoms } from '../../api/user-symptoms';
 import { UserTreatments } from '../../api/user-treatments';
 import { CheckinHistories } from '../../api/checkin-histories';
+// import { Images } from '../../api/images';
 
 import Checkin from './Checkin';
 import SymptomChart from '../components/SymptomChart';
+import ProfileBackgroundModel from '../components/ProfileBackgroundModel';
+
 
 // ToDo //
 
-// materialize
 // react production build
 
 class Dashboard extends React.Component {
+  selectProfilePhoto() {
+    const file = this.refs.photoInput.files[0];
+    const imageType = /image.*/;
+
+    if (file.type.match(imageType)) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.src = reader.result;
+        Meteor.users.update(Meteor.userId(), {
+          $set: {
+            'profile.userPhoto': img.src
+          }
+        });
+
+      }
+
+      reader.readAsDataURL(file);
+    } else {
+      alert('File type not supported');
+    }
+  }
+
   render() {
     if (this.props.isFetching) {
       return (
@@ -31,8 +57,14 @@ class Dashboard extends React.Component {
     }
     return (
       <div className="">
+        {this.props.userPhoto &&
+          <div className='userPhoto__wrapper'>
+            <img className='userPhoto' src={this.props.userPhoto} />
+          </div>
+        }
         {/* <div className="page-content__main-heading">Dashboard</div> */}
-        <div className='dashboard-user-info'>
+        {this.props.showProfileBackgroundModel && <ProfileBackgroundModel />}
+        <div className='dashboard-user-info' style={{backgroundImage: Meteor.user() ? `url(${Meteor.user().profile.backgroundURL})` : '' }}>
           <div className='dashboard-user-info__name'>
             {Meteor.user() && <h2>{Meteor.user().profile.firstName} {Meteor.user().profile.lastName}</h2>}
           </div>
@@ -40,13 +72,13 @@ class Dashboard extends React.Component {
             <div className='section'>
               <h5 className="purple-text text-lighten-2 center-align">Tasks</h5>
                 {
-                  this.props.checkinHistory.dailyCompleted !== 'yes' ?
+                  this.props.dailyCheckinStatus !== 'complete' ?
                   <div>
                     <div>
-                      {this.props.checkinHistory.dailyCompleted === 'partial' ? "Your check in is incomplete" : "You haven't checked in today"}
+                      {this.props.dailyCheckinStatus === 'partially complete' ? "Your check in is incomplete" : "You haven't checked in today"}
                     </div>
                     <Link className="waves-effect waves-light purple darken-1 btn" to="/home/checkin/symptoms">
-                      {this.props.checkinHistory.dailyCompleted === 'partial' ? "Finish checking in" : "Check in now"}
+                      {this.props.dailyCheckinStatus === 'partially complete' ? "Finish checking in" : "Check in now"}
                     </Link>
                   </div>
                 :
@@ -55,12 +87,19 @@ class Dashboard extends React.Component {
               <div className='section'>
                 <h6>Optional:</h6>
                 {
-                  this.props.checkinHistory.dailyCompleted === 'yes' &&
+                  this.props.dailyCheckinStatus === 'complete' &&
                   <div className="">
                     <Link className="waves-effect waves-light blue btn" to="/home/checkin/symptoms">Edit check-in</Link>
                     <span className='grey-text'>{`Last checked in ${moment(this.props.checkinHistory.lastCheckin).fromNow()}`}</span>
                   </div>
                 }
+                <button className='black btn' onClick={() => {
+                  Session.set('showProfileBackgroundModel', true)
+                }}>Change profile background</button>
+                <div>
+                  <span>Add profile picture </span>
+                  <input type='file' ref='photoInput' onChange={this.selectProfilePhoto.bind(this)}/>
+                </div>
               </div>
             </div>
           </div>
@@ -146,18 +185,26 @@ export default createContainer(() => {
   const checkinHistoryIsReady = checkinHandle.ready() && !!CheckinHistories.findOne();
   const currentDate = moment().format('MMMM Do YYYY');
   const todaysCheckin = checkinHistoryIsReady ? CheckinHistories.findOne().checkins.find((checkin) => checkin.date === currentDate) : undefined;
-  // if (checkinHistoryIsReady && !todaysCheckin) {
-  //   Meteor.call('checkinHistories.checkins.update', {
-  //     date: currentDate,
-  //     symptoms: UserSymptoms.find().fetch(),
-  //     treatments: UserTreatments.find().fetch(),
-  //   });
-  //   Meteor.call('checkinHistories.dailyCompleted.update', 'no')
-  // }
+
+  // edit
+  let dailyCheckinStatus;
+  if ((checkinHistoryIsReady && todaysCheckin) && (todaysCheckin.symptoms.every(checkinSymptom => checkinSymptom.severity > 0) && todaysCheckin.treatments.every(checkinTreatment => checkinTreatment.compliance !== null))) {
+    dailyCheckinStatus = 'complete';
+  } else if ((checkinHistoryIsReady && todaysCheckin) && (todaysCheckin.symptoms.some(checkinSymptom => checkinSymptom.severity > 0) || todaysCheckin.treatments.some(checkinTreatment => checkinTreatment.compliance !== null))) {
+    dailyCheckinStatus = 'partially complete';
+  } else {
+    dailyCheckinStatus = 'incomplete';
+  }
+
   return {
     userSymptoms: UserSymptoms.find().fetch(),
     userTreatments: UserTreatments.find().fetch(),
     checkinHistory: CheckinHistories.findOne(),
     isFetching: (!checkinHistoryIsReady || !symptomsHandle.ready() || !treatmentsHandle.ready()),
+    showProfileBackgroundModel: Session.get('showProfileBackgroundModel'),
+    userPhoto: (Meteor.user() && Meteor.user().profile.userPhoto) ? Meteor.user().profile.userPhoto : undefined,
+
+    // edit
+    dailyCheckinStatus
   };
 }, Dashboard);

@@ -11,23 +11,24 @@ import SidebarMenu from '../components/SidebarMenu';
 // ToDo
 // create high level container for subscriptions
 
-const AuthenticatedRoute = ({ loggingIn, authenticated, component, toggled, ...rest }) => {
+const AuthenticatedRoute = ({ loggingIn, authenticated, component, sidebarToggled, showProfileBackgroundModel, ...rest }) => {
 
   return (
     <Route render={(props) => {
       return (
         authenticated ?
           <div className="page">
-            <SidebarMenu currentPath={props.location.pathname} toggled={toggled}/>
+            <SidebarMenu currentPath={props.location.pathname} sidebarToggled={sidebarToggled}/>
             <PrivateHeader title="Lymi"/>
-            {toggled &&
-              <div className='page-content--overlay' onClick={() => Session.set('toggled', false)}></div>
+            {(sidebarToggled || showProfileBackgroundModel) &&
+              <div className='page-content--overlay' onClick={() => {
+                Session.set('sidebarToggled', false);
+                Session.set('showProfileBackgroundModel', false);
+              }}></div>
             }
-            {/* <div className='page-content'> */}
-              <div>
-                {(React.createElement(component, {...props}))}
-              </div>
-            {/* </div> */}
+            <div>
+              {(React.createElement(component, {...props}))}
+            </div>
           </div>
         : <Redirect to="/login" />
       );
@@ -42,8 +43,9 @@ AuthenticatedRoute.propTypes = {
 }
 
 export default createContainer(() => {
-  const toggled = Session.get('toggled') || false
-  document.body.style.overflow = toggled ? 'hidden' : 'auto';
+  const sidebarToggled = Session.get('sidebarToggled') || false
+  const showProfileBackgroundModel = Session.get('showProfileBackgroundModel') || false;
+  document.body.style.overflow = (sidebarToggled || showProfileBackgroundModel) ? 'hidden' : 'auto';
 
   // const checkinHandle = Meteor.subscribe('checkinHistories');
   // const checkinHistoryIsReady = checkinHandle.ready() && !!CheckinHistories.findOne();
@@ -64,7 +66,8 @@ export default createContainer(() => {
 
 
   return {
-    toggled,
+    sidebarToggled,
+    showProfileBackgroundModel
     // dailyCheckinStatus
   }
 }, AuthenticatedRoute);

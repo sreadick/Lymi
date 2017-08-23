@@ -55,7 +55,7 @@ class TreatmentCheckin extends React.Component {
         <button className={`black btn ${!this.props.treatmentCheckinCompleted && 'disabled'}`}
           onClick={() => {
             if (this.props.treatmentCheckinCompleted) {
-              Meteor.call('checkinHistories.dailyCompleted.update', "yes")
+              // Meteor.call('checkinHistories.dailyCompleted.update', "yes")
               this.props.history.replace("/home/dashboard");
             }
           }}>Finish!

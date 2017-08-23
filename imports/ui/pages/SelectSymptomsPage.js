@@ -9,7 +9,6 @@ import { getNextColor } from '../../utils/utils';
 import { UserSymptoms } from '../../api/user-symptoms';
 import { CheckinHistories } from '../../api/checkin-histories';
 
-// import SymptomCheckbox from '../components/SymptomCheckbox';
 import { SymptomGroup } from '../components/SymptomGroup';
 
 class SelectSymptomsPage extends React.Component {
@@ -20,6 +19,7 @@ class SelectSymptomsPage extends React.Component {
       otherSymptomResponse: {}
     };
   }
+
   renderCommonSymptomsList() {
     return symptomsByCategory.map((symptomGroup) => {
       return (
@@ -43,24 +43,11 @@ class SelectSymptomsPage extends React.Component {
               <a className='secondary-content' onClick={() => {
                 Meteor.call('userSymptoms.remove', symptom.name);
               }}>
-                  {/* <i className="remove right floated red icon"></i> */}
                 <i className="material-icons" style={{color: '#777'}}>delete_forever</i>
               </a>
             </span>
           </div>
         </li>
-        // {/* <div key={symptom._id}>
-        //   <h3 className="user-symptom" style={{color: symptom.color}}>
-        //     <span className="user-symptom__remove-icon"
-        //       onClick={() => {
-        //         Meteor.call('userSymptoms.remove', symptom.name);
-        //       }}>
-        //       {/* <i className="remove right floated red icon"></i> */}
-        //       <i className="material-icons">delete_forever</i>
-        //     </span>
-        //     {symptom.name}
-        //   </h3>
-        // </div> */}
       )
     });
   }
@@ -83,7 +70,6 @@ class SelectSymptomsPage extends React.Component {
             <div className='row'>
               <div className='col s12'>
                 <div className="input-field">
-                  {/* <input type="text" ref="otherSymptom" placeholder="Other..." /> */}
                   <input type="text" id='otherSymptom' ref="otherSymptom" />
                   <label htmlFor='otherSymptom'>Other Symptom</label>
                   <div className={`input-response ${this.state.otherSymptomResponse.success ? 'light-green-text text-darken-2' : 'red-text text-darken-2'}`}
@@ -125,11 +111,13 @@ class SelectSymptomsPage extends React.Component {
                       })
                     }
                     setTimeout(() => {
-                      this.setState({
-                        otherSymptomResponse: {
-                          message: ''
-                        }
-                      })
+                      if (this.mounted === true) {
+                        this.setState({
+                          otherSymptomResponse: {
+                            message: ''
+                          }
+                        });
+                      }
                     }, 3000);
                   }}>
                   Add

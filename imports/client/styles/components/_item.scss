@@ -29,14 +29,14 @@
   margin: $space;
 }
 
-.item__label.deleted {
-  text-decoration: line-through;
-}
-
 .item__content {
   // font-family: 'Source Sans Pro', sans-serif;
   font-size: 1rem;
   font-weight: 400;
   color: #353535;
   line-height: .9rem;
+}
+
+.checkin-symptom-item.deleted {
+  text-decoration: line-through;
 }
