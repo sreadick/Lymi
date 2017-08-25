@@ -33,11 +33,12 @@ Meteor.methods({
     if (!this.userId) {
       throw new Meteor.Error('not-authorized');
     }
-    const symptomToDelete = UserSymptoms.findOne({name: symptomName});
-
-    if (!symptomToDelete) {
-      throw new Meteor.Error('Symptom does not exist.');
-    }
-    UserSymptoms.remove({_id: symptomToDelete._id});
+    // const symptomToDelete = UserSymptoms.findOne({name: symptomName});
+    //
+    // if (!symptomToDelete) {
+    //   throw new Meteor.Error('Symptom does not exist.');
+    // }
+    // UserSymptoms.remove({_id: symptomToDelete._id});
+    return UserSymptoms.remove({name: symptomName});
   }
 });

@@ -59,7 +59,7 @@ class SymptomsCheckin extends React.Component {
               <p>{symptom.name}</p>
               {
                 (this.props.yesterdaysCheckin && !!this.props.yesterdaysCheckin.symptoms.find((yesterdaysCheckinSymptom) => yesterdaysCheckinSymptom.name === symptom.name && yesterdaysCheckinSymptom.severity > 0))
-                && <span>Yesterday: {this.props.yesterdaysCheckin.symptoms.find((yesterdaysCheckinSymptom) => yesterdaysCheckinSymptom.name === symptom.name).severity}</span>
+                && <em className='grey-text'>Yesterday: {this.props.yesterdaysCheckin.symptoms.find((yesterdaysCheckinSymptom) => yesterdaysCheckinSymptom.name === symptom.name).severity}</em>
               }
               {this.renderSeveritySquares(symptom)}
             </div>

@@ -107,7 +107,7 @@ class Dashboard extends React.Component {
         <Checkin />
 
         <div className="row dashboard-chart-section">
-          <div className='col m3'>
+          <div className='col sm12 m3'>
             <div className="dashboard-chart-section__list">
               <ol className='collection with-header z-depth-2'>
                 <li className="collection-header"><h5>My Symptoms:</h5></li>
@@ -123,10 +123,12 @@ class Dashboard extends React.Component {
                 })}
               </ol>
             </div>
-            <Link className="waves-effect waves-light blue btn" to="/home/selectsymptoms">Edit</Link>
-            <Link className='waves-effect waves-light black btn' to="/home/history/symptoms">Full History</Link>
+            <div>
+              <Link className="waves-effect waves-light blue btn" to="/home/selectsymptoms">Edit</Link>
+              <Link className='waves-effect waves-light black btn' to="/home/history/symptoms">Full History</Link>
+            </div>
           </div>
-          <div className='col m9'>
+          <div className='col sm12 m9'>
             <div className="dashboard-chart-section__chart__wrapper z-depth-2">
               <div className="dashboard-chart-section__chart">
                 {this.props.checkinHistory.checkins.length > 0 &&
