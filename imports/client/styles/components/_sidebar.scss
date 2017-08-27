@@ -11,12 +11,19 @@
   position: fixed;
   z-index: 4;
   height: 100vh !important;
-  width: 20vw;
+  width: 100vw;
   transition: left .4s linear;
+
+  @media screen and (min-width: $tablet-breakpoint) {
+    width: 20vw;
+  }
 }
 
 .sidebar-menu__wrapper.closed {
-  left: -20vw;
+  left: -100vw;
+  @media screen and (min-width: $tablet-breakpoint) {
+    left: -20vw;
+  }
 }
 
 .sidebar-menu__wrapper.open {
@@ -33,7 +40,7 @@
 }
 
 .sidebar-menu__link__container {
-  margin-top: 3.5rem;
+  padding-top: 3.5rem;
 }
 
 .sidebar-menu__link__item {
@@ -54,13 +61,14 @@
 }
 
 .sidebar-menu__link:hover {
-  border-left: 6px solid $grey;
+  border-left: 6px solid $deep-purple-lighten-2;
 }
 
 .sidebar-menu__link.selected {
   // border-left: 6px solid $violet;
   // text-decoration: underline;
-  background: $green;
+  background: $deep-purple-lighten-2;
+  color: white;
 }
 
 .sidebar-menu__link__tooltip {

@@ -42,7 +42,7 @@ export class TreatmentList extends React.Component {
             <p>All changes are automatically saved and you can edit the list anytime</p>
           </div>
         :
-        this.props.userTreatments.map((treatment, index) => {
+        this.props.userTreatments.map((treatment) => {
           return (
             // <div className="treatment-item" key={treatment._id}>
             <div className="" key={treatment._id}>

@@ -43,3 +43,21 @@
     width: auto;
   }
 }
+
+.treatment-details-section {
+  border: 1px solid #aaa;
+  height: 30rem;
+  // input {
+  //   width: 60% !important;
+  // }
+  .date-picker-wrapper {
+    // height: 13rem;
+    height: 18rem;
+    width: 20rem;
+    font-size: 1rem;
+
+    td {
+      padding: $space / 4;
+    }
+  }
+}

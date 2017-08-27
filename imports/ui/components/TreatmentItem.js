@@ -1,18 +1,27 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 
+import moment from 'moment';
+import Datetime from 'react-datetime';
+
 export class TreatmentItem extends React.Component {
   constructor(props) {
     super(props);
-    const { name, amount, dose, dose_type, frequency } = props.treatment;
+    const { name, amount, dose, dose_type, frequency, includeDetails, daysOfWeek } = props.treatment;
 
     this.state = {
       name,
       amount,
       dose,
       dose_type,
-      frequency
+      frequency,
+      includeDetails,
+      daysOfWeek,
+      startDate: moment(),
+      endDate: moment(),
     };
+
+    this.handleWeekdayChange = this.handleWeekdayChange.bind(this);
   }
 
   handleChange(e) {
@@ -41,6 +50,35 @@ export class TreatmentItem extends React.Component {
   handleRemove() {
     Meteor.call('userTreatments.remove', this.props.treatment._id)
   }
+
+  handleWeekdayChange(e, day) {
+    e.preventDefault();
+    if (this.state.daysOfWeek.includes(day)) {
+      Meteor.call('userTreatments.update', this.props.treatment._id, {
+        daysOfWeek: this.state.daysOfWeek.filter((dayOfWeek) => dayOfWeek !== day)
+      });
+      this.setState({
+        daysOfWeek: this.state.daysOfWeek.filter((dayOfWeek) => dayOfWeek !== day)
+      });
+    } else {
+      Meteor.call('userTreatments.update', this.props.treatment._id, {
+        daysOfWeek: [
+          day,
+          ...this.state.daysOfWeek
+        ]
+      });
+      this.setState({
+        daysOfWeek: [
+          day,
+          ...this.state.daysOfWeek
+        ]
+      });
+    }
+  }
+
+  // handleDateChange(startDate) {
+  //   this.setState({ startDate })
+  // }
 
   uppercase(treatmentName) {
     const words = treatmentName.split(' ');
@@ -114,6 +152,55 @@ export class TreatmentItem extends React.Component {
                 <label className='active' htmlFor='frequency'>Times Per Day</label>
                 <div className="input-response red-text text-darken-2">{this.props.showErrors ? this.props.errors.frequency : ''}</div>
               </div>
+
+              <button className='btn-flat' onClick={() => {
+                this.setState({includeDetails: !this.state.includeDetails})
+                Meteor.call('userTreatments.update', this.props.treatment._id, {
+                  includeDetails: !this.state.includeDetails
+                });
+              }}>
+
+              { this.state.includeDetails ?
+                <span>Exclude Details<i className='material-icons'>expand_less</i></span>
+                :
+                <span>Include Details<i className='material-icons'>expand_more</i></span>
+              }
+              </button>
+              {this.state.includeDetails &&
+                <div className='treatment-details-section z-depth-1'>
+                  <div className='col l3'>
+                    {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) =>
+                      <div key={day}>
+                        <input type="checkbox" id={`${this.props.treatment._id}_${day}`} checked={this.state.daysOfWeek.includes(day)} onChange={(e) => this.handleWeekdayChange(e, day)}/>
+                        <label htmlFor={`${this.props.treatment._id}_${day}`}>{day}</label>
+                      </div>
+                    )}
+                  </div>
+                  <div className='col l4'>
+                    <div className='date-picker-wrapper'>
+                      <Datetime
+                        open={true}
+                        timeFormat={false}
+                        onChange={(date) => this.setState({ startDate: date })}
+                        value={this.state.startDate}
+                      />
+                    </div>
+                  </div>
+                  <div className='col l1'>
+                    to...
+                  </div>
+                  <div className='col l4'>
+                    <div className='date-picker-wrapper'>
+                      <Datetime
+                        open={true}
+                        timeFormat={false}
+                        onChange={(date) => this.setState({ endDate: date })}
+                        value={this.state.endDate}
+                      />
+                    </div>
+                  </div>
+                </div>
+              }
             </div>
 
           </div>

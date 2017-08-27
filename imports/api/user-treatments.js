@@ -28,6 +28,8 @@ Meteor.methods({
         name: "needs to be at least three characters.",
         dose: "should be a positive number"
       },
+      includeDetails: false,
+      daysOfWeek: [],
       createdAt: moment().valueOf(),
       userId: this.userId
     });
@@ -46,6 +48,7 @@ Meteor.methods({
         updates.dose = 0;
       }
     }
+    // console.log(updates);
 
     new SimpleSchema({
       _id: {
@@ -72,6 +75,18 @@ Meteor.methods({
         type: Number,
         optional: true
       },
+      includeDetails: {
+        type: Boolean,
+        optional: true
+      },
+      daysOfWeek: {
+        type: Array,
+        optional: true
+      },
+      'daysOfWeek.$': {
+        type: String,
+        optional: true
+      },
       errors: {
         type: Object,
         optional: true,
@@ -81,6 +96,9 @@ Meteor.methods({
       _id,
       ...updates
     });
+
+    // console.log(UserTreatments.find({_id}).fetch());
+    // console.log(updates);
 
     UserTreatments.update({
       _id, userId: this.userId

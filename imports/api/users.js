@@ -2,7 +2,8 @@ import { Meteor } from 'meteor/meteor';
 import SimpleSchema from 'simpl-schema';
 import { Accounts } from 'meteor/accounts-base';
 
-import { CheckinHistories } from './checkin-histories'
+import { CheckinHistories } from './checkin-histories';
+import { backgroundImages } from '../public/resources/backgroundImages';
 
 Accounts.validateNewUser((user) => {
   const email = user.emails[0].address;
@@ -24,7 +25,7 @@ Accounts.onCreateUser((options, user) => {
 
   user.profile.firstName = options.firstName;
   user.profile.lastName = options.lastName;
-  user.profile.backgroundURL = 'http://i2.cdn.turner.com/cnn/dam/assets/141202112409-profile-background-stock.jpg';
+  user.profile.backgroundURL = backgroundImages[Math.floor(Math.random() * backgroundImages.length)]
 
   CheckinHistories.insert({
     userId: user._id,

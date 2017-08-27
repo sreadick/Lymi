@@ -11,8 +11,24 @@ import { CheckinHistories } from '../../api/checkin-histories';
 import SymptomsCheckin from './SymptomsCheckin';
 import TreatmentsCheckin from './TreatmentsCheckin';
 
-class Checkin extends React.Component {
 
+class Checkin extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      fromTreatmentsCheckin: false
+    }
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.location !== this.props.location) {
+      if (this.props.location.pathname === "/home/checkin/treatments") {
+        this.setState({ fromTreatmentsCheckin: true })
+      } else {
+        this.setState({ fromTreatmentsCheckin: false })
+      }
+    }
+  }
   render() {
     if (this.props.isFetching) {
       return (
@@ -26,19 +42,24 @@ class Checkin extends React.Component {
       return <Redirect to="/home/selecttreatments" />
     }
     return (
-      <div className="checkin-item__container">
-        <Switch>
-          <Route exact path="/home/checkin/symptoms" render={() => {
-            return <SymptomsCheckin symptomCheckinItems={this.props.symptomCheckinItems} {...this.props} />
-          }} />
-          <Route exact path="/home/checkin/treatments" render={() => {
-            return <TreatmentsCheckin treatmentCheckinItems={this.props.treatmentCheckinItems} {...this.props} />
-          }} />
-          <Route exact path="/home/checkin" render={() => {
-            return <Redirect to="/home/checkin/symptoms" />
-          }} />
-        </Switch>
-      </div>
+      <Switch>
+        <Route exact path="/home/checkin/symptoms" render={() => {
+          return (
+            <SymptomsCheckin
+              symptomCheckinItems={this.props.symptomCheckinItems}
+              treatmentCheckinItems={this.props.treatmentCheckinItems}
+              fromTreatmentsCheckin={this.state.fromTreatmentsCheckin}
+              {...this.props}
+            />
+          );
+        }} />
+        <Route exact path="/home/checkin/treatments" render={() => {
+          return <TreatmentsCheckin treatmentCheckinItems={this.props.treatmentCheckinItems} {...this.props} />
+        }} />
+        <Route exact path="/home/checkin" render={() => {
+          return <Redirect to="/home/checkin/symptoms" />
+        }} />
+      </Switch>
     );
   }
 };
@@ -55,15 +76,14 @@ export default createContainer(() => {
 
   const userSymptoms = UserSymptoms.find().fetch();
   const userTreatments = UserTreatments.find().fetch();
-  const checkinSymptomNames = todaysCheckin ? todaysCheckin.symptoms.map((symptom) => symptom.name) : [];
-  const checkinTreatmentNames = todaysCheckin ? todaysCheckin.treatments.map((treatment) => treatment.name) : [];
-
+  // const checkinSymptomNames = todaysCheckin ? todaysCheckin.symptoms.map((symptom) => symptom.name) : [];
+  // const checkinTreatmentNames = todaysCheckin ? todaysCheckin.treatments.map((treatment) => treatment.name) : [];
   if (checkinHistoryIsReady ) {
     if (!todaysCheckin) {
       Meteor.call('checkinHistories.checkins.create', {
         date: currentDate,
         symptoms: userSymptoms,
-        treatments: userTreatments,
+        treatments: userTreatments.filter((treatment) => treatment.includeDetails === false || treatment.daysOfWeek.includes(moment().format('dddd'))),
       });
     } else {
       if (todaysCheckin.symptoms.map((checkinSymptom) => checkinSymptom.name).toString() !== userSymptoms.map((userSymptom) => userSymptom.name).toString()) {
@@ -74,9 +94,10 @@ export default createContainer(() => {
         });
       }
       if (todaysCheckin.treatments.map((checkinTreatment) => checkinTreatment.name).toString() !== userTreatments.map((userTreatment) => userTreatment.name).toString()) {
+
         Meteor.call('checkinHistories.checkins.treatments.update', {
           date: currentDate,
-          treatments: userTreatments,
+          treatments: userTreatments.filter((treatment) => treatment.includeDetails === false || treatment.daysOfWeek.includes(moment().format('dddd'))),
           todaysCheckinTreatments: todaysCheckin.treatments
         });
       }

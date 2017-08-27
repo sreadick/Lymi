@@ -17,7 +17,6 @@ import Checkin from '../pages/Checkin';
 import SymptomHistory from '../pages/SymptomsHistory';
 import NotFound from '../pages/NotFound';
 
-
 const App = appProps => (
   <Router history={history}>
     <Switch>

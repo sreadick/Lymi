@@ -4,7 +4,6 @@ import { Link, Redirect } from 'react-router-dom';
 import { createContainer } from 'meteor/react-meteor-data';
 import moment from 'moment';
 
-
 import { CheckinHistories } from '../../api/checkin-histories';
 
 class SymptomsCheckin extends React.Component {
@@ -47,27 +46,39 @@ class SymptomsCheckin extends React.Component {
     })
   }
 
+  componentDidMount() {
+    if (this.props.fromTreatmentsCheckin === false && this.props.symptomCheckinCompleted && this.props.treatmentCheckinItems.length > 0 && !!this.props.treatmentCheckinItems.find((treatment) => treatment.compliance === null)) {
+      this.props.history.push('/home/checkin/treatments')
+    }
+  }
+
   render() {
     if (this.props.symptomCheckinItems.length === 0) return <div></div>
     return (
       <div className="page-content">
-        <h4 className="grey-text">Check in for {moment().format('MMMM Do YYYY')}</h4>
-        <h5 className="black-text">How were your symptoms today?</h5>
-        <div>
-          {this.props.symptomCheckinItems.map((symptom) => (
-            <div className="card section" key={symptom.name}>
-              <p>{symptom.name}</p>
-              {
-                (this.props.yesterdaysCheckin && !!this.props.yesterdaysCheckin.symptoms.find((yesterdaysCheckinSymptom) => yesterdaysCheckinSymptom.name === symptom.name && yesterdaysCheckinSymptom.severity > 0))
-                && <em className='grey-text'>Yesterday: {this.props.yesterdaysCheckin.symptoms.find((yesterdaysCheckinSymptom) => yesterdaysCheckinSymptom.name === symptom.name).severity}</em>
-              }
-              {this.renderSeveritySquares(symptom)}
-            </div>
-          ))}
-          <Link className={`black btn ${!this.props.symptomCheckinCompleted && 'disabled'}`}
-            to={this.props.symptomCheckinCompleted ? "/home/checkin/treatments" : "#"}>
-            Next
-          </Link>
+        <div className="checkin-item__container">
+
+          <h4 className="grey-text">Check in for {moment().format('MMMM Do YYYY')}</h4>
+          <h5 className="black-text">How were your symptoms today?</h5>
+          <div>
+            {this.props.symptomCheckinItems.map((symptom) => (
+              <div className="card section" key={symptom.name}>
+                <p>{symptom.name}</p>
+                {
+                  (this.props.yesterdaysCheckin && !!this.props.yesterdaysCheckin.symptoms.find((yesterdaysCheckinSymptom) => yesterdaysCheckinSymptom.name === symptom.name && yesterdaysCheckinSymptom.severity > 0))
+                  && <em className='grey-text'>Yesterday: {this.props.yesterdaysCheckin.symptoms.find((yesterdaysCheckinSymptom) => yesterdaysCheckinSymptom.name === symptom.name).severity}</em>
+                }
+                {this.renderSeveritySquares(symptom)}
+              </div>
+            ))}
+            <Link className={`black btn ${!this.props.symptomCheckinCompleted && 'disabled'}`}
+              to={this.props.symptomCheckinCompleted ?
+                this.props.treatmentCheckinItems.length === 0 ? "/home/dashboard" : "/home/checkin/treatments"
+                : "#"
+              }>
+              {this.props.treatmentCheckinItems.length === 0 ? 'Finish' : 'Next'}
+            </Link>
+          </div>
         </div>
       </div>
     );
@@ -75,11 +86,11 @@ class SymptomsCheckin extends React.Component {
 };
 
 export default createContainer(props => {
-  const currentDate = moment().format('MMMM Do YYYY');
-  const checkinItems = props.checkinHistoryIsReady ? CheckinHistories.findOne().checkins.find((checkin) => checkin.date === currentDate) : {};
-
+  // const currentDate = moment().format('MMMM Do YYYY');
+  // const checkinItems = props.checkinHistoryIsReady ? CheckinHistories.findOne().checkins.find((checkin) => checkin.date === currentDate) : {};
   return {
-    symptomCheckinItems: checkinItems.symptoms || [],
-    symptomCheckinCompleted: (props.checkinHistoryIsReady && checkinItems.symptoms.filter((symptom) => symptom.severity > 0).length === checkinItems.symptoms.length)
+    // symptomCheckinItems: checkinItems.symptoms || [],
+    // treatmentCheckinItems: checkinItems.treatments || [],
+    symptomCheckinCompleted: (props.checkinHistoryIsReady && props.symptomCheckinItems.filter((symptom) => symptom.severity > 0).length === props.symptomCheckinItems.length)
   }
 }, SymptomsCheckin)

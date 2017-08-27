@@ -39,27 +39,29 @@ class TreatmentCheckin extends React.Component {
     e.target.classList.remove("highlighted")
   }
   render() {
-    if (this.props.treatmentCheckinItems.length === 0) return <div></div>
+    // if (this.props.treatmentCheckinItems.length === 0) return <div></div>
     return (
       <div className="page-content">
-        <h4 className="grey-text">Check in for {moment().format('MMMM Do YYYY')}</h4>
-        <h5 className="black-text">Did you take your medications?</h5>
-        <Link className="blue btn" to="/home/checkin/symptoms">Back to symptoms</Link>
-        {this.props.treatmentCheckinItems.map((treatment) => (
-          <div className="card section" key={treatment.name}>
-            <p>{treatment.name}</p>
-            {this.renderAnswerSquares(treatment)}
-          </div>
-        ))}
+        <div className="checkin-item__container">
+          <h4 className="grey-text">Check in for {moment().format('MMMM Do YYYY')}</h4>
+          <h5 className="black-text">Did you take your medications?</h5>
+          <Link className="blue btn" to="/home/checkin/symptoms">Back to symptoms</Link>
+          {this.props.treatmentCheckinItems.map((treatment) => (
+            <div className="card section" key={treatment.name}>
+              <p>{treatment.name}</p>
+              {this.renderAnswerSquares(treatment)}
+            </div>
+          ))}
 
-        <button className={`black btn ${!this.props.treatmentCheckinCompleted && 'disabled'}`}
-          onClick={() => {
-            if (this.props.treatmentCheckinCompleted) {
-              // Meteor.call('checkinHistories.dailyCompleted.update', "yes")
-              this.props.history.replace("/home/dashboard");
-            }
-          }}>Finish!
-        </button>
+          <button className={`black btn ${!this.props.treatmentCheckinCompleted && 'disabled'}`}
+            onClick={() => {
+              if (this.props.treatmentCheckinCompleted) {
+                // Meteor.call('checkinHistories.dailyCompleted.update', "yes")
+                this.props.history.replace("/home/dashboard");
+              }
+            }}>Finish!
+          </button>
+        </div>
       </div>
     );
   }

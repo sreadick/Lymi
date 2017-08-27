@@ -11,7 +11,7 @@ import SidebarMenu from '../components/SidebarMenu';
 // ToDo
 // create high level container for subscriptions
 
-const AuthenticatedRoute = ({ loggingIn, authenticated, component, sidebarToggled, showProfileBackgroundModel, ...rest }) => {
+const AuthenticatedRoute = ({ loggingIn, authenticated, component, sidebarToggled, showProfileBackgroundModel, showProfileImageModel, ...rest }) => {
 
   return (
     <Route render={(props) => {
@@ -20,10 +20,11 @@ const AuthenticatedRoute = ({ loggingIn, authenticated, component, sidebarToggle
           <div className="page">
             <SidebarMenu currentPath={props.location.pathname} sidebarToggled={sidebarToggled}/>
             <PrivateHeader title="Lymi"/>
-            {(sidebarToggled || showProfileBackgroundModel) &&
+            {(sidebarToggled || showProfileBackgroundModel || showProfileImageModel) &&
               <div className='page-content--overlay' onClick={() => {
                 Session.set('sidebarToggled', false);
                 Session.set('showProfileBackgroundModel', false);
+                Session.set('showProfileImageModel', false);
               }}></div>
             }
             <div>
@@ -45,7 +46,8 @@ AuthenticatedRoute.propTypes = {
 export default createContainer(() => {
   const sidebarToggled = Session.get('sidebarToggled') || false
   const showProfileBackgroundModel = Session.get('showProfileBackgroundModel') || false;
-  document.body.style.overflow = (sidebarToggled || showProfileBackgroundModel) ? 'hidden' : 'auto';
+  const showProfileImageModel = Session.get('showProfileImageModel') || false;
+  document.body.style.overflow = (sidebarToggled || showProfileBackgroundModel || showProfileImageModel) ? 'hidden' : 'auto';
 
   // const checkinHandle = Meteor.subscribe('checkinHistories');
   // const checkinHistoryIsReady = checkinHandle.ready() && !!CheckinHistories.findOne();
@@ -67,7 +69,8 @@ export default createContainer(() => {
 
   return {
     sidebarToggled,
-    showProfileBackgroundModel
+    showProfileBackgroundModel,
+    showProfileImageModel
     // dailyCheckinStatus
   }
 }, AuthenticatedRoute);

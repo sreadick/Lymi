@@ -27,9 +27,9 @@ class SidebarMenu extends React.Component {
     return (
       <div className={`sidebar-menu__wrapper ${this.props.sidebarToggled ? "open" : "closed"}`}>
         <div className='sidebar-menu'>
-          <span className="sidebar-icon" onClick={() => Session.set('sidebarToggled', false)}>
+          {/* <span className="sidebar-icon" onClick={() => Session.set('sidebarToggled', false)}>
             <i className="large grey remove icon"></i>
-          </span>
+          </span> */}
           <div className="sidebar-menu__link__container">
             {this.props.links.map((link) => (
               <div className="sidebar-menu__link__item" key={link.name}
