@@ -94,7 +94,6 @@ export default createContainer(() => {
         });
       }
       if (todaysCheckin.treatments.map((checkinTreatment) => checkinTreatment.name).toString() !== userTreatments.map((userTreatment) => userTreatment.name).toString()) {
-
         Meteor.call('checkinHistories.checkins.treatments.update', {
           date: currentDate,
           treatments: userTreatments.filter((treatment) => treatment.includeDetails === false || treatment.daysOfWeek.includes(moment().format('dddd'))),

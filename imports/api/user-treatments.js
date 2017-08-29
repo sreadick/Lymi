@@ -29,7 +29,10 @@ Meteor.methods({
         dose: "should be a positive number"
       },
       includeDetails: false,
-      daysOfWeek: [],
+      daysOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+      startDateValue: undefined,
+      endDateValue: undefined,
+      dateRangeToggled: false,
       createdAt: moment().valueOf(),
       userId: this.userId
     });
@@ -85,6 +88,18 @@ Meteor.methods({
       },
       'daysOfWeek.$': {
         type: String,
+        optional: true
+      },
+      startDateValue: {
+        type: Number,
+        optional: true
+      },
+      endDateValue: {
+        type: Number,
+        optional: true
+      },
+      dateRangeToggled: {
+        type: Boolean,
         optional: true
       },
       errors: {

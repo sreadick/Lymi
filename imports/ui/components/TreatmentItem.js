@@ -2,12 +2,13 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 
 import moment from 'moment';
-import Datetime from 'react-datetime';
+
+import { DateRangePicker } from 'react-dates';
 
 export class TreatmentItem extends React.Component {
   constructor(props) {
     super(props);
-    const { name, amount, dose, dose_type, frequency, includeDetails, daysOfWeek } = props.treatment;
+    const { name, amount, dose, dose_type, frequency, daysOfWeek, startDateValue, endDateValue, includeDetails, dateRangeToggled } = props.treatment;
 
     this.state = {
       name,
@@ -15,10 +16,12 @@ export class TreatmentItem extends React.Component {
       dose,
       dose_type,
       frequency,
-      includeDetails,
       daysOfWeek,
-      startDate: moment(),
-      endDate: moment(),
+      startDate: startDateValue ? moment(startDateValue) : null,
+      endDate: endDateValue ? moment(endDateValue) : null,
+      includeDetails,
+      dateRangeToggled,
+      focusedInput: 'startDate'
     };
 
     this.handleWeekdayChange = this.handleWeekdayChange.bind(this);
@@ -76,9 +79,6 @@ export class TreatmentItem extends React.Component {
     }
   }
 
-  // handleDateChange(startDate) {
-  //   this.setState({ startDate })
-  // }
 
   uppercase(treatmentName) {
     const words = treatmentName.split(' ');
@@ -167,8 +167,8 @@ export class TreatmentItem extends React.Component {
               }
               </button>
               {this.state.includeDetails &&
-                <div className='treatment-details-section z-depth-1'>
-                  <div className='col l3'>
+                <div className='treatment-details-section'>
+                  <div className='days-of-week-list'>
                     {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) =>
                       <div key={day}>
                         <input type="checkbox" id={`${this.props.treatment._id}_${day}`} checked={this.state.daysOfWeek.includes(day)} onChange={(e) => this.handleWeekdayChange(e, day)}/>
@@ -176,27 +176,53 @@ export class TreatmentItem extends React.Component {
                       </div>
                     )}
                   </div>
-                  <div className='col l4'>
-                    <div className='date-picker-wrapper'>
-                      <Datetime
-                        open={true}
-                        timeFormat={false}
-                        onChange={(date) => this.setState({ startDate: date })}
-                        value={this.state.startDate}
-                      />
+                  <div className=''>
+                    <div className='row'>
+                      <div
+                        className={`from-now-on-btn white btn-flat ${!this.state.dateRangeToggled && 'selected'}`}
+                        onClick={() => {
+                          Meteor.call('userTreatments.update', this.props.treatment._id, {
+                            dateRangeToggled: false,
+                            startDateValue: undefined,
+                            endDateValue: undefined,
+                          });
+                          this.setState({dateRangeToggled: false})
+                        }}>
+                        From now on
+                      </div>
                     </div>
-                  </div>
-                  <div className='col l1'>
-                    to...
-                  </div>
-                  <div className='col l4'>
-                    <div className='date-picker-wrapper'>
-                      <Datetime
-                        open={true}
-                        timeFormat={false}
-                        onChange={(date) => this.setState({ endDate: date })}
-                        value={this.state.endDate}
-                      />
+                    <div className='row center-align'>
+                      <em className='grey-text'>or</em>
+                    </div>
+                    <div className='row'>
+                      <div
+                        className={`date-picker-wrapper ${this.state.dateRangeToggled && 'selected'}`}
+                        onClick={() => {
+                          Meteor.call('userTreatments.update', this.props.treatment._id, {
+                            dateRangeToggled: true,
+                            startDateValue: undefined,
+                            endDateValue: undefined,
+                          });
+                          this.setState({dateRangeToggled: true})
+                        }}>
+                        <DateRangePicker
+                          startDate={this.state.startDate} // momentPropTypes.momentObj or null,
+                          endDate={this.state.endDate} // momentPropTypes.momentObj or null,
+                          onDatesChange={({ startDate, endDate }) => {
+                            Meteor.call('userTreatments.update', this.props.treatment._id, {
+                              startDateValue: startDate ? startDate.valueOf() : undefined,
+                              endDateValue: endDate ? endDate.valueOf() : undefined
+                            });
+                            this.setState({ startDate, endDate });
+                          }}
+                          focusedInput={this.state.dateRangeToggled ? this.state.focusedInput : null} // PropTypes.oneOf([START_DATE, END_DATE]) or null,
+                          onFocusChange={focusedInput => this.setState({ focusedInput })} // PropTypes.func.isRequired,
+                          isOutsideRange={(day) => (this.state.daysOfWeek.includes(day.format('dddd')) && day.isSameOrAfter(moment().startOf('day')) ) ? false : true}
+                          keepOpenOnDateSelect={true}
+                          enableOutsideDays={false}
+                          showClearDates={true}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -205,67 +231,6 @@ export class TreatmentItem extends React.Component {
 
           </div>
         </div>
-
-        {/* <div className="input-field col s12">
-          <select>
-            <option value="" disabled selected>Choose your option</option>
-            <option value="1">Option 1</option>
-            <option value="2">Option 2</option>
-            <option value="3">Option 3</option>
-          </select>
-          <label>Materialize Select</label>
-        </div> */}
-
-        {/* <div className="input-field col s12">
-          <select multiple>
-            <option value="" disabled selected>Choose your option</option>
-            <option value="1">Option 1</option>
-            <option value="2">Option 2</option>
-            <option value="3">Option 3</option>
-          </select>
-          <label>Materialize Multiple Select</label>
-        </div> */}
-
-        {/* <div className="input-field col s12">
-          <select>
-            <optgroup label="team 1">
-              <option value="1">Option 1</option>
-              <option value="2">Option 2</option>
-            </optgroup>
-            <optgroup label="team 2">
-              <option value="3">Option 3</option>
-              <option value="4">Option 4</option>
-            </optgroup>
-          </select>
-          <label>Optgroups</label>
-        </div>
-
-        <div className="input-field col s12 m6">
-          <select className="icons">
-            <option value="" disabled selected>Choose your option</option>
-            <option value="" data-icon="images/sample-1.jpg" className="circle">example 1</option>
-            <option value="" data-icon="images/office.jpg" className="circle">example 2</option>
-            <option value="" data-icon="images/yuna.jpg" className="circle">example 3</option>
-          </select>
-          <label>Images in select</label>
-        </div>
-        <div className="input-field col s12 m6">
-          <select className="icons">
-            <option value="" disabled selected>Choose your option</option>
-            <option value="" data-icon="images/sample-1.jpg" className="left circle">example 1</option>
-            <option value="" data-icon="images/office.jpg" className="left circle">example 2</option>
-            <option value="" data-icon="images/yuna.jpg" className="left circle">example 3</option>
-          </select>
-          <label>Images in select</label>
-        </div>
-
-        <label>Browser Select</label>
-        <select className="browser-default">
-          <option value="" disabled selected>Choose your option</option>
-          <option value="1">Option 1</option>
-          <option value="2">Option 2</option>
-          <option value="3">Option 3</option>
-        </select> */}
 
       </div>
     );

@@ -45,19 +45,36 @@
 }
 
 .treatment-details-section {
-  border: 1px solid #aaa;
-  height: 30rem;
-  // input {
-  //   width: 60% !important;
-  // }
+  // border: 1px solid #aaa;
+  border-top: 3px solid $deep-purple-lighten-3;
+  height: 20rem;
+  padding: $space 0;
+  display: flex;
+
+  .days-of-week-list {
+    margin: 0 2rem;
+  }
+
+  .from-now-on-btn {
+    width: 340px;
+    height: 50px;
+    margin-top: 1.4rem;
+    line-height: 3rem;
+    text-align: center;
+  }
   .date-picker-wrapper {
-    // height: 13rem;
-    height: 18rem;
-    width: 20rem;
+    // width: 20rem;
     font-size: 1rem;
+    z-index: 3;
 
     td {
       padding: $space / 4;
+      border: 1px solid #ccc;
     }
   }
+
+  .from-now-on-btn.selected, .date-picker-wrapper.selected {
+    border: 2px solid $deep-purple-lighten-3;
+  }
+
 }
