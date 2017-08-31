@@ -20,6 +20,35 @@ class Checkin extends React.Component {
       fromTreatmentsCheckin: false
     }
   }
+  componentDidUpdate(prevProps) {
+    if (this.props.checkinHistoryIsReady && (this.props.userTreatments !== prevProps.userTreatments || this.props.userSymptoms !== prevProps.userSymptoms)) {
+      if (!this.props.todaysCheckin) {
+        Meteor.call('checkinHistories.checkins.create', {
+          date: this.props.currentDate,
+          symptoms: this.props.userSymptoms,
+          treatments: this.props.userTreatments.filter((treatment) => (treatment.dateSelectMode === 'fromNowOn' && treatment.daysOfWeek.includes(moment().format('dddd'))) || (treatment.dateSelectMode === 'dateRange' && moment().isBetween(treatment.startDateValue, treatment.endDateValue))),
+        });
+      } else {
+        Meteor.call('checkinHistories.checkins.update', {
+          date: this.props.currentDate,
+          symptoms: this.props.userSymptoms,
+          todaysCheckinSymptoms: this.props.todaysCheckin.symptoms,
+          treatments: this.props.userTreatments.filter((treatment) => (treatment.dateSelectMode === 'fromNowOn' && treatment.daysOfWeek.includes(moment().format('dddd'))) || (treatment.dateSelectMode === 'dateRange' && moment().isBetween(treatment.startDateValue, treatment.endDateValue))),
+          todaysCheckinTreatments: this.props.todaysCheckin.treatments
+        });
+        // Meteor.call('checkinHistories.checkins.symptoms.update', {
+        //   date: this.props.currentDate,
+        //   symptoms: this.props.userSymptoms,
+        //   todaysCheckinSymptoms: this.props.todaysCheckin.symptoms
+        // });
+        // Meteor.call('checkinHistories.checkins.treatments.update', {
+        //   date: this.props.currentDate,
+        //   treatments: this.props.userTreatments.filter((treatment) => (treatment.dateSelectMode === 'fromNowOn' && treatment.daysOfWeek.includes(moment().format('dddd'))) || (treatment.dateSelectMode === 'dateRange' && moment().isBetween(treatment.startDateValue, treatment.endDateValue))),
+        //   todaysCheckinTreatments: this.props.todaysCheckin.treatments
+        // });
+      }
+    }
+  }
   componentWillReceiveProps(nextProps) {
     if (nextProps.location !== this.props.location) {
       if (this.props.location.pathname === "/home/checkin/treatments") {
@@ -65,7 +94,6 @@ class Checkin extends React.Component {
 };
 
 export default createContainer(() => {
-
   Meteor.subscribe('userSymptoms');
   Meteor.subscribe('userTreatments');
   const checkinHandle = Meteor.subscribe('checkinHistories');
@@ -78,31 +106,39 @@ export default createContainer(() => {
   const userTreatments = UserTreatments.find().fetch();
   // const checkinSymptomNames = todaysCheckin ? todaysCheckin.symptoms.map((symptom) => symptom.name) : [];
   // const checkinTreatmentNames = todaysCheckin ? todaysCheckin.treatments.map((treatment) => treatment.name) : [];
-  if (checkinHistoryIsReady ) {
-    if (!todaysCheckin) {
-      Meteor.call('checkinHistories.checkins.create', {
-        date: currentDate,
-        symptoms: userSymptoms,
-        treatments: userTreatments.filter((treatment) => treatment.includeDetails === false || treatment.daysOfWeek.includes(moment().format('dddd'))),
-      });
-    } else {
-      if (todaysCheckin.symptoms.map((checkinSymptom) => checkinSymptom.name).toString() !== userSymptoms.map((userSymptom) => userSymptom.name).toString()) {
-        Meteor.call('checkinHistories.checkins.symptoms.update', {
-          date: currentDate,
-          symptoms: userSymptoms,
-          todaysCheckinSymptoms: todaysCheckin.symptoms
-        });
-      }
-      if (todaysCheckin.treatments.map((checkinTreatment) => checkinTreatment.name).toString() !== userTreatments.map((userTreatment) => userTreatment.name).toString()) {
-        Meteor.call('checkinHistories.checkins.treatments.update', {
-          date: currentDate,
-          treatments: userTreatments.filter((treatment) => treatment.includeDetails === false || treatment.daysOfWeek.includes(moment().format('dddd'))),
-          todaysCheckinTreatments: todaysCheckin.treatments
-        });
-      }
-    }
-  }
+  // if (checkinHistoryIsReady ) {
+  //   if (!todaysCheckin) {
+  //     Meteor.call('checkinHistories.checkins.create', {
+  //       date: currentDate,
+  //       symptoms: userSymptoms,
+  //       // treatments: userTreatments.filter((treatment) => treatment.includeDetails === false || treatment.daysOfWeek.includes(moment().format('dddd'))),
+  //       // treatments: userTreatments.filter((treatment) => treatment.includeDetails === false || (treatment.dateRangeToggled === false && treatment.daysOfWeek.includes(moment().format('dddd'))) || moment().isBetween(treatment.startDateValue, treatment.endDateValue)),
+  //       treatments: userTreatments.filter((treatment) => (treatment.dateSelectMode === 'fromNowOn' && treatment.daysOfWeek.includes(moment().format('dddd'))) || (treatment.dateSelectMode === 'dateRange' && moment().isBetween(treatment.startDateValue, treatment.endDateValue))),
+  //     });
+  //   } else {
+  //     if (todaysCheckin.symptoms.map((checkinSymptom) => checkinSymptom.name).toString() !== userSymptoms.map((userSymptom) => userSymptom.name).toString()) {
+  //       Meteor.call('checkinHistories.checkins.symptoms.update', {
+  //         date: currentDate,
+  //         symptoms: userSymptoms,
+  //         todaysCheckinSymptoms: todaysCheckin.symptoms
+  //       });
+  //     }
+  //
+  //     if (todaysCheckin.treatments.map((checkinTreatment) => checkinTreatment.name).toString() !== userTreatments.map((userTreatment) => userTreatment.name).toString()) {
+  //       Meteor.call('checkinHistories.checkins.treatments.update', {
+  //         date: currentDate,
+  //         // treatments: userTreatments.filter((treatment) => treatment.includeDetails === false || treatment.daysOfWeek.includes(moment().format('dddd'))),
+  //         // treatments: userTreatments.filter((treatment) => treatment.includeDetails === false || (treatment.dateRangeToggled === false && treatment.daysOfWeek.includes(moment().format('dddd'))) || moment().isBetween(treatment.startDateValue, treatment.endDateValue)),
+  //         treatments: userTreatments.filter((treatment) => (treatment.dateSelectMode === 'fromNowOn' && treatment.daysOfWeek.includes(moment().format('dddd'))) || (treatment.dateSelectMode === 'dateRange' && moment().isBetween(treatment.startDateValue, treatment.endDateValue))),
+  //         todaysCheckinTreatments: todaysCheckin.treatments
+  //       });
+  //     }
+  //   }
+  // }
+  // console.log(userTreatments.filter((treatment) => (treatment.dateSelectMode === 'fromNowOn' && treatment.daysOfWeek.includes(moment().format('dddd'))) || (treatment.dateSelectMode === 'dateRange' && moment().isBetween(treatment.startDateValue, treatment.endDateValue))))
+  // userTreatments.forEach((treatment) => console.log(treatment.dateSelectMode === 'fromNowOn' && treatment.daysOfWeek.includes(moment().format('dddd'))) || (treatment.dateSelectMode === 'dateRange' && moment().isBetween(treatment.startDateValue, treatment.endDateValue)));
   return {
+    currentDate,
     userSymptoms,
     userTreatments,
     symptomCheckinItems: todaysCheckin ? todaysCheckin.symptoms : [],

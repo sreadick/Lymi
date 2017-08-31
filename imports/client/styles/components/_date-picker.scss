@@ -505,6 +505,10 @@ $caret-top: $react-dates-spacing-vertical-picker - $react-dates-width-tooltip-ar
   background: $react-dates-color-white;
   position: relative;
   text-align: left;
+
+  // edit
+  left: 300px;
+  top: -220px;
 }
 
 .DayPicker--horizontal {

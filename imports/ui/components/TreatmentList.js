@@ -15,16 +15,22 @@ export class TreatmentList extends React.Component {
         errors.name = "needs to be unique"
       }
       if (this.props.userTreatments[i].name.length < 3) {
-        errors.name = "needs to be at least three characters.";
+        errors.name = "needs to be at least three characters";
       }
       if (parseInt(this.props.userTreatments[i].amount) !== parseFloat(this.props.userTreatments[i].amount) || parseInt(this.props.userTreatments[i].amount) <= 0) {
-        errors.amount = "should be a positive whole number."
+        errors.amount = "should be a positive whole number"
       }
       if (this.props.userTreatments[i].dose_type !== 'pills' && this.props.userTreatments[i].dose <= 0) {
         errors.dose = "should be a positive number";
       }
       if (parseInt(this.props.userTreatments[i].frequency) !== parseFloat(this.props.userTreatments[i].frequency) || parseInt(this.props.userTreatments[i].frequency) <= 0) {
-        errors.frequency = "should be a positive whole number."
+        errors.frequency = "should be a positive whole number"
+      }
+      if ((this.props.userTreatments[i].dateSelectMode !== 'dateSelect') && this.props.userTreatments[i].daysOfWeek.length === 0) {
+        errors.daysOfWeek = 'Select at least one day of the week'
+      }
+      if (this.props.userTreatments[i].dateSelectMode === 'dateRange' && (!this.props.userTreatments[i].startDateValue || !this.props.userTreatments[i].endDateValue || this.props.userTreatments[i].startDateValue === this.props.userTreatments[i].endDateValue)) {
+        errors.dateRange = 'Select a start and end date';
       }
 
       Meteor.call('userTreatments.update', this.props.userTreatments[i]._id, {

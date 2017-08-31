@@ -53,19 +53,29 @@
 
   .days-of-week-list {
     margin: 0 2rem;
+
+    button {
+      margin-bottom: $space / 2;
+    }
   }
 
-  .from-now-on-btn {
-    width: 340px;
+  .date_select_mode_btn {
+    width: 270px;
     height: 50px;
-    margin-top: 1.4rem;
+    // margin-top: 1.4rem;
     line-height: 3rem;
     text-align: center;
+
+    border: 1px solid #ccc;
+
+    border-radius: 20px;
   }
   .date-picker-wrapper {
     // width: 20rem;
     font-size: 1rem;
     z-index: 3;
+
+
 
     td {
       padding: $space / 4;
@@ -73,7 +83,7 @@
     }
   }
 
-  .from-now-on-btn.selected, .date-picker-wrapper.selected {
+  .date_select_mode_btn.selected {
     border: 2px solid $deep-purple-lighten-3;
   }
 

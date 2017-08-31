@@ -32,7 +32,8 @@ Meteor.methods({
       daysOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
       startDateValue: undefined,
       endDateValue: undefined,
-      dateRangeToggled: false,
+      // dateRangeToggled: false,
+      dateSelectMode: 'fromNowOn',
       createdAt: moment().valueOf(),
       userId: this.userId
     });
@@ -82,6 +83,10 @@ Meteor.methods({
         type: Boolean,
         optional: true
       },
+      dateSelectMode: {
+        type: String,
+        optional: true
+      },
       daysOfWeek: {
         type: Array,
         optional: true
@@ -98,10 +103,10 @@ Meteor.methods({
         type: Number,
         optional: true
       },
-      dateRangeToggled: {
-        type: Boolean,
-        optional: true
-      },
+      // dateRangeToggled: {
+      //   type: Boolean,
+      //   optional: true
+      // },
       errors: {
         type: Object,
         optional: true,

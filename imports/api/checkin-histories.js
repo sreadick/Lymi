@@ -30,34 +30,23 @@ Meteor.methods({
       }
     });
   },
-  'checkinHistories.checkins.symptoms.update'({ date, symptoms, todaysCheckinSymptoms }) {
+  'checkinHistories.checkins.update'({ date, symptoms, todaysCheckinSymptoms, treatments, todaysCheckinTreatments }) {
     if (!this.userId) {
       throw new Meteor.Error('not-authorized');
     }
     const dateIndex = CheckinHistories.findOne({userId: this.userId}).checkins.findIndex((checkin) => checkin.date === date);
-    const fieldPath = `checkins.${dateIndex}.symptoms`;
+    const symptomsPath = `checkins.${dateIndex}.symptoms`;
+    const treatmentsPath = `checkins.${dateIndex}.treatments`;
 
     CheckinHistories.update({userId: this.userId}, {
       $set: {
-        [fieldPath] : symptoms.map((symptom) => {
+        [symptomsPath] : symptoms.map((symptom) => {
           return {
             name: symptom.name,
             severity: todaysCheckinSymptoms.find((checkinSymptom) => symptom.name === checkinSymptom.name) ? todaysCheckinSymptoms.find((checkinSymptom) => symptom.name === checkinSymptom.name).severity : 0
           }
         }),
-      }
-    });
-  },
-  'checkinHistories.checkins.treatments.update'({ date, treatments, todaysCheckinTreatments }) {
-    if (!this.userId) {
-      throw new Meteor.Error('not-authorized');
-    }
-    const dateIndex = CheckinHistories.findOne({userId: this.userId}).checkins.findIndex((checkin) => checkin.date === date);
-    const fieldPath = `checkins.${dateIndex}.treatments`;
-
-    CheckinHistories.update({userId: this.userId}, {
-      $set: {
-        [fieldPath] : treatments.map((treatment) => {
+        [treatmentsPath] : treatments.map((treatment) => {
           return {
             name: treatment.name,
             compliance: todaysCheckinTreatments.find((checkinTreatment) => treatment.name === checkinTreatment.name) ? todaysCheckinTreatments.find((checkinTreatment) => treatment.name === checkinTreatment.name).compliance : undefined
@@ -66,6 +55,42 @@ Meteor.methods({
       }
     });
   },
+  // 'checkinHistories.checkins.symptoms.update'({ date, symptoms, todaysCheckinSymptoms }) {
+  //   if (!this.userId) {
+  //     throw new Meteor.Error('not-authorized');
+  //   }
+  //   const dateIndex = CheckinHistories.findOne({userId: this.userId}).checkins.findIndex((checkin) => checkin.date === date);
+  //   const fieldPath = `checkins.${dateIndex}.symptoms`;
+  //
+  //   CheckinHistories.update({userId: this.userId}, {
+  //     $set: {
+  //       [fieldPath] : symptoms.map((symptom) => {
+  //         return {
+  //           name: symptom.name,
+  //           severity: todaysCheckinSymptoms.find((checkinSymptom) => symptom.name === checkinSymptom.name) ? todaysCheckinSymptoms.find((checkinSymptom) => symptom.name === checkinSymptom.name).severity : 0
+  //         }
+  //       }),
+  //     }
+  //   });
+  // },
+  // 'checkinHistories.checkins.treatments.update'({ date, treatments, todaysCheckinTreatments }) {
+  //   if (!this.userId) {
+  //     throw new Meteor.Error('not-authorized');
+  //   }
+  //   const dateIndex = CheckinHistories.findOne({userId: this.userId}).checkins.findIndex((checkin) => checkin.date === date);
+  //   const fieldPath = `checkins.${dateIndex}.treatments`;
+  //
+  //   CheckinHistories.update({userId: this.userId}, {
+  //     $set: {
+  //       [fieldPath] : treatments.map((treatment) => {
+  //         return {
+  //           name: treatment.name,
+  //           compliance: todaysCheckinTreatments.find((checkinTreatment) => treatment.name === checkinTreatment.name) ? todaysCheckinTreatments.find((checkinTreatment) => treatment.name === checkinTreatment.name).compliance : undefined
+  //          }
+  //       }),
+  //     }
+  //   });
+  // },
   'checkinHistories.symptom.update'(symptom, severity, date) {
     const dateIndex = CheckinHistories.findOne({userId: this.userId}).checkins.findIndex((checkin) => checkin.date === date);
     const symptomIndex = CheckinHistories.findOne({userId: this.userId}).checkins[dateIndex].symptoms.findIndex((thisSymptom) => thisSymptom.name === symptom.name);
