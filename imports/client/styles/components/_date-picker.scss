@@ -81,6 +81,11 @@ $react-dates-z-index: 0 !default;
   }
 }
 
+.individual-date-picker .CalendarDay--highlighted-calendar {
+  background: $react-dates-color-primary-shade-2;
+  color: white;
+}
+
 .CalendarDay--outside {
   border: 0;
   cursor: default;

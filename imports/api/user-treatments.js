@@ -32,8 +32,8 @@ Meteor.methods({
       daysOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
       startDateValue: undefined,
       endDateValue: undefined,
-      // dateRangeToggled: false,
-      dateSelectMode: 'fromNowOn',
+      dateSelectMode: 'from now on',
+      individualDateValues: [],
       createdAt: moment().valueOf(),
       userId: this.userId
     });
@@ -103,10 +103,14 @@ Meteor.methods({
         type: Number,
         optional: true
       },
-      // dateRangeToggled: {
-      //   type: Boolean,
-      //   optional: true
-      // },
+      individualDateValues: {
+        type: Array,
+        optional: true
+      },
+      'individualDateValues.$': {
+        type: Number,
+        optional: true
+      },
       errors: {
         type: Object,
         optional: true,
@@ -116,9 +120,6 @@ Meteor.methods({
       _id,
       ...updates
     });
-
-    // console.log(UserTreatments.find({_id}).fetch());
-    // console.log(updates);
 
     UserTreatments.update({
       _id, userId: this.userId

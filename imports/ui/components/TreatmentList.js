@@ -10,6 +10,7 @@ import { TreatmentItem } from './TreatmentItem';
 export class TreatmentList extends React.Component {
   getAllErrors() {
     for (let i = 0; i < this.props.userTreatments.length; ++i) {
+      console.log(this.props.userTreatments[i]);
       const errors = {};
       if (this.props.userTreatments.find((treatment) => this.props.userTreatments[i].name.toLowerCase() === treatment.name.toLowerCase() && this.props.userTreatments[i]._id !== treatment._id)) {
         errors.name = "needs to be unique"
@@ -26,11 +27,18 @@ export class TreatmentList extends React.Component {
       if (parseInt(this.props.userTreatments[i].frequency) !== parseFloat(this.props.userTreatments[i].frequency) || parseInt(this.props.userTreatments[i].frequency) <= 0) {
         errors.frequency = "should be a positive whole number"
       }
-      if ((this.props.userTreatments[i].dateSelectMode !== 'dateSelect') && this.props.userTreatments[i].daysOfWeek.length === 0) {
+      if ((this.props.userTreatments[i].dateSelectMode !== 'individual select') && this.props.userTreatments[i].daysOfWeek.length === 0) {
         errors.daysOfWeek = 'Select at least one day of the week'
       }
-      if (this.props.userTreatments[i].dateSelectMode === 'dateRange' && (!this.props.userTreatments[i].startDateValue || !this.props.userTreatments[i].endDateValue || this.props.userTreatments[i].startDateValue === this.props.userTreatments[i].endDateValue)) {
+      if (this.props.userTreatments[i].dateSelectMode === 'date range' && (!this.props.userTreatments[i].startDateValue || !this.props.userTreatments[i].endDateValue || this.props.userTreatments[i].startDateValue === this.props.userTreatments[i].endDateValue)) {
         errors.dateRange = 'Select a start and end date';
+      }
+      if (this.props.userTreatments[i].dateSelectMode === 'individual select' && this.props.userTreatments[i].individualDateValues.length === 0) {
+        errors.individualDates = 'Select at least one day';
+      }
+
+      if (this.props.userTreatments[i].dateSelectMode === 'individual select' && this.props.userTreatments[i].individualDateValues.length === 0) {
+        console.log(true);
       }
 
       Meteor.call('userTreatments.update', this.props.userTreatments[i]._id, {

@@ -8,7 +8,7 @@ import { DayPickerRangeController, DayPickerSingleDateController } from 'react-d
 export class TreatmentItem extends React.Component {
   constructor(props) {
     super(props);
-    const { name, amount, dose, dose_type, frequency, daysOfWeek, startDateValue, endDateValue, includeDetails, dateSelectMode } = props.treatment;
+    const { name, amount, dose, dose_type, frequency, daysOfWeek, startDateValue, endDateValue, includeDetails, dateSelectMode, individualDateValues } = props.treatment;
 
     this.state = {
       name,
@@ -22,14 +22,15 @@ export class TreatmentItem extends React.Component {
       focusedInput: 'startDate',
       includeDetails,
       dateSelectMode,
-      individualDates: []
-      // dateRangeToggled,
+      individualDateValues,
     };
 
     this.handleWeekdayChange = this.handleWeekdayChange.bind(this);
+    this.handleIndividualDateSelection = this.handleIndividualDateSelection.bind(this);
   }
 
   componentDidMount() {
+    this.props.getAllErrors();
     if (this.props.errors.daysOfWeek || this.props.errors.dateRange) {
       this.setState({ includeDetails: true })
     }
@@ -58,8 +59,28 @@ export class TreatmentItem extends React.Component {
     });
   }
 
+
+
   handleRemove() {
     Meteor.call('userTreatments.remove', this.props.treatment._id)
+  }
+
+  handleIndividualDateSelection(date) {
+    const individualDateValues = this.state.individualDateValues.slice();
+    const dateTargetIndex = individualDateValues.indexOf(date.valueOf());
+    if (dateTargetIndex < 0) {
+      individualDateValues.push(date.valueOf());
+    } else {
+      individualDateValues.splice(dateTargetIndex, 1)
+    }
+    Meteor.call('userTreatments.update', this.props.treatment._id, {individualDateValues}, (err, res) => {
+      if (err) {
+        console.log(err);
+      } else {
+        this.props.getAllErrors();
+      }
+    });
+    this.setState({individualDateValues});
   }
 
   handleWeekdayChange(e, days) {
@@ -201,62 +222,84 @@ export class TreatmentItem extends React.Component {
                   <div className='days-of-week-list'>
                     {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) =>
                       <div key={day}>
-                        <input type="checkbox" id={`${this.props.treatment._id}_${day}`} checked={this.state.daysOfWeek.includes(day)} onChange={(e) => this.handleWeekdayChange(e, [day])}/>
+                        <input type="checkbox" id={`${this.props.treatment._id}_${day}`} checked={this.state.daysOfWeek.includes(day)} disabled={this.state.dateSelectMode === 'individual select'} onChange={(e) => this.handleWeekdayChange(e, [day])}/>
                         <label htmlFor={`${this.props.treatment._id}_${day}`}>{day}</label>
                       </div>
                     )}
-                    <button className='btn-flat'
+                    {this.state.dateSelectMode !== 'individual select' && <button className='btn-flat'
                       onClick={() => this.handleWeekdayChange(undefined, ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])}>
                       Select All
-                    </button>
+                    </button>}
                     <div className="input-response red-text text-darken-2">{this.props.showErrors ? this.props.errors.daysOfWeek : ''}</div>
                   </div>
                   <div className=''>
-                    <div className='row'>
+                    {['from now on', 'date range', 'individual select'].map(dateSelectMode =>
+                      <div className='row' key={dateSelectMode}>
+                        <div
+                          className={`date_select_mode_btn white btn-flat ${this.state.dateSelectMode === dateSelectMode && 'selected'}`}
+                          onClick={() => {
+                            Meteor.call('userTreatments.update', this.props.treatment._id, {
+                              dateSelectMode,
+                              startDateValue: undefined,
+                              endDateValue: undefined,
+                            }, (err, res) => {
+                              if (err) {
+                                console.log(err);
+                              } else {
+                                this.props.getAllErrors();
+                              }
+                            });
+                            this.setState({dateSelectMode})
+                          }}>
+                          {dateSelectMode === 'from now on' ? "From Now On" : dateSelectMode === 'date range' ? "Select Date Range" : "Select Individual Dates"}
+                        </div>
+                      </div>
+                    )}
+                    {/* <div className='row'>
                       <div
-                        className={`date_select_mode_btn white btn-flat ${this.state.dateSelectMode === 'fromNowOn' && 'selected'}`}
+                        className={`date_select_mode_btn white btn-flat ${this.state.dateSelectMode === 'from now on' && 'selected'}`}
                         onClick={() => {
                           Meteor.call('userTreatments.update', this.props.treatment._id, {
-                            dateSelectMode: 'fromNowOn',
+                            dateSelectMode: 'from now on',
                             startDateValue: undefined,
                             endDateValue: undefined,
                           });
-                          this.setState({dateSelectMode: 'fromNowOn'})
+                          this.setState({dateSelectMode: 'from now on'})
                         }}>
                         From now on
                       </div>
                     </div>
                     <div className='row'>
                       <div
-                        className={`date_select_mode_btn white btn-flat ${this.state.dateSelectMode === 'dateRange' && 'selected'}`}
+                        className={`date_select_mode_btn white btn-flat ${this.state.dateSelectMode === 'date range' && 'selected'}`}
                         onClick={() => {
                           Meteor.call('userTreatments.update', this.props.treatment._id, {
-                            dateSelectMode: 'dateRange',
+                            dateSelectMode: 'date range',
                             startDateValue: undefined,
                             endDateValue: undefined,
                           });
-                          this.setState({dateSelectMode: 'dateRange'})
+                          this.setState({dateSelectMode: 'date range'})
                         }}>
                         Select Date Range
                       </div>
                     </div>
                     <div className='row'>
                       <div
-                        className={`date_select_mode_btn white btn-flat ${this.state.dateSelectMode === 'dateSelect' && 'selected'}`}
+                        className={`date_select_mode_btn white btn-flat ${this.state.dateSelectMode === 'individual select' && 'selected'}`}
                         onClick={() => {
                           Meteor.call('userTreatments.update', this.props.treatment._id, {
-                            dateSelectMode: 'dateSelect',
+                            dateSelectMode: 'individual select',
                             startDateValue: undefined,
                             endDateValue: undefined,
                           });
-                          this.setState({dateSelectMode: 'dateSelect'})
+                          this.setState({dateSelectMode: 'individual select'})
                         }}>
                         Select Specific Dates
                       </div>
-                    </div>
+                    </div> */}
 
                     <div className='col l4'>
-                      {this.state.dateSelectMode === 'dateRange' ?
+                      {this.state.dateSelectMode === 'date range' ?
                         <div className='date-picker-wrapper'>
                           <div className="input-response red-text text-darken-2 align-right">{this.props.showErrors ? this.props.errors.dateRange : ''}</div>
                           <DayPickerRangeController
@@ -285,15 +328,14 @@ export class TreatmentItem extends React.Component {
                             numberOfMonths={2}
                           />
                         </div>
-                      : this.state.dateSelectMode === 'dateSelect' ?
-                        <div className='date-picker-wrapper'>
-                          <div className="input-response red-text text-darken-2 align-right">{this.props.showErrors ? this.props.errors.dateRange : ''}</div>
-                          {/* <DayPickerSingleDateController
-                            date={this.state.singleDate} // momentPropTypes.momentObj or null
-                            onDateChange={date => this.setState({ date })} // PropTypes.func.isRequired
-                            focused={this.state.focused} // PropTypes.bool
-                            onFocusChange={({ focused }) => this.setState({ focused })} // PropTypes.func.isRequired
-                          /> */}
+                      : this.state.dateSelectMode === 'individual select' ?
+                        <div className='date-picker-wrapper individual-date-picker'>
+                          <div className="input-response red-text text-darken-2 align-right">{this.props.showErrors ? this.props.errors.individualDates : ''}</div>
+                          <DayPickerSingleDateController
+                            date={null}
+                            onDateChange={date => this.handleIndividualDateSelection(date)}
+                            isDayHighlighted={date => this.state.individualDateValues.map(dateValue => moment(dateValue).format('MM DD YYYY')).includes(date.format('MM DD YYYY'))}
+                          />
                         </div>
                       : undefined
                     }

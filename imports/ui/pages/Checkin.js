@@ -26,14 +26,14 @@ class Checkin extends React.Component {
         Meteor.call('checkinHistories.checkins.create', {
           date: this.props.currentDate,
           symptoms: this.props.userSymptoms,
-          treatments: this.props.userTreatments.filter((treatment) => (treatment.dateSelectMode === 'fromNowOn' && treatment.daysOfWeek.includes(moment().format('dddd'))) || (treatment.dateSelectMode === 'dateRange' && moment().isBetween(treatment.startDateValue, treatment.endDateValue))),
+          treatments: this.props.userTreatments.filter((treatment) => (treatment.dateSelectMode === 'from now on' && treatment.daysOfWeek.includes(moment().format('dddd'))) || (treatment.dateSelectMode === 'date range' && moment().isBetween(treatment.startDateValue, treatment.endDateValue))),
         });
       } else {
         Meteor.call('checkinHistories.checkins.update', {
           date: this.props.currentDate,
           symptoms: this.props.userSymptoms,
           todaysCheckinSymptoms: this.props.todaysCheckin.symptoms,
-          treatments: this.props.userTreatments.filter((treatment) => (treatment.dateSelectMode === 'fromNowOn' && treatment.daysOfWeek.includes(moment().format('dddd'))) || (treatment.dateSelectMode === 'dateRange' && moment().isBetween(treatment.startDateValue, treatment.endDateValue))),
+          treatments: this.props.userTreatments.filter((treatment) => (treatment.dateSelectMode === 'from now on' && treatment.daysOfWeek.includes(moment().format('dddd'))) || (treatment.dateSelectMode === 'date range' && moment().isBetween(treatment.startDateValue, treatment.endDateValue))),
           todaysCheckinTreatments: this.props.todaysCheckin.treatments
         });
         // Meteor.call('checkinHistories.checkins.symptoms.update', {
