@@ -28,13 +28,50 @@ Meteor.methods({
         name: "needs to be at least three characters.",
         dose: "should be a positive number"
       },
-      includeDetails: false,
       daysOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
       startDateValue: undefined,
       endDateValue: undefined,
       dateSelectMode: 'from now on',
       individualDateValues: [],
+      dosingFormat: 'default',
       createdAt: moment().valueOf(),
+      dosingDetails: {
+        generalDoses: [
+          {
+            time: 'morning',
+            quantity: 0,
+          },
+          {
+            time: 'afternoon',
+            quantity: 0,
+          },
+          {
+            time: 'evening',
+            quantity: 0,
+          },
+          {
+            time: 'bedtime',
+            quantity: 0,
+          },
+        ],
+        specificDoses: [
+          {
+            time: moment().hour(0).minute(0).valueOf(),
+            quantity: 1,
+          }
+        ],
+        hourlyDose: {
+          hourInterval: 0,
+          quantity: 1
+        },
+        prnDose: {
+          hourInterval: 24,
+          quantity: 0
+        },
+        other: {
+          dosingInstructions: ''
+        }
+      },
       userId: this.userId
     });
   },
@@ -43,16 +80,17 @@ Meteor.methods({
     if (!this.userId) {
       throw new Meteor.Error("not-authorized");
     }
-    if (Object.keys(updates).includes("amount") || Object.keys(updates).includes("frequency")) {
-      updates[Object.keys(updates)[0]] = parseInt(updates[Object.keys(updates)[0]]) || 0;
-    } else if (Object.keys(updates).includes("dose")) {
+    if (Object.keys(updates).includes("dose")) {
       updates[Object.keys(updates)[0]] = parseFloat(updates[Object.keys(updates)[0]]) || 0;
+    } else if (Object.keys(updates).includes("amount")) {
+      updates[Object.keys(updates)[0]] = parseInt(updates[Object.keys(updates)[0]]) || 0;
+    } else if (Object.keys(updates).includes("frequency")) {
+      updates.frequency = parseInt(updates[Object.keys(updates)[0]]) || 0;
     } else if (Object.keys(updates).includes("dose_type")) {
       if (updates.dose_type === 'pills') {
         updates.dose = 0;
       }
     }
-    // console.log(updates);
 
     new SimpleSchema({
       _id: {
@@ -77,10 +115,6 @@ Meteor.methods({
       },
       frequency: {
         type: Number,
-        optional: true
-      },
-      includeDetails: {
-        type: Boolean,
         optional: true
       },
       dateSelectMode: {
@@ -111,6 +145,82 @@ Meteor.methods({
         type: Number,
         optional: true
       },
+      dosingFormat: {
+        type: String,
+        optional: true
+      },
+      dosingDetails: {
+        type: Object,
+        optional: true
+      },
+      'dosingDetails': {
+        type: Object,
+        optional: true
+      },
+      'dosingDetails.generalDoses': {
+        type: Array,
+        optional: true
+      },
+      'dosingDetails.generalDoses.$': {
+        type: Object,
+        optional: true
+      },
+      'dosingDetails.generalDoses.$.time': {
+        type: String,
+        optional: true
+      },
+      'dosingDetails.generalDoses.$.quantity': {
+        type: Number,
+        optional: true
+      },
+      'dosingDetails.specificDoses': {
+        type: Array,
+        optional: true
+      },
+      'dosingDetails.specificDoses.$': {
+        type: Object,
+        optional: true
+      },
+      'dosingDetails.specificDoses.$.time': {
+        type: Number,
+        optional: true
+      },
+      'dosingDetails.specificDoses.$.quantity': {
+        type: Number,
+        optional: true
+      },
+      'dosingDetails.hourlyDose': {
+        type: Object,
+        optional: true
+      },
+      'dosingDetails.hourlyDose.hourInterval': {
+        type: Number,
+        optional: true
+      },
+      'dosingDetails.hourlyDose.quantity': {
+        type: Number,
+        optional: true
+      },
+      'dosingDetails.prnDose': {
+        type: Object,
+        optional: true
+      },
+      'dosingDetails.prnDose.hourInterval': {
+        type: Number,
+        optional: true
+      },
+      'dosingDetails.prnDose.quantity': {
+        type: Number,
+        optional: true
+      },
+      'dosingDetails.other': {
+        type: Object,
+        optional: true
+      },
+      'dosingDetails.other.dosingInstructions': {
+        type: String,
+        optional: true
+      },
       errors: {
         type: Object,
         optional: true,
@@ -127,6 +237,26 @@ Meteor.methods({
       $set: {
         ...updates,
         userId: this.userId
+      }
+    });
+  },
+  'userTreatments.details.update'(_id, dose) {
+    if (!this.userId) {
+      throw new Meteor.Error("not-authorized");
+    }
+
+    if (dose.targetProperty === 'quantity') {
+      dose.changedValue = parseFloat(dose.changedValue) || 0;
+    }
+    let targetPath;
+    if (dose.index !== undefined) {
+      targetPath = `dosingDetails.${dose.type}.${dose.index}.${dose.targetProperty}`;
+    } else {
+      targetPath = `dosingDetails.${dose.type}.${dose.targetProperty}`;
+    }
+    UserTreatments.update({userId: this.userId}, {
+      $set: {
+        [targetPath]: dose.changedValue
       }
     });
   },

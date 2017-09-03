@@ -10,7 +10,6 @@ import { TreatmentItem } from './TreatmentItem';
 export class TreatmentList extends React.Component {
   getAllErrors() {
     for (let i = 0; i < this.props.userTreatments.length; ++i) {
-      console.log(this.props.userTreatments[i]);
       const errors = {};
       if (this.props.userTreatments.find((treatment) => this.props.userTreatments[i].name.toLowerCase() === treatment.name.toLowerCase() && this.props.userTreatments[i]._id !== treatment._id)) {
         errors.name = "needs to be unique"
@@ -37,12 +36,9 @@ export class TreatmentList extends React.Component {
         errors.individualDates = 'Select at least one day';
       }
 
-      if (this.props.userTreatments[i].dateSelectMode === 'individual select' && this.props.userTreatments[i].individualDateValues.length === 0) {
-        console.log(true);
-      }
-
       Meteor.call('userTreatments.update', this.props.userTreatments[i]._id, {
-        errors
+        errors,
+        // showDateDetails: (this.props.showErrors && (errors.daysOfWeek || errors.dateRange || errors.individualDates)) ? true : false
       });
     }
   }

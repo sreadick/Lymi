@@ -26,14 +26,14 @@ class Checkin extends React.Component {
         Meteor.call('checkinHistories.checkins.create', {
           date: this.props.currentDate,
           symptoms: this.props.userSymptoms,
-          treatments: this.props.userTreatments.filter((treatment) => (treatment.dateSelectMode === 'from now on' && treatment.daysOfWeek.includes(moment().format('dddd'))) || (treatment.dateSelectMode === 'date range' && moment().isBetween(treatment.startDateValue, treatment.endDateValue))),
+          treatments: this.props.userTreatments.filter((treatment) => (treatment.dateSelectMode === 'from now on' && treatment.daysOfWeek.includes(moment().format('dddd'))) || (treatment.dateSelectMode === 'date range' && moment().isBetween(treatment.startDateValue, treatment.endDateValue) || (treatment.dateSelectMode === 'individual select' && treatment.individualDateValues.map(dateValue => moment(dateValue).format('MM DD YYYY')).includes(moment().format('MM DD YYYY'))))),
         });
       } else {
         Meteor.call('checkinHistories.checkins.update', {
           date: this.props.currentDate,
           symptoms: this.props.userSymptoms,
           todaysCheckinSymptoms: this.props.todaysCheckin.symptoms,
-          treatments: this.props.userTreatments.filter((treatment) => (treatment.dateSelectMode === 'from now on' && treatment.daysOfWeek.includes(moment().format('dddd'))) || (treatment.dateSelectMode === 'date range' && moment().isBetween(treatment.startDateValue, treatment.endDateValue))),
+          treatments: this.props.userTreatments.filter((treatment) => (treatment.dateSelectMode === 'from now on' && treatment.daysOfWeek.includes(moment().format('dddd'))) || (treatment.dateSelectMode === 'date range' && moment().isBetween(treatment.startDateValue, treatment.endDateValue) || (treatment.dateSelectMode === 'individual select' && treatment.individualDateValues.map(dateValue => moment(dateValue).format('MM DD YYYY')).includes(moment().format('MM DD YYYY'))))),
           todaysCheckinTreatments: this.props.todaysCheckin.treatments
         });
         // Meteor.call('checkinHistories.checkins.symptoms.update', {
@@ -136,7 +136,7 @@ export default createContainer(() => {
   //   }
   // }
   // console.log(userTreatments.filter((treatment) => (treatment.dateSelectMode === 'fromNowOn' && treatment.daysOfWeek.includes(moment().format('dddd'))) || (treatment.dateSelectMode === 'dateRange' && moment().isBetween(treatment.startDateValue, treatment.endDateValue))))
-  // userTreatments.forEach((treatment) => console.log(treatment.dateSelectMode === 'fromNowOn' && treatment.daysOfWeek.includes(moment().format('dddd'))) || (treatment.dateSelectMode === 'dateRange' && moment().isBetween(treatment.startDateValue, treatment.endDateValue)));
+  // userTreatments.forEach((treatment) => console.log(treatment.individualDateValues, moment().startOf('day').valueOf()));
   return {
     currentDate,
     userSymptoms,

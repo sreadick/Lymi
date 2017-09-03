@@ -512,8 +512,9 @@ $caret-top: $react-dates-spacing-vertical-picker - $react-dates-width-tooltip-ar
   text-align: left;
 
   // edit
-  left: 300px;
-  top: -220px;
+  bottom: 10px;
+  // left: 300px;
+  // top: -220px;
 }
 
 .DayPicker--horizontal {
@@ -608,6 +609,9 @@ $caret-top: $react-dates-spacing-vertical-picker - $react-dates-width-tooltip-ar
 
 .transition-container--horizontal {
   transition: height 0.2s ease-in-out;
+
+  // edit
+  height: 300px !important;
 }
 
 .transition-container--vertical {

@@ -44,47 +44,46 @@
   }
 }
 
-.treatment-details-section {
-  // border: 1px solid #aaa;
-  border-top: 3px solid $deep-purple-lighten-3;
-  height: 20rem;
-  padding: $space 0;
-  display: flex;
+// .treatment-details-section {
+//   // border: 1px solid #aaa;
+//   border-top: 3px solid $deep-purple-lighten-3;
+//   height: 20rem;
+//   padding: $space 0;
+//   display: flex;
+//
+//   .days-of-week-list {
+//     margin: 0 2rem;
+//
+//     button {
+//       margin-bottom: $space / 2;
+//     }
+//   }
+// }
 
-  .days-of-week-list {
-    margin: 0 2rem;
+.date_select_mode_btn {
+  width: 100%;
+  height: 50px;
+  // margin-top: 1.4rem;
+  line-height: 3rem;
+  text-align: center;
 
-    button {
-      margin-bottom: $space / 2;
-    }
-  }
+  border: 1px solid #ccc;
 
-  .date_select_mode_btn {
-    width: 270px;
-    height: 50px;
-    // margin-top: 1.4rem;
-    line-height: 3rem;
-    text-align: center;
+  border-radius: 20px;
+}
+.date-picker-wrapper {
+  // width: 20rem;
+  font-size: 1rem;
+  z-index: 3;
 
+
+
+  td {
+    padding: $space / 4;
     border: 1px solid #ccc;
-
-    border-radius: 20px;
   }
-  .date-picker-wrapper {
-    // width: 20rem;
-    font-size: 1rem;
-    z-index: 3;
+}
 
-
-
-    td {
-      padding: $space / 4;
-      border: 1px solid #ccc;
-    }
-  }
-
-  .date_select_mode_btn.selected {
-    border: 2px solid $deep-purple-lighten-3;
-  }
-
+.date_select_mode_btn.selected {
+  border: 2px solid $deep-purple-lighten-3;
 }
