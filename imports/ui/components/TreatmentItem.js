@@ -10,7 +10,7 @@ import 'rc-time-picker/assets/index.css';
 export class TreatmentItem extends React.Component {
   constructor(props) {
     super(props);
-    const { name, amount, dose, dose_type, frequency, daysOfWeek, startDateValue, endDateValue, dateSelectMode, individualDateValues, dosingFormat, dosingDetails } = props.treatment;
+    const { name, amount, dose, dose_type, frequency, daysOfWeek, startDateValue, endDateValue, dateSelectMode, individualDateValues, dosingFormat, dosingDetails, otherInstructions, info } = props.treatment;
 
     this.state = {
       name,
@@ -25,7 +25,9 @@ export class TreatmentItem extends React.Component {
       dateSelectMode,
       individualDateValues,
       dosingFormat,
-      dosingDetails
+      dosingDetails,
+      otherInstructions,
+      info
     };
 
     this.handleWeekdayChange = this.handleWeekdayChange.bind(this);
@@ -105,7 +107,33 @@ export class TreatmentItem extends React.Component {
     this.setState({dosingDetails})
   }
 
+  handleInstructionsChange(e) {
+    const otherInstructions = Object.assign({}, this.state.otherInstructions);
+    otherInstructions[e.target.name] = e.target.value
 
+    Meteor.call('userTreatments.update', this.props.treatment._id, {otherInstructions}, (err, res) => {
+      if (err) {
+        console.log(err);
+      } else {
+        this.props.getAllErrors();
+      }
+    });
+    this.setState({otherInstructions});
+  }
+
+  handleInfoChange(e) {
+    const info = Object.assign({}, this.state.info);
+    info[e.target.name] = e.target.value
+
+    Meteor.call('userTreatments.update', this.props.treatment._id, {info}, (err, res) => {
+      if (err) {
+        console.log(err);
+      } else {
+        this.props.getAllErrors();
+      }
+    });
+    this.setState({info});
+  }
 
   handleRemove() {
     Meteor.call('userTreatments.remove', this.props.treatment._id)
@@ -483,8 +511,59 @@ export class TreatmentItem extends React.Component {
                   </div>
                 }
               	</Collapsible>
-                <Collapsible trigger={<div className='valign-wrapper'><i className='material-icons'>local_pharmacy</i><span>Med Info</span></div>}>
-              		Lorem ipsum dolor sit amet.
+                <Collapsible trigger={<div className='valign-wrapper'><i className='material-icons'>local_pharmacy</i><span>Other Instructions</span></div>}>
+                  <div>
+                    Meals:
+                    {['None', 'Take with', 'Take before', 'Take after'].map(mealInstruction =>
+                      <p key={mealInstruction}>
+                        <input type="radio" name='meals' id={`mealInstructions_${mealInstruction}`} value={mealInstruction} checked={this.state.otherInstructions.meals === mealInstruction} onChange={(e) => this.handleInstructionsChange(e)}/>
+                        <label htmlFor={`mealInstructions_${mealInstruction}`}>{mealInstruction}</label>
+                      </p>
+                    )}
+                    Contraindications:
+                    {['None', 'antibiotic', 'probiotic'].map(contraindicatedInstruction =>
+                      <p key={contraindicatedInstruction}>
+                        <input type="radio" name='contraindications' id={`contraindicatedInstructions_${contraindicatedInstruction}`} value={contraindicatedInstruction} checked={this.state.otherInstructions.contraindications === contraindicatedInstruction} onChange={(e) => this.handleInstructionsChange(e)}/>
+                        <label htmlFor={`contraindicatedInstructions_${contraindicatedInstruction}`}>{contraindicatedInstruction !== 'None' ? "Don't take within 3 hours of" : ''} {contraindicatedInstruction}</label>
+                      </p>
+                    )}
+                    Custom:
+                    <div className='container'>
+                      <div className="input-field">
+                        <textarea className="materialize-textarea" id="userDefinedInstructions" name="userDefined" value={this.state.otherInstructions.userDefined} onChange={(e) => this.handleInstructionsChange(e)}></textarea>
+                        <label className='active' htmlFor='userDefinedInstructions'>Specify</label>
+                      </div>
+                    </div>
+                  </div>
+              	</Collapsible>
+                <Collapsible trigger={<div className='valign-wrapper'><i className='material-icons'>info</i><span>Treatment Info</span></div>}>
+              		<div>
+                    <div className='col l3'>
+                      Type:
+                      {['N/A', 'Medication', 'Supplement', 'Other'].map(treatmentType =>
+                        <p key={treatmentType}>
+                          <input type="radio" name='type' id={`type_${treatmentType}`} value={treatmentType} checked={this.state.info.type === treatmentType} onChange={(e) => this.handleInfoChange(e)}/>
+                          <label htmlFor={`type_${treatmentType}`}>{treatmentType}</label>
+                        </p>
+                      )}
+                      <div className="input-field inline">
+                        <input id="otherType" name="typeOtherValue" value={this.state.info.typeOtherValue} disabled={this.state.info.type !== 'Other'} onChange={(e) => this.handleInfoChange(e)} />
+                        <label className='active' htmlFor='otherType'>Specify</label>
+                      </div>
+                    </div>
+                    <div className='col l3'>
+                      Category:
+                      <div className="input-field">
+                        <input name="category" value={this.state.info.category} placeholder='e.g. SSRI' onChange={(e) => this.handleInfoChange(e)} />
+                      </div>
+                    </div>
+                    <div className='col l3'>
+                      Used to treat:
+                      <div className="input-field">
+                        <input name="usedToTreat" value={this.state.info.usedToTreat} placeholder='e.g. Depression' onChange={(e) => this.handleInfoChange(e)} />
+                      </div>
+                    </div>
+                  </div>
               	</Collapsible>
               </div>
             </div>

@@ -57,11 +57,12 @@ class SymptomsHistory extends React.Component {
             onClick={() => Session.set('groupSymptoms', !Session.get('groupSymptoms'))}>
             {this.props.groupSymptoms ?  'Ungroup' : 'Group'}
           </button>
-
-          <button className={`btn ${this.props.includeDeleted ? 'deep-purple lighten-1' : 'grey'}`}
-            onClick={() => Session.set('includeDeleted', !Session.get('includeDeleted'))}>
-            {this.props.includeDeleted ?  'Exclude Deleted' : 'Include Deleted'}
-          </button>
+          { this.props.showDeletedTab &&
+            <button className={`btn ${this.props.includeDeleted ? 'deep-purple lighten-1' : 'grey'}`}
+              onClick={() => Session.set('includeDeleted', !Session.get('includeDeleted'))}>
+              {this.props.includeDeleted ?  'Exclude Deleted' : 'Include Deleted'}
+            </button>
+          }
         </div>
         {this.props.displayedSymptoms.length > 0 ?
           this.props.displayedSymptoms.map((symptom, index) => {
@@ -111,6 +112,32 @@ class SymptomsHistory extends React.Component {
               ))}
           </div>
         }
+        <div>
+          <div className='section'></div>
+          <h5>Checkins:</h5>
+          {this.props.checkinHistory.checkins.map(checkin =>
+            <div key={checkin.date}>
+              <h4>{checkin.date}</h4>
+              <table className='striped'>
+                <thead>
+                  <tr>
+                    <th>Symptom</th>
+                    <th>Severity</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {checkin.symptoms.map(symptoms =>
+                    <tr key={symptoms.name}>
+                      <td>{symptoms.name}</td>
+                      <td>{symptoms.severity === 0 ? 'N/A' : symptoms.severity}</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
       </div>
     );
   }
@@ -144,8 +171,8 @@ export default createContainer((props) => {
     isFetching: (!checkinHistoryIsReady || !symptomsHandle.ready() || !treatmentsHandle.ready()),
     groupSymptoms: Session.get('groupSymptoms') || false,
     includeDeleted: Session.get('includeDeleted') || false,
+    showDeletedTab: currentSymptoms.map(symptom => symptom.name).toString() !== currentAndDeletedSymptoms.map(symptom => symptom.name).toString(),
     displayedSymptoms: Session.get('includeDeleted') ? currentAndDeletedSymptoms : currentSymptoms,
-    // displayedSymptomColors: allSymptomColors
   };
 
 }, SymptomsHistory);

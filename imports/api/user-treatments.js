@@ -66,11 +66,22 @@ Meteor.methods({
         },
         prnDose: {
           hourInterval: 24,
-          quantity: 0
+          quantity: 1
         },
         other: {
           dosingInstructions: ''
         }
+      },
+      otherInstructions: {
+        meals: 'None',
+        contraindications: 'None',
+        userDefined: ''
+      },
+      info: {
+        type: 'N/A',
+        typeOtherValue: '',
+        category: '',
+        usedToTreat: "",
       },
       userId: this.userId
     });
@@ -91,7 +102,6 @@ Meteor.methods({
         updates.dose = 0;
       }
     }
-
     new SimpleSchema({
       _id: {
         type: String,
@@ -221,6 +231,42 @@ Meteor.methods({
         type: String,
         optional: true
       },
+      otherInstructions: {
+        type: Object,
+        optional: true
+      },
+      'otherInstructions.meals': {
+        type: String,
+        optional: true
+      },
+      'otherInstructions.contraindications': {
+        type: String,
+        optional: true
+      },
+      'otherInstructions.userDefined': {
+        type: String,
+        optional: true
+      },
+      info: {
+        type: Object,
+        optional: true
+      },
+      'info.type': {
+        type: String,
+        optional: true
+      },
+      'info.typeOtherValue': {
+        type: String,
+        optional: true
+      },
+      'info.category': {
+        type: String,
+        optional: true
+      },
+      'info.usedToTreat': {
+        type: String,
+        optional: true
+      },
       errors: {
         type: Object,
         optional: true,
@@ -244,7 +290,6 @@ Meteor.methods({
     if (!this.userId) {
       throw new Meteor.Error("not-authorized");
     }
-
     if (dose.targetProperty === 'quantity') {
       dose.changedValue = parseFloat(dose.changedValue) || 0;
     }
@@ -254,7 +299,9 @@ Meteor.methods({
     } else {
       targetPath = `dosingDetails.${dose.type}.${dose.targetProperty}`;
     }
-    UserTreatments.update({userId: this.userId}, {
+    UserTreatments.update({
+      _id, userId: this.userId
+    }, {
       $set: {
         [targetPath]: dose.changedValue
       }
