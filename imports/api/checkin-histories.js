@@ -12,20 +12,23 @@ if (Meteor.isServer) {
 }
 
 Meteor.methods({
-  'checkinHistories.checkins.create'({ date, symptoms, treatments }) {
+  'checkinHistories.checkins.create'({ date, symptoms, treatments, position }) {
     if (!this.userId) {
       throw new Meteor.Error('not-authorized');
     }
     CheckinHistories.update({ userId: this.userId }, {
       $push: {
         checkins: {
-          date,
-          symptoms: symptoms.map((symptom) => {
-            return { name: symptom.name, severity: 0 }
-          }),
-          treatments: treatments.map((treatment) => {
-            return { name: treatment.name, compliance: undefined }
-          }),
+          $each: [{
+            date,
+            symptoms: symptoms.map((symptom) => {
+              return { name: symptom.name, severity: 0 }
+            }),
+            treatments: treatments.map((treatment) => {
+              return { name: treatment.name, compliance: undefined }
+            }),
+          }],
+          $position: position
         }
       }
     });

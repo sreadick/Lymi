@@ -45,7 +45,7 @@ class Dashboard extends React.Component {
             {Meteor.user() && <h2>{Meteor.user().profile.firstName} {Meteor.user().profile.lastName}</h2>}
           </div>
 
-          <TasksBox />
+          <TasksBox userSymptoms={this.props.userSymptoms} userTreatments={this.props.userTreatments} todayTreatments={this.props.todayTreatments}  />
         </div>
 
         <div className='dashboard-chart-section symptoms'>
@@ -350,7 +350,7 @@ export default createContainer(() => {
   const treatmentsHandle = Meteor.subscribe('userTreatments');
 
   // edit
-  const todayTreatments = UserTreatments.find().fetch().filter((treatment) => (treatment.dateSelectMode === 'from now on' && treatment.daysOfWeek.includes(moment().format('dddd'))) || (treatment.dateSelectMode === 'date range' && moment().isBetween(treatment.startDateValue, treatment.endDateValue) || (treatment.dateSelectMode === 'individual select' && treatment.individualDateValues.map(dateValue => moment(dateValue).format('MM DD YYYY')).includes(moment().format('MM DD YYYY')))));
+  const todayTreatments = UserTreatments.find().fetch().filter((treatment) => (treatment.dateSelectMode === 'from now on' && treatment.daysOfWeek.includes(moment().format('dddd'))) || (treatment.dateSelectMode === 'date range' && (treatment.daysOfWeek.includes(moment().format('dddd')) && moment().isBetween(treatment.startDateValue, treatment.endDateValue)) || (treatment.dateSelectMode === 'individual select' && treatment.individualDateValues.map(dateValue => moment(dateValue).format('MM DD YYYY')).includes(moment().format('MM DD YYYY')))));
   const currentSelectedTreatmentTab = Session.get('currentSelectedTreatmentTab') || 'today';
   return {
     userSymptoms: UserSymptoms.find().fetch(),
@@ -362,6 +362,7 @@ export default createContainer(() => {
     currentSelectedTreatmentTab,
     showProfileImageModel: Session.get('showProfileImageModel'),
     userPhoto: (Meteor.user() && Meteor.user().profile.userPhoto) ? Meteor.user().profile.userPhoto : undefined,
+    todayTreatments
 
   };
 }, Dashboard);

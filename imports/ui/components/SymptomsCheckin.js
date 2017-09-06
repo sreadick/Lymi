@@ -4,7 +4,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { createContainer } from 'meteor/react-meteor-data';
 import moment from 'moment';
 
-import { CheckinHistories } from '../../api/checkin-histories';
+// import { CheckinHistories } from '../../api/checkin-histories';
 
 class SymptomsCheckin extends React.Component {
   renderSeveritySquares(symptom) {
@@ -35,7 +35,7 @@ class SymptomsCheckin extends React.Component {
   }
 
   chooseSeverity(symptom, severityNumber) {
-    Meteor.call('checkinHistories.symptom.update', symptom, severityNumber, moment().format('MMMM Do YYYY'))
+    Meteor.call('checkinHistories.symptom.update', symptom, severityNumber, this.props.targetDate)
     this.removeHighlight(symptom);
   }
 
@@ -47,9 +47,9 @@ class SymptomsCheckin extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.fromTreatmentsCheckin === false && this.props.symptomCheckinCompleted && this.props.treatmentCheckinItems.length > 0 && !!this.props.treatmentCheckinItems.find((treatment) => treatment.compliance === null)) {
-      this.props.history.push('/home/checkin/treatments')
-    }
+    // if (this.props.fromTreatmentsCheckin === false && this.props.symptomCheckinCompleted && this.props.treatmentCheckinItems.length > 0 && !!this.props.treatmentCheckinItems.find((treatment) => treatment.compliance === null)) {
+    //   this.props.history.push('/home/checkin/treatments')
+    // }
   }
 
   render() {
@@ -58,7 +58,7 @@ class SymptomsCheckin extends React.Component {
       <div className="page-content">
         <div className="checkin-item__container">
 
-          <h4 className="grey-text">Check in for {moment().format('MMMM Do YYYY')}</h4>
+          {/* <h4 className="grey-text">Check in for {moment().format('MMMM Do YYYY')}</h4> */}
           <h5 className="black-text">How were your symptoms today?</h5>
           <div>
             {this.props.symptomCheckinItems.map((symptom) => (
@@ -71,13 +71,17 @@ class SymptomsCheckin extends React.Component {
                 {this.renderSeveritySquares(symptom)}
               </div>
             ))}
-            <Link className={`black btn ${!this.props.symptomCheckinCompleted && 'disabled'}`}
+            {/* <Link className={`black btn ${!this.props.symptomCheckinCompleted && 'disabled'}`}
               to={this.props.symptomCheckinCompleted ?
                 this.props.treatmentCheckinItems.length === 0 ? "/home/dashboard" : "/home/checkin/treatments"
                 : "#"
               }>
               {this.props.treatmentCheckinItems.length === 0 ? 'Finish' : 'Next'}
-            </Link>
+            </Link> */}
+            <button className={`black btn ${!this.props.symptomCheckinCompleted && 'disabled'}`}
+              onClick={() => this.props.navigateToComponent('treatments')}>
+              {this.props.treatmentCheckinItems.length === 0 ? 'Finish' : 'Next'}
+            </button>
           </div>
         </div>
       </div>
@@ -91,6 +95,6 @@ export default createContainer(props => {
   return {
     // symptomCheckinItems: checkinItems.symptoms || [],
     // treatmentCheckinItems: checkinItems.treatments || [],
-    symptomCheckinCompleted: (props.checkinHistoryIsReady && props.symptomCheckinItems.filter((symptom) => symptom.severity > 0).length === props.symptomCheckinItems.length)
+    symptomCheckinCompleted: (props.symptomCheckinItems.filter((symptom) => symptom.severity > 0).length === props.symptomCheckinItems.length)
   }
 }, SymptomsCheckin)

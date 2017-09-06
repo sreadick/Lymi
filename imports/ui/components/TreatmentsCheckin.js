@@ -35,7 +35,7 @@ class TreatmentCheckin extends React.Component {
   }
 
   chooseAnswer(e, treatment, answer) {
-    Meteor.call('checkinHistories.treatment.update', treatment, answer, moment().format('MMMM Do YYYY'));
+    Meteor.call('checkinHistories.treatment.update', treatment, answer, this.props.targetDate);
     e.target.classList.remove("highlighted")
   }
   render() {
@@ -43,9 +43,14 @@ class TreatmentCheckin extends React.Component {
     return (
       <div className="page-content">
         <div className="checkin-item__container">
-          <h4 className="grey-text">Check in for {moment().format('MMMM Do YYYY')}</h4>
+          {/* <h4 className="grey-text">Check in for {moment().format('MMMM Do YYYY')}</h4> */}
           <h5 className="black-text">Did you take your medications?</h5>
-          <Link className="blue btn" to="/home/checkin/symptoms">Back to symptoms</Link>
+          {/* <Link className="blue btn" to="/home/checkin/symptoms">Back to symptoms</Link> */}
+          <button
+            className='blue btn'
+            onClick={() => this.props.navigateToComponent("symptoms")}>
+            Back to symptoms!
+          </button>
           {this.props.treatmentCheckinItems.map((treatment) => (
             <div className="card section" key={treatment.name}>
               <p>{treatment.name}</p>
@@ -54,12 +59,8 @@ class TreatmentCheckin extends React.Component {
           ))}
 
           <button className={`black btn ${!this.props.treatmentCheckinCompleted && 'disabled'}`}
-            onClick={() => {
-              if (this.props.treatmentCheckinCompleted) {
-                // Meteor.call('checkinHistories.dailyCompleted.update', "yes")
-                this.props.history.replace("/home/dashboard");
-              }
-            }}>Finish!
+            onClick={() => this.props.navigateToComponent("dashboard")}>
+            Finish!
           </button>
         </div>
       </div>
@@ -72,7 +73,7 @@ export default createContainer(props => {
   const checkinItems = props.checkinHistoryIsReady ? CheckinHistories.findOne().checkins.find((checkin) => checkin.date === currentDate) : {};
 
   return {
-    treatmentCheckinItems: checkinItems.treatments || [],
-    treatmentCheckinCompleted: (props.checkinHistoryIsReady && checkinItems.treatments.filter((treatment) => treatment.compliance !== null).length === checkinItems.treatments.length)
+    // treatmentCheckinItems: checkinItems.treatments || [],
+    treatmentCheckinCompleted: (props.treatmentCheckinItems.filter((treatment) => treatment.compliance !== null).length === props.treatmentCheckinItems.length)
   }
 }, TreatmentCheckin)

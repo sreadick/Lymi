@@ -2,15 +2,28 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
+import moment from 'moment';
 
 import { UserSymptoms } from '../../api/user-symptoms';
 import { UserTreatments } from '../../api/user-treatments';
 import { CheckinHistories } from '../../api/checkin-histories';
 
-const SidebarLink = ({ to, children, className, errorMessage, ...rest }) => (
+const SidebarLink = ({ to, children, className, errorMessage, userSymptoms, userTreatments, ...rest }) => (
   <Link
     className={className}
-    to={!errorMessage ? to : '#'}
+    // to={!errorMessage ? to : '#'}
+    to={{
+      pathname: !errorMessage ? to : '#',
+      state: to === "/home/checkin" ?
+        {
+          checkinDate: moment().format('MMMM Do YYYY'),
+          symptoms: userSymptoms,
+          treatments: userTreatments,
+        }
+        :
+        undefined
+      }
+    }
     onClick={() => {
       if (!errorMessage) {
         Session.set('sidebarToggled', false);
@@ -44,6 +57,8 @@ class SidebarMenu extends React.Component {
                 <SidebarLink
                   className={`sidebar-menu__link ${this.props.currentPath === link.path ? 'selected' : link.errorMessage ? 'disabled' : ''}`}
                   to={link.path}
+                  userSymptoms={this.props.userSymptoms}
+                  userTreatments={this.props.userTreatments}
                   errorMessage={link.errorMessage}>
                   {link.name}
                 </SidebarLink>
@@ -90,7 +105,7 @@ export default createContainer(() => {
         : (collectionsAreReady && (userSymptoms.length === 0)) ? <span>You need to have at least 1 <SidebarLink to="/home/selectsymptoms">symptom</SidebarLink></span>
         : (collectionsAreReady && (userTreatments.length === 0)) ? <span>You need to have at least 1 <SidebarLink to="/home/selecttreatments">treatment</SidebarLink></span>
         : userTreatments.find((treatment) => Object.keys(treatment.errors).length > 0) ? "Treatments contain one or more errors"
-        : undefined
+        : undefined,
       },
       {
         name: "Symptoms",
