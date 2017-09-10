@@ -49,7 +49,7 @@ export default class SymptomChart extends React.Component {
 						},
             ticks: {
               min: 1,
-              max: 5,
+              max: 10,
               stepSize: 1
             }
 					}]
@@ -138,7 +138,7 @@ export default class SymptomChart extends React.Component {
         <Line
           data={this.state.chartData}
           options={this.state.chartOptions}
-          height={this.props.height || 55}
+          height={this.props.height || 100}
           // width='100'
         />
       </div>

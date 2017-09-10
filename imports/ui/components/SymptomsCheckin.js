@@ -10,7 +10,7 @@ class SymptomsCheckin extends React.Component {
   renderSeveritySquares(symptom) {
     return (
       <div ref={`${symptom.name}_symptom_container`} className="checkin-item__answer-group">
-        {[1,2,3,4,5].map((severityNumber) =>
+        {[1,2,3,4,5,6,7,8,9,10].map((severityNumber) =>
           <div className={`severity checkin-item__answer-square ${severityNumber <= symptom.severity ? "selected" : ""}`} key={severityNumber}
             onClick={() => this.chooseSeverity(symptom, severityNumber)}
             onMouseOver={(e) => this.handleMouseOver(e, symptom, severityNumber)}

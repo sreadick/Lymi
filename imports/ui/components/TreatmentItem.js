@@ -176,11 +176,11 @@ export class TreatmentItem extends React.Component {
           daysOfWeek: this.state.daysOfWeek.filter((dayOfWeek) => dayOfWeek !== days[0])
         });
       } else {
+        const daysOfWeek = this.state.daysOfWeek.slice();
+        const position = days[0] === "Monday" ? 0 : days[0] === "Tuesday" ? 1 : days[0] === "Wednesday" ? 2 : days[0] === "Thursday" ? 3 : days[0] === "Friday" ? 4 : days[0] === "Saturday" ? 5 : 6;
+        daysOfWeek.splice(position, 0, days[0]);
         Meteor.call('userTreatments.update', this.props.treatment._id, {
-          daysOfWeek: [
-            days[0],
-            ...this.state.daysOfWeek
-          ]
+          daysOfWeek
         }, (err, res) => {
           if (err) {
             console.log(err);
@@ -188,12 +188,7 @@ export class TreatmentItem extends React.Component {
             this.props.getAllErrors();
           }
         });
-        this.setState({
-          daysOfWeek: [
-            days[0],
-            ...this.state.daysOfWeek
-          ]
-        });
+        this.setState({daysOfWeek});
       }
     } else {
       Meteor.call('userTreatments.update', this.props.treatment._id, {
@@ -245,7 +240,7 @@ export class TreatmentItem extends React.Component {
 
             <div className="row">
               <div className="input-field col l4">
-                <input type="number" id="amount" name="amount" ref="amount" min="1" value={this.state.amount} onChange={this.handleChange.bind(this)}/>
+                <input type="number" id="amount" name="amount" ref="amount" min="1" value={this.state.amount} onChange={this.handleChange.bind(this)} disabled={this.state.dosingFormat !== 'default' && this.state.dosingFormat !== 'other'}/>
                 <label className='active' htmlFor='amount'>Amount</label>
                 <div className="input-response red-text text-darken-2">{this.props.showErrors ? this.props.errors.amount : ''}</div>
               </div>
@@ -275,7 +270,7 @@ export class TreatmentItem extends React.Component {
 
               <div className="input-field col l4">
                 {/* <div className="ui right labeled input"> */}
-                  <input type="number" name="frequency" ref="frequency" value={this.state.frequency} min="1" onChange={this.handleChange.bind(this)}/>
+                  <input type="number" name="frequency" ref="frequency" value={this.state.frequency} min="1" onChange={this.handleChange.bind(this)} disabled={this.state.dosingFormat === 'generalTimes' || this.state.dosingFormat === 'byHours' || this.state.dosingFormat === 'prn'} />
                 {/* </div> */}
                 {/* <label className='active' htmlFor='frequency'>{this.state.frequency == "1" ? "time" : "times" } per day</label> */}
                 <label className='active' htmlFor='frequency'>Times Per Day</label>
@@ -409,7 +404,7 @@ export class TreatmentItem extends React.Component {
                 <div className='col l8'>
                   {this.state.dosingDetails.generalDoses.map((dose, index) =>
                     <div className='row' key={index}>
-                      <div className="col s8">
+                      <div className="col s2">
                         {dose.time.charAt(0).toUpperCase() + dose.time.slice(1)}
                       </div>
                       <div className="col s2">
@@ -433,7 +428,7 @@ export class TreatmentItem extends React.Component {
                     </div>
                     {this.state.dosingDetails.specificDoses.map((dose, index) =>
                       <div className='row' key={index}>
-                        <div className="col s8">
+                        <div className="col s4">
                           <TimePicker
                             showSecond={false}
                             value={moment(dose.time)}

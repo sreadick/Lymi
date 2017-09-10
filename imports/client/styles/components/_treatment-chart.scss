@@ -1,0 +1,41 @@
+.treatment-chart__container {
+  background: white;
+  border-radius: 5px;
+  padding: 0 $space;
+  width: 973px;
+  overflow: auto;
+}
+
+.treatment-chart__block-segment__wrapper {
+  border: 1px solid black;
+  background: transparent;
+  height: 25px;
+}
+
+.treatment-chart__block-segment {
+  height: 100%;
+  width: 62.52px;
+  background: white;
+  display: inline-block;
+  // border: 1px solid #ddd;
+}
+
+.treatment-chart__block-segment.Yes {
+  background: #673AB7;
+}
+.treatment-chart__block-segment.No {
+  background: red;
+}
+.treatment-chart__block-segment.Some {
+  background: #D1C4E9;
+}
+.treatment-chart__block-segment.Missing {
+  background: yellow;
+}
+
+.treatment-chart__date {
+  // background: pink;
+  -ms-transform: rotate(40deg); /* IE 9 */
+  -webkit-transform: rotate(40deg); /* Chrome, Safari, Opera */
+  transform: rotate(40deg);
+}

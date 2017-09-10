@@ -39,7 +39,7 @@
 //   color: white;
 // }
 .checkin-item__container {
-  max-width: 650px;
+  max-width: 700px;
   margin: $space auto 0 auto;
   text-align: center;
   padding-bottom: 1rem;
@@ -57,7 +57,8 @@
   display: inline-block;
   margin: 0 1%;
   border-radius: 10px;
-  width: 10%;
+  // width: 8%;
+  padding: 0 1.4rem;
   height: 100%;
   line-height: 50px;
 
@@ -115,4 +116,32 @@
 .checkin-item__answer-square.highlighted.No {
   border: 1px solid $no-checkin-answer-primary;
   background: lighten($no-checkin-answer-primary, 7%);
+}
+
+.checkin-item__answer-square.Some {
+  border: 1px solid $some-checkin-answer-primary;
+  min-width: 3.7rem;
+}
+
+.checkin-item__answer-square.selected.Some {
+  background: $some-checkin-answer-primary;
+}
+
+.checkin-item__answer-square.highlighted.Some {
+  border: 1px solid $some-checkin-answer-primary;
+  background: lighten($some-checkin-answer-primary, 7%);
+}
+
+.checkin-item__answer-square.NPD {
+  border: 1px solid $npd-checkin-answer-primary;
+  min-width: 3.7rem;
+}
+
+.checkin-item__answer-square.selected.NPD {
+  background: $npd-checkin-answer-primary;
+}
+
+.checkin-item__answer-square.highlighted.NPD {
+  border: 1px solid $npd-checkin-answer-primary;
+  background: lighten($npd-checkin-answer-primary, 7%);
 }

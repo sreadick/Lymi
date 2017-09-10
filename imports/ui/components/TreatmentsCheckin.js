@@ -11,12 +11,12 @@ class TreatmentCheckin extends React.Component {
     return (
       <div className="checkin-item__container">
         <div className="checkin-item__answer-group">
-          {['Yes', 'No'].map((answer) =>
+          {['Yes', 'No', 'Some', 'NPD'].map((answer) =>
             <div className={`${answer} checkin-item__answer-square ${answer === treatment.compliance ? "selected" : ""}`} key={answer}
               onClick={(e) => this.chooseAnswer(e, treatment, answer)}
               onMouseOver={(e) => this.handleMouseOver(e)}
               onMouseOut={(e) => this.handleMouseOut(e)}>
-              {answer}
+              {answer === 'NPD' ? 'Not Prescribed Today' : answer}
             </div>
           )}
         </div>

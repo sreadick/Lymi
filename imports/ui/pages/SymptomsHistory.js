@@ -116,7 +116,6 @@ class SymptomsHistory extends React.Component {
         <div>
           <div className='section'></div>
           <h5>Checkins:</h5>
-          {console.log(this.props.displayedCheckinTableItems)}
           {this.props.displayedCheckinTableItems.map(checkin =>
             <div className="section" key={checkin.date}>
               <h4>{checkin.date}</h4>
@@ -199,7 +198,6 @@ export default createContainer((props) => {
   const currentAndDeletedSymptoms = currentSymptoms.slice();
   const displayedCheckinTableItems = checkinHistoryIsReady && CheckinHistories.findOne().checkins.reverse().slice();
   const lastThreeDays = [moment().format('MMMM Do YYYY'), moment().subtract(1, 'days').format('MMMM Do YYYY'), moment().subtract(2, 'days').format('MMMM Do YYYY')]
-  // console.log(lastThreeDays);
   if (checkinHistoryIsReady) {
     CheckinHistories.findOne().checkins.forEach((checkin) => {
       checkin.symptoms.forEach((symptom) => {
@@ -212,15 +210,11 @@ export default createContainer((props) => {
       });
     });
     lastThreeDays.forEach((day, index) => {
-      // console.log(day);
-      // console.log(CheckinHistories.findOne().checkins[0].date);
-      // console.log(moment(day, 'MMMM Do YYYY').isAfter(moment(CheckinHistories.findOne().checkins[0].date, 'MMMM Do YYYY')));
       if (!CheckinHistories.findOne().checkins.map(checkin => checkin.date).includes(day) && moment(day, 'MMMM Do YYYY').isAfter(moment(CheckinHistories.findOne().checkins[0].date, 'MMMM Do YYYY'))) {
         displayedCheckinTableItems.splice(index, 0, {date: day, symptoms: undefined, treatments: undefined, index})
       }
     })
   }
-  // console.log(displayedCheckinTableItems);
   return {
     userSymptoms: UserSymptoms.find().fetch(),
     userTreatments: UserTreatments.find().fetch(),

@@ -79,11 +79,14 @@
   }
 }
 
+.collection-item .Collapsible__trigger {
+  border-top: none;
+  // border-bottom: 1px solid grey;
+}
+
 .CustomTriggerCSS {
   // background-color: lightcoral;
   transition: background-color 200ms ease;
-
-
 }
 
 .CustomTriggerCSS--open {

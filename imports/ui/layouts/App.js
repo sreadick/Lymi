@@ -14,7 +14,8 @@ import SelectSymptomsPage from '../pages/SelectSymptomsPage';
 import SelectTreatmentsPage from '../pages/SelectTreatmentsPage';
 import Dashboard from '../pages/Dashboard';
 import Checkin from '../pages/Checkin';
-import SymptomHistory from '../pages/SymptomsHistory';
+import SymptomsHistory from '../pages/SymptomsHistory';
+import TreatmentsHistory from '../pages/TreatmentsHistory';
 import NotFound from '../pages/NotFound';
 
 const App = appProps => (
@@ -28,7 +29,8 @@ const App = appProps => (
       <AuthenticatedRoute exact path="/home/selecttreatments" component={SelectTreatmentsPage} {...appProps} />
       <AuthenticatedRoute exact path="/home/dashboard" component={Dashboard} {...appProps} />
       <AuthenticatedRoute path="/home/checkin" component={Checkin} {...appProps} />
-      <AuthenticatedRoute exact path="/home/history/symptoms" component={SymptomHistory} {...appProps} />
+      <AuthenticatedRoute exact path="/home/history/symptoms" component={SymptomsHistory} {...appProps} />
+      <AuthenticatedRoute exact path="/home/history/treatments" component={TreatmentsHistory} {...appProps} />
       <Route path="*" component={NotFound}/>
     </Switch>
   </Router>

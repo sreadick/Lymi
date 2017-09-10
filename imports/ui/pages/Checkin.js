@@ -169,12 +169,11 @@ export default createContainer(props => {
   const foundCheckin = checkinHistoryIsReady ? CheckinHistories.findOne().checkins.find((checkin) => checkin.date === targetDate) : undefined;
   if (checkinHistoryIsReady){
     if (!foundCheckin) {
-      console.log(props.location.state.position);
       Meteor.call('checkinHistories.checkins.create', {
         date: targetDate,
         symptoms: symptoms,
         treatments: dateFilteredTreatments,
-        position: props.location.state.position
+        position: props.location.state.position || (CheckinHistories.findOne().checkins.length)
       });
     // } else if (!symptoms.every(symptom => foundCheckin.symptoms.find(checkinSymptom => checkinSymptom.name === symptom.name)) || !dateFilteredTreatments.every(treatment => foundCheckin.treatments.find(checkinTreatment => checkinTreatment.name === treatment.name))) {
     } else {
