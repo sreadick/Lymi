@@ -1,41 +1,104 @@
-.treatment-chart__container {
+.treatment-chart__wrapper {
+  margin-top: 8px;
   background: white;
-  border-radius: 5px;
-  padding: 0 $space;
-  width: 973px;
-  overflow: auto;
+  border-radius: 10px;
+  overflow-x: auto;
+  padding: $space / 2;
 }
 
-.treatment-chart__block-segment__wrapper {
+.treatment-chart__item__container {
+  padding: $space / 4;
+  width: max-content;
+  min-width: 100%;
+}
+
+.treatment-chart__item {
   border: 1px solid black;
+  border-radius: 10px;
   background: transparent;
   height: 25px;
+  display: inline-block;
+  min-width: 100%;
+  overflow: hidden;
+}
+
+.treatment-chart__item__title.deleted {
+  text-decoration: line-through;
 }
 
 .treatment-chart__block-segment {
   height: 100%;
-  width: 62.52px;
+  width: 45px;
   background: white;
   display: inline-block;
-  // border: 1px solid #ddd;
 }
 
 .treatment-chart__block-segment.Yes {
-  background: #673AB7;
+  background: $yes-checkin-answer-primary;
 }
 .treatment-chart__block-segment.No {
-  background: red;
+  background: $no-checkin-answer-primary;
 }
 .treatment-chart__block-segment.Some {
-  background: #D1C4E9;
+  background: $some-checkin-answer-primary;
 }
-.treatment-chart__block-segment.Missing {
-  background: yellow;
+.treatment-chart__block-segment.null {
+  background: grey;
 }
 
 .treatment-chart__date {
-  // background: pink;
-  -ms-transform: rotate(40deg); /* IE 9 */
-  -webkit-transform: rotate(40deg); /* Chrome, Safari, Opera */
-  transform: rotate(40deg);
+  font-size: .8rem;
+  display: inline-block;
+  width: 45px;
+  height: 20px;
+  margin: 0 auto;
+  -ms-transform: rotate(-20deg); /* IE 9 */
+  -webkit-transform: rotate(-20deg); /* Chrome, Safari, Opera */
+  transform: rotate(-20deg);
+}
+
+.treatment-chart__date.missing {
+  color: red;
+  text-decoration: line-through;
+}
+
+.treatment-chart__legend {
+  border: 1px solid black;
+  padding: $space / 2 $space / 4;
+  margin-top: $space / 2;
+}
+
+.treatment-chart__legend__item__block {
+  width: 25px;
+  height: 12px;
+  border: 1px solid #ddd;
+  display: inline-block;
+  margin-right: $space / 4;
+}
+
+.treatment-chart__legend__item__block.yes {
+  background: $yes-checkin-answer-primary;
+
+}
+.treatment-chart__legend__item__block.some {
+  background: $some-checkin-answer-primary;
+}
+.treatment-chart__legend__item__block.no {
+  background: $no-checkin-answer-primary;
+}
+.treatment-chart__legend__item__block.missing {
+  background: grey;
+}
+.treatment-chart__legend__item__block.NPD {
+  background: white
+}
+.treatment-chart__legend__item__block.checkin-missing {
+  background: white;
+  color: red;
+  text-decoration: line-through;
+  font-size: .6rem;
+  border: none;
+  -ms-transform: rotate(-20deg); /* IE 9 */
+  -webkit-transform: rotate(-20deg); /* Chrome, Safari, Opera */
+  transform: rotate(-20deg);
 }

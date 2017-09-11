@@ -119,6 +119,11 @@ export default createContainer(() => {
         name: "Symptom History",
         path: "/home/history/symptoms",
         errorMessage: (CheckinHistories.findOne() && checkinHistory.checkins.length === 0) ? "No history to report" : undefined
+      },
+      {
+        name: "Treatment History",
+        path: "/home/history/treatments",
+        errorMessage: (CheckinHistories.findOne() && checkinHistory.checkins.length === 0) ? "No history to report" : undefined
       }
     ]
   }

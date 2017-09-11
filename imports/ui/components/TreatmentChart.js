@@ -3,19 +3,20 @@ import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import moment from 'moment';
 
+import { UserTreatments } from '../../api/user-treatments';
+
 const TreatmentChart = (props) => {
   return (
-    <div className='treatment-chart__container'>
+    <div className='treatment-chart__item__container'>
       {props.treatments.map((treatment) =>
         <div key={treatment.name}>
-          <div className='center-align'>{treatment.name}</div>
-          <div className='treatment-chart__block-segment__wrapper'>
+          <h5 className={`grey-text text-darken-2 center-align treatment-chart__item__title ${!props.currentTreatmentNames.includes(treatment.name) ? 'deleted' : ''} `}>{treatment.name.charAt(0).toUpperCase() + treatment.name.slice(1)}</h5>
+          <div className='treatment-chart__item z-depth-1'>
             {props.checkins.map(checkin => {
               let checkinTreatment;
               if (checkin.treatments !== null) {
                 checkinTreatment = checkin.treatments.find(checkinTreatment => checkinTreatment.name === treatment.name)
               }
-              // return <div key={checkin.date} className={`treatment-chart__block-segment ${checkin.treatments.find(checkinTreatment => checkinTreatment.name === treatment.name) && checkin.treatments.find(checkinTreatment => checkinTreatment.name === treatment.name).compliance }`}></div>
               return <div key={checkin.date} className={`treatment-chart__block-segment ${checkinTreatment && checkinTreatment.compliance}`}></div>
             })}
         </div>
@@ -23,14 +24,54 @@ const TreatmentChart = (props) => {
       )}
       <div>
         {props.checkins.map((checkin) =>
-          <span className={`${checkin.treatments === null ? 'red-text' : 'black-text'} treatment-chart__date`} key={checkin.date}>{moment(checkin.date, "MMMM Do YYYY").format('MM-DD-YY')} </span>
+          <div className={`treatment-chart__date ${checkin.treatments === null ? 'missing' : ''}`} key={checkin.date}>{moment(checkin.date, "MMMM Do YYYY").format('M/D/YY')} </div>
         )}
+      </div>
+      <div className='right treatment-chart__legend'>
+        <div className='treatment-chart__legend__item'>
+          <div className='treatment-chart__legend__item__block yes'></div>
+          <span className='treatment-chart__legend__item__title'>
+            All doses taken
+          </span>
+        </div>
+        <div className='treatment-chart__legend__item'>
+          <div className='treatment-chart__legend__item__block some'></div>
+          <span className='treatment-chart__legend__item__title'>
+            Some doses taken
+          </span>
+        </div>
+        <div className='treatment-chart__legend__item'>
+          <div className='treatment-chart__legend__item__block no'></div>
+          <span className='treatment-chart__legend__item__title'>
+            No doses taken
+          </span>
+        </div>
+        <div className='treatment-chart__legend__item'>
+          <div className='treatment-chart__legend__item__block missing'></div>
+          <span className='treatment-chart__legend__item__title'>
+            Not Specified
+          </span>
+        </div>
+        <div className='treatment-chart__legend__item'>
+          <div className='treatment-chart__legend__item__block NPD'></div>
+          <span className='treatment-chart__legend__item__title'>
+            Not Prescribed
+          </span>
+        </div>
+        <div className='treatment-chart__legend__item'>
+          <div className='treatment-chart__legend__item__block checkin-missing'>x/x/xx</div>
+          <span className='treatment-chart__legend__item__title'>
+            Check-In Missing
+          </span>
+        </div>
       </div>
     </div>
   );
 };
 
 export default createContainer((props) => {
+  const treatmentsHandle = Meteor.subscribe('userTreatments');
+
   const initialCheckInDate = moment(props.checkins[0].date, 'MMMM Do YYYY');
   const NumberDatesFromInitialCheckIn = moment().diff(initialCheckInDate, 'days') + 1;
   const dateLabels = [...Array(NumberDatesFromInitialCheckIn).keys()].map((dateOffset) =>
@@ -87,8 +128,6 @@ export default createContainer((props) => {
   //     })
   //   }
   // });
-  console.log(modifiedCheckins);
-  console.log(props.checkins);
   // dateLabels.forEach(dateLabel => {
   //   if (treatment.dateSelectMode === 'date range' && moment(dateLabel, "MMMM Do YYYY").isBetween(treatment.startDateValue, treatment.endDateValue)) {
   //     const targetCheckin = props.checkins.find(checkin => (checkin.date === dateLabel));
@@ -101,6 +140,7 @@ export default createContainer((props) => {
   return {
     treatments: props.treatments,
     checkinDates: props.checkins.map(checkin => moment(checkin.date, "MMMM Do YYYY").format('MM-DD-YY')),
-    checkins: modifiedCheckins
+    checkins: modifiedCheckins,
+    currentTreatmentNames: UserTreatments.find().fetch().map(treatment => treatment.name),
   };
 }, TreatmentChart);

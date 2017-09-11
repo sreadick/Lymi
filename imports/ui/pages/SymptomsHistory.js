@@ -19,14 +19,14 @@ class SymptomsHistory extends React.Component {
   //
   //   this.state = {
   //     groupSymptoms: false,
-  //     includeDeleted: false,
+  //     includeDeletedSymptoms: false,
   //     displayedSymptoms: []
   //   }
   // }
   //
   // componentDidMount() {
   //   Session.set('groupSymptoms', false)
-  //   Session.set('includeDeleted', false)
+  //   Session.set('includeDeletedSymptoms', false)
   //
   //   this.setState({
   //     displayedSymptoms: this.props.displayedSymptoms
@@ -60,9 +60,9 @@ class SymptomsHistory extends React.Component {
             {this.props.groupSymptoms ?  'Ungroup' : 'Group'}
           </button>
           { this.props.showDeletedTab &&
-            <button className={`btn ${this.props.includeDeleted ? 'deep-purple lighten-1' : 'grey'}`}
-              onClick={() => Session.set('includeDeleted', !Session.get('includeDeleted'))}>
-              {this.props.includeDeleted ?  'Exclude Deleted' : 'Include Deleted'}
+            <button className={`btn ${this.props.includeDeletedSymptoms ? 'deep-purple lighten-1' : 'grey'}`}
+              onClick={() => Session.set('includeDeletedSymptoms', !Session.get('includeDeletedSymptoms'))}>
+              {this.props.includeDeletedSymptoms ?  'Exclude Deleted' : 'Include Deleted'}
             </button>
           }
         </div>
@@ -113,8 +113,7 @@ class SymptomsHistory extends React.Component {
               ))}
           </div>
         }
-        <div>
-          <div className='section'></div>
+        <div className='section'>
           <h5>Checkins:</h5>
           {this.props.displayedCheckinTableItems.map(checkin =>
             <div className="section" key={checkin.date}>
@@ -171,10 +170,10 @@ class SymptomsHistory extends React.Component {
                     </thead>
 
                     <tbody>
-                      {checkin.symptoms.map(symptoms =>
-                        <tr key={symptoms.name}>
-                          <td>{symptoms.name}</td>
-                          <td>{symptoms.severity === 0 ? 'N/A' : symptoms.severity}</td>
+                      {checkin.symptoms.map(checkinSymptom =>
+                        <tr key={checkinSymptom.name}>
+                          <td>{checkinSymptom.name}</td>
+                          <td>{checkinSymptom.severity === 0 ? 'N/A' : checkinSymptom.severity}</td>
                         </tr>
                       )}
                     </tbody>
@@ -197,7 +196,7 @@ export default createContainer((props) => {
   const currentSymptoms = UserSymptoms.find().fetch();
   const currentAndDeletedSymptoms = currentSymptoms.slice();
   const displayedCheckinTableItems = checkinHistoryIsReady && CheckinHistories.findOne().checkins.reverse().slice();
-  const lastThreeDays = [moment().format('MMMM Do YYYY'), moment().subtract(1, 'days').format('MMMM Do YYYY'), moment().subtract(2, 'days').format('MMMM Do YYYY')]
+  const lastThreeDays = [moment().format('MMMM Do YYYY'), moment().subtract(1, 'days').format('MMMM Do YYYY'), moment().subtract(2, 'days').format('MMMM Do YYYY')];
   if (checkinHistoryIsReady) {
     CheckinHistories.findOne().checkins.forEach((checkin) => {
       checkin.symptoms.forEach((symptom) => {
@@ -222,9 +221,9 @@ export default createContainer((props) => {
     checkinHistory: CheckinHistories.findOne(),
     isFetching: (!checkinHistoryIsReady || !displayedCheckinTableItems || !symptomsHandle.ready() || !treatmentsHandle.ready()),
     groupSymptoms: Session.get('groupSymptoms') || false,
-    includeDeleted: Session.get('includeDeleted') || false,
+    includeDeletedSymptoms: Session.get('includeDeletedSymptoms') || false,
     showDeletedTab: currentSymptoms.map(symptom => symptom.name).toString() !== currentAndDeletedSymptoms.map(symptom => symptom.name).toString(),
-    displayedSymptoms: Session.get('includeDeleted') ? currentAndDeletedSymptoms : currentSymptoms,
+    displayedSymptoms: Session.get('includeDeletedSymptoms') ? currentAndDeletedSymptoms : currentSymptoms,
   };
 
 }, SymptomsHistory);

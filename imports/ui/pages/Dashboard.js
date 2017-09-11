@@ -80,7 +80,7 @@ class Dashboard extends React.Component {
                           checkins={this.props.checkinHistory.checkins}
                           symptomColors={this.props.userSymptoms.map(symptom => symptom.color)}
                           height={120}
-                          padding={{top: 30, right: 30, bottom: 10, left: 0}}
+                          padding={{top: 40, right: 30, bottom: 20, left: 0}}
                         />
                       </div>
                     }
@@ -88,7 +88,7 @@ class Dashboard extends React.Component {
                 </div>
               </div>
             </div>
-            <div className='center-align'>
+            <div className=''>
               <Link className="waves-effect waves-light blue btn" to="/home/selectsymptoms">Edit</Link>
               <Link className='waves-effect waves-light black btn' to="/home/history/symptoms">Full History</Link>
             </div>
@@ -98,11 +98,12 @@ class Dashboard extends React.Component {
         {/* <div className="row dashboard-chart-section treatments"> */}
         <div className="row dashboard-chart-section treatments">
           <div className='col s7'>
-            {/* <h4 className='white-text'>[Graph Coming Soon]</h4>        */}
-            <TreatmentChart
-              treatments={this.props.userTreatments}
-              checkins={this.props.checkinHistory.checkins}
-            />
+            <div className='treatment-chart__wrapper'>
+              <TreatmentChart
+                treatments={this.props.userTreatments}
+                checkins={this.props.checkinHistory.checkins}
+              />
+            </div>
           </div>
           <div className='col s5'>
             <ul className='collection with-header z-depth-2'>
@@ -254,7 +255,10 @@ class Dashboard extends React.Component {
                 );
               })}
             </ul>
-            <Link className="waves-effect waves-light blue btn" to="/home/selecttreatments">edit</Link>
+            <div className='right'>
+              <Link className="waves-effect waves-light blue btn" to="/home/selecttreatments">edit</Link>
+              <Link className='waves-effect waves-light black btn' to="/home/history/treatments">Full History</Link>
+            </div>
           </div>
         </div>
 
