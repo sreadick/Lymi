@@ -87,6 +87,21 @@ export class TreatmentItem extends React.Component {
     });
   }
 
+  handleDosingFormatChange(radioGroup, value) {
+    this.setState({
+      [radioGroup]: value
+    });
+    Meteor.call('userTreatments.update', this.props.treatment._id, {
+      [radioGroup]: value,
+    }, (err, res) => {
+      if (err) {
+        console.log(err);
+      } else {
+        this.props.getAllErrors();
+      }
+    });
+  }
+
   handleDosingDetailsChange({type, index, targetProperty, changedValue}) {
     Meteor.call('userTreatments.details.update', this.props.treatment._id, {
       type, index, targetProperty, changedValue
@@ -107,9 +122,9 @@ export class TreatmentItem extends React.Component {
     this.setState({dosingDetails})
   }
 
-  handleInstructionsChange(e) {
+  handleInstructionsChange(targetInstruction, value) {
     const otherInstructions = Object.assign({}, this.state.otherInstructions);
-    otherInstructions[e.target.name] = e.target.value
+    otherInstructions[targetInstruction] = value;
 
     Meteor.call('userTreatments.update', this.props.treatment._id, {otherInstructions}, (err, res) => {
       if (err) {
@@ -121,9 +136,9 @@ export class TreatmentItem extends React.Component {
     this.setState({otherInstructions});
   }
 
-  handleInfoChange(e) {
+  handleInfoChange(targetGroup, value) {
     const info = Object.assign({}, this.state.info);
-    info[e.target.name] = e.target.value
+    info[targetGroup] = value;
 
     Meteor.call('userTreatments.update', this.props.treatment._id, {info}, (err, res) => {
       if (err) {
@@ -352,7 +367,8 @@ export class TreatmentItem extends React.Component {
                             }}
                             focusedInput={this.state.focusedInput}
                             onFocusChange={focusedInput => this.setState({ focusedInput: this.state.focusedInput === 'startDate' ? 'endDate' : 'startDate' })}
-                            isOutsideRange={(day) => (this.state.daysOfWeek.includes(day.format('dddd')) && day.isSameOrAfter(moment().startOf('day')) ) ? false : true}
+                            // isOutsideRange={(day) => (this.state.daysOfWeek.includes(day.format('dddd')) && day.isSameOrAfter(moment().startOf('day')) ) ? false : true}
+                            isOutsideRange={(day) => this.state.daysOfWeek.includes(day.format('dddd')) ? false : true}
                             numberOfMonths={2}
                           />
                           <div className="input-response red-text text-darken-2 align-right">{this.props.showErrors ? this.props.errors.dateRange : ''}</div>
@@ -363,7 +379,7 @@ export class TreatmentItem extends React.Component {
                             date={null}
                             onDateChange={date => this.handleIndividualDateSelection(date)}
                             isDayHighlighted={date => this.state.individualDateValues.map(dateValue => moment(dateValue).format('MM DD YYYY')).includes(date.format('MM DD YYYY'))}
-                            isOutsideRange={(day) => (day.isSameOrAfter(moment().startOf('day')) ) ? false : true}
+                            // isOutsideRange={(day) => (day.isSameOrAfter(moment().startOf('day')) ) ? false : true}
                           />
                           <div className="input-response red-text text-darken-2 align-right">{this.props.showErrors ? this.props.errors.individualDates : ''}</div>
                         </div>
@@ -376,27 +392,27 @@ export class TreatmentItem extends React.Component {
                 <div className="col l4">
                   <span>Select one of the following formats:</span>
                   <p>
-                    <input type="radio" name="dosingFormat" id="format:default" value='default' checked={this.state.dosingFormat === 'default'} onChange={this.handleChange.bind(this)} />
+                    <input type="radio" name={`${this.state.name}_dosingFormat`} id="format:default" value='default' checked={this.state.dosingFormat === 'default'} onChange={(e) => this.handleDosingFormatChange('dosingFormat', e.target.value)} />
                     <label htmlFor="format:default">Default</label>
                   </p>
                   <p>
-                    <input type="radio" name="dosingFormat" id="format:generalTimes" value='generalTimes' checked={this.state.dosingFormat === 'generalTimes'} onChange={this.handleChange.bind(this)} />
+                    <input type="radio" name={`${this.state.name}_dosingFormat`} id="format:generalTimes" value='generalTimes' checked={this.state.dosingFormat === 'generalTimes'} onChange={(e) => this.handleDosingFormatChange('dosingFormat', e.target.value)} />
                     <label htmlFor="format:generalTimes">General Times</label>
                   </p>
                   <p>
-                    <input type="radio" name="dosingFormat" id="format:specificTimes" value='specificTimes' checked={this.state.dosingFormat === 'specificTimes'} onChange={this.handleChange.bind(this)} />
+                    <input type="radio" name={`${this.state.name}_dosingFormat`} id="format:specificTimes" value='specificTimes' checked={this.state.dosingFormat === 'specificTimes'} onChange={(e) => this.handleDosingFormatChange('dosingFormat', e.target.value)} />
                     <label htmlFor="format:specificTimes">Specific Times</label>
                   </p>
                   <p>
-                    <input type="radio" name="dosingFormat" id="format:byHours" value='byHours' checked={this.state.dosingFormat === 'byHours'} onChange={this.handleChange.bind(this)} />
+                    <input type="radio" name={`${this.state.name}_dosingFormat`} id="format:byHours" value='byHours' checked={this.state.dosingFormat === 'byHours'} onChange={(e) => this.handleDosingFormatChange('dosingFormat', e.target.value)} />
                     <label htmlFor="format:byHours">{`Every ${this.state.dosingDetails.hourlyDose.hourInterval == 0 ? 'x' : this.state.dosingDetails.hourlyDose.hourInterval} ${this.state.dosingDetails.hourlyDose.hourInterval == 1 ? 'hour' : 'hours'}`}</label>
                   </p>
                   <p>
-                    <input type="radio" name="dosingFormat" id="format:prn" value='prn' checked={this.state.dosingFormat === 'prn'} onChange={this.handleChange.bind(this)} />
+                    <input type="radio" name={`${this.state.name}_dosingFormat`} id="format:prn" value='prn' checked={this.state.dosingFormat === 'prn'} onChange={(e) => this.handleDosingFormatChange('dosingFormat', e.target.value)} />
                     <label htmlFor="format:prn">PRN (as neeeded)</label>
                   </p>
                   <p>
-                    <input type="radio" name="dosingFormat" id="format:other" value='other' checked={this.state.dosingFormat === 'other'} onChange={this.handleChange.bind(this)} />
+                    <input type="radio" name={`${this.state.name}_dosingFormat`} id="format:other" value='other' checked={this.state.dosingFormat === 'other'} onChange={(e) => this.handleDosingFormatChange('dosingFormat', e.target.value)} />
                     <label htmlFor="format:other">Other</label>
                   </p>
                 </div>
@@ -511,21 +527,21 @@ export class TreatmentItem extends React.Component {
                     Meals:
                     {['None', 'Take with', 'Take before', 'Take after'].map(mealInstruction =>
                       <p key={mealInstruction}>
-                        <input type="radio" name='meals' id={`mealInstructions_${mealInstruction}`} value={mealInstruction} checked={this.state.otherInstructions.meals === mealInstruction} onChange={(e) => this.handleInstructionsChange(e)}/>
+                        <input type="radio" name={`${this.state.name}_meals`} id={`mealInstructions_${mealInstruction}`} value={mealInstruction} checked={this.state.otherInstructions.meals === mealInstruction} onChange={(e) => this.handleInstructionsChange('meals', e.target.value)}/>
                         <label htmlFor={`mealInstructions_${mealInstruction}`}>{mealInstruction}</label>
                       </p>
                     )}
                     Contraindications:
                     {['None', 'antibiotic', 'probiotic'].map(contraindicatedInstruction =>
                       <p key={contraindicatedInstruction}>
-                        <input type="radio" name='contraindications' id={`contraindicatedInstructions_${contraindicatedInstruction}`} value={contraindicatedInstruction} checked={this.state.otherInstructions.contraindications === contraindicatedInstruction} onChange={(e) => this.handleInstructionsChange(e)}/>
+                        <input type="radio" name={`${this.state.name}_contraindications`} id={`contraindicatedInstructions_${contraindicatedInstruction}`} value={contraindicatedInstruction} checked={this.state.otherInstructions.contraindications === contraindicatedInstruction} onChange={(e) => this.handleInstructionsChange('contraindications', e.target.value)}/>
                         <label htmlFor={`contraindicatedInstructions_${contraindicatedInstruction}`}>{contraindicatedInstruction !== 'None' ? "Don't take within 3 hours of" : ''} {contraindicatedInstruction}</label>
                       </p>
                     )}
                     Custom:
                     <div className='container'>
                       <div className="input-field">
-                        <textarea className="materialize-textarea" id="userDefinedInstructions" name="userDefined" value={this.state.otherInstructions.userDefined} onChange={(e) => this.handleInstructionsChange(e)}></textarea>
+                        <textarea className="materialize-textarea" name={`${this.state.name}_userDefined`} id="userDefinedInstructions" value={this.state.otherInstructions.userDefined} onChange={(e) => this.handleInstructionsChange('userDefined', e.target.value)}></textarea>
                         <label className='active' htmlFor='userDefinedInstructions'>Specify</label>
                       </div>
                     </div>
@@ -537,25 +553,25 @@ export class TreatmentItem extends React.Component {
                       Type:
                       {['N/A', 'Medication', 'Supplement', 'Other'].map(treatmentType =>
                         <p key={treatmentType}>
-                          <input type="radio" name='type' id={`type_${treatmentType}`} value={treatmentType} checked={this.state.info.type === treatmentType} onChange={(e) => this.handleInfoChange(e)}/>
+                          <input type="radio" name={`${this.state.name}_treatmentType`} id={`type_${treatmentType}`} value={treatmentType} checked={this.state.info.type === treatmentType} onChange={(e) => this.handleInfoChange('type', e.target.value)}/>
                           <label htmlFor={`type_${treatmentType}`}>{treatmentType}</label>
                         </p>
                       )}
                       <div className="input-field inline">
-                        <input id="otherType" name="typeOtherValue" value={this.state.info.typeOtherValue} disabled={this.state.info.type !== 'Other'} onChange={(e) => this.handleInfoChange(e)} />
+                        <input id="otherType" name={`${this.state.name}_treatmentTypeOtherValue`} value={this.state.info.typeOtherValue} disabled={this.state.info.type !== 'Other'} onChange={(e) => this.handleInfoChange('typeOtherValue', e.target.value)} />
                         <label className='active' htmlFor='otherType'>Specify</label>
                       </div>
                     </div>
                     <div className='col l3'>
                       Category:
                       <div className="input-field">
-                        <input name="category" value={this.state.info.category} placeholder='e.g. SSRI' onChange={(e) => this.handleInfoChange(e)} />
+                        <input name={`${this.state.name}_treatmentCategory`} value={this.state.info.category} placeholder='e.g. SSRI' onChange={(e) => this.handleInfoChange('category', e.target.value)} />
                       </div>
                     </div>
                     <div className='col l3'>
                       Used to treat:
                       <div className="input-field">
-                        <input name="usedToTreat" value={this.state.info.usedToTreat} placeholder='e.g. Depression' onChange={(e) => this.handleInfoChange(e)} />
+                        <input name={`${this.state.name}_usedToTreat`} value={this.state.info.usedToTreat} placeholder='e.g. Depression' onChange={(e) => this.handleInfoChange('usedToTreat', e.target.value)} />
                       </div>
                     </div>
                   </div>

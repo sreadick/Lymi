@@ -5,6 +5,6 @@ export const backgroundImages = [
   'http://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/504400/cd2e6e5aa573e9dc9a6da6f99fa557dc817cb78b.jpg',
   'http://cdn.wallpapersafari.com/29/99/kDaOHF.png',
   'http://www.pixelstalk.net/wp-content/uploads/2016/10/Download-Bonsai-Tree-Image.jpg',
-  'http://www.tagzeo.com/i/2017/03/winter-night-wallpaper-high-quality.jpg',
+  'https://vignette4.wikia.nocookie.net/steamtradingcards/images/b/ba/Abalone_Background_Beginners.jpg/revision/latest?cb=20140808054456',
   'http://s1.picswalls.com/wallpapers/2014/07/28/paris-desktop-wallpapers_121135444_125.jpg'
 ]

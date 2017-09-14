@@ -99,10 +99,12 @@ class Dashboard extends React.Component {
         <div className="row dashboard-chart-section treatments">
           <div className='col s7'>
             <div className='treatment-chart__wrapper'>
-              <TreatmentChart
-                treatments={this.props.userTreatments}
-                checkins={this.props.checkinHistory.checkins}
-              />
+              {this.props.checkinHistory.checkins.length > 0 &&
+                <TreatmentChart
+                  treatments={this.props.userTreatments}
+                  checkins={this.props.checkinHistory.checkins}
+                />
+              }
             </div>
           </div>
           <div className='col s5'>
