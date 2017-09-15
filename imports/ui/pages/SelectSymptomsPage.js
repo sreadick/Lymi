@@ -67,7 +67,7 @@ class SelectSymptomsPage extends React.Component {
 
           <div className="z-depth-2 symptom-group__container">
             {this.renderCommonSymptomsList()}
-            <div className='row center-align'>
+            <div className='row otherSymptom'>
               <div className='col s12'>
                 <div className="input-field">
                   <input type="text" id='otherSymptom' ref="otherSymptom" />
