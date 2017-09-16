@@ -39,8 +39,8 @@ export default class ProfileImageModel extends React.Component {
             selectProfilePhoto()
           }}>
             <div>
-              <span>Select your profile picture </span>
-              <input type='file' ref='photoInput' onChange={this.selectProfilePhoto.bind(this)}/>
+              <span className='row'>Select your profile picture </span>
+              <input className='row' type='file' ref='photoInput' onChange={this.selectProfilePhoto.bind(this)}/>
             </div>
           </form>
         </div>
