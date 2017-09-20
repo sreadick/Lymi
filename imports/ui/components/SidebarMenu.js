@@ -124,6 +124,10 @@ export default createContainer(() => {
         name: "Treatment History",
         path: "/home/history/treatments",
         errorMessage: (CheckinHistories.findOne() && checkinHistory.checkins.length === 0) ? "No history to report" : undefined
+      },
+      {
+        name: "Account",
+        path: "/home/account",
       }
     ]
   }

@@ -16,6 +16,7 @@ import Dashboard from '../pages/Dashboard';
 import Checkin from '../pages/Checkin';
 import SymptomsHistory from '../pages/SymptomsHistory';
 import TreatmentsHistory from '../pages/TreatmentsHistory';
+import Account from '../pages/Account';
 import NotFound from '../pages/NotFound';
 
 const App = appProps => (
@@ -31,6 +32,7 @@ const App = appProps => (
       <AuthenticatedRoute path="/home/checkin" component={Checkin} {...appProps} />
       <AuthenticatedRoute exact path="/home/history/symptoms" component={SymptomsHistory} {...appProps} />
       <AuthenticatedRoute exact path="/home/history/treatments" component={TreatmentsHistory} {...appProps} />
+      <AuthenticatedRoute exact path="/home/account" component={Account} {...appProps} />
       <Route path="*" component={NotFound}/>
     </Switch>
   </Router>
