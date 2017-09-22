@@ -40,8 +40,8 @@ class Dashboard extends React.Component {
             <img className='userPhoto' src={this.props.userPhoto} />
           </div>
         }
-        {this.props.showProfileBackgroundModel && <ProfileBackgroundModel />}
-        {this.props.showProfileImageModel && <ProfileImageModel />}
+        {/* {this.props.showProfileBackgroundModel && <ProfileBackgroundModel />}
+        {this.props.showProfileImageModel && <ProfileImageModel />} */}
         <div className='dashboard-user-info' style={{backgroundImage: Meteor.user() ? `url(${Meteor.user().profile.backgroundURL})` : '' }}>
           <div className='dashboard-user-info__name'>
             {Meteor.user() && <h2>{Meteor.user().profile.firstName} {Meteor.user().profile.lastName}</h2>}
@@ -281,10 +281,10 @@ export default createContainer(() => {
     userTreatments: UserTreatments.find().fetch(),
     displayedTreatments: currentSelectedTreatmentTab === 'today' ? todayTreatments : UserTreatments.find().fetch(),
     checkinHistory: CheckinHistories.findOne(),
-    isFetching: (!symptomsHandle.ready() || !treatmentsHandle.ready()),
-    showProfileBackgroundModel: Session.get('showProfileBackgroundModel'),
+    isFetching: (!symptomsHandle.ready() || !treatmentsHandle.ready() || !Meteor.user()),
     currentSelectedTreatmentTab,
-    showProfileImageModel: Session.get('showProfileImageModel'),
+    // showProfileBackgroundModel: Session.get('showProfileBackgroundModel'),
+    // showProfileImageModel: Session.get('showProfileImageModel'),
     userPhoto: (Meteor.user() && Meteor.user().profile.userPhoto) ? Meteor.user().profile.userPhoto : undefined,
     todayTreatments
 

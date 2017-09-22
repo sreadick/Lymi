@@ -48,7 +48,7 @@ class TasksBox extends React.Component {
               <p>No tasks require your attention.</p>
             }
           <div className=''>
-            <h6>Optional:</h6>
+            {/* <h6>Optional:</h6> */}
             {
               this.props.dailyCheckinStatus === 'complete' &&
               <div className="">
@@ -68,12 +68,6 @@ class TasksBox extends React.Component {
                 <span className='grey-text'>{`Last checked in ${moment(this.props.checkinHistory.lastCheckin).fromNow()}`}</span>
               </div>
             }
-            <button className='black btn' onClick={() => {
-              Session.set('showProfileBackgroundModel', true)
-            }}>Change profile background</button>
-            <button className='black btn' onClick={() => {
-              Session.set('showProfileImageModel', true)
-            }}>Select profile Image</button>
           </div>
         </div>
       </div>
