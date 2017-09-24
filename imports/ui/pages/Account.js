@@ -42,7 +42,7 @@ class Account extends React.Component {
             <PersonalInfo userInfo={this.props.userInfo}/>
           </Tab>
       		<Tab className='col s3' title="Medical Info">
-            <MedicalInfo userInfo={this.props.userInfo}/>
+            <MedicalInfo medicalInfo={this.props.userInfo.profile.medical}/>
           </Tab>
         </Tabs>
       </div>

@@ -11,13 +11,13 @@ import Checkin from '../pages/Checkin';
 
 class TasksBox extends React.Component {
   render() {
-    if (this.props.isFetching) {
-      return (
-        <div className="progress">
-          <div className="indeterminate"></div>
-        </div>
-      );
-    }
+    // if (this.props.isFetching) {
+    //   return (
+    //     <div className="progress">
+    //       <div className="indeterminate"></div>
+    //     </div>
+    //   );
+    // }
     return (
       <div className="dashboard-user-info__tasks-box z-depth-4">
         {/* <Checkin /> */}
@@ -45,30 +45,8 @@ class TasksBox extends React.Component {
                 </Link>
               </div>
             :
-              <p>No tasks require your attention.</p>
+              <p className='center'>No tasks require your attention.</p>
             }
-          <div className=''>
-            {/* <h6>Optional:</h6> */}
-            {
-              this.props.dailyCheckinStatus === 'complete' &&
-              <div className="">
-                {/* <Link className="waves-effect waves-light blue btn" to="/home/checkin/symptoms">Edit check-in</Link> */}
-                <Link
-                  className="waves-effect waves-light blue btn"
-                  to={{
-                    pathname: "/home/checkin",
-                    state: {
-                      checkinDate: moment().format('MMMM Do YYYY'),
-                      symptoms: this.props.userSymptoms,
-                      treatments: this.props.userTreatments
-                    },
-                  }}>
-                  Edit check-in
-                </Link>
-                <span className='grey-text'>{`Last checked in ${moment(this.props.checkinHistory.lastCheckin).fromNow()}`}</span>
-              </div>
-            }
-          </div>
         </div>
       </div>
     );
@@ -76,32 +54,23 @@ class TasksBox extends React.Component {
 };
 
 export default createContainer(props => {
-  const checkinHandle = Meteor.subscribe('checkinHistories');
-  const checkinHistoryIsReady = checkinHandle.ready() && !!CheckinHistories.findOne();
-  const currentDate = moment().format('MMMM Do YYYY');
-  const todaysCheckin = checkinHistoryIsReady ? CheckinHistories.findOne().checkins.find((checkin) => checkin.date === currentDate) : undefined;
-  // edit
-  let dailyCheckinStatus;
-  if ((checkinHistoryIsReady && todaysCheckin) && (props.userSymptoms.every(userSymptom => todaysCheckin.symptoms.find(checkinSymptom => (checkinSymptom.name === userSymptom.name && checkinSymptom.severity > 0))) && props.todayTreatments.every(userTreatment => todaysCheckin.treatments.find(checkinTreatment => (checkinTreatment.name === userTreatment.name && checkinTreatment.compliance !== null))))) {
-    dailyCheckinStatus = 'complete';
-  } else if ((checkinHistoryIsReady && todaysCheckin) && (props.userSymptoms.some(userSymptom => todaysCheckin.symptoms.find(checkinSymptom => (checkinSymptom.name === userSymptom.name && checkinSymptom.severity > 0))) || props.todayTreatments.some(userTreatment => todaysCheckin.treatments.find(checkinTreatment => (checkinTreatment.name === userTreatment.name && checkinTreatment.compliance !== null))))) {
-    dailyCheckinStatus = 'partially complete';
-  } else {
-    dailyCheckinStatus = 'incomplete';
-  }
-
-  // if ((checkinHistoryIsReady && todaysCheckin) && (todaysCheckin.symptoms.every(checkinSymptom => checkinSymptom.severity > 0) && todaysCheckin.treatments.every(checkinTreatment => checkinTreatment.compliance !== null))) {
+  // const checkinHandle = Meteor.subscribe('checkinHistories');
+  // const checkinHistoryIsReady = checkinHandle.ready() && !!CheckinHistories.findOne();
+  // const currentDate = moment().format('MMMM Do YYYY');
+  // const todaysCheckin = checkinHistoryIsReady ? CheckinHistories.findOne().checkins.find((checkin) => checkin.date === currentDate) : undefined;
+  // // edit
+  // let dailyCheckinStatus;
+  // if ((checkinHistoryIsReady && todaysCheckin) && (props.userSymptoms.every(userSymptom => todaysCheckin.symptoms.find(checkinSymptom => (checkinSymptom.name === userSymptom.name && checkinSymptom.severity > 0))) && props.todayTreatments.every(userTreatment => todaysCheckin.treatments.find(checkinTreatment => (checkinTreatment.name === userTreatment.name && checkinTreatment.compliance !== null))))) {
   //   dailyCheckinStatus = 'complete';
-  // } else if ((checkinHistoryIsReady && todaysCheckin) && (todaysCheckin.symptoms.some(checkinSymptom => checkinSymptom.severity > 0) || todaysCheckin.treatments.some(checkinTreatment => checkinTreatment.compliance !== null))) {
+  // } else if ((checkinHistoryIsReady && todaysCheckin) && (props.userSymptoms.some(userSymptom => todaysCheckin.symptoms.find(checkinSymptom => (checkinSymptom.name === userSymptom.name && checkinSymptom.severity > 0))) || props.todayTreatments.some(userTreatment => todaysCheckin.treatments.find(checkinTreatment => (checkinTreatment.name === userTreatment.name && checkinTreatment.compliance !== null))))) {
   //   dailyCheckinStatus = 'partially complete';
   // } else {
   //   dailyCheckinStatus = 'incomplete';
   // }
 
   return {
-    checkinHistory: CheckinHistories.findOne(),
-    isFetching: !checkinHistoryIsReady,
-    dailyCheckinStatus
+    // checkinHistory: CheckinHistories.findOne(),
+    // isFetching: !checkinHistoryIsReady,
+    // dailyCheckinStatus
   };
-  console.log(dailyCheckinStatus);
 }, TasksBox)

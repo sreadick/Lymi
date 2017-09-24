@@ -19,7 +19,7 @@ export default class PersonalInfo extends React.Component {
   handleChange(e) {
     this.setState({
       [e.target.name]: e.target.value
-    })
+    });
   }
 
   handleSubmit(e) {

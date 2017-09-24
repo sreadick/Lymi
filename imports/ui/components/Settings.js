@@ -8,6 +8,13 @@ class Settings extends React.Component {
     return (
       <div className='account-info'>
         <div className='account-info__heading'>Settings</div>
+        <div className='account-info__subheading'>Tracked Items</div>
+        <div className='section'>
+          <Row>
+            <Input name='trackedItems' type='checkbox' label='Symptoms' disabled='disabled' />
+            <Input name='trackedItems' type='checkbox' label='Treatments' disabled='disabled' />
+          </Row>
+        </div>
       </div>
     );
   }

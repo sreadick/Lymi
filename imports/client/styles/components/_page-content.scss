@@ -209,22 +209,44 @@
 }
 
 .dashboard-user-info {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  padding: 5rem;
-
+  padding: 0 7rem;
   height: calc(100vh - 4rem);
-  // background-image: url('http://wallpaperclicker.com/storage/wallpaper/beauty-night-landscape-68406808.jpg');
   background-size: 100% 100%;
   margin-top: 4rem;
 }
 
+.dashboard-user-info__top-row {
+  display: flex;
+  justify-content: space-between;
+  height: 45%;
+  width: 100%;
+}
+
+.dashboard-user-info__top-row > div {
+  width: 20%;
+}
+
+.userPhoto__wrapper {
+  // position: absolute;
+  // top: 10rem;
+  // left: 10rem;
+
+  // height: 100%;
+  // width: 15rem;
+}
+
+.userPhoto {
+  height: 10rem;
+  // width: 12rem;
+  border-radius: 20px;
+}
+
 .dashboard-user-info__name {
   color: white;
-  text-align: center;
-  text-transform: capitalize;
   font-weight: 500;
+  font-size: 1.9rem;
+  text-transform: capitalize;
+  text-align: center;
 }
 
 .dashboard-user-info__tasks-box {
@@ -232,8 +254,8 @@
   min-width: 24rem;
   margin: 0 auto;
   background: transparentize(white, .1);
-  min-height: 20rem;
-  border: 2px solid $deep-purple-lighten-2;
+  min-height: 17rem;
+  border: 3px solid $deep-purple-lighten-2;
   border-radius: 10px;
   padding: 0 1rem;
 
@@ -309,23 +331,4 @@
   width: 100%;
   // padding-top: 5rem;
   // padding: 2rem;
-}
-
-.userPhoto__wrapper {
-  position: absolute;
-  top: 10rem;
-  left: 10rem;
-
-  height: 15rem;
-  width: 15rem;
-}
-
-.userPhoto {
-  height: 12rem;
-  width: 12rem;
-  border-radius: 10px;
-}
-
-.dashboard-parallax {
-  height: 3000px;
 }

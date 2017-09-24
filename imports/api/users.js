@@ -39,6 +39,11 @@ Accounts.onCreateUser((options, user) => {
   user.profile.homePhone = '';
   user.profile.cellPhone = '';
 
+  user.profile.medical = {
+    tickBorneDiseases: [],
+    initialInfectionDate: '',
+  }
+
   user.profile.backgroundURL = backgroundImages[Math.floor(Math.random() * backgroundImages.length)]
 
   CheckinHistories.insert({
