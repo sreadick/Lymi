@@ -6,19 +6,15 @@ import moment from 'moment';
 import { Session } from 'meteor/session';
 import Collapsible from 'react-collapsible';
 
-import { UserSymptoms } from '../../api/user-symptoms';
-import { UserTreatments } from '../../api/user-treatments';
-import { CheckinHistories } from '../../api/checkin-histories';
-// import { Images } from '../../api/images';
+import { UserSymptoms } from '../../../api/user-symptoms';
+import { UserTreatments } from '../../../api/user-treatments';
+import { CheckinHistories } from '../../../api/checkin-histories';
 
-import TasksBox from '../components/TasksBox';
-import SymptomChart from '../components/SymptomChart';
-import TreatmentChart from '../components/TreatmentChart';
-import ProfileBackgroundModel from '../components/ProfileBackgroundModel';
-import ProfileImageModel from '../components/ProfileImageModel';
-
-
-// ToDo //
+import TasksBox from '../../components/patient/TasksBox';
+import SymptomChart from '../../components/patient/SymptomChart';
+import TreatmentChart from '../../components/patient/TreatmentChart';
+import ProfileBackgroundModel from '../../components/patient/ProfileBackgroundModel';
+import ProfileImageModel from '../../components/patient/ProfileImageModel';
 
 const Dashboard = (props) => {
   if (props.isFetching) {
@@ -28,9 +24,9 @@ const Dashboard = (props) => {
       </div>
     );
   } else if (props.userSymptoms.length === 0 || props.userTreatments.length === 0) {
-    return <Redirect to="/home" />
+    return <Redirect to="/patient" />
   } else if (props.userTreatments.find((treatment) => Object.keys(treatment.errors).length > 0)) {
-    return <Redirect to="/home/selecttreatments" />
+    return <Redirect to="/patient/selecttreatments" />
   }
   return (
     <div className="">
@@ -54,7 +50,7 @@ const Dashboard = (props) => {
                 <Link
                   className="waves-effect waves-light indigo darken-1 btn right"
                   to={{
-                    pathname: "/home/checkin",
+                    pathname: "/patient/checkin",
                     state: {
                       checkinDate: moment().format('MMMM Do YYYY'),
                       symptoms: props.userSymptoms,
@@ -110,8 +106,10 @@ const Dashboard = (props) => {
             </div>
           </div>
           <div className=''>
-            <Link className="waves-effect waves-light blue btn" to="/home/selectsymptoms">Edit</Link>
-            <Link className='waves-effect waves-light black btn' to="/home/history/symptoms">Full History</Link>
+            <Link className="waves-effect waves-light blue btn" to="/patient/selectsymptoms">Edit</Link>
+            {props.checkinHistory.checkins.length > 0 &&
+              <Link className='waves-effect waves-light black btn' to="/patient/history/symptoms">Full History</Link>
+            }
           </div>
         </div>
       </div>
@@ -279,8 +277,10 @@ const Dashboard = (props) => {
             })}
           </ul>
           <div className='right'>
-            <Link className="waves-effect waves-light blue btn" to="/home/selecttreatments">edit</Link>
-            <Link className='waves-effect waves-light black btn' to="/home/history/treatments">Full History</Link>
+            <Link className="waves-effect waves-light blue btn" to="/patient/selecttreatments">edit</Link>
+            {props.checkinHistory.checkins.length > 0 &&
+              <Link className='waves-effect waves-light black btn' to="/patient/history/treatments">Full History</Link>
+            }
           </div>
         </div>
       </div>
@@ -302,7 +302,7 @@ export default createContainer(() => {
   const currentSelectedTreatmentTab = Session.get('currentSelectedTreatmentTab') || 'today';
 
   const currentDate = moment().format('MMMM Do YYYY');
-  const todaysCheckin = checkinHandle.ready() ? checkinHistory.checkins.find((checkin) => checkin.date === currentDate) : undefined;
+  const todaysCheckin = (checkinHandle.ready() && checkinHistory) ? checkinHistory.checkins.find((checkin) => checkin.date === currentDate) : undefined;
 
   let dailyCheckinStatus;
   if ((checkinHandle.ready() && todaysCheckin) && (userSymptoms.every(userSymptom => todaysCheckin.symptoms.find(checkinSymptom => (checkinSymptom.name === userSymptom.name && checkinSymptom.severity > 0))) && todayTreatments.every(userTreatment => todaysCheckin.treatments.find(checkinTreatment => (checkinTreatment.name === userTreatment.name && checkinTreatment.compliance !== null))))) {
@@ -312,7 +312,6 @@ export default createContainer(() => {
   } else {
     dailyCheckinStatus = 'incomplete';
   }
-
   return {
     userSymptoms,
     userTreatments,

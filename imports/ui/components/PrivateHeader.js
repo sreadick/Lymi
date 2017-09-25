@@ -3,8 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-
-import { SidebarToggle } from './SidebarToggle';
+import { Session } from 'meteor/session';
 
 const PrivateHeader = (props) => {
   if (window.innerWidth > 768) {
@@ -12,7 +11,11 @@ const PrivateHeader = (props) => {
       <div className="nav-header private z-depth-1">
         <div className="nav-header__content">
           <div className="nav-header__content--left">
-            <SidebarToggle />
+            <span
+              className="sidebar-icon"
+              onClick={() => Session.set('sidebarToggled', !Session.get('sidebarToggled')) }>
+              <i className='material-icons'>{Session.get('sidebarToggled') === true ? "clear" : "menu"}</i>
+            </span>
             <Link className="nav-header__link--title" to="/">{props.title}</Link>
           </div>
           <div className="nav-header__content--right">
@@ -26,7 +29,11 @@ const PrivateHeader = (props) => {
   return (
     <div className="nav-header private z-depth-1">
       <div className="nav-header__content">
-        <SidebarToggle />
+        <span
+          className="sidebar-icon"
+          onClick={() => Session.set('sidebarToggled', !Session.get('sidebarToggled')) }>
+          <i className='material-icons'>{Session.get('sidebarToggled') === true ? "clear" : "menu"}</i>
+        </span>
         <Link className="nav-header__link--title" to="/">{props.title}</Link>
         <Link className="nav-header__link" to="#" onClick={() => Accounts.logout()}>Logout</Link>
       </div>

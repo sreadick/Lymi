@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 
 import PublicHeader from '../components/PublicHeader';
 
-
-const PublicRoute = ({ loggingIn, authenticated, component, ...rest }) => {
+const PublicRoute = ({ loggingIn, authenticated, accountType, component, ...rest }) => {
   return (
     <Route {...rest} render={(props) => {
       return (
@@ -14,7 +13,10 @@ const PublicRoute = ({ loggingIn, authenticated, component, ...rest }) => {
             <PublicHeader />
             {(React.createElement(component, {...props}))}
           </div>
-        : <Redirect to="/home" />
+        : accountType === 'doctor' ?
+          <Redirect to="/doctor" />
+        :
+          <Redirect to="/patient" />
       );
     }}/>
   );

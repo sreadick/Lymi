@@ -3,7 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import FlipMove from 'react-flip-move';
 
-import { UserTreatments } from '../../api/user-treatments';
+import { UserTreatments } from '../../../api/user-treatments';
 
 import { TreatmentItem } from './TreatmentItem';
 

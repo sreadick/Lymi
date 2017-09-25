@@ -6,21 +6,23 @@ export default class Signup extends React.Component {
   constructor(props, state) {
     super(props, state);
     this.state = {
-      error: ''
+      error: '',
+      accountType: 'patient'
     };
   }
   onSubmit(e) {
     e.preventDefault();
-    let email = this.refs.email.value.trim();
-    let password = this.refs.password.value.trim();
-    let firstName = this.refs.firstName.value.trim();
-    let lastName = this.refs.lastName.value.trim();
+    const email = this.refs.email.value.trim();
+    const password = this.refs.password.value.trim();
+    const firstName = this.refs.firstName.value.trim();
+    const lastName = this.refs.lastName.value.trim();
+    const accountType = this.state.accountType;
 
     if (password.length < 9) {
       return this.setState({error: "Password must be a minimum of 9 characters"});
     }
 
-    Accounts.createUser({email, firstName, lastName, password}, (err) => {
+    Accounts.createUser({email, password, firstName, lastName, accountType}, (err) => {
       if (err) {
         this.setState({error: err.reason});
       } else {
@@ -36,6 +38,15 @@ export default class Signup extends React.Component {
             <h1>Join</h1>
             {this.state.error ? <p>{this.state.error}</p> : undefined}
             <form onSubmit={this.onSubmit.bind(this)} noValidate className="boxed-view__form">
+              <div className='row'>
+                <p>Are you a patient or a doctor?</p>
+                <div className={`btn ${this.state.accountType === 'patient' ? 'deep-purple' : 'grey'}`} onClick={() => this.setState({accountType: 'patient'})}>
+                  Patient
+                </div>
+                <div className={`btn ${this.state.accountType === 'doctor' ? 'deep-purple' : 'grey'}`} onClick={() => this.setState({accountType: 'doctor'})}>
+                  Doctor
+                </div>
+              </div>
               <div className='row'>
                 <div className="input-field col s6">
                   <input type="text" ref="firstName" id='firstName' name="firstName"/>

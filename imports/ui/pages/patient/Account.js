@@ -3,13 +3,12 @@ import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import { Mongo } from 'meteor/mongo';
 import { createContainer } from 'meteor/react-meteor-data';
-// import moment from 'moment';
 import { Tabs, Tab } from 'react-materialize';
 
-import Settings from '../components/Settings';
-import Preferences from '../components/Preferences';
-import PersonalInfo from '../components/PersonalInfo';
-import MedicalInfo from '../components/MedicalInfo';
+import Settings from '../../components/patient/account/Settings';
+import Preferences from '../../components/patient/account/Preferences';
+import PersonalInfo from '../../components/patient/account/PersonalInfo';
+import MedicalInfo from '../../components/patient/account/MedicalInfo';
 
 
 class Account extends React.Component {

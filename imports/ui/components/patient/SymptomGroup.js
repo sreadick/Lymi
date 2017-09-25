@@ -1,6 +1,6 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
-import { getNextColor } from '../../utils/utils';
+import { getNextColor } from '../../../utils/utils';
 
 import SymptomCheckbox from './SymptomCheckbox';
 

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Mongo } from 'meteor/mongo';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Redirect } from 'react-router-dom';
 
@@ -8,18 +7,17 @@ import { UserTreatments } from '../../api/user-treatments';
 
 import { Meteor } from 'meteor/meteor';
 
-const Home = (props) => {
+const Patient = (props) => {
   if (props.isFetching) {
     return <div></div>;
   } else if (props.userSymptoms.length > 0 && props.userTreatments.length > 0) {
-    return <Redirect to="/home/dashboard" />
+    return <Redirect to="/patient/dashboard" />
   } else if (props.userSymptoms.length > 0) {
-    return <Redirect to="/home/selecttreatments" />
+    return <Redirect to="/patient/selecttreatments" />
   } else {
-    return <Redirect to="/home/selectsymptoms" />
+    return <Redirect to="/patient/selectsymptoms" />
   }
 }
-
 
 export default createContainer(() => {
   let symptomsHandle = Meteor.subscribe('userSymptoms');
@@ -28,6 +26,5 @@ export default createContainer(() => {
     userSymptoms: UserSymptoms.find().fetch(),
     userTreatments: UserTreatments.find().fetch(),
     isFetching: (!symptomsHandle.ready() || !treatmentsHandle.ready()),
-    // currentDate: moment().format('MMMM Do YYYY')
   };
-}, Home);
+}, Patient);

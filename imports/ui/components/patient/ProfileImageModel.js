@@ -2,7 +2,6 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 
-
 export default class ProfileImageModel extends React.Component {
   selectProfilePhoto() {
     const file = this.refs.photoInput.files[0];

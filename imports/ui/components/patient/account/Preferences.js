@@ -3,8 +3,8 @@ import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Row, Input, Button } from 'react-materialize';
 
-import ProfileBackgroundModel from './ProfileBackgroundModel';
-import ProfileImageModel from './ProfileImageModel';
+import ProfileBackgroundModel from '../ProfileBackgroundModel';
+import ProfileImageModel from '../ProfileImageModel';
 
 class Preferences extends React.Component {
   render() {

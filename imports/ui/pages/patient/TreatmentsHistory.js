@@ -5,12 +5,12 @@ import { Redirect, Link } from 'react-router-dom';
 import { Session } from 'meteor/session';
 import moment from 'moment';
 
-import { UserSymptoms } from '../../api/user-symptoms';
-import { UserTreatments } from '../../api/user-treatments';
-import { CheckinHistories } from '../../api/checkin-histories';
+import { UserSymptoms } from '../../../api/user-symptoms';
+import { UserTreatments } from '../../../api/user-treatments';
+import { CheckinHistories } from '../../../api/checkin-histories';
 
-import TreatmentChart from '../components/TreatmentChart';
 import Checkin from './Checkin';
+import TreatmentChart from '../../components/patient/TreatmentChart';
 
 class TreatmentsHistory extends React.Component {
   render() {
@@ -46,7 +46,7 @@ class TreatmentsHistory extends React.Component {
                   <Link
                     className="waves-effect waves-light pink btn"
                     to={{
-                      pathname: "/home/checkin",
+                      pathname: "/patient/checkin",
                       state: {
                         checkinDate: checkin.date,
                         symptoms: this.props.userSymptoms,
@@ -63,7 +63,7 @@ class TreatmentsHistory extends React.Component {
                     <Link
                       className="waves-effect waves-light deep-purple btn"
                       to={{
-                        pathname: "/home/checkin",
+                        pathname: "/patient/checkin",
                         state: {
                           checkinDate: checkin.date,
                           symptoms: checkin.symptoms ? checkin.symptoms.map(symptom => {

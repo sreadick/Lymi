@@ -4,13 +4,13 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Redirect, Link } from 'react-router-dom';
 import { Session } from 'meteor/session';
 import moment from 'moment';
-import { getNextColor } from '../../utils/utils';
+import { getNextColor } from '../../../utils/utils';
 
-import { UserSymptoms } from '../../api/user-symptoms';
-import { UserTreatments } from '../../api/user-treatments';
-import { CheckinHistories } from '../../api/checkin-histories';
+import { UserSymptoms } from '../../../api/user-symptoms';
+import { UserTreatments } from '../../../api/user-treatments';
+import { CheckinHistories } from '../../../api/checkin-histories';
 
-import SymptomChart from '../components/SymptomChart';
+import SymptomChart from '../../components/patient/SymptomChart';
 import Checkin from './Checkin';
 
 class SymptomsHistory extends React.Component {
@@ -82,7 +82,7 @@ class SymptomsHistory extends React.Component {
           <div className="ui message">
             No symptoms are currently selected.
             <div>
-              <Link className='ui basic button' to='/home/selectsymptoms'>Add Symptoms</Link>
+              <Link className='ui basic button' to='/patient/selectsymptoms'>Add Symptoms</Link>
             </div>
           </div>
         }
@@ -124,7 +124,7 @@ class SymptomsHistory extends React.Component {
                   <Link
                     className="waves-effect waves-light pink btn"
                     to={{
-                      pathname: "/home/checkin",
+                      pathname: "/patient/checkin",
                       state: {
                         checkinDate: checkin.date,
                         symptoms: this.props.userSymptoms,
@@ -141,7 +141,7 @@ class SymptomsHistory extends React.Component {
                     <Link
                       className="waves-effect waves-light deep-purple btn"
                       to={{
-                        pathname: "/home/checkin",
+                        pathname: "/patient/checkin",
                         state: {
                           checkinDate: checkin.date,
                           symptoms: checkin.symptoms ? checkin.symptoms.map(symptom => {

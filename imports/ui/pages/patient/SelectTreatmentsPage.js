@@ -4,9 +4,9 @@ import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
 
-import { UserTreatments } from '../../api/user-treatments';
+import { UserTreatments } from '../../../api/user-treatments';
 
-import { TreatmentList } from '../components/TreatmentList';
+import { TreatmentList } from '../../components/patient/TreatmentList';
 
 class SelectTreatmentsPage extends React.Component {
 
@@ -53,12 +53,12 @@ class SelectTreatmentsPage extends React.Component {
           </button>
           <TreatmentList userTreatments={this.props.userTreatments} showErrors={this.props.showErrors}/>
           <div className='row'>
-            <Link className="col s2 waves-effect waves-light btn-large purple lighten-2" to="/home/selectsymptoms">Back: Symptoms</Link>
+            <Link className="col s2 waves-effect waves-light btn-large purple lighten-2" to="/patient/selectsymptoms">Back: Symptoms</Link>
             <span className="col s8 center-align select-treatment-bottom-error grey-text" ref="errorMessage">Check above for errors and try again...</span>
             <button className={"col s2 right waves-effect waves-light green " + (this.props.userTreatments.length > 0 ? "btn-large" : "btn-large disabled")}
                onClick={() => {
                  const hasErrors = this.validateTreatments();
-                 hasErrors ? Session.set('showErrors', true) : this.props.history.push('/home/dashboard')
+                 hasErrors ? Session.set('showErrors', true) : this.props.history.push('/patient/dashboard')
                }}>
                Next: Dashboard
             </button>

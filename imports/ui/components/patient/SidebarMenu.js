@@ -4,17 +4,16 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
 import moment from 'moment';
 
-import { UserSymptoms } from '../../api/user-symptoms';
-import { UserTreatments } from '../../api/user-treatments';
-import { CheckinHistories } from '../../api/checkin-histories';
+import { UserSymptoms } from '../../../api/user-symptoms';
+import { UserTreatments } from '../../../api/user-treatments';
+import { CheckinHistories } from '../../../api/checkin-histories';
 
 const SidebarLink = ({ to, children, className, errorMessage, userSymptoms, userTreatments, ...rest }) => (
   <Link
     className={className}
-    // to={!errorMessage ? to : '#'}
     to={{
-      pathname: !errorMessage ? to : '#',
-      state: to === "/home/checkin" ?
+      pathname: !errorMessage ? to : '',
+      state: to === "/patient/checkin" ?
         {
           checkinDate: moment().format('MMMM Do YYYY'),
           symptoms: userSymptoms,
@@ -90,44 +89,44 @@ export default createContainer(() => {
     links: [
       {
         name: "Dashboard",
-        path: "/home/dashboard",
+        path: "/patient/dashboard",
         errorMessage: (collectionsAreReady && (userSymptoms.length === 0 && userTreatments.length === 0)) ?
-          <span>You need to have at least 1 <SidebarLink to="/home/selectsymptoms">symptom</SidebarLink> and <SidebarLink to="/home/selecttreatments">treatment</SidebarLink></span>
-        : (collectionsAreReady && (userSymptoms.length === 0)) ? <span>You need to have at least 1 <SidebarLink to="/home/selectsymptoms">symptom</SidebarLink></span>
-        : (collectionsAreReady && (userTreatments.length === 0)) ? <span>You need to have at least 1 <SidebarLink to="/home/selecttreatments">treatment</SidebarLink></span>
+          <span>You need to have at least 1 <SidebarLink to="/patient/selectsymptoms">symptom</SidebarLink> and <SidebarLink to="/patient/selecttreatments">treatment</SidebarLink></span>
+        : (collectionsAreReady && (userSymptoms.length === 0)) ? <span>You need to have at least 1 <SidebarLink to="/patient/selectsymptoms">symptom</SidebarLink></span>
+        : (collectionsAreReady && (userTreatments.length === 0)) ? <span>You need to have at least 1 <SidebarLink to="/patient/selecttreatments">treatment</SidebarLink></span>
         : undefined
       },
       {
         name: "Check in",
-        path: "/home/checkin",
+        path: "/patient/checkin",
         errorMessage: (collectionsAreReady && (userSymptoms.length === 0 && userTreatments.length === 0)) ?
-          <span>You need to have at least 1 <SidebarLink to="/home/selectsymptoms">symptom</SidebarLink> and <SidebarLink to="/home/selecttreatments">treatment</SidebarLink></span>
-        : (collectionsAreReady && (userSymptoms.length === 0)) ? <span>You need to have at least 1 <SidebarLink to="/home/selectsymptoms">symptom</SidebarLink></span>
-        : (collectionsAreReady && (userTreatments.length === 0)) ? <span>You need to have at least 1 <SidebarLink to="/home/selecttreatments">treatment</SidebarLink></span>
+          <span>You need to have at least 1 <SidebarLink to="/patient/selectsymptoms">symptom</SidebarLink> and <SidebarLink to="/patient/selecttreatments">treatment</SidebarLink></span>
+        : (collectionsAreReady && (userSymptoms.length === 0)) ? <span>You need to have at least 1 <SidebarLink to="/patient/selectsymptoms">symptom</SidebarLink></span>
+        : (collectionsAreReady && (userTreatments.length === 0)) ? <span>You need to have at least 1 <SidebarLink to="/patient/selecttreatments">treatment</SidebarLink></span>
         : userTreatments.find((treatment) => Object.keys(treatment.errors).length > 0) ? "Treatments contain one or more errors"
         : undefined,
       },
       {
         name: "Symptoms",
-        path: "/home/selectsymptoms"
+        path: "/patient/selectsymptoms"
       },
       {
         name: "Treatments",
-        path: "/home/selecttreatments"
+        path: "/patient/selecttreatments"
       },
       {
         name: "Symptom History",
-        path: "/home/history/symptoms",
+        path: "/patient/history/symptoms",
         errorMessage: (CheckinHistories.findOne() && checkinHistory.checkins.length === 0) ? "No history to report" : undefined
       },
       {
         name: "Treatment History",
-        path: "/home/history/treatments",
+        path: "/patient/history/treatments",
         errorMessage: (CheckinHistories.findOne() && checkinHistory.checkins.length === 0) ? "No history to report" : undefined
       },
       {
         name: "Account",
-        path: "/home/account",
+        path: "/patient/account",
       }
     ]
   }

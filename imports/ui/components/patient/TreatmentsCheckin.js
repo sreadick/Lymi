@@ -4,7 +4,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { createContainer } from 'meteor/react-meteor-data';
 import moment from 'moment';
 
-import { CheckinHistories } from '../../api/checkin-histories';
+import { CheckinHistories } from '../../../api/checkin-histories';
 
 class TreatmentCheckin extends React.Component {
   renderAnswerSquares(treatment) {

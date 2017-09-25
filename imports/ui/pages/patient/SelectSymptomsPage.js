@@ -1,15 +1,16 @@
 import React from 'react';
-import { symptomsByCategory } from '../../public/resources/commonSymptoms';
+import { symptomsByCategory } from '../../../public/resources/commonSymptoms';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Link } from 'react-router-dom';
 import FlipMove from 'react-flip-move';
-import { getNextColor } from '../../utils/utils';
+import { getNextColor } from '../../../utils/utils';
 
-import { UserSymptoms } from '../../api/user-symptoms';
-import { CheckinHistories } from '../../api/checkin-histories';
+import { SymptomGroup } from '../../components/patient/SymptomGroup';
 
-import { SymptomGroup } from '../components/SymptomGroup';
+import { UserSymptoms } from '../../../api/user-symptoms';
+import { CheckinHistories } from '../../../api/checkin-histories';
+
 
 class SelectSymptomsPage extends React.Component {
   constructor(props) {
@@ -140,7 +141,7 @@ class SelectSymptomsPage extends React.Component {
         <div className='row right-align'>
           {/* <div className='col m4'> */}
             <Link className={`waves-effect waves-light ${this.props.userSymptoms.length > 0 ? "btn-large" : "btn-large disabled"} green right`}
-              to={this.props.userSymptoms.length > 0 ? "/home/selecttreatments" : "#"}>
+              to={this.props.userSymptoms.length > 0 ? "/patient/selecttreatments" : "#"}>
               Next: Treatments
             </Link>
           {/* </div> */}

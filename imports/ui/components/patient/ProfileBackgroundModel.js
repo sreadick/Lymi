@@ -2,13 +2,12 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 
-import { backgroundImages } from '../../public/resources/backgroundImages';
-
+import { backgroundImages } from '../../../public/resources/backgroundImages';
 
 export default class ProfileBackgroundModel extends React.Component {
   constructor(props) {
     super(props);
-    
+
     this.handleBackgroundSelect = this.handleBackgroundSelect.bind(this);
   }
   handleBackgroundSelect(e, imageAddress) {

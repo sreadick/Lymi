@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import moment from 'moment';
 
-import { UserTreatments } from '../../api/user-treatments';
+import { UserTreatments } from '../../../api/user-treatments';
 
 const TreatmentChart = (props) => {
   return (
