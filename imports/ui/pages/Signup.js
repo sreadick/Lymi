@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Accounts } from 'meteor/accounts-base';
+import { capitalize } from '../../utils/utils';
 
 export default class Signup extends React.Component {
   constructor(props, state) {
@@ -14,11 +15,15 @@ export default class Signup extends React.Component {
     e.preventDefault();
     const email = this.refs.email.value.trim();
     const password = this.refs.password.value.trim();
-    const firstName = this.refs.firstName.value.trim();
-    const lastName = this.refs.lastName.value.trim();
+    const firstName = capitalize(this.refs.firstName.value.trim());
+    const lastName = capitalize(this.refs.lastName.value.trim());
     const accountType = this.state.accountType;
 
-    if (password.length < 9) {
+    if (!firstName) {
+      return this.setState({error: "Enter your first name"});
+    } else if (!lastName) {
+      return this.setState({error: "Enter your last name"});
+    } else if (password.length < 9) {
       return this.setState({error: "Password must be a minimum of 9 characters"});
     }
 
@@ -49,11 +54,11 @@ export default class Signup extends React.Component {
               </div>
               <div className='row'>
                 <div className="input-field col s6">
-                  <input type="text" ref="firstName" id='firstName' name="firstName"/>
+                  <input type="text" ref="firstName" id='firstName' name="firstName" required className='validate'/>
                   <label className='active' htmlFor='firstName'>First Name</label>
                 </div>
                 <div className="input-field col s6">
-                  <input type="text" ref="lastName" id='lastName' name="lastName"/>
+                  <input type="text" ref="lastName" id='lastName' name="lastName" required className='validate' />
                   <label className='active' htmlFor='lastName'>Last Name</label>
                 </div>
               </div>

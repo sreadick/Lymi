@@ -7,9 +7,6 @@ import PropTypes from 'prop-types';
 import PrivateHeader from '../components/PrivateHeader';
 import SidebarMenu from '../components/patient/SidebarMenu';
 
-// ToDo
-// create high level container for subscriptions
-
 const AuthPatientRoute = ({ loggingIn, authenticated, accountType, component, sidebarToggled, showProfileBackgroundModel, showProfileImageModel, ...rest }) => {
   return (
     <Route render={(props) => {
@@ -21,7 +18,7 @@ const AuthPatientRoute = ({ loggingIn, authenticated, accountType, component, si
         :
           <div className="page">
             <SidebarMenu currentPath={props.location.pathname} sidebarToggled={sidebarToggled}/>
-            <PrivateHeader title="Lymi"/>
+            <PrivateHeader title="Lymi" accountType={accountType} />
             {(sidebarToggled || showProfileBackgroundModel || showProfileImageModel) &&
               <div className='page-content--overlay' onClick={() => {
                 Session.set('sidebarToggled', false);

@@ -1,8 +1,9 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
-import { Row, Col, Input, Button } from 'react-materialize';
+import { createContainer } from 'meteor/react-meteor-data';
+import { Row, Col, Input, Button, Card } from 'react-materialize';
 
-export default class MedicalInfo extends React.Component {
+class MedicalInfo extends React.Component {
   constructor(props) {
     super(props);
     const { tickBorneDiseases, initialInfectionDate } = props.medicalInfo;
@@ -55,17 +56,74 @@ export default class MedicalInfo extends React.Component {
   }
 
   findDoctor() {
-
+    const sixCharKeyQuery = this.refs.doctorKey.state.value;
+    Session.set('sixCharKeyQuery', sixCharKeyQuery);
   }
 
-  linkToDcotor() {
-
+  linkToDcotor(doctorId) {
+    Meteor.call('users.updateLymeDoctor', doctorId, (err, res) => {
+      if (err) {
+        console.log(err);
+      } else {
+        // Meteor.call('requests.remove', {patientId: Meteor.userId(), doctorId: doctorId});
+        Session.set('sixCharKeyQuery', '');
+      }
+    });
   }
 
   render() {
+    if (this.props.isFetching) {
+      return (
+        <div className="progress">
+          <div className="indeterminate"></div>
+        </div>
+      );
+    }
     return (
       <div className='account-info'>
         <div className='account-info__heading'>Medical Info</div>
+        <div className='account-info__subheading'>Lyme Practitioner</div>
+        {!this.props.currentDoctor ?
+          <p>Not Specified</p>
+        :
+          <div>
+            <h3>{this.props.currentDoctor.profile.firstName} {this.props.currentDoctor.profile.lastName}</h3>
+          </div>
+        }
+        <Row className='section'>
+          <Col s={6} offset='s3'>
+            <Card title='Find You Doctor' className='center-align'>
+              {this.props.searchedDoctor ?
+                <div>
+                  <Row>
+                    <p>Doctor Found:</p>
+                  </Row>
+                  <Row>
+                    <b>Dr {this.props.searchedDoctor.profile.firstName} {this.props.searchedDoctor.profile.lastName}</b>
+                  </Row>
+                  <Row>
+                    <Button className='green darken-2' onClick={() => this.linkToDcotor(this.props.searchedDoctor._id)}>Confirm</Button>
+                    <Button className='yellow darken-2' onClick={() => Session.set('sixCharKeyQuery', '')}>Search Again</Button>
+                  </Row>
+                </div>
+              :
+                <div>
+                  <Row>
+                    <p>If you know your Lyme practitioner's 6 character id, enter it here</p>
+                  </Row>
+                  <Row>
+                    <Col s={8} offset='s2'>
+                      <Input s={12} ref='doctorKey' label='id' />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Button onClick={this.findDoctor}>Search</Button>
+                  </Row>
+                </div>
+              }
+            </Card>
+          </Col>
+        </Row>
         <form className='' noValidate onSubmit={this.handleSubmit}>
           <div className='account-info__subheading'>Tick-Borne Diseases</div>
           <Row>
@@ -83,23 +141,23 @@ export default class MedicalInfo extends React.Component {
             <p ref='formSubmitResponse' className='account-info__form-submit-response'>Saved</p>
           </div>
         </form>
-        <div className='account-info__subheading'>Lyme Practitioner</div>
-        <div className='section'>
-          <Row>
-            <Col s={4} offset='s4' className='s4'>
-              <p>If you know your lyme practitioner's 6 digit id, enter it here to link accounts</p>
-              <Row>
-                <Col s={8} className='s4'>
-                  <Input label='id' />
-                </Col>
-                <Col s={4} className='s4'>
-                  <Button onClick={this.findDoctor}>Enter</Button>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-        </div>
       </div>
     );
   }
 };
+
+export default createContainer(props => {
+  const searchedDoctorHandle = Meteor.subscribe('searchedDoctor', Session.get('sixCharKeyQuery'));
+  const searchedDoctor = Meteor.users.findOne({ accountType: 'doctor', sixCharKey: Session.get('sixCharKeyQuery')});
+
+  const currentdDoctorHandle = Meteor.subscribe('currentDoctor');
+  const currentDoctor = Meteor.user() && Meteor.users.findOne({ accountType: 'doctor', _id: Meteor.user().doctorId })
+
+  console.log('searchedDoctor:' , searchedDoctor);
+  console.log('currentDoctor:' , currentDoctor);
+  return {
+    searchedDoctor,
+    currentDoctor,
+    isFetching: !Meteor.user() || !searchedDoctorHandle.ready() || !currentdDoctorHandle.ready(),
+  }
+}, MedicalInfo)

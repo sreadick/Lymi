@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import SimpleSchema from 'simpl-schema';
 import { Accounts } from 'meteor/accounts-base';
+import { Random } from 'meteor/random'
 
 import { CheckinHistories } from './checkin-histories';
 import { backgroundImages } from '../public/resources/backgroundImages';
@@ -8,12 +9,48 @@ import { backgroundImages } from '../public/resources/backgroundImages';
 Meteor.publish('userData', function() {
   if (this.userId) {
     return Meteor.users.find(this.userId, {
-      fields: { accountType: 1 }
+      fields: { accountType: 1, doctorId: 1, sixCharKey: 1 }
     });
   } else {
     this.ready();
   }
 });
+
+Meteor.publish('currentPatients', function() {
+  if (Meteor.users.findOne(this.userId).accountType === 'doctor') {
+    return Meteor.users.find({accountType: 'patient', doctorId: this.userId});
+  } else {
+    this.ready();
+  }
+});
+
+Meteor.publish('allPatients', function() {
+  if (Meteor.users.findOne(this.userId).accountType === 'doctor') {
+    return Meteor.users.find({accountType: 'patient'});
+  } else {
+    this.ready();
+  }
+});
+
+Meteor.publish('currentDoctor', function() {
+  if (this.userId && Meteor.users.findOne(this.userId).doctorId) {
+    return Meteor.users.find({accountType: 'doctor', _id: Meteor.users.findOne(this.userId).doctorId});
+  } else {
+    this.ready();
+  }
+});
+
+Meteor.publish('searchedDoctor', function(sixCharKeyQuery) {
+  if (this.userId) {
+    return Meteor.users.find({accountType: 'doctor', sixCharKey: sixCharKeyQuery}, {
+      fields: { emails: 0 }
+    });
+  } else {
+    this.ready();
+  }
+});
+
+
 
 Accounts.validateNewUser((user) => {
   const email = user.emails[0].address;
@@ -37,7 +74,9 @@ Accounts.onCreateUser((options, user) => {
   user.profile.firstName = options.firstName;
   user.profile.lastName = options.lastName;
 
-  if (options.accountType === 'patient') {
+  if (options.accountType === 'doctor') {
+    user.sixCharKey = Random.id(6);
+  } else if (options.accountType === 'patient') {
     user.profile.middleInitial = '';
 
     user.profile.birthMonth = '';
@@ -68,4 +107,14 @@ Accounts.onCreateUser((options, user) => {
   }
 
   return user;
+})
+
+Meteor.methods({
+  'users.updateLymeDoctor'(doctorId) {
+    Meteor.users.update(this.userId, {
+      $set: {
+        doctorId
+      }
+    });
+  }
 })

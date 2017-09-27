@@ -31,7 +31,7 @@ class Account extends React.Component {
       <div className="page-content">
         <div className="page-content__main-heading">Account</div>
         <Tabs className='z-depth-1'>
-          <Tab className='col s3' title="Settings" active>
+          <Tab className='col s3' title="Settings" active={!this.props.location.state || !this.props.location.state.activeTab}>
             <Settings userInfo={this.props.userInfo}/>
           </Tab>
           <Tab className='col s3' title="Preferences">
@@ -40,8 +40,8 @@ class Account extends React.Component {
       		<Tab className='col s3' title="Personal Info">
             <PersonalInfo userInfo={this.props.userInfo}/>
           </Tab>
-      		<Tab className='col s3' title="Medical Info">
-            <MedicalInfo medicalInfo={this.props.userInfo.profile.medical}/>
+      		<Tab className='col s3' title="Medical Info" active={this.props.location.state && this.props.location.state.activeTab === 'medicalInfo'}>
+            <MedicalInfo medicalInfo={this.props.userInfo.profile.medical} />
           </Tab>
         </Tabs>
       </div>
@@ -51,7 +51,7 @@ class Account extends React.Component {
 
 export default createContainer(props => {
   return {
+    userInfo: Meteor.user(),
     isFetching: !Meteor.user(),
-    userInfo: Meteor.user()
   }
 }, Account)
