@@ -9,6 +9,14 @@ if (Meteor.isServer) {
     return CheckinHistories.find({ userId: this.userId });
     this.ready();
   });
+
+  Meteor.publish('patientCheckinHistories', function(patientId) {
+    if (this.userId && Meteor.users.findOne(this.userId).accountType === 'doctor') {
+      return CheckinHistories.find({ userId: patientId });
+    } else {
+      this.ready();
+    }
+  });
 }
 
 Meteor.methods({

@@ -10,6 +10,13 @@ if (Meteor.isServer) {
     return UserTreatments.find({ userId: this.userId });
     this.ready();
   });
+  Meteor.publish('patientTreatments', function(patientId) {
+    if (this.userId && Meteor.users.findOne(this.userId).accountType === 'doctor') {
+      return UserTreatments.find({ userId: patientId });
+    } else {
+      this.ready();
+    }
+  });
 }
 
 Meteor.methods({

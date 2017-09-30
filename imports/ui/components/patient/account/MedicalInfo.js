@@ -148,11 +148,10 @@ class MedicalInfo extends React.Component {
 
 export default createContainer(props => {
   const searchedDoctorHandle = Meteor.subscribe('searchedDoctor', Session.get('sixCharKeyQuery'));
+  const currentdDoctorHandle = Meteor.subscribe('currentDoctor', Meteor.user() && Meteor.user().doctorId);
+
   const searchedDoctor = Meteor.users.findOne({ accountType: 'doctor', sixCharKey: Session.get('sixCharKeyQuery')});
-
-  const currentdDoctorHandle = Meteor.subscribe('currentDoctor');
-  const currentDoctor = Meteor.user() && Meteor.users.findOne({ accountType: 'doctor', _id: Meteor.user().doctorId })
-
+  const currentDoctor = Meteor.user() && Meteor.users.findOne({ accountType: 'doctor', _id: Meteor.user().doctorId });
   console.log('searchedDoctor:' , searchedDoctor);
   console.log('currentDoctor:' , currentDoctor);
   return {

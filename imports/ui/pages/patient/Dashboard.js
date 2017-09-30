@@ -137,7 +137,6 @@ const Dashboard = (props) => {
               <li className='collection-item center-align'>No treatments are scheduled for today</li>
             : props.displayedTreatments.map((treatment) => {
               return (
-                //edit
                 <li className="collection-item" key={treatment._id}>
                 	<Collapsible trigger=
                     {

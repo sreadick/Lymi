@@ -28,6 +28,9 @@ const Home = (props) => {
             ?
               props.currentPatients.map(patient =>
                 <div key={patient._id}>
+                  <Link to={`/doctor/patientsummary/${patient._id}`}>
+                    {patient.profile.firstName} {patient.profile.lastName}
+                  </Link>
                   {patient.emails[0].address}
                 </div>
               )

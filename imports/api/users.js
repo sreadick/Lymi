@@ -6,50 +6,52 @@ import { Random } from 'meteor/random'
 import { CheckinHistories } from './checkin-histories';
 import { backgroundImages } from '../public/resources/backgroundImages';
 
-Meteor.publish('userData', function() {
-  if (this.userId) {
-    return Meteor.users.find(this.userId, {
-      fields: { accountType: 1, doctorId: 1, sixCharKey: 1 }
-    });
-  } else {
-    this.ready();
-  }
-});
+if (Meteor.isServer) {
+  Meteor.publish('userData', function() {
+    if (this.userId) {
+      return Meteor.users.find(this.userId, {
+        fields: { accountType: 1, doctorId: 1, sixCharKey: 1 }
+      });
+    } else {
+      this.ready();
+    }
+  });
 
-Meteor.publish('currentPatients', function() {
-  if (Meteor.users.findOne(this.userId).accountType === 'doctor') {
-    return Meteor.users.find({accountType: 'patient', doctorId: this.userId});
-  } else {
-    this.ready();
-  }
-});
+  Meteor.publish('currentPatients', function() {
+    if (this.userId && Meteor.users.findOne(this.userId).accountType === 'doctor') {
+      return Meteor.users.find({accountType: 'patient', doctorId: this.userId});
+    } else {
+      this.ready();
+    }
+  });
 
-Meteor.publish('allPatients', function() {
-  if (Meteor.users.findOne(this.userId).accountType === 'doctor') {
-    return Meteor.users.find({accountType: 'patient'});
-  } else {
-    this.ready();
-  }
-});
+  Meteor.publish('allPatients', function() {
+    if (this.userId && Meteor.users.findOne(this.userId).accountType === 'doctor') {
+      return Meteor.users.find({accountType: 'patient'});
+    } else {
+      this.ready();
+    }
+  });
 
-Meteor.publish('currentDoctor', function() {
-  if (this.userId && Meteor.users.findOne(this.userId).doctorId) {
-    return Meteor.users.find({accountType: 'doctor', _id: Meteor.users.findOne(this.userId).doctorId});
-  } else {
-    this.ready();
-  }
-});
+  Meteor.publish('currentDoctor', function(doctorId) {
+    if (this.userId) {
+      return Meteor.users.find({accountType: 'doctor', _id: doctorId});
+    } else {
+      return this.ready();
+    }
+  });
 
-Meteor.publish('searchedDoctor', function(sixCharKeyQuery) {
-  if (this.userId) {
-    return Meteor.users.find({accountType: 'doctor', sixCharKey: sixCharKeyQuery}, {
-      fields: { emails: 0 }
-    });
-  } else {
-    this.ready();
-  }
-});
-
+  Meteor.publish('searchedDoctor', function(sixCharKeyQuery) {
+    if (this.userId) {
+      return Meteor.users.find({accountType: 'doctor', sixCharKey: sixCharKeyQuery}, {
+        fields: { emails: 0 }
+      });
+    } else {
+      return this.ready();
+      // return {}
+    }
+  });
+}
 
 
 Accounts.validateNewUser((user) => {

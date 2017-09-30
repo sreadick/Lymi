@@ -9,11 +9,6 @@ import '../imports/startup/simple-schema-configuration';
 
 import { SelectedSymptoms } from '../imports/api/ui';
 
-// Tracker.autorun(() => {
-//   const isAuthenticated = !!Meteor.userId();
-//   onAuthChange(isAuthenticated);
-// });
-
 Meteor.startup(() => {
   ReactDom.render(<App/>, document.getElementById('app'));
 });
