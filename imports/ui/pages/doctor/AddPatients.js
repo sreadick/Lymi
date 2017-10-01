@@ -20,13 +20,14 @@ class AddPatients extends React.Component {
   handlePatientNameChange(e) {
     const patientNameSplit = e.target.value.trim().toLowerCase().split(' ').map(name => capitalize(name));
     if (patientNameSplit.length === 1) {
-      const firstNameQueryResults = Meteor.users.find({['profile.firstName']: patientNameSplit[0]}).fetch();
-      const lastNameQueryResults = Meteor.users.find({['profile.lastName']: patientNameSplit[0]}).fetch();
+      const firstNameQueryResults = Meteor.users.find({accountType: 'patient', ['profile.firstName']: patientNameSplit[0]}).fetch();
+      const lastNameQueryResults = Meteor.users.find({accountType: 'patient', ['profile.lastName']: patientNameSplit[0]}).fetch();
       this.setState({
         patients: firstNameQueryResults.concat(lastNameQueryResults)
       })
     } else if (patientNameSplit.length === 2) {
       const fullNameResults = Meteor.users.find({
+        accountType: 'patient',
         ['profile.firstName']: patientNameSplit[0],
         ['profile.lastName']: patientNameSplit[1]
       }).fetch();
