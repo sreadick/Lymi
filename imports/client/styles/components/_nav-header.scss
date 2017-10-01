@@ -29,7 +29,7 @@
   margin: 0;
   margin-left: 2rem;
 
-  font-size: 2rem;
+  font-size: 1.7rem;
   font-weight: 300;
   color: $deep-purple-darken-1;
 }
@@ -69,10 +69,10 @@
   background: transparentize(white, .1);
 
   &.doctor {
-    background: #757575;
+    background: black;
 
     .nav-header__link--title {
-      color: #ffc107; 
+      color: $deep-purple-lighten-1;
     }
 
     .nav-header__link, {
@@ -80,7 +80,7 @@
     }
 
     .nav-header__user-email {
-      color: black;
+      color: #ddd;
     }
 
     .nav-header__sidebar-icon i {

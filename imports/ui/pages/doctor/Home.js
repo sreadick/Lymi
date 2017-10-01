@@ -14,8 +14,7 @@ const Home = (props) => {
   }
   return (
     <div className='page-content doctor'>
-      <div className='black patients-box__wrapper'>
-        <div className='right grey-text'>My Key: {props.sixCharKey}</div>
+      <div className='black patients-box__wrapper z-depth-2'>
         <div className='patients-box__title'>
           My Patients
           {/* <Link className='btn-floating waves-effect waves-light green' to='/doctor/addpatients'> */}
@@ -31,7 +30,6 @@ const Home = (props) => {
                   <Link to={`/doctor/patientsummary/${patient._id}`}>
                     {patient.profile.firstName} {patient.profile.lastName}
                   </Link>
-                  {patient.emails[0].address}
                 </div>
               )
             :
@@ -41,6 +39,7 @@ const Home = (props) => {
               </div>
           }
         </div>
+        <div className='right grey-text'>My Key: {props.sixCharKey}</div>
       </div>
     </div>
   );

@@ -18,7 +18,7 @@ const AuthPatientRoute = ({ loggingIn, authenticated, accountType, component, si
         :
           <div className="page">
             <SidebarMenu currentPath={props.location.pathname} sidebarToggled={sidebarToggled}/>
-            <PrivateHeader title="Lymi" accountType={accountType} />
+            <PrivateHeader title="LymeLog" accountType={accountType} />
             {(sidebarToggled || showProfileBackgroundModel || showProfileImageModel) &&
               <div className='page-content--overlay' onClick={() => {
                 Session.set('sidebarToggled', false);

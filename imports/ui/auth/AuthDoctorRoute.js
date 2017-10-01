@@ -16,7 +16,7 @@ const AuthDoctorRoute = ({ loggingIn, authenticated, accountType, component, sid
         : accountType === 'doctor' ?
           <div className="page doctor">
             {/* <SidebarMenu currentPath={props.location.pathname} sidebarToggled={sidebarToggled}/> */}
-            <PrivateHeader title="Lymi-MD" accountType={accountType} />
+            <PrivateHeader title="LymeLog-MD" accountType={accountType} />
             <div>
               {(React.createElement(component, {...props, ...rest}))}
             </div>

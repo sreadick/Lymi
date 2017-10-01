@@ -16,7 +16,7 @@ PublicHeader.propTypes = {
 };
 
 PublicHeader.defaultProps = {
-  title: 'Lymi'
+  title: 'LymeLog'
 };
 
 export default PublicHeader;

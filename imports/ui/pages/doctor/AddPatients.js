@@ -1,11 +1,40 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
+import { Link } from 'react-router-dom';
 import { createContainer } from 'meteor/react-meteor-data';
-import { Button, Row, Col } from 'react-materialize';
+import { Button, Row, Col, Input, Icon } from 'react-materialize';
+import { capitalize } from '../../../utils/utils';
 
 import { Requests } from '../../../api/requests';
 
 class AddPatients extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      patients: []
+    };
+
+    this.handlePatientNameChange = this.handlePatientNameChange.bind(this);
+  }
+  handlePatientNameChange(e) {
+    const patientNameSplit = e.target.value.trim().toLowerCase().split(' ').map(name => capitalize(name));
+    if (patientNameSplit.length === 1) {
+      const firstNameQueryResults = Meteor.users.find({['profile.firstName']: patientNameSplit[0]}).fetch();
+      const lastNameQueryResults = Meteor.users.find({['profile.lastName']: patientNameSplit[0]}).fetch();
+      this.setState({
+        patients: firstNameQueryResults.concat(lastNameQueryResults)
+      })
+    } else if (patientNameSplit.length === 2) {
+      const fullNameResults = Meteor.users.find({
+        ['profile.firstName']: patientNameSplit[0],
+        ['profile.lastName']: patientNameSplit[1]
+      }).fetch();
+      this.setState({
+        patients: fullNameResults
+      })
+    }
+  }
   sendRequestToPatient(patient) {
     Meteor.call('requests.insert', patient._id);
   }
@@ -23,10 +52,24 @@ class AddPatients extends React.Component {
     }
     return (
       <div className='page-content doctor'>
-        <div className='blue darken-1 patients-box__wrapper'>
-          <div className='patients-box__title'>Add Patients</div>
+        <div className='grey darken-2 patients-box__wrapper z-depth-2'>
+          {/* <Row> */}
+            {/* <Col s={1} className='valign-wrapper'> */}
+            {/* </Col> */}
+            {/* <Col s={4} offset='s3'> */}
+              <div className='patients-box__title'>
+                <Link className='left' to='/doctor/home'><Icon small>keyboard_arrow_left</Icon></Link>
+                Add Patients
+              </div>
+            {/* </Col> */}
+          {/* </Row> */}
+          <Row>
+            <Col s={4} offset='s4'>
+              <Input className='white-text' s={12} placeholder='Patient Name' onChange={this.handlePatientNameChange}/>
+            </Col>
+          </Row>
           <div className='patients-box'>
-            {this.props.allPatients.map((patient, index) =>
+            {this.state.patients.map((patient, index) =>
               <Row key={patient._id} style={{height: '50px'}}>
                 {index !== 0 && <div className="divider"></div>}
                 <div className="valign-wrapper section">

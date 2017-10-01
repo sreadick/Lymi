@@ -58,7 +58,7 @@ class SelectSymptomsPage extends React.Component {
       <div className="page-content">
         {(this.props.checkinHistoryIsReady && this.props.checkinHistory.checkins.length === 0)
           && <div className="intro_message_container" ref="intro_message_container">
-            <h1>Welcome to Lymi</h1>
+            <h1>Welcome to LymeLog</h1>
             <p>To get started select your symptoms from the list below. If your symptom isn't listed you can enter it at the bottom of the page.</p>
             <p onClick={() => this.refs.intro_message_container.classList.add('closed')}><span>Got it</span></p>
           </div>
