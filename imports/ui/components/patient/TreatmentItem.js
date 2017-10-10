@@ -6,6 +6,8 @@ import moment from 'moment';
 import { DayPickerRangeController, DayPickerSingleDateController } from 'react-dates';
 import TimePicker from 'rc-time-picker';
 import 'rc-time-picker/assets/index.css';
+import Autosuggest from 'react-autosuggest';
+// import autoSuggestTheme from '../../../client/styles/_react-autosuggest';
 
 export class TreatmentItem extends React.Component {
   constructor(props) {
@@ -27,7 +29,8 @@ export class TreatmentItem extends React.Component {
       dosingFormat,
       dosingDetails,
       otherInstructions,
-      info
+      info,
+      treatmentSuggestions: []
     };
 
     this.handleWeekdayChange = this.handleWeekdayChange.bind(this);
@@ -39,52 +42,54 @@ export class TreatmentItem extends React.Component {
   }
 
   handleChange(e) {
-    const otherUpdates = {};
-    if (e.target.name === 'dose_type' && e.target.value === 'pills') {
-      this.setState({
-        dose_type: 'pills',
-        dose: 0,
-      });
-    } else if (e.target.name === 'frequency') {
-      if (parseFloat(e.target.value) > 9) {
-        e.target.value = 9;
-      } else if (parseFloat(e.target.value) < 1) {
-        e.target.value = 1
-      }
-      const dosingDetails = Object.assign({}, this.props.treatment.dosingDetails, {specificDoses: []});
-      for (let i = 0; i < parseInt(e.target.value); i++) {
-        dosingDetails.specificDoses.push(this.state.dosingDetails.specificDoses[i] ?
-          {
-            time: this.state.dosingDetails.specificDoses[i].time,
-            quantity: parseFloat(this.state.dosingDetails.specificDoses[i].quantity) || 0,
-          } : {
-            time: moment().hour(0).minute(0).valueOf(),
-            quantity: 1
-          }
-        );
+    if (e.target.name) {
+      const otherUpdates = {};
+      if (e.target.name === 'dose_type' && e.target.value === 'pills') {
+        this.setState({
+          dose_type: 'pills',
+          dose: 0,
+        });
+      } else if (e.target.name === 'frequency') {
+        if (parseFloat(e.target.value) > 9) {
+          e.target.value = 9;
+        } else if (parseFloat(e.target.value) < 1) {
+          e.target.value = 1
+        }
+        const dosingDetails = Object.assign({}, this.props.treatment.dosingDetails, {specificDoses: []});
+        for (let i = 0; i < parseInt(e.target.value); i++) {
+          dosingDetails.specificDoses.push(this.state.dosingDetails.specificDoses[i] ?
+            {
+              time: this.state.dosingDetails.specificDoses[i].time,
+              quantity: parseFloat(this.state.dosingDetails.specificDoses[i].quantity) || 0,
+            } : {
+              time: moment().hour(0).minute(0).valueOf(),
+              quantity: 1
+            }
+          );
+        }
+
+        otherUpdates.dosingDetails = dosingDetails;
+        this.setState({
+          frequency: e.target.value,
+          dosingDetails
+        });
+      } else {
+        this.setState({
+          [e.target.name]: e.target.value,
+        });
       }
 
-      otherUpdates.dosingDetails = dosingDetails;
-      this.setState({
-        frequency: e.target.value,
-        dosingDetails
-      });
-    } else {
-      this.setState({
+      Meteor.call('userTreatments.update', this.props.treatment._id, {
         [e.target.name]: e.target.value,
+        ...otherUpdates
+      }, (err, res) => {
+        if (err) {
+          console.log(err);
+        } else {
+          this.props.getAllErrors();
+        }
       });
     }
-
-    Meteor.call('userTreatments.update', this.props.treatment._id, {
-      [e.target.name]: e.target.value,
-      ...otherUpdates
-    }, (err, res) => {
-      if (err) {
-        console.log(err);
-      } else {
-        this.props.getAllErrors();
-      }
-    });
   }
 
   handleDosingFormatChange(radioGroup, value) {
@@ -224,6 +229,91 @@ export class TreatmentItem extends React.Component {
     return words.map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
   }
 
+  getSuggestionValue(treatmentSuggestion) {
+    if (treatmentSuggestion.brandName) {
+      if (treatmentSuggestion.genericName) {
+        return `${treatmentSuggestion.brandName} (${treatmentSuggestion.genericName})`;
+      } else if (treatmentSuggestion.otherName) {
+        return `${treatmentSuggestion.brandName} (${treatmentSuggestion.otherName})`;
+      } else {
+        return treatmentSuggestion.brandName;
+      }
+    } else if (treatmentSuggestion.name) {
+      return treatmentSuggestion.name
+    }
+  }
+
+  renderSuggestion(treatmentSuggestion) {
+    if (treatmentSuggestion.brandName) {
+      if (treatmentSuggestion.genericName) {
+        return (
+          <div>
+            {`${treatmentSuggestion.brandName} (${treatmentSuggestion.genericName})`}
+          </div>
+        );
+      } else if (treatmentSuggestion.otherName) {
+        return (
+          <div>
+            {`${treatmentSuggestion.brandName} (${treatmentSuggestion.otherName})`}
+          </div>
+        );
+      } else {
+        return (
+          <div>
+            {treatmentSuggestion.brandName}
+          </div>
+        );
+      }
+    } else if (treatmentSuggestion.name) {
+      return (
+        <div>
+          {treatmentSuggestion.name}
+        </div>
+      );
+    }
+  }
+
+  onSuggestionsFetchRequested({ value }) {
+    const inputValue = value.trim().toLowerCase();
+    const inputLength = inputValue.length;
+    this.setState({
+      treatmentSuggestions: inputLength === 0 ? [] : this.props.commonTreatments.filter(commonTreatment => {
+        if (commonTreatment.brandName) {
+          if (commonTreatment.genericName) {
+            return commonTreatment.brandName.toLowerCase().slice(0, inputLength) === inputValue || commonTreatment.genericName.toLowerCase().slice(0, inputLength) === inputValue;
+          } else if (commonTreatment.otherName) {
+            return commonTreatment.brandName.toLowerCase().slice(0, inputLength) === inputValue || commonTreatment.otherName.toLowerCase().slice(0, inputLength) === inputValue;
+          } else {
+            return commonTreatment.brandName.toLowerCase().slice(0, inputLength) === inputValue;
+          }
+        } else if (commonTreatment.name) {
+          return commonTreatment.name.toLowerCase().slice(0, inputLength) === inputValue
+        }
+      })
+    });
+  };
+
+  onSuggestionsClearRequested() {
+    this.setState({
+      treatmentSuggestions: []
+    });
+  };
+
+  onSuggestionSelected(e, {suggestion, suggestionValue}) {
+    Meteor.call('userTreatments.update', this.props.treatment._id, {
+      name: suggestionValue,
+      commonTreatmentId: suggestion._id,
+    }, (err, res) => {
+      if (err) {
+        console.log(err);
+      } else {
+        this.props.getAllErrors();
+      }
+    });
+    this.setState({name: suggestionValue})
+  }
+
+
   render() {
     return (
       <div className="">
@@ -246,8 +336,17 @@ export class TreatmentItem extends React.Component {
 
             <div className='row'>
               <div className="input-field">
-                <input type="text" id="name" name="name" ref="name" value={this.state.name} onChange={this.handleChange.bind(this)} autoFocus/>
-                <label className='active' htmlFor='name'>Medication/Supplement</label>
+                <Autosuggest
+                  suggestions={this.state.treatmentSuggestions}
+                  onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
+                  onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
+                  getSuggestionValue={this.getSuggestionValue.bind(this)}
+                  renderSuggestion={this.renderSuggestion.bind(this)}
+                  onSuggestionSelected={this.onSuggestionSelected.bind(this)}
+                  inputProps={{name:'name', value: this.state.name, onChange: this.handleChange.bind(this)}}
+                />
+                {/* <input type="text" id="name" name="name" ref="name" value={this.state.name} onChange={this.handleChange.bind(this)} autoFocus/>
+                <label className='active' htmlFor='name'>Medication/Supplement</label> */}
                 <div className="input-response red-text text-darken-2">{this.props.showErrors ? this.props.errors.name : ''}</div>
               </div>
             </div>

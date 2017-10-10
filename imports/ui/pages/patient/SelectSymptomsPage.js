@@ -1,15 +1,16 @@
 import React from 'react';
-import { symptomsByCategory } from '../../../public/resources/commonSymptoms';
+// import { symptomsByCategory } from '../../../public/resources/commonSymptomsList';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Link } from 'react-router-dom';
 import FlipMove from 'react-flip-move';
-import { getNextColor } from '../../../utils/utils';
+import { getNextColor, capitalizePhrase } from '../../../utils/utils';
 
 import { SymptomGroup } from '../../components/patient/SymptomGroup';
 
 import { UserSymptoms } from '../../../api/user-symptoms';
 import { CheckinHistories } from '../../../api/checkin-histories';
+import { CommonSymptoms } from '../../../api/common-symptoms';
 
 
 class SelectSymptomsPage extends React.Component {
@@ -21,25 +22,51 @@ class SelectSymptomsPage extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this._isMounted = true;
+  }
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
   renderCommonSymptomsList() {
-    return symptomsByCategory.map((symptomGroup) => {
+    const categories = this.props.commonSymptoms.filter((symptom, index, symptomArray) => {
+      return (index === 0 || symptom.system !== symptomArray[index - 1].system)
+    }).map(symptom => symptom.system);
+
+    return categories.map((category) => {
       return (
         <SymptomGroup
-          key={symptomGroup.category}
-          category={symptomGroup.category}
-          symptoms={symptomGroup.symptoms}
+          key={category}
+          category={category}
+
+          // edit (remove map)
+          symptoms={this.props.commonSymptoms.filter(symptom => symptom.system === category)}
+          //
+
           userSymptoms={this.props.userSymptoms}
           nextColor={this.props.nextColor}>
         </SymptomGroup>
       )
     });
+    // return symptomsByCategory.map((symptomGroup) => {
+    //   return (
+    //     <SymptomGroup
+    //       key={symptomGroup.category}
+    //       category={symptomGroup.category}
+    //       symptoms={symptomGroup.symptoms}
+    //       userSymptoms={this.props.userSymptoms}
+    //       nextColor={this.props.nextColor}>
+    //     </SymptomGroup>
+    //   )
+    // });
   }
   showSelectedSymptoms() {
     return this.props.userSymptoms.map((symptom) => {
       return (
         <li className="collection-item user-symptom" key={symptom._id} style={{background: symptom.color, color: 'white'}}>
           <div>
-            {symptom.name}
+            {capitalizePhrase(symptom.name)}
             <span className="user-symptom__remove-icon">
               <a className='secondary-content' onClick={() => {
                 Meteor.call('userSymptoms.remove', symptom.name);
@@ -52,8 +79,61 @@ class SelectSymptomsPage extends React.Component {
       )
     });
   }
+  addOtherSymptom() {
+    const symptomName = this.refs.otherSymptom.value.toLowerCase().trim();
+    // const uppercaseSymptomName = symptomName.charAt(0).toUpperCase() + symptomName.slice(1).toLowerCase();
+    const foundCommonSymptom = this.props.commonSymptoms.find(commonSymptom => symptomName === commonSymptom.name);
+    if (symptomName.length >= 3 && symptomName.length <= 50 && !this.props.userSymptoms.find(symptom => symptom.name.toLowerCase() === symptomName)) {
+      Meteor.call('userSymptoms.insert', {
+        name: symptomName,
+        commonSymptomId: (foundCommonSymptom && foundCommonSymptom._id) ? foundCommonSymptom._id : '',
+        system: (foundCommonSymptom && foundCommonSymptom.system) ? foundCommonSymptom.system : '',
+        description: (foundCommonSymptom && foundCommonSymptom.description) ? foundCommonSymptom.description : '',
+        dx: (foundCommonSymptom && foundCommonSymptom.dx) ? foundCommonSymptom.dx : [],
+        color: this.props.nextColor
+      });
+      this.setState({
+        otherSymptomResponse: {
+          success: true,
+          message: `Added '${symptomName}'`
+        }
+      })
+      this.refs.otherSymptom.value = '';
+    } else if (symptomName.length < 3 || symptomName.length > 50) {
+      this.setState({
+        otherSymptomResponse: {
+          success: false,
+          message: `Must be between 3 and 50 characters`
+        }
+      })
+    } else {
+      this.setState({
+        otherSymptomResponse: {
+          success: false,
+          message: `'${symptomName}' already exists`
+        }
+      })
+    }
+
+    setTimeout(() => {
+      if (this._isMounted) {
+        this.setState({
+          otherSymptomResponse: {
+            message: ''
+          }
+        });
+      }
+    }, 3000);
+  }
 
   render() {
+    if (this.props.isFetching) {
+      return (
+        <div className="progress">
+          <div className="indeterminate"></div>
+        </div>
+      );
+    }
     return (
       <div className="page-content">
         {(this.props.checkinHistoryIsReady && this.props.checkinHistory.checkins.length === 0)
@@ -81,46 +161,7 @@ class SelectSymptomsPage extends React.Component {
               </div>
               <div className='col s12 center-align'>
                 <button className="waves-effect waves-light btn black"
-                  onClick={() => {
-                    const symptomName = this.refs.otherSymptom.value.trim();
-                    const uppercaseSymptomName = symptomName.charAt(0).toUpperCase() + symptomName.slice(1).toLowerCase();
-                    if (uppercaseSymptomName.length >= 3 && uppercaseSymptomName.length <= 50 && !this.props.userSymptoms.find(symptom => symptom.name.toLowerCase() === uppercaseSymptomName.toLowerCase())) {
-                      Meteor.call('userSymptoms.insert', {
-                        name: uppercaseSymptomName,
-                        color: this.props.nextColor
-                      });
-                      this.setState({
-                        otherSymptomResponse: {
-                          success: true,
-                          message: `Added '${symptomName}'`
-                        }
-                      })
-                      this.refs.otherSymptom.value = '';
-                    } else if (uppercaseSymptomName.length < 3 || uppercaseSymptomName.length > 50) {
-                      this.setState({
-                        otherSymptomResponse: {
-                          success: false,
-                          message: `Must be between 3 and 50 characters`
-                        }
-                      })
-                    } else {
-                      this.setState({
-                        otherSymptomResponse: {
-                          success: false,
-                          message: `'${symptomName}' already exists`
-                        }
-                      })
-                    }
-                    setTimeout(() => {
-                      if (this.mounted === true) {
-                        this.setState({
-                          otherSymptomResponse: {
-                            message: ''
-                          }
-                        });
-                      }
-                    }, 3000);
-                  }}>
+                  onClick={this.addOtherSymptom.bind(this)} >
                   Add
                 </button>
               </div>
@@ -156,10 +197,18 @@ export default createContainer(() => {
   const checkinHandle = Meteor.subscribe('checkinHistories');
   const checkinHistoryIsReady = checkinHandle.ready() && !!CheckinHistories.findOne();
   const userSymptoms = UserSymptoms.find({}, {sort: {createdAt: -1}}).fetch();
+
+  //edit
+  const commonSymptomHandle = Meteor.subscribe('commonSymptoms');
+  const commonSymptoms = CommonSymptoms.find({}, {sort: {system: 1}}).fetch();
+
+  // console.log(commonSymptoms);
   return {
     userSymptoms,
     checkinHistory: CheckinHistories.findOne(),
     checkinHistoryIsReady,
-    nextColor: userSymptoms.length > 0 ? getNextColor(userSymptoms.length) : getNextColor(0)
+    commonSymptoms,
+    nextColor: userSymptoms.length > 0 ? getNextColor(userSymptoms.length) : getNextColor(0),
+    isFetching: !commonSymptomHandle.ready() || !checkinHistoryIsReady
   }
 }, SelectSymptomsPage);

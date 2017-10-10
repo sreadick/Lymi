@@ -11,9 +11,9 @@ export const SymptomGroup = (props) => (
       {props.symptoms.map((symptom) => {
         return (
           <SymptomCheckbox
-            key={symptom}
+            key={symptom.name}
             symptom={symptom}
-            isChecked={!!props.userSymptoms.find((userSymptom) => userSymptom.name === symptom)}
+            isChecked={!!props.userSymptoms.find((userSymptom) => userSymptom.name === symptom.name)}
             nextColor={props.nextColor}
           />
         )

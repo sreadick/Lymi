@@ -5,6 +5,7 @@ import { Redirect, Link } from 'react-router-dom';
 import moment from 'moment';
 import { Session } from 'meteor/session';
 import Collapsible from 'react-collapsible';
+import { capitalizePhrase } from '../../../utils/utils';
 
 import { UserSymptoms } from '../../../api/user-symptoms';
 import { UserTreatments } from '../../../api/user-treatments';
@@ -79,7 +80,7 @@ const Dashboard = (props) => {
                     return (
                       <li className="collection-item" key={symptom._id} style={{background: symptom.color, color: 'white'}}>
                         <span className="">
-                          {symptom.name}
+                          {capitalizePhrase(symptom.name)}
                         </span>
                       </li>
                     );

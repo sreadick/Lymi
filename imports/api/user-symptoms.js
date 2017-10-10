@@ -31,6 +31,10 @@ Meteor.methods({
     // let currentColor = userSymptomsLength > 0 ? UserSymptoms.find({userId: this.userId}).fetch()[userSymptomsLength - 1].color : '#558B2F';
     UserSymptoms.insert({
       name: symptom.name,
+      commonSymptomId: symptom.commonSymptomId || '',
+      system: symptom.system || '',
+      description: symptom.description || '',
+      dx: symptom.dx || [],
       userId: this.userId,
       color: symptom.color,
       createdAt: moment().valueOf(),

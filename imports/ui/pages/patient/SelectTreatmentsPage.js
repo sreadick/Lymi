@@ -5,11 +5,11 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
 
 import { UserTreatments } from '../../../api/user-treatments';
+import { CommonTreatments } from '../../../api/common-treatments';
 
 import { TreatmentList } from '../../components/patient/TreatmentList';
 
 class SelectTreatmentsPage extends React.Component {
-
   componentDidMount() {
     Session.set('showErrors', false);
   }
@@ -51,7 +51,7 @@ class SelectTreatmentsPage extends React.Component {
             onClick={this.handleAddTreatment.bind(this)}>
             New Treatment
           </button>
-          <TreatmentList userTreatments={this.props.userTreatments} showErrors={this.props.showErrors}/>
+          <TreatmentList userTreatments={this.props.userTreatments} commonTreatments={this.props.commonTreatments} showErrors={this.props.showErrors}/>
           <div className='row'>
             <Link className="col s2 waves-effect waves-light btn-large purple lighten-2" to="/patient/selectsymptoms">Back: Symptoms</Link>
             <span className="col s8 center-align select-treatment-bottom-error grey-text" ref="errorMessage">Check above for errors and try again...</span>
@@ -71,8 +71,11 @@ class SelectTreatmentsPage extends React.Component {
 
 export default createContainer(() => {
   const treatmentHandle = Meteor.subscribe('userTreatments');
+  Meteor.subscribe('commonTreatments')
+
   return {
     userTreatments: UserTreatments.find({}, {sort: {createdAt: -1}}).fetch(),
+    commonTreatments: CommonTreatments.find({}, {sort: {class: 1}}).fetch(),
     isFetching: !treatmentHandle.ready(),
     showErrors: Session.get('showErrors')
   }

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Accounts } from 'meteor/accounts-base';
 import { Meteor } from 'meteor/meteor';
 
 export default class Login extends React.Component {
@@ -22,6 +23,13 @@ export default class Login extends React.Component {
       }
     });
   }
+  forgotPassword() {
+    console.log('saf');
+    const options = {
+      email: 'bill@gmail.com'
+    }
+    Accounts.forgotPassword(options);
+  }
   render() {
     return (
       <div>
@@ -34,6 +42,7 @@ export default class Login extends React.Component {
               <input type="password" ref="password" name="password" placeholder="Password"/>
               <button className="button button--auth">Login</button>
             </form>
+            <div onClick={this.forgotPassword}>Forgot Password</div>
             <Link to="/signup">Need an account?</Link>
           </div>
         </div>

@@ -90,7 +90,8 @@ Meteor.methods({
         category: '',
         usedToTreat: "",
       },
-      userId: this.userId
+      userId: this.userId,
+      commonTreatmentId: ''
     });
   },
 
@@ -108,7 +109,10 @@ Meteor.methods({
       if (updates.dose_type === 'pills') {
         updates.dose = 0;
       }
+    } else if (Object.keys(updates).includes("name") && !Object.keys(updates).includes("commonTreatmentId")) {
+      updates.commonTreatmentId = '';
     }
+
     new SimpleSchema({
       _id: {
         type: String,
@@ -271,6 +275,10 @@ Meteor.methods({
         optional: true
       },
       'info.usedToTreat': {
+        type: String,
+        optional: true
+      },
+      commonTreatmentId: {
         type: String,
         optional: true
       },

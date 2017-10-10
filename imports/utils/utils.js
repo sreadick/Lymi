@@ -11,3 +11,13 @@ export const getNextColor = (lastSymptomIndex) => {
 export const capitalize = (word) => {
   return word.charAt(0).toUpperCase() + word.slice(1);
 }
+
+export const capitalizePhrase = (phrase) => {
+  return phrase.split(/\s/).map(word => {
+    if (word === 'the' || word === 'or' || word === 'at' || word === 'of' || word === 'in' || word === 'on' || word === 'to') {
+      return word
+    } else {
+      return capitalize(word)
+    }
+  }).join(' ')
+}

@@ -58,6 +58,7 @@ export class TreatmentList extends React.Component {
             <div className="" key={treatment._id}>
               <TreatmentItem
                 treatment={treatment}
+                commonTreatments={this.props.commonTreatments}
                 errors={treatment.errors}
                 showErrors={this.props.showErrors}
                 getAllErrors={this.getAllErrors.bind(this)}

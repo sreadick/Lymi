@@ -4,7 +4,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Redirect, Link } from 'react-router-dom';
 import { Session } from 'meteor/session';
 import moment from 'moment';
-import { getNextColor } from '../../../utils/utils';
+import { capitalizePhrase, getNextColor } from '../../../utils/utils';
 
 import { UserSymptoms } from '../../../api/user-symptoms';
 import { UserTreatments } from '../../../api/user-treatments';
@@ -73,7 +73,7 @@ class SymptomsHistory extends React.Component {
                 <span
                   className={`checkin-symptom-item ${!this.props.userSymptoms.map(userSymptom => userSymptom.name).find(userSymptomName => userSymptomName === symptom.name) ? 'deleted' : ''}`}
                   style={{color: symptom.color}}>
-                  {symptom.name}
+                  {capitalizePhrase(symptom.name)}
                 </span>
               </div>
             );
@@ -172,7 +172,7 @@ class SymptomsHistory extends React.Component {
                     <tbody>
                       {checkin.symptoms.map(checkinSymptom =>
                         <tr key={checkinSymptom.name}>
-                          <td>{checkinSymptom.name}</td>
+                          <td>{capitalizePhrase(checkinSymptom.name)}</td>
                           <td>{checkinSymptom.severity === 0 ? 'N/A' : checkinSymptom.severity}</td>
                         </tr>
                       )}

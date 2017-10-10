@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { Link, Redirect } from 'react-router-dom';
 import { createContainer } from 'meteor/react-meteor-data';
 import moment from 'moment';
+import { capitalizePhrase } from '../../../utils/utils';
 
 // import { CheckinHistories } from '../../api/checkin-histories';
 
@@ -63,7 +64,7 @@ class SymptomsCheckin extends React.Component {
           <div>
             {this.props.symptomCheckinItems.map((symptom) => (
               <div className="card section" key={symptom.name}>
-                <p>{symptom.name}</p>
+                <p>{capitalizePhrase(symptom.name)}</p>
                 {
                   (this.props.yesterdaysCheckin && !!this.props.yesterdaysCheckin.symptoms.find((yesterdaysCheckinSymptom) => yesterdaysCheckinSymptom.name === symptom.name && yesterdaysCheckinSymptom.severity > 0))
                   && <em className='grey-text'>Yesterday: {this.props.yesterdaysCheckin.symptoms.find((yesterdaysCheckinSymptom) => yesterdaysCheckinSymptom.name === symptom.name).severity}</em>
