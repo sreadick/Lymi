@@ -23,12 +23,18 @@ export default class Login extends React.Component {
       }
     });
   }
-  forgotPassword() {
-    console.log('saf');
-    const options = {
-      email: 'bill@gmail.com'
-    }
-    Accounts.forgotPassword(options);
+  sendPasswordReset() {
+    Accounts.forgotPassword({email: this.refs.emailToSendPasswordReset.value}, (err, res) => {
+      if (err) {
+        if (err.error === 403) {
+          alert('User not found. Try again');
+        } else {
+          console.log(err);
+        }
+      } else {
+        console.log('forgotPassword method: success');
+      }
+    });
   }
   render() {
     return (
@@ -42,8 +48,23 @@ export default class Login extends React.Component {
               <input type="password" ref="password" name="password" placeholder="Password"/>
               <button className="button button--auth">Login</button>
             </form>
-            <div onClick={this.forgotPassword}>Forgot Password</div>
-            <Link to="/signup">Need an account?</Link>
+            <div><Link to="/signup">Need an account?</Link></div>
+            <div className='divider'></div>
+            <div className='section'></div>
+            <div><Link to='#' onClick={() => Session.set('showForgotPasswordInput', true)}>Forgot Password</Link></div>
+            {Session.get('showForgotPasswordInput') &&
+            <div className='z-depth-2 '>
+              <Link to='#'><i className="material-icons right grey-text" onClick={() => Session.set('showForgotPasswordInput', false)}>close</i></Link>
+              <div className='section'></div>
+              <div className='container input-field'>
+                <input type="text" id="emailToSendPasswordReset" ref="emailToSendPasswordReset"/>
+                <label htmlFor='emailToSendPasswordReset'>Send to email address:</label>
+                <button className='btn' onClick={this.sendPasswordReset.bind(this)}>Send Reset Info</button>
+              </div>
+              <div className='section'></div>
+            </div>
+
+            }
           </div>
         </div>
 

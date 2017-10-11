@@ -18,4 +18,5 @@ import '../imports/startup/simple-schema-configuration';
 
 Meteor.startup(() => {
   // seedDbWithCommonSymptoms()
+  process.env.MAIL_URL = "smtp://postmaster%40sandbox9ab28225eaba4745b15b716bf5211994.mailgun.org:dc95afc35e43b77429dd082b6d48019f@smtp.mailgun.org:587";
 });
