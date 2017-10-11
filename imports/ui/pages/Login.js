@@ -24,7 +24,8 @@ export default class Login extends React.Component {
     });
   }
   sendPasswordReset() {
-    Accounts.forgotPassword({email: this.refs.emailToSendPasswordReset.value}, (err, res) => {
+    const email = this.refs.emailToSendPasswordReset.value;
+    Accounts.forgotPassword({email: email}, (err, res) => {
       if (err) {
         if (err.error === 403) {
           alert('User not found. Try again');
@@ -32,7 +33,7 @@ export default class Login extends React.Component {
           console.log(err);
         }
       } else {
-        console.log('forgotPassword method: success');
+        alert(`Password reset information sent to ${email}. Check your email for further instructions`);
       }
     });
   }
