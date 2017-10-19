@@ -32,7 +32,7 @@ Meteor.methods({
     UserSymptoms.insert({
       name: symptom.name,
       commonSymptomId: symptom.commonSymptomId || '',
-      system: symptom.system || '',
+      system: symptom.system || 'Other',
       description: symptom.description || '',
       dx: symptom.dx || [],
       userId: this.userId,

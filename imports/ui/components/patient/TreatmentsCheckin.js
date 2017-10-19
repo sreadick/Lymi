@@ -57,7 +57,19 @@ class TreatmentCheckin extends React.Component {
               {this.renderAnswerSquares(treatment)}
             </div>
           ))}
-
+          {this.props.nonPrescribedTreatmentNames.length > 0 &&
+            <div className='grey lighten-2'>
+              <p>Treatments not prescribed for today:</p>
+              <ul>
+                {this.props.nonPrescribedTreatmentNames.map(treatmentName =>
+                  <li key={treatmentName}>
+                    {treatmentName}
+                  </li>
+                )}
+              </ul>
+              <p>If this list is incorrect <Link to='/patient/selecttreatments'>edit</Link> you treatment list</p>
+            </div>
+          }
           <button className={`black btn ${!this.props.treatmentCheckinCompleted && 'disabled'}`}
             onClick={() => this.props.navigateToComponent("dashboard")}>
             Finish!

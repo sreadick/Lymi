@@ -1,0 +1,19 @@
+.treatment-editor {
+  flex: 4;
+  background: white;
+  border: 1px solid #ddd;
+  padding: 2.5rem;
+  margin: 1rem 0 1rem 1rem;
+  overflow-y: auto;
+}
+
+.treatment-editor--no-treatment-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-style: italic;
+}
+
+.treatment-editor__title {
+  font-size: 1.5rem !important;
+}

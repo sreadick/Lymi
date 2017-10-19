@@ -94,7 +94,8 @@ export default class SymptomChart extends React.Component {
         borderColor: this.props.symptomColors[index] || 'pink',
         borderDash: this.props.currentSymptomNames && !this.props.currentSymptomNames.includes(symptom) ? [5, 10] : undefined,
         fill: false,
-        cubicInterpolationMode: 'monotone',
+        // cubicInterpolationMode: 'monotone',
+        lineTension: .0,
         data: this.props.checkins.map((checkin) => {
           const targetSymptomCheckin = checkin.symptoms.find((checkinSymptom) => {
             return checkinSymptom.name === symptom;
@@ -118,13 +119,20 @@ export default class SymptomChart extends React.Component {
 
     const dummyLabel = '';
 
-    if (this.props.checkins.length === 1) {
+    // if (this.props.checkins.length === 1) {
+    //   symptomDatasets.forEach((dataset) => {
+    //     dataset.data.push(dummyDataset);
+    //     dataset.data.unshift(dummyDataset);
+    //   })
+    //   dateLabels.push(dummyLabel);
+    //   dateLabels.unshift(dummyLabel);
+    // }
+
+    for (let i = 0; i < 20 - this.props.checkins.length; ++i) {
       symptomDatasets.forEach((dataset) => {
         dataset.data.push(dummyDataset);
-        dataset.data.unshift(dummyDataset);
       })
       dateLabels.push(dummyLabel);
-      dateLabels.unshift(dummyLabel);
     }
 
     return {

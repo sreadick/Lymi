@@ -25,7 +25,7 @@ Meteor.methods({
       throw new Meteor.Error("not-authorized");
     }
 
-    UserTreatments.insert({
+    return UserTreatments.insert({
       name: '',
       amount: 1,
       dose: 0,

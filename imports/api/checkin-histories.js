@@ -20,7 +20,7 @@ if (Meteor.isServer) {
 }
 
 Meteor.methods({
-  'checkinHistories.checkins.create'({ date, symptoms, treatments, position }) {
+  'checkinHistories.checkins.create'({ date, symptoms, treatments, todayTreatments, position }) {
     if (!this.userId) {
       throw new Meteor.Error('not-authorized');
     }
@@ -30,10 +30,15 @@ Meteor.methods({
           $each: [{
             date,
             symptoms: symptoms.map((symptom) => {
-              return { name: symptom.name, severity: 0 }
+              return { name: symptom.name, severity: 0, commonSymptomId: symptom.commonSymptomId }
             }),
             treatments: treatments.map((treatment) => {
-              return { name: treatment.name, compliance: undefined }
+              return {
+                name: treatment.name,
+                prescribedToday: !!todayTreatments.find(todayTreatment => treatment.name === todayTreatment.name),
+                compliance: undefined,
+                commonTreatmentId: treatment.commonTreatmentId
+              }
             }),
           }],
           $position: position
@@ -41,7 +46,7 @@ Meteor.methods({
       }
     });
   },
-  'checkinHistories.checkins.update'({ date, symptoms, todaysCheckinSymptoms, treatments, todaysCheckinTreatments }) {
+  'checkinHistories.checkins.update'({ date, symptoms, todaysCheckinSymptoms, treatments, todaysCheckinTreatments, todayTreatments }) {
     if (!this.userId) {
       throw new Meteor.Error('not-authorized');
     }
@@ -54,13 +59,16 @@ Meteor.methods({
         [symptomsPath] : symptoms.map((symptom) => {
           return {
             name: symptom.name,
-            severity: todaysCheckinSymptoms.find((checkinSymptom) => symptom.name === checkinSymptom.name) ? todaysCheckinSymptoms.find((checkinSymptom) => symptom.name === checkinSymptom.name).severity : 0
+            severity: todaysCheckinSymptoms.find((checkinSymptom) => symptom.name === checkinSymptom.name) ? todaysCheckinSymptoms.find((checkinSymptom) => symptom.name === checkinSymptom.name).severity : 0,
+            commonSymptomId: symptom.commonSymptomId
           }
         }),
         [treatmentsPath] : treatments.map((treatment) => {
           return {
             name: treatment.name,
-            compliance: todaysCheckinTreatments.find((checkinTreatment) => treatment.name === checkinTreatment.name) ? todaysCheckinTreatments.find((checkinTreatment) => treatment.name === checkinTreatment.name).compliance : undefined
+            prescribedToday: !!todayTreatments.find(todayTreatment => treatment.name === todayTreatment.name),
+            compliance: todaysCheckinTreatments.find((checkinTreatment) => treatment.name === checkinTreatment.name) ? todaysCheckinTreatments.find((checkinTreatment) => treatment.name === checkinTreatment.name).compliance : undefined,
+            commonTreatmentId: treatment.commonTreatmentId
            }
         }),
       }

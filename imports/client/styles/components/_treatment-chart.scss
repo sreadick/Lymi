@@ -1,10 +1,11 @@
 .treatment-chart__wrapper {
   margin-top: 8px;
+  border: 1px solid #aaa;
   background: white;
   border-radius: 10px;
   overflow-x: auto;
   padding: $space / 2;
-  min-height: 24rem;
+  min-height: 34rem;
 }
 
 .treatment-chart__item__container {
@@ -45,6 +46,9 @@
 }
 .treatment-chart__block-segment.null {
   background: grey;
+}
+.treatment-chart__block-segment.aaa {
+  background: pink;
 }
 
 .treatment-chart__date {

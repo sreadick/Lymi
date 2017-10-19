@@ -2,8 +2,11 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import moment from 'moment';
+import {isTreatmentPrescribed} from '../../../utils/utils';
 
 import { UserTreatments } from '../../../api/user-treatments';
+
+const colorsArray = ['#b39ddb', '#e57373', '#90caf9', '#ffab91', '#81C784', '#A1887F', '#F06292', '#7986CB', '#E0E0E0', '#4DB6AC', '#BA68C8', '#DCE775', '#90A4AE', '#FFB74D', '#AED581', '#4FC3F7', '#FFD54F'];
 
 const TreatmentChart = (props) => {
   return (
@@ -12,12 +15,29 @@ const TreatmentChart = (props) => {
         <div key={treatment.name}>
           <h5 className={`grey-text text-darken-2 center-align treatment-chart__item__title ${!props.currentTreatmentNames.includes(treatment.name) ? 'deleted' : ''} `}>{treatment.name.charAt(0).toUpperCase() + treatment.name.slice(1)}</h5>
           <div className='treatment-chart__item z-depth-1'>
-            {props.checkins.map(checkin => {
+            {props.checkins.map((checkin, index) => {
               let checkinTreatment;
               if (checkin.treatments !== null) {
                 checkinTreatment = checkin.treatments.find(checkinTreatment => checkinTreatment.name === treatment.name)
               }
-              return <div key={checkin.date} className={`treatment-chart__block-segment ${checkinTreatment && checkinTreatment.compliance}`}></div>
+              return (
+                <div
+                  key={checkin.date}
+                  className={`treatment-chart__block-segment ${checkinTreatment && (checkinTreatment.prescribedToday ? checkinTreatment.compliance : 'aaa')}`}
+                  style={{
+                    // background: colorsArray[index],
+                    background: 'white',
+                    color: colorsArray[index],
+                  }}>
+                  {!checkinTreatment ? !isTreatmentPrescribed(treatment, moment(checkin.date, "MMMM Do YYYY")) ? "NP!" : "?"
+                  : checkinTreatment.prescribedToday === false ? "NP"
+                  : checkinTreatment.compliance === "No" ? "N"
+                  : checkinTreatment.compliance === "Some" ? "S"
+                  : checkinTreatment.compliance === "Yes" ? "Y"
+                  : checkinTreatment.compliance === "NPD" ? "NP"
+                  : "?"}
+                </div>
+              )
             })}
         </div>
         </div>
