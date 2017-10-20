@@ -45,7 +45,7 @@ export default class SymptomChart extends React.Component {
 						scaleLabel: {
 							display: window.innerWidth > 700 ? true : false,
               fontColor: this.props.symptomNames.length === 1 ? this.props.symptomColors[0] : 'grey',
-							labelString: this.props.symptomNames.length === 1 ? this.props.symptomNames[0] : '',
+							// labelString: this.props.symptomNames.length === 1 ? this.props.symptomNames[0] : '',
 						},
             ticks: {
               min: 1,

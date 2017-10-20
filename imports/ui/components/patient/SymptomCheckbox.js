@@ -57,6 +57,7 @@ export default class SymptomCheckbox extends React.Component {
       <div className="switch">
         <label className={this.state.isChecked ? 'green-text text-darken-2' : 'black-text'}>
           {capitalizePhrase(this.props.symptom.name)}
+          {/* {this.props.symptom.description && <div className='pink-text'>({this.props.symptom.description})</div>} */}
           <input
             type="checkbox"
             checked={this.state.isChecked}

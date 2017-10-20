@@ -53,15 +53,15 @@ class SymptomsHistory extends React.Component {
     }
     return (
       <div className="page-content">
-        <div className="page-content__main-heading">History: Symptoms</div>
-
+        {/* <div className="page-content__main-heading">History: Symptoms</div> */}
+        <div className='section'></div>
         <div className='row history-options-button-container'>
-          <Input s={3} type='select' label='Group:' defaultValue={this.props.groupSymptomsBy} onChange={(e) => Session.set('groupSymptomsBy', e.target.value)}>
+          <Input s={2} type='select' label='Group:' defaultValue={this.props.groupSymptomsBy} onChange={(e) => Session.set('groupSymptomsBy', e.target.value)}>
             <option value='all'>All</option>
             <option value='system'>By Organ System</option>
             <option value='none'>None</option>
           </Input>
-          <Input s={3} type='select' label='Sort:' defaultValue={this.props.sortSymptomsBy} onChange={(e) => Session.set('sortSymptomsBy', e.target.value)}>
+          <Input s={2} type='select' label='Sort:' defaultValue={this.props.sortSymptomsBy} onChange={(e) => Session.set('sortSymptomsBy', e.target.value)}>
             <option value='averageWorst'>Average Worst</option>
             <option value='currentWorst'>Current Worst</option>
           </Input>
@@ -73,14 +73,15 @@ class SymptomsHistory extends React.Component {
             <option value='5'>5</option>
           </Input>
           {this.props.showDeletedTab &&
-            <button className={`col s3 btn ${this.props.includeDeletedSymptoms ? 'deep-purple lighten-1' : 'grey'}`}
+            <button className={`col s2 offset-s3 btn ${this.props.includeDeletedSymptoms ? 'white black-text' : 'black'}`}
               onClick={() => Session.set('includeDeletedSymptoms', !Session.get('includeDeletedSymptoms'))}>
               {this.props.includeDeletedSymptoms ?  'Exclude Deleted' : 'Include Deleted'}
             </button>
           }
         </div>
 
-        <div className='page-content--symptom-history__graph-wrapper'>
+        {/* <div className='page-content--symptom-history__graph-wrapper'> */}
+        <div className='page-content--symptom-history__graph-wrapper z-depth-4'>
           {this.props.checkinHistory.checkins.length > 0 &&
             <div>
               {this.props.groupSymptomsBy === 'all' ?
@@ -251,7 +252,7 @@ export default createContainer((props) => {
     checkinHistory: CheckinHistories.findOne(),
     isFetching: (!checkinHistoryIsReady || !displayedCheckinTableItems || !symptomsHandle.ready() || !treatmentsHandle.ready()),
     // groupSymptoms: Session.get('groupSymptoms') || true,
-    groupSymptomsBy: Session.get('groupSymptomsBy') || 'all',
+    groupSymptomsBy: Session.get('groupSymptomsBy') || 'system',
     sortSymptomsBy: Session.get('sortSymptomsBy') || 'averageWorst',
     includeDeletedSymptoms: Session.get('includeDeletedSymptoms') || false,
     showDeletedTab: currentSymptoms.map(symptom => symptom.name).toString() !== currentAndDeletedSymptoms.map(symptom => symptom.name).toString(),
