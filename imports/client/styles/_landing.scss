@@ -18,7 +18,7 @@
 
 .landing__section {
   height: 100vh;
-  background: $eggshell;
+  background: #9999ff;
 
 
   // background: linear-gradient(270deg, #0f1626, $eggshell, #ab987a);
@@ -49,20 +49,33 @@
   //   50%{background-position:100% 50%}
   //   100%{background-position:0% 50%}
   // }
+
+  // background: #4568DC;  /* fallback for old browsers */
+  // background: -webkit-linear-gradient(to top, #B06AB3, #4568DC);  /* Chrome 10-25, Safari 5.1-6 */
+  // background: linear-gradient(to top, #B06AB3, #4568DC); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+  background: #F0F2F0;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to top, #000C40, #F0F2F0);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to top, #000C40, #F0F2F0); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+  // background: #E8CBC0;  /* fallback for old browsers */
+  // background: -webkit-linear-gradient(to top, #636FA4, #E8CBC0);  /* Chrome 10-25, Safari 5.1-6 */
+  // background: linear-gradient(to top, #636FA4, #E8CBC0); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
 }
 
-.flex-wrapper {
+.landing__section__flex-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
   height: 100%;
-  max-width: 40%;
+  max-width: 90%;
   margin: 0 auto;
 }
 
-.main_heading {
+.landing__main-heading {
   color: $navy;
   font-weight: 300;
   font-size: 2.8rem;
@@ -80,7 +93,7 @@
   color: #252236;
   line-height: 2.4rem;
   font-size: 18px;
-  font-weight: 300;
+  font-weight: 400;
   margin: 0;
   margin-bottom: 3rem;
   display: none;
@@ -90,11 +103,17 @@
   }
 }
 
+.landing__caption {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: white;
+}
+
 .landing__button {
   // background: transparent;
   // border: 1px solid $navy;
-  background: $leather;
-  color: $eggshell;
+  background: white;
+  color: purple;
   width: 11rem;
   @include link-font-style;
   border-radius: 140px;
@@ -120,7 +139,12 @@
 
 
 .landing__section2 {
-
   height: 100vh;
-  background: $leather;
+  // background: $leather;
+}
+
+.graph-screen-shot {
+  width: 40rem;
+  border: 15px solid #333;
+  border-radius: 20px;
 }
