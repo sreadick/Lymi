@@ -36,6 +36,8 @@ const SymptomChartItem = (props) => (
       }
       checkins={props.checkins}
       currentSymptomNames={props.currentUserSymptomsNames}
+      startDate={props.startDate}
+      endDate={props.endDate}
       padding={{top: 30, right: 30, bottom: 10, left: 0}}
     />
     {props.symptoms.length > props.maxSymptomsPerSegment &&

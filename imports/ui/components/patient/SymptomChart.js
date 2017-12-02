@@ -78,9 +78,13 @@ export default class SymptomChart extends React.Component {
   }
 
   getData() {
-    const startDate = moment(this.props.checkins[0].date, 'MMMM Do YYYY');
-    const lastDate = moment(this.props.checkins[this.props.checkins.length - 1].date, 'MMMM Do YYYY');
-    const totalDatesNumber = lastDate.diff(startDate , 'days') + 1;
+    let startDate = this.props.startDate ? moment(this.props.startDate, 'MMMM Do YYYY') : undefined;
+    let endDate = this.props.endDate ? moment(this.props.endDate, 'MMMM Do YYYY') : undefined;
+    if (!this.props.startDate || !this.props.endDate) {
+      startDate = moment(this.props.checkins[0].date, 'MMMM Do YYYY');
+      endDate = moment(this.props.checkins[this.props.checkins.length - 1].date, 'MMMM Do YYYY');
+    }
+    const totalDatesNumber = endDate.diff(startDate , 'days') + 1;
     const dateLabels = [...Array(totalDatesNumber).keys()].map((dateOffset) =>
       moment(startDate).add(dateOffset, "d").format('M/D/YY')
     );
@@ -128,12 +132,12 @@ export default class SymptomChart extends React.Component {
     //   dateLabels.unshift(dummyLabel);
     // }
 
-    for (let i = 0; i < 20 - this.props.checkins.length; ++i) {
-      symptomDatasets.forEach((dataset) => {
-        dataset.data.push(dummyDataset);
-      })
-      dateLabels.push(dummyLabel);
-    }
+    // for (let i = 0; i < 20 - this.props.checkins.length; ++i) {
+    //   symptomDatasets.forEach((dataset) => {
+    //     dataset.data.push(dummyDataset);
+    //   })
+    //   dateLabels.push(dummyLabel);
+    // }
 
     return {
       symptomDatasets, dateLabels

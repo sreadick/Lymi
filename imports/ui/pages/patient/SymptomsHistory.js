@@ -11,19 +11,24 @@ import { UserSymptoms } from '../../../api/user-symptoms';
 import { UserTreatments } from '../../../api/user-treatments';
 import { CheckinHistories } from '../../../api/checkin-histories';
 
+import SymptomChart from '../../components/patient/SymptomChart';
 import SymptomChartItem from '../../components/patient/SymptomChartItem';
 import Checkin from './Checkin';
 
 class SymptomsHistory extends React.Component {
-  // constructor(props) {
-  //   super(props);
-  //
-  //   this.state = {
-  //     groupSymptoms: false,
-  //     includeDeletedSymptoms: false,
-  //     displayedSymptoms: []
-  //   }
-  // }
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      // groupSymptoms: false,
+      // includeDeletedSymptoms: false,
+      // displayedSymptoms: []
+      graphedSymptoms: [],
+      graphStartDate: null,
+      graphEndDate: null,
+      checkinDates: []
+    }
+  }
   //
   // componentDidMount() {
   //   Session.set('groupSymptoms', false)
@@ -33,14 +38,23 @@ class SymptomsHistory extends React.Component {
   //     displayedSymptoms: this.props.displayedSymptoms
   //   });
   // }
-  //
-  // componentDidUpdate(prevProps) {
-  //   if (prevProps.displayedSymptoms !== this.props.displayedSymptoms) {
-  //     this.setState({
-  //       displayedSymptoms: this.props.displayedSymptoms,
-  //     });
-  //   }
-  // }
+
+  componentDidUpdate(prevProps) {
+    // if (prevProps.displayedSymptoms !== this.props.displayedSymptoms) {
+    //   this.setState({
+    //     displayedSymptoms: this.props.displayedSymptoms,
+    //   });
+    // }
+    if (this.props.checkinHistory && (!this.state.graphStartDate || !this.state.graphEndDate)) {
+      const graphStartDate = this.props.checkinHistory.checkins[0].date;
+      const graphEndDate = this.props.checkinHistory.checkins[this.props.checkinHistory.checkins.length -1].date;
+      const totalDatesNumber = moment(graphEndDate, 'MMMM Do YYYY').diff(moment(graphStartDate, 'MMMM Do YYYY') , 'days') + 1;
+      const checkinDates = [...Array(totalDatesNumber).keys()].map((dateOffset) =>
+        moment(graphStartDate, 'MMMM Do YYYY').add(dateOffset, "d").format('MMMM Do YYYY')
+      );
+      this.setState({graphStartDate, graphEndDate, checkinDates})
+    }
+  }
   //
   // handleToggleOption(e, target) {
   //   Session.set(target, !Session.get(target))
@@ -54,6 +68,40 @@ class SymptomsHistory extends React.Component {
     return (
       <div className="page-content">
         {/* <div className="page-content__main-heading">History: Symptoms</div> */}
+
+        <div className='section'></div>
+        <p>Select 5 symptoms to graph:</p>
+        {/* <div className='row'> */}
+          {this.props.displayedSymptoms.map(symptom =>
+            <Input
+              key={symptom.name}
+              type='checkbox'
+              name='graphedSymptoms'
+              value={symptom.name}
+              label={symptom.name}
+              defaultChecked={this.state.graphedSymptoms.includes(symptom.name)}
+              disabled={this.state.graphedSymptoms.map(graphedSymptom => graphedSymptom.name).includes(symptom.name) === false && this.state.graphedSymptoms.length >= 5}
+              onChange={() => {
+                const graphedSymptoms = this.state.graphedSymptoms.slice();
+                if (graphedSymptoms.map(graphedSymptom => graphedSymptom.name).includes(symptom.name)) {
+                  const symptomIndex = graphedSymptoms.indexOf(symptom)
+                  graphedSymptoms.splice(symptomIndex, 1);
+                } else {
+                  graphedSymptoms.push(symptom)
+                }
+                this.setState({graphedSymptoms})
+              }}
+            />
+          )}
+        {/* </div> */}
+        <SymptomChart
+          symptomNames={this.state.graphedSymptoms.map(symptom => symptom.name)}
+          symptomColors={this.state.graphedSymptoms.map(symptom => symptom.color)}
+          checkins={this.props.checkinHistory.checkins}
+          currentSymptomNames={this.props.currentSymptoms.map(symptom => symptom.name)}
+          padding={{top: 30, right: 30, bottom: 10, left: 0}}
+        />
+
         <div className='section'></div>
         <div className='row history-options-button-container'>
           <Input s={2} type='select' label='Group:' defaultValue={this.props.groupSymptomsBy} onChange={(e) => Session.set('groupSymptomsBy', e.target.value)}>
@@ -78,6 +126,26 @@ class SymptomsHistory extends React.Component {
               {this.props.includeDeletedSymptoms ?  'Exclude Deleted' : 'Include Deleted'}
             </button>
           }
+          <Input s={2} type='select' label='Start Date' value={this.state.graphStartDate || ''} onChange={(e) => this.setState({graphStartDate: e.target.value})}>
+            {this.state.checkinDates.map(checkinDate =>
+              <option
+                key={checkinDate}
+                value={checkinDate}
+                disabled={moment(checkinDate, 'MMMM Do YYYY').isAfter(moment(this.state.graphEndDate, "MMMM Do YYYY"), 'day')}>
+                {checkinDate}
+              </option>
+            )}
+          </Input>
+          <Input s={2} type='select' label='End Date' value={this.state.graphEndDate || ''} onChange={(e) => this.setState({graphEndDate: e.target.value})}>
+            {this.state.checkinDates.map(checkinDate =>
+              <option
+                key={checkinDate}
+                value={checkinDate}
+                disabled={moment(checkinDate, 'MMMM Do YYYY').isBefore(moment(this.state.graphStartDate, "MMMM Do YYYY"), 'day')}>
+                {checkinDate}
+              </option>
+            )}
+          </Input>
         </div>
 
         {/* <div className='page-content--symptom-history__graph-wrapper'> */}
@@ -85,13 +153,37 @@ class SymptomsHistory extends React.Component {
           {this.props.checkinHistory.checkins.length > 0 &&
             <div>
               {this.props.groupSymptomsBy === 'all' ?
-                <SymptomChartItem title='All Symptoms' symptoms={this.props.displayedSymptoms} currentUserSymptomsNames={this.props.currentSymptoms.map(symptom => symptom.name)} checkins={this.props.checkinHistory.checkins} maxSymptomsPerSegment={this.props.maxSymptomsPerSegment}/>
+                <SymptomChartItem
+                  title='All Symptoms'
+                  symptoms={this.props.displayedSymptoms}
+                  currentUserSymptomsNames={this.props.currentSymptoms.map(symptom => symptom.name)}
+                  checkins={this.props.checkinHistory.checkins} maxSymptomsPerSegment={this.props.maxSymptomsPerSegment}
+                  startDate={this.state.graphStartDate}
+                  endDate={this.state.graphEndDate}
+                />
               : this.props.groupSymptomsBy === 'system' ?
                 this.props.symptomSystems.map((system, index) =>
-                  <SymptomChartItem key={index} title={system} symptoms={this.props.displayedSymptoms.filter(symptom => symptom.system === system)} currentUserSymptomsNames={this.props.currentSymptoms.map(symptom => symptom.name)} checkins={this.props.checkinHistory.checkins} maxSymptomsPerSegment={this.props.maxSymptomsPerSegment}/>
+                  <SymptomChartItem
+                    key={index}
+                    title={system}
+                    symptoms={this.props.displayedSymptoms.filter(symptom => symptom.system === system)}
+                    currentUserSymptomsNames={this.props.currentSymptoms.map(symptom => symptom.name)}
+                    checkins={this.props.checkinHistory.checkins}
+                    maxSymptomsPerSegment={this.props.maxSymptomsPerSegment}
+                    startDate={this.state.graphStartDate}
+                    endDate={this.state.graphEndDate}
+                  />
                 )
               : this.props.displayedSymptoms.map((symptom, index) => (
-                <SymptomChartItem key={index} symptoms={[symptom]} currentUserSymptomsNames={[symptom.name]} checkins={this.props.checkinHistory.checkins} maxSymptomsPerSegment={this.props.maxSymptomsPerSegment}/>
+                <SymptomChartItem
+                  key={index}
+                  symptoms={[symptom]}
+                  currentUserSymptomsNames={[symptom.name]}
+                  checkins={this.props.checkinHistory.checkins}
+                  maxSymptomsPerSegment={this.props.maxSymptomsPerSegment}
+                  startDate={this.state.graphStartDate}
+                  endDate={this.state.graphEndDate}
+                />
               ))}
             </div>
           }

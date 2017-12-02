@@ -20,24 +20,26 @@ const TreatmentChart = (props) => {
               if (checkin.treatments !== null) {
                 checkinTreatment = checkin.treatments.find(checkinTreatment => checkinTreatment.name === treatment.name)
               }
-              return (
-                <div
-                  key={checkin.date}
-                  className={`treatment-chart__block-segment ${checkinTreatment && (checkinTreatment.prescribedToday ? checkinTreatment.compliance : 'aaa')}`}
-                  style={{
-                    // background: colorsArray[index],
-                    background: 'white',
-                    color: colorsArray[index],
-                  }}>
-                  {!checkinTreatment ? !isTreatmentPrescribed(treatment, moment(checkin.date, "MMMM Do YYYY")) ? "NP!" : "?"
-                  : checkinTreatment.prescribedToday === false ? "NP"
-                  : checkinTreatment.compliance === "No" ? "N"
-                  : checkinTreatment.compliance === "Some" ? "S"
-                  : checkinTreatment.compliance === "Yes" ? "Y"
-                  : checkinTreatment.compliance === "NPD" ? "NP"
-                  : "?"}
-                </div>
-              )
+              return <div key={checkin.date} className={`treatment-chart__block-segment ${checkinTreatment && checkinTreatment.compliance}`}></div>
+              // Edit Experiment
+              // return (
+              //   <div
+              //     key={checkin.date}
+              //     className={`treatment-chart__block-segment ${checkinTreatment && (checkinTreatment.prescribedToday ? checkinTreatment.compliance : 'aaa')}`}
+              //     style={{
+              //       // background: colorsArray[index],
+              //       background: 'white',
+              //       color: colorsArray[index],
+              //     }}>
+              //     {!checkinTreatment ? !isTreatmentPrescribed(treatment, moment(checkin.date, "MMMM Do YYYY")) ? "NP!" : "?"
+              //     : checkinTreatment.prescribedToday === false ? "NP"
+              //     : checkinTreatment.compliance === "No" ? "N"
+              //     : checkinTreatment.compliance === "Some" ? "S"
+              //     : checkinTreatment.compliance === "Yes" ? "Y"
+              //     : checkinTreatment.compliance === "NPD" ? "NP"
+              //     : "?"}
+              //   </div>
+              // )
             })}
         </div>
         </div>
