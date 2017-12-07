@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import PublicHeader from '../components/PublicHeader';
 
-const PublicRoute = ({ loggingIn, authenticated, accountType, component, ...rest }) => {
+const PublicRoute = ({ loggingIn, authenticated, account, component, ...rest }) => {
   return (
     <Route {...rest} render={(props) => {
       return (
@@ -13,7 +13,7 @@ const PublicRoute = ({ loggingIn, authenticated, accountType, component, ...rest
             <PublicHeader />
             {(React.createElement(component, {...props}))}
           </div>
-        : accountType === 'doctor' ?
+        : account.type === 'doctor' ?
           <Redirect to="/doctor" />
         :
           <Redirect to="/patient" />

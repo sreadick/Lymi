@@ -11,7 +11,7 @@ if (Meteor.isServer) {
   });
 
   Meteor.publish('patientCheckinHistories', function(patientId) {
-    if (this.userId && Meteor.users.findOne(this.userId).accountType === 'doctor') {
+    if (this.userId && Meteor.users.findOne(this.userId).account.type === 'doctor') {
       return CheckinHistories.find({ userId: patientId });
     } else {
       this.ready();
@@ -40,19 +40,21 @@ Meteor.methods({
                 commonTreatmentId: treatment.commonTreatmentId
               }
             }),
+            notableEvents: '',
           }],
           $position: position
         }
       }
     });
   },
-  'checkinHistories.checkins.update'({ date, symptoms, todaysCheckinSymptoms, treatments, todaysCheckinTreatments, todayTreatments }) {
+  'checkinHistories.checkins.update'({ date, symptoms, todaysCheckinSymptoms, treatments, todaysCheckinTreatments, todayTreatments, todaysNotableEvents }) {
     if (!this.userId) {
       throw new Meteor.Error('not-authorized');
     }
     const dateIndex = CheckinHistories.findOne({userId: this.userId}).checkins.findIndex((checkin) => checkin.date === date);
     const symptomsPath = `checkins.${dateIndex}.symptoms`;
     const treatmentsPath = `checkins.${dateIndex}.treatments`;
+    const notableEventsPath = `checkins.${dateIndex}.notableEvents`;
 
     CheckinHistories.update({userId: this.userId}, {
       $set: {
@@ -71,6 +73,7 @@ Meteor.methods({
             commonTreatmentId: treatment.commonTreatmentId
            }
         }),
+        [notableEventsPath] : todaysNotableEvents,
       }
     });
   },
@@ -130,6 +133,18 @@ Meteor.methods({
     CheckinHistories.update({userId: this.userId}, {
       $set: {
         [fieldPath] : answer,
+        lastCheckin: new Date()
+      }
+    });
+  },
+  'checkinHistories.notableEvents.update'(message, date) {
+    const dateIndex = CheckinHistories.findOne({userId: this.userId}).checkins.findIndex((checkin) => checkin.date === date);
+    // const notableEventsIndex = CheckinHistories.findOne({userId: this.userId}).checkins[dateIndex].notableEvents.findIndex((thisTreatment) => thisTreatment.name === treatment.name);
+    const fieldPath = `checkins.${dateIndex}.notableEvents`;
+
+    CheckinHistories.update({userId: this.userId}, {
+      $set: {
+        [fieldPath] : message,
         lastCheckin: new Date()
       }
     });

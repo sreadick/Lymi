@@ -136,13 +136,13 @@ class SelectSymptomsPage extends React.Component {
     }
     return (
       <div className="page-content">
-        {(this.props.checkinHistoryIsReady && this.props.checkinHistory.checkins.length === 0)
+        {/* {(this.props.checkinHistoryIsReady && this.props.checkinHistory.checkins.length === 0)
           && <div className="intro_message_container" ref="intro_message_container">
             <h1>Welcome to LymeLog</h1>
             <p>To get started select your symptoms from the list below. If your symptom isn't listed you can enter it at the bottom of the page.</p>
             <p onClick={() => this.refs.intro_message_container.classList.add('closed')}><span>Got it</span></p>
           </div>
-        }
+        } */}
         <div className="">
           <div className="page-content__main-heading">Common Symptoms</div>
 
@@ -182,8 +182,12 @@ class SelectSymptomsPage extends React.Component {
         <div className='row right-align'>
           {/* <div className='col m4'> */}
             <Link className={`waves-effect waves-light ${this.props.userSymptoms.length > 0 ? "btn-large" : "btn-large disabled"} green right`}
-              to={this.props.userSymptoms.length > 0 ? "/patient/selecttreatments" : "#"}>
-              Next: Treatments
+              to={
+                this.props.userSymptoms.length === 0 ? '#'
+                : Meteor.user().profile.settings.trackedItems.includes('treatments') ? '/patient/selecttreatments'
+                : '/patient/dashboard'
+              }>
+              { Meteor.user().profile.settings.trackedItems.includes('treatments') ? 'Next: Treatments' : 'Next: Dashboard'}
             </Link>
           {/* </div> */}
         </div>

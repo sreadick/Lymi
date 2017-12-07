@@ -11,6 +11,7 @@ import { CheckinHistories } from '../../../api/checkin-histories';
 
 import SymptomsCheckin from '../../components/patient/SymptomsCheckin';
 import TreatmentsCheckin from '../../components/patient/TreatmentsCheckin';
+import NotableEventsCheckin from '../../components/patient/NotableEventsCheckin';
 
 
 class Checkin extends React.Component {
@@ -43,14 +44,25 @@ class Checkin extends React.Component {
             fromTreatmentsCheckin={this.state.fromTreatmentsCheckin}
             navigateToComponent={this.navigateToComponent}
             targetDate={this.props.targetDate}
-            yesterdaysCheckin={this.props.yesterdaysCheckin} />
-          :
+            yesterdaysCheckin={this.props.yesterdaysCheckin}
+            trackedItems={this.props.trackedItems}
+           />
+          : this.state.checkinComponent === 'treatments' ?
           <TreatmentsCheckin
             treatmentCheckinItems={this.props.treatmentCheckinItems}
             navigateToComponent={this.navigateToComponent}
             targetDate={this.props.targetDate}
             yesterdaysCheckin={this.props.yesterdaysCheckin}
-            nonPrescribedTreatmentNames={this.props.nonPrescribedTreatmentNames} />
+            nonPrescribedTreatmentNames={this.props.nonPrescribedTreatmentNames}
+            trackedItems={this.props.trackedItems}
+          />
+          :
+          <NotableEventsCheckin
+            navigateToComponent={this.navigateToComponent}
+            notableEventsMessage={this.props.notableEventsMessage}
+            targetDate={this.props.targetDate}
+            trackedItems={this.props.trackedItems}
+          />
         }
       </div>
     );
@@ -85,16 +97,19 @@ export default createContainer(props => {
         todaysCheckinSymptoms: foundCheckin.symptoms,
         treatments: treatments,
         todayTreatments: dateFilteredTreatments,
-        todaysCheckinTreatments: foundCheckin.treatments
+        todaysCheckinTreatments: foundCheckin.treatments,
+        todaysNotableEvents: foundCheckin.notableEvents
       });
     }
   }
   return {
     symptomCheckinItems: foundCheckin ? foundCheckin.symptoms : [],
     treatmentCheckinItems: foundCheckin ? foundCheckin.treatments.filter(checkinTreatment => checkinTreatment.prescribedToday) : [],
+    notableEventsMessage: foundCheckin ? foundCheckin.notableEvents : '',
     nonPrescribedTreatmentNames: foundCheckin ? foundCheckin.treatments.filter(checkinTreatment => !checkinTreatment.prescribedToday).map(checkinTreatment => checkinTreatment.name) : [],
     isFetching: !checkinHistoryIsReady,
     targetDate,
-    yesterdaysCheckin
+    yesterdaysCheckin,
+    trackedItems: Meteor.user().profile.settings.trackedItems
   }
 }, Checkin)

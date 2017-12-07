@@ -25,7 +25,7 @@ const Dashboard = (props) => {
         <div className="indeterminate"></div>
       </div>
     );
-  } else if (props.userSymptoms.length === 0 || props.userTreatments.length === 0) {
+  } else if (Meteor.user().account.status === 'initializing' || props.userSymptoms.length === 0 || (props.userTreatments.length === 0 && props.trackedItems.includes('treatments'))) {
     return <Redirect to="/patient" />
   } else if (props.userTreatments.find((treatment) => Object.keys(treatment.errors).length > 0)) {
     return <Redirect to="/patient/selecttreatments" />
@@ -67,6 +67,23 @@ const Dashboard = (props) => {
         </div>
 
         <TasksBox userSymptoms={props.userSymptoms} userTreatments={props.userTreatments} todayTreatments={props.todayTreatments} dailyCheckinStatus={props.dailyCheckinStatus} />
+
+        <div className='dashboard-user-info__bottom-row'>
+          <div className='tracked-items__wrapper'>
+            <h5>Tracked Items:
+              <Link to='/patient/account' className='right'>
+                edit
+              </Link>
+            </h5>
+            <ul className='tracked-items'>
+              {props.trackedItems.map(trackedItem =>
+                <li className='tracked-items__item-name' key={trackedItem}>
+                  {trackedItem}
+                </li>
+              )}
+            </ul>
+          </div>
+        </div>
       </div>
 
       <div className='row grey lighten-4 dashboard-chart-section'>
@@ -136,46 +153,47 @@ const Dashboard = (props) => {
         </div>
       </div>
 
-      {/* <div className="row dashboard-chart-section treatments"> */}
-      <div className="row dashboard-chart-section black">
-        <div className='col sm12 m9'>
-          <div className='row'>
-            <div className='treatment-chart__wrapper z-depth-2'>
-              {props.checkinHistory.checkins.length > 0 &&
-                <TreatmentChart
-                  treatments={props.userTreatments}
-                  checkins={props.checkinHistory.checkins}
-                />
-              }
+      {props.trackedItems.includes('treatments') &&
+        // <div className="row dashboard-chart-section treatments">
+        <div className="row dashboard-chart-section black">
+          <div className='col sm12 m9'>
+            <div className='row'>
+              <div className='treatment-chart__wrapper z-depth-2'>
+                {props.checkinHistory.checkins.length > 0 &&
+                  <TreatmentChart
+                    treatments={props.userTreatments}
+                    checkins={props.checkinHistory.checkins}
+                  />
+                }
+              </div>
             </div>
           </div>
-        </div>
-        <div className='col sm12 m3'>
-          <ul className='collection with-header z-depth-2'>
-            <li className="collection-header">
-              <h5>My Treatments:
-                <div className='secondary-content'>
-                  {props.checkinHistory.checkins.length > 0 &&
-                    <Link className='waves-effect waves-light' to="/patient/history/treatments"><i className='dashboard-chart-section__collection-header-icon black-text material-icons'>insert_chart</i></Link>
-                  }
-                  <Link className="waves-effect waves-light" to="/patient/selecttreatments"><i className='dashboard-chart-section__collection-header-icon blue-text material-icons'>edit</i></Link>
-                </div>
-              </h5>
-            </li>
+          <div className='col sm12 m3'>
+            <ul className='collection with-header z-depth-2'>
+              <li className="collection-header">
+                <h5>My Treatments:
+                  <div className='secondary-content'>
+                    {props.checkinHistory.checkins.length > 0 &&
+                      <Link className='waves-effect waves-light' to="/patient/history/treatments"><i className='dashboard-chart-section__collection-header-icon black-text material-icons'>insert_chart</i></Link>
+                    }
+                    <Link className="waves-effect waves-light" to="/patient/selecttreatments"><i className='dashboard-chart-section__collection-header-icon blue-text material-icons'>edit</i></Link>
+                  </div>
+                </h5>
+              </li>
 
-            {props.userTreatments.map((treatment) => {
-              return (
-                <TreatmentCollapsible
-                  key={treatment._id}
-                  treatment={treatment}
-                  takeTreatmentToday={!!props.todayTreatments.find(todayTreatment => todayTreatment._id === treatment._id)}
-                />
-              );
-            })}
-          </ul>
+              {props.userTreatments.map((treatment) => {
+                return (
+                  <TreatmentCollapsible
+                    key={treatment._id}
+                    treatment={treatment}
+                    takeTreatmentToday={!!props.todayTreatments.find(todayTreatment => todayTreatment._id === treatment._id)}
+                  />
+                );
+              })}
+            </ul>
+          </div>
         </div>
-      </div>
-
+      }
     </div>
   );
 };
@@ -196,10 +214,12 @@ export default createContainer(() => {
   const currentDate = moment().format('MMMM Do YYYY');
   const todaysCheckin = (checkinHandle.ready() && checkinHistory) ? checkinHistory.checkins.find((checkin) => checkin.date === currentDate) : undefined;
 
+  const trackedItems = Meteor.user().profile.settings.trackedItems;
+
   let dailyCheckinStatus;
-  if ((checkinHandle.ready() && todaysCheckin) && (userSymptoms.every(userSymptom => todaysCheckin.symptoms.find(checkinSymptom => (checkinSymptom.name === userSymptom.name && checkinSymptom.severity > 0))) && todayTreatments.every(userTreatment => todaysCheckin.treatments.find(checkinTreatment => (checkinTreatment.name === userTreatment.name && checkinTreatment.compliance !== null))))) {
+  if ((checkinHandle.ready() && todaysCheckin) && (userSymptoms.every(userSymptom => todaysCheckin.symptoms.find(checkinSymptom => (checkinSymptom.name === userSymptom.name && checkinSymptom.severity > 0))) && (todayTreatments.every(userTreatment => todaysCheckin.treatments.find(checkinTreatment => (checkinTreatment.name === userTreatment.name && checkinTreatment.compliance !== null))) || !trackedItems.includes('treatments')))) {
     dailyCheckinStatus = 'complete';
-  } else if ((checkinHandle.ready() && todaysCheckin) && (userSymptoms.some(userSymptom => todaysCheckin.symptoms.find(checkinSymptom => (checkinSymptom.name === userSymptom.name && checkinSymptom.severity > 0))) || todayTreatments.some(userTreatment => todaysCheckin.treatments.find(checkinTreatment => (checkinTreatment.name === userTreatment.name && checkinTreatment.compliance !== null))))) {
+  } else if ((checkinHandle.ready() && todaysCheckin) && (userSymptoms.some(userSymptom => todaysCheckin.symptoms.find(checkinSymptom => (checkinSymptom.name === userSymptom.name && checkinSymptom.severity > 0))) || (todayTreatments.some(userTreatment => todaysCheckin.treatments.find(checkinTreatment => (checkinTreatment.name === userTreatment.name && checkinTreatment.compliance !== null))) || !trackedItems.includes('treatments')))) {
     dailyCheckinStatus = 'partially complete';
   } else {
     dailyCheckinStatus = 'incomplete';
@@ -216,7 +236,8 @@ export default createContainer(() => {
     activeSegmentNumber,
     activeSegmentSymptoms: activeSegmentNumber ? userSymptoms.slice((activeSegmentNumber - 1) * 3, activeSegmentNumber * 3) : undefined,
     userPhoto: (Meteor.user() && Meteor.user().profile.userPhoto) ? Meteor.user().profile.userPhoto : undefined,
-    todayTreatments
+    todayTreatments,
+    trackedItems
 
   };
 }, Dashboard);

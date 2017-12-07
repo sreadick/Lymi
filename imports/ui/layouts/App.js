@@ -13,6 +13,7 @@ import Login from '../pages/Login';
 import NotFound from '../pages/NotFound';
 
 import Patient from './Patient';
+import WelcomePage from '../pages/patient/WelcomePage';
 import SelectSymptomsPage from '../pages/patient/SelectSymptomsPage';
 import SelectTreatmentsPage from '../pages/patient/SelectTreatmentsPage';
 import SelectTreatmentsPage2 from '../pages/patient/SelectTreatmentsPage2';
@@ -33,7 +34,7 @@ import PatientSummary from '../pages/doctor/PatientSummary';
 // Consider creating high level container for front end collections
 
 const App = appProps => {
-  if (appProps.authenticated && !appProps.accountType) {
+  if (appProps.authenticated && !appProps.account) {
     return (
       <div className="progress">
         <div className="indeterminate"></div>
@@ -48,6 +49,7 @@ const App = appProps => {
         <PublicRoute path="/signup" component={Signup} {...appProps} />
 
         <AuthPatientRoute exact path="/patient" component={Patient} {...appProps} />
+        <AuthPatientRoute exact path="/patient/welcomepage" component={WelcomePage} {...appProps} />
         <AuthPatientRoute exact path="/patient/selectsymptoms" component={SelectSymptomsPage} {...appProps} />
         <AuthPatientRoute exact path="/patient/selecttreatments" component={SelectTreatmentsPage} {...appProps} />
         <AuthPatientRoute exact path="/patient/selecttreatments2" component={SelectTreatmentsPage2} {...appProps} />
@@ -75,7 +77,7 @@ export default createContainer(() => {
   return {
     loggingIn,
     authenticated: !!Meteor.userId(),
-    accountType: (userDataHandle.ready() && Meteor.userId()) ? Meteor.users.findOne(Meteor.userId()).accountType : undefined
+    account: (userDataHandle.ready() && Meteor.userId()) ? Meteor.users.findOne(Meteor.userId()).account : undefined
   };
 
 }, App);

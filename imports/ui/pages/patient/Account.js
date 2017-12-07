@@ -32,7 +32,7 @@ class Account extends React.Component {
         <div className="page-content__main-heading">Account</div>
         <Tabs className='z-depth-1'>
           <Tab className='col s3' title="Settings" active={!this.props.location.state || !this.props.location.state.activeTab}>
-            <Settings userInfo={this.props.userInfo}/>
+            <Settings settingsInfo={this.props.userInfo.profile.settings}/>
           </Tab>
           <Tab className='col s3' title="Preferences">
             <Preferences userInfo={this.props.userInfo}/>

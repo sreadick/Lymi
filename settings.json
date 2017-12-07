@@ -1,0 +1,7 @@
+{
+  "galaxy.meteor.com": {
+    "env": {
+      "MONGO_URL": "mongodb://sky:undecisive@ds113566.mlab.com:13566/lymelogdb"
+    }
+  }
+}

@@ -81,6 +81,7 @@ export default createContainer(() => {
   const userSymptoms = UserSymptoms.find().fetch();
   const userTreatments = UserTreatments.find().fetch();
   const checkinHistory = CheckinHistories.findOne();
+  const trackedItems = Meteor.user().profile.settings.trackedItems;
 
   return {
     userSymptoms,
@@ -90,19 +91,19 @@ export default createContainer(() => {
       {
         name: "Dashboard",
         path: "/patient/dashboard",
-        errorMessage: (collectionsAreReady && (userSymptoms.length === 0 && userTreatments.length === 0)) ?
+        errorMessage: (collectionsAreReady && (userSymptoms.length === 0 && (userTreatments.length === 0 && trackedItems.includes('treatments')))) ?
           <span>You need to have at least 1 <SidebarLink to="/patient/selectsymptoms">symptom</SidebarLink> and <SidebarLink to="/patient/selecttreatments">treatment</SidebarLink></span>
         : (collectionsAreReady && (userSymptoms.length === 0)) ? <span>You need to have at least 1 <SidebarLink to="/patient/selectsymptoms">symptom</SidebarLink></span>
-        : (collectionsAreReady && (userTreatments.length === 0)) ? <span>You need to have at least 1 <SidebarLink to="/patient/selecttreatments">treatment</SidebarLink></span>
+        : (collectionsAreReady && (userTreatments.length === 0 && trackedItems.includes('treatments'))) ? <span>You need to have at least 1 <SidebarLink to="/patient/selecttreatments">treatment</SidebarLink></span>
         : undefined
       },
       {
         name: "Check in",
         path: "/patient/checkin",
-        errorMessage: (collectionsAreReady && (userSymptoms.length === 0 && userTreatments.length === 0)) ?
+        errorMessage: (collectionsAreReady && (userSymptoms.length === 0 && (userTreatments.length === 0 && trackedItems.includes('treatments')))) ?
           <span>You need to have at least 1 <SidebarLink to="/patient/selectsymptoms">symptom</SidebarLink> and <SidebarLink to="/patient/selecttreatments">treatment</SidebarLink></span>
         : (collectionsAreReady && (userSymptoms.length === 0)) ? <span>You need to have at least 1 <SidebarLink to="/patient/selectsymptoms">symptom</SidebarLink></span>
-        : (collectionsAreReady && (userTreatments.length === 0)) ? <span>You need to have at least 1 <SidebarLink to="/patient/selecttreatments">treatment</SidebarLink></span>
+        : (collectionsAreReady && (userTreatments.length === 0 && trackedItems.includes('treatments'))) ? <span>You need to have at least 1 <SidebarLink to="/patient/selecttreatments">treatment</SidebarLink></span>
         : userTreatments.find((treatment) => Object.keys(treatment.errors).length > 0) ? "Treatments contain one or more errors"
         : undefined,
       },
@@ -112,7 +113,10 @@ export default createContainer(() => {
       },
       {
         name: "Treatments",
-        path: "/patient/selecttreatments"
+        path: "/patient/selecttreatments",
+        errorMessage: !Meteor.user().profile.settings.trackedItems.includes('treatments') ?
+          <span>Treatment tracking is turned off. Go to <SidebarLink to="/patient/account">settings</SidebarLink> to enable</span>
+          : undefined
       },
       {
         name: "Symptom History",

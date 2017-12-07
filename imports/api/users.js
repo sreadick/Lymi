@@ -10,7 +10,7 @@ if (Meteor.isServer) {
   Meteor.publish('userData', function() {
     if (this.userId) {
       return Meteor.users.find(this.userId, {
-        fields: { accountType: 1, doctorId: 1, sixCharKey: 1 }
+        fields: { account: 1, doctorId: 1, sixCharKey: 1 }
       });
     } else {
       this.ready();
@@ -18,16 +18,16 @@ if (Meteor.isServer) {
   });
 
   Meteor.publish('currentPatients', function() {
-    if (this.userId && Meteor.users.findOne(this.userId).accountType === 'doctor') {
-      return Meteor.users.find({accountType: 'patient', doctorId: this.userId});
+    if (this.userId && Meteor.users.findOne(this.userId).account.type === 'doctor') {
+      return Meteor.users.find({'account.type': 'patient', doctorId: this.userId});
     } else {
       this.ready();
     }
   });
 
   Meteor.publish('allPatients', function() {
-    if (this.userId && Meteor.users.findOne(this.userId).accountType === 'doctor') {
-      return Meteor.users.find({accountType: 'patient'});
+    if (this.userId && Meteor.users.findOne(this.userId).account.type === 'doctor') {
+      return Meteor.users.find({'account.type': 'patient'});
     } else {
       this.ready();
     }
@@ -35,7 +35,7 @@ if (Meteor.isServer) {
 
   Meteor.publish('currentDoctor', function(doctorId) {
     if (this.userId) {
-      return Meteor.users.find({accountType: 'doctor', _id: doctorId});
+      return Meteor.users.find({'account.type': 'doctor', _id: doctorId});
     } else {
       return this.ready();
     }
@@ -43,7 +43,7 @@ if (Meteor.isServer) {
 
   Meteor.publish('searchedDoctor', function(sixCharKeyQuery) {
     if (this.userId) {
-      return Meteor.users.find({accountType: 'doctor', sixCharKey: sixCharKeyQuery}, {
+      return Meteor.users.find({'account.type': 'doctor', sixCharKey: sixCharKeyQuery}, {
         fields: { emails: 0 }
       });
     } else {
@@ -69,16 +69,21 @@ Accounts.validateNewUser((user) => {
 
 Accounts.onCreateUser((options, user) => {
 
-  user.accountType = options.accountType;
+  // user.accountType = options.accountType;
+  user.account = {
+    type: options.accountType
+  };
 
   user.profile = options.profile || {};
 
   user.profile.firstName = options.firstName;
   user.profile.lastName = options.lastName;
 
-  if (options.accountType === 'doctor') {
+  if (user.account.type === 'doctor') {
     user.sixCharKey = Random.id(6);
-  } else if (options.accountType === 'patient') {
+    user.account.status = 'pending approval'
+  } else if (user.account.type === 'patient') {
+    user.account.status = 'initializing'
     user.profile.middleInitial = '';
 
     user.profile.birthMonth = '';
@@ -97,6 +102,10 @@ Accounts.onCreateUser((options, user) => {
     user.profile.medical = {
       tickBorneDiseases: [],
       initialInfectionDate: '',
+    }
+
+    user.profile.settings = {
+      trackedItems: ['symptoms', 'treatments', 'notable events']
     }
 
     user.profile.backgroundURL = backgroundImages[Math.floor(Math.random() * backgroundImages.length)]
@@ -118,5 +127,12 @@ Meteor.methods({
         doctorId
       }
     });
+  },
+  'users.updateAccountStatus'(status) {
+    Meteor.users.update(this.userId, {
+      $set: {
+        'account.status': status
+      }
+    })
   }
 })

@@ -13,7 +13,7 @@ if (Meteor.isServer) {
     this.ready();
   });
   Meteor.publish('patientSymptoms', function(patientId) {
-    if (this.userId && Meteor.users.findOne(this.userId).accountType === 'doctor') {
+    if (this.userId && Meteor.users.findOne(this.userId).account.type === 'doctor') {
       return UserSymptoms.find({ userId: patientId });
     } else {
       this.ready();

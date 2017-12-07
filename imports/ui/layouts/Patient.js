@@ -10,9 +10,11 @@ import { Meteor } from 'meteor/meteor';
 const Patient = (props) => {
   if (props.isFetching) {
     return <div></div>;
-  } else if (props.userSymptoms.length > 0 && props.userTreatments.length > 0) {
+  } else if (props.accountStatus === 'initializing') {
+    return <Redirect to="/patient/welcomepage" />
+  } else if (props.userSymptoms.length > 0 && (props.userTreatments.length > 0 || !props.trackedItems.includes('treatments'))) {
     return <Redirect to="/patient/dashboard" />
-  } else if (props.userSymptoms.length > 0) {
+  } else if (props.userSymptoms.length > 0 && props.trackedItems.includes('treatments')) {
     return <Redirect to="/patient/selecttreatments" />
   } else {
     return <Redirect to="/patient/selectsymptoms" />
@@ -26,5 +28,7 @@ export default createContainer(() => {
     userSymptoms: UserSymptoms.find().fetch(),
     userTreatments: UserTreatments.find().fetch(),
     isFetching: (!symptomsHandle.ready() || !treatmentsHandle.ready()),
+    trackedItems: Meteor.user() ? Meteor.user().profile.settings.trackedItems : [],
+    accountStatus: Meteor.user() ? Meteor.user().account.status : undefined
   };
 }, Patient);

@@ -7,16 +7,16 @@ import PropTypes from 'prop-types';
 import PrivateHeader from '../components/PrivateHeader';
 // import SidebarMenu from '../components/patient/SidebarMenu';
 
-const AuthDoctorRoute = ({ loggingIn, authenticated, accountType, component, sidebarToggled, ...rest }) => {
+const AuthDoctorRoute = ({ loggingIn, authenticated, account, component, sidebarToggled, ...rest }) => {
   return (
     <Route render={(props) => {
       return (
         !authenticated ?
           <Redirect to="/login" />
-        : accountType === 'doctor' ?
+        : account.type === 'doctor' ?
           <div className="page doctor">
             {/* <SidebarMenu currentPath={props.location.pathname} sidebarToggled={sidebarToggled}/> */}
-            <PrivateHeader title="LymeLog-MD" accountType={accountType} />
+            <PrivateHeader title="LymeLog-MD" accountType={account.type} />
             <div>
               {(React.createElement(component, {...props, ...rest}))}
             </div>

@@ -80,8 +80,18 @@ class SymptomsCheckin extends React.Component {
               {this.props.treatmentCheckinItems.length === 0 ? 'Finish' : 'Next'}
             </Link> */}
             <button className={`black btn ${!this.props.symptomCheckinCompleted && 'disabled'}`}
-              onClick={() => this.props.navigateToComponent(this.props.treatmentCheckinItems.length === 0 ? 'dashboard' : 'treatments')}>
-              {this.props.treatmentCheckinItems.length === 0 ? 'Finish' : 'Next'}
+              // onClick={() => this.props.navigateToComponent(this.props.treatmentCheckinItems.length === 0 ? 'dashboard' : 'treatments')}>
+              // {this.props.treatmentCheckinItems.length === 0 ? 'Finish' : 'Next'}
+              onClick={() => {
+                this.props.trackedItems.includes('treatments') ? this.props.navigateToComponent('treatments') :
+                this.props.trackedItems.includes('notable events') ? this.props.navigateToComponent('notable events') :
+                this.props.navigateToComponent('dashboard')
+              }}>
+              {
+                this.props.trackedItems.includes('treatments') ? 'Treatments' :
+                this.props.trackedItems.includes('notable events') ? 'Notable Events' :
+                "Finish!"
+              }
             </button>
           </div>
         </div>

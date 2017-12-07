@@ -150,10 +150,10 @@ export default createContainer(props => {
   const searchedDoctorHandle = Meteor.subscribe('searchedDoctor', Session.get('sixCharKeyQuery'));
   const currentdDoctorHandle = Meteor.subscribe('currentDoctor', Meteor.user() && Meteor.user().doctorId);
 
-  const searchedDoctor = Meteor.users.findOne({ accountType: 'doctor', sixCharKey: Session.get('sixCharKeyQuery')});
-  const currentDoctor = Meteor.user() && Meteor.users.findOne({ accountType: 'doctor', _id: Meteor.user().doctorId });
-  console.log('searchedDoctor:' , searchedDoctor);
-  console.log('currentDoctor:' , currentDoctor);
+  const searchedDoctor = Meteor.users.findOne({ 'account.type': 'doctor', sixCharKey: Session.get('sixCharKeyQuery')});
+  const currentDoctor = Meteor.user() && Meteor.users.findOne({ 'account.type': 'doctor', _id: Meteor.user().doctorId });
+  // console.log('searchedDoctor:' , searchedDoctor);
+  // console.log('currentDoctor:' , currentDoctor);
   return {
     searchedDoctor,
     currentDoctor,
