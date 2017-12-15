@@ -68,7 +68,7 @@ Meteor.methods({
           }
         ],
         hourlyDose: {
-          hourInterval: 0,
+          hourInterval: 1,
           quantity: 1
         },
         prnDose: {

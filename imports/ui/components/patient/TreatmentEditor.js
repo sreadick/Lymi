@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { Session } from 'meteor/session';
 
 import Collapsible from 'react-collapsible';
+import { Row, Col, Input, Tabs, Tab } from 'react-materialize';
 import moment from 'moment';
 import { DayPickerRangeController, DayPickerSingleDateController } from 'react-dates';
 import TimePicker from 'rc-time-picker';
@@ -11,33 +12,42 @@ import 'rc-time-picker/assets/index.css';
 import Autosuggest from 'react-autosuggest';
 // import autoSuggestTheme from '../../../client/styles/_react-autosuggest';
 
+import TreatmentDosing from './TreatmentDetails/TreatmentDosing';
+import TreatmentDates from './TreatmentDetails/TreatmentDates';
+import TreatmentInfo from './TreatmentDetails/TreatmentInfo';
+import TreatmentInstructions from './TreatmentDetails/TreatmentInstructions';
+
 export class TreatmentEditor extends React.Component {
   constructor(props) {
     super(props);
 
+    // const { name, amount, dose, dose_type, frequency, daysOfWeek, startDate, endDate } = props.treatment;
+    const { treatment } = props;
+
     this.state = {
-      name: '',
-      amount: 0,
-      dose: 0,
-      dose_type: '',
-      frequency: 0,
-      daysOfWeek: [],
-      startDate: null,
-      endDate: null,
+      name: treatment ? treatment.name : '',
+      amount: treatment ? treatment.amount : 0,
+      dose: treatment ? treatment.dose : 0,
+      dose_type: treatment ? treatment.dose_type : '',
+      frequency: treatment ? treatment.frequency : 0,
+      daysOfWeek: treatment ? treatment.daysOfWeek : [],
+      startDate: (treatment && treatment.startDateValue) ? moment(treatment.startDateValue) : null,
+      endDate: (treatment && treatment.endDateValue) ? moment(treatment.endDateValue) : null,
       focusedInput: 'startDate',
-      dateSelectMode: '',
-      individualDateValues: [],
-      dosingFormat: '',
-      dosingDetails: {
+      dateSelectMode: treatment ? treatment.dateSelectMode : '',
+      individualDateValues: treatment ? treatment.individualDateValues : [],
+      dosingFormat: treatment ? treatment.dosingFormat : '',
+      dosingDetails: treatment ? treatment.dosingDetails : {
         generalDoses: [],
         specificDoses: [],
         hourlyDose: {},
         prnDose: {},
         other: {}
       },
-      otherInstructions: {},
-      info: {},
+      otherInstructions: treatment ? treatment.otherInstructions : {},
+      info: treatment ? treatment.info : {},
       treatmentSuggestions: [],
+      selectedTab: 'dosing',
     };
 
     this.handleWeekdayChange = this.handleWeekdayChange.bind(this);
@@ -49,14 +59,50 @@ export class TreatmentEditor extends React.Component {
 
     if (currentTreatmentId && currentTreatmentId !== previousTreatmentId) {
       const { name, amount, dose, dose_type, frequency, daysOfWeek, startDateValue, endDateValue, dateSelectMode, individualDateValues, dosingFormat, dosingDetails, otherInstructions, info } = this.props.treatment;
+      const startDate = this.props.treatment.startDateValue ? moment(this.props.treatment.startDateValue) : null;
+      const endDate = this.props.treatment.endDateValue ? moment(this.props.treatment.endDateValue) : null;
       this.setState({
-        name, amount, dose, dose_type, frequency, daysOfWeek, startDateValue, endDateValue, dateSelectMode, individualDateValues, dosingFormat, dosingDetails, otherInstructions, info
+        name, amount, dose, dose_type, frequency, daysOfWeek, startDateValue, endDateValue, startDate, endDate, dateSelectMode, individualDateValues, dosingFormat, dosingDetails, otherInstructions, info
       })
     }
   }
 
   componentDidMount() {
-    // this.props.getAllErrors();
+    // this.getAllErrors();
+  }
+
+  getAllErrors() {
+    const errors = {};
+    const treatment = this.props.treatment;
+    // if (this.props.userTreatments.find((treatment) => this.props.userTreatments[i].name.toLowerCase() === treatment.name.toLowerCase() && this.props.userTreatments[i]._id !== treatment._id)) {
+    //   errors.name = "needs to be unique"
+    // }
+    if (treatment.name.length < 3) {
+      errors.name = "needs to be at least three characters";
+    }
+    if (parseInt(treatment.amount) !== parseFloat(treatment.amount) || parseInt(treatment.amount) <= 0) {
+      errors.amount = "should be a positive whole number"
+    }
+    if (treatment.dose_type !== 'pills' && treatment.dose <= 0) {
+      errors.dose = "should be a positive number";
+    }
+    if (parseInt(treatment.frequency) !== parseFloat(treatment.frequency) || parseInt(treatment.frequency) <= 0) {
+      errors.frequency = "should be a positive whole number"
+    }
+    if ((treatment.dateSelectMode !== 'individual select') && treatment.daysOfWeek.length === 0) {
+      errors.daysOfWeek = 'Select at least one day of the week'
+    }
+    if (treatment.dateSelectMode === 'date range' && (!treatment.startDateValue || !treatment.endDateValue || treatment.startDateValue === treatment.endDateValue)) {
+      errors.dateRange = 'Select a start and end date';
+    }
+    if (treatment.dateSelectMode === 'individual select' && treatment.individualDateValues.length === 0) {
+      errors.individualDates = 'Select at least one day';
+    }
+
+    Meteor.call('userTreatments.update', treatment._id, {
+      errors,
+      // showDateDetails: (this.props.showErrors && (errors.daysOfWeek || errors.dateRange || errors.individualDates)) ? true : false
+    });
   }
 
   handleChange(e) {
@@ -85,7 +131,6 @@ export class TreatmentEditor extends React.Component {
             }
           );
         }
-
         otherUpdates.dosingDetails = dosingDetails;
         this.setState({
           frequency: e.target.value,
@@ -104,35 +149,81 @@ export class TreatmentEditor extends React.Component {
         if (err) {
           console.log(err);
         } else {
-          this.props.getAllErrors();
+          this.getAllErrors();
         }
       });
     }
   }
 
-  handleDosingFormatChange(radioGroup, value) {
-    this.setState({
-      [radioGroup]: value
-    });
+  // handleDosingFormatChange(radioGroup, value) {
+  //   this.setState({
+  //     [radioGroup]: value
+  //   });
+  //   Meteor.call('userTreatments.update', this.props.treatment._id, {
+  //     [radioGroup]: value,
+  //   }, (err, res) => {
+  //     if (err) {
+  //       console.log(err);
+  //     } else {
+  //       this.getAllErrors();
+  //     }
+  //   });
+  // }
+  handleDosingChange({attr, value}) {
+    const otherUpdates = {};
+
+    if (attr === 'frequency') {
+      if (parseFloat(value) > 9) {
+        value = 9;
+      } else if (parseFloat(value) < 1) {
+        value = 1
+      }
+      const dosingDetails = Object.assign({}, this.state.dosingDetails, {specificDoses: []});
+      for (let i = 0; i < parseInt(value); i++) {
+        dosingDetails.specificDoses.push(this.state.dosingDetails.specificDoses[i] ?
+          {
+            time: this.state.dosingDetails.specificDoses[i].time,
+            quantity: parseFloat(this.state.dosingDetails.specificDoses[i].quantity) || 0,
+          } : {
+            time: moment().hour(0).minute(0).valueOf(),
+            quantity: 1
+          }
+        );
+      }
+
+      otherUpdates.dosingDetails = dosingDetails;
+      this.setState({
+        frequency: value,
+        dosingDetails
+      });
+    } else {
+      this.setState({
+        [attr]: value
+      });
+    }
     Meteor.call('userTreatments.update', this.props.treatment._id, {
-      [radioGroup]: value,
+      [attr]: value,
+      ...otherUpdates
     }, (err, res) => {
       if (err) {
         console.log(err);
       } else {
-        this.props.getAllErrors();
+        this.getAllErrors();
       }
     });
   }
 
   handleDosingDetailsChange({type, index, targetProperty, changedValue}) {
+    if (targetProperty === 'hourInterval') {
+      changedValue = parseFloat(changedValue) || 0
+    }
     Meteor.call('userTreatments.details.update', this.props.treatment._id, {
       type, index, targetProperty, changedValue
     }, (err, res) => {
       if (err) {
         console.log(err);
       } else {
-        this.props.getAllErrors();
+        this.getAllErrors();
       }
     });
     const dosingDetails = Object.assign({}, this.state.dosingDetails);
@@ -153,7 +244,7 @@ export class TreatmentEditor extends React.Component {
       if (err) {
         console.log(err);
       } else {
-        this.props.getAllErrors();
+        this.getAllErrors();
       }
     });
     this.setState({otherInstructions});
@@ -167,7 +258,7 @@ export class TreatmentEditor extends React.Component {
       if (err) {
         console.log(err);
       } else {
-        this.props.getAllErrors();
+        this.getAllErrors();
       }
     });
     this.setState({info});
@@ -175,6 +266,38 @@ export class TreatmentEditor extends React.Component {
 
   handleRemove() {
     Meteor.call('userTreatments.remove', this.props.treatment._id)
+  }
+
+  handleDateModeChange(dateSelectMode) {
+    Meteor.call('userTreatments.update', this.props.treatment._id, {
+      dateSelectMode,
+    }, (err, res) => {
+      if (err) {
+        console.log(err);
+      } else {
+        this.getAllErrors();
+      }
+    });
+    this.setState({dateSelectMode})
+  }
+
+  handleDateRangeSelection(startDate, endDate) {
+    console.log(startDate, '...', endDate);
+    Meteor.call('userTreatments.update', this.props.treatment._id, {
+      startDateValue: startDate ? startDate.startOf('day').valueOf() : undefined,
+      endDateValue: endDate ? endDate.startOf('day').valueOf() : undefined
+    }, (err, res) => {
+      if (err) {
+        console.log(err);
+      } else {
+        this.getAllErrors();
+      }
+    });
+    this.setState({ startDate, endDate });
+  }
+
+  handleDateRangeFocusChange(focusedInput) {
+    this.setState({ focusedInput: this.state.focusedInput === 'startDate' ? 'endDate' : 'startDate' });
   }
 
   handleIndividualDateSelection(date) {
@@ -189,7 +312,7 @@ export class TreatmentEditor extends React.Component {
       if (err) {
         console.log(err);
       } else {
-        this.props.getAllErrors();
+        this.getAllErrors();
       }
     });
     this.setState({individualDateValues});
@@ -207,7 +330,7 @@ export class TreatmentEditor extends React.Component {
           if (err) {
             console.log(err);
           } else {
-            this.props.getAllErrors();
+            this.getAllErrors();
           }
         });
         this.setState({
@@ -223,7 +346,7 @@ export class TreatmentEditor extends React.Component {
           if (err) {
             console.log(err);
           } else {
-            this.props.getAllErrors();
+            this.getAllErrors();
           }
         });
         this.setState({daysOfWeek});
@@ -235,7 +358,7 @@ export class TreatmentEditor extends React.Component {
         if (err) {
           console.log(err);
         } else {
-          this.props.getAllErrors();
+          this.getAllErrors();
         }
       });
       this.setState({ daysOfWeek: days });
@@ -325,7 +448,7 @@ export class TreatmentEditor extends React.Component {
       if (err) {
         console.log(err);
       } else {
-        this.props.getAllErrors();
+        this.getAllErrors();
       }
     });
     this.setState({name: suggestionValue})
@@ -356,7 +479,7 @@ export class TreatmentEditor extends React.Component {
 
 
             <div className='row'>
-              <div className="input-field">
+              <div className="input-field col l6 offset-l3">
                 <Autosuggest
                   suggestions={this.state.treatmentSuggestions}
                   onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
@@ -364,64 +487,328 @@ export class TreatmentEditor extends React.Component {
                   getSuggestionValue={this.getSuggestionValue.bind(this)}
                   renderSuggestion={this.renderSuggestion.bind(this)}
                   onSuggestionSelected={this.onSuggestionSelected.bind(this)}
-                  inputProps={{className: 'treatment-editor__title', name:'name', value: this.state.name, placeholder: "Treatment Name", onChange: this.handleChange.bind(this)}}
+                  inputProps={{className: 'treatment-editor__title center-align', name:'name', value: this.state.name, placeholder: "Treatment Name", onChange: this.handleChange.bind(this)}}
                 />
-                {/* <input type="text" id="name" name="name" ref="name" value={this.state.name} onChange={this.handleChange.bind(this)} autoFocus/>
+                {/* <input type="text" id="name" name="name" value={this.state.name} onChange={this.handleChange.bind(this)} autoFocus/>
                 <label className='active' htmlFor='name'>Medication/Supplement</label> */}
-                <div className="input-response red-text text-darken-2">{this.props.showErrors ? this.props.errors.name : ''}</div>
+                <div className="input-response red-text text-darken-2 center-align">{this.props.showErrors ? this.props.treatment.errors.name : ''}</div>
               </div>
             </div>
 
+            {/* <div className={`card z-depth-4 ${this.state.selectedTab === 'dosing' ? 'blue' : this.state.selectedTab === 'dates' ? 'red' : this.state.selectedTab === 'instructions' ? 'green' : 'orange'} lighten-5`}> */}
+            <div className={`card z-depth-4`}>
+              <Row>
+                <button
+                  // className={`col s3 blue btn no-hover-effect hoverable ${this.state.selectedTab === 'dosing' && 'z-depth-4'}`}
+                  className={`col s3 blue white-text btn-flat btn-large`}
+                  onClick={() => this.setState({selectedTab: 'dosing'})}>
+                  Dosing
+                </button>
+                <button
+                  // className={`col s3 red btn no-hover-effect hoverable ${this.state.selectedTab === 'dates' && 'z-depth-4'}`}
+                  className={`col s3 red white-text btn-flat btn-large`}
+                  onClick={() => this.setState({selectedTab: 'dates'})}>
+                  Dates
+                </button>
+                <button
+                  // className={`col s3 green btn no-hover-effect hoverable ${this.state.selectedTab === 'instructions' && 'z-depth-4'}`}
+                  className={`col s3 green white-text btn-flat btn-large`}
+                  onClick={() => this.setState({selectedTab: 'instructions'})}>
+                  Special Instructions
+                </button>
+                <button
+                  // className={`col s3 orange btn no-hover-effect hoverable ${this.state.selectedTab === 'info' && 'z-depth-4'}`}
+                  className={`col s3 orange white-text btn-flat btn-large`}
+                  onClick={() => this.setState({selectedTab: 'info'})}>
+                  RX Info
+                </button>
+              </Row>
+              {this.state.selectedTab === 'dosing' ?
+                <TreatmentDosing
+                  treatment={this.props.treatment}
+                  handleDosingChange={this.handleDosingChange.bind(this)}
+                  handleDosingDetailsChange={this.handleDosingDetailsChange.bind(this)} />
+              : this.state.selectedTab === 'dates' ?
+                <TreatmentDates
+                  treatment={this.props.treatment}
+                  handleDateModeChange={this.handleDateModeChange.bind(this)}
+                  handleWeekdayChange={this.handleWeekdayChange.bind(this)}
+                  startDate={this.state.startDate}
+                  endDate={this.state.endDate}
+                  focusedInput={this.state.focusedInput}
+                  handleDateRangeSelection={this.handleDateRangeSelection.bind(this)}
+                  handleDateRangeFocusChange={this.handleDateRangeFocusChange.bind(this)}
+                  handleIndividualDateSelection={this.handleIndividualDateSelection.bind(this)} />
+              : this.state.selectedTab === 'instructions' ?
+                // <TreatmentInstructions />
+                <TreatmentInstructions
+                  treatment={this.props.treatment}
+                  handleInstructionsChange={this.handleInstructionsChange.bind(this)} />
+              :
+                <TreatmentInfo
+                  treatment={this.props.treatment}
+                  handleInfoChange={this.handleInfoChange.bind(this)} />
+              }
+            </div>
 
-            <div className="row">
-              <div className="input-field col l4">
-                <input type="number" id="amount" name="amount" ref="amount" min="1" value={this.state.amount} onChange={this.handleChange.bind(this)} disabled={this.state.dosingFormat !== 'default' && this.state.dosingFormat !== 'other'}/>
-                <label className='active' htmlFor='amount'>Amount</label>
-                <div className="input-response red-text text-darken-2">{this.props.showErrors ? this.props.errors.amount : ''}</div>
-              </div>
+            {/* <div className="card section z-depth-4">
+              <Row>
+                <Col s={4} offset='s4'>
+                  <Input s={12} type='select' name='dosingFormat' label="Dosing Format" value={this.state.dosingFormat} onChange={this.handleChange.bind(this)}>
+                		<option value='default'>Basic</option>
+                		<option value='generalTimes'>Daily Times</option>
+                		<option value='specificTimes'>Specific Times</option>
+                		<option value='byHours'>Every x Hours</option>
+                		<option value='prn'>PRN (as neeeded)</option>
+                		<option value='other'>Custom</option>
+                	</Input>
+                </Col>
+              </Row>
 
-              <div className="input-field col l3">
-                <input className={`ui ${this.state.dose_type === 'pills' && 'disabled'} input`}
-                  type="number" id="dose" name="dose" ref="dose" value={this.state.dose_type === 'pills' ? '' : this.state.dose} disabled={this.state.dose_type === 'pills'} min="0" step="25"
-                  onChange={(e) => {
-                    if (this.state.dose_type !== 'pills') {
-                      this.handleChange(e);
+              { this.state.dosingFormat === 'default' ?
+                <Row>
+                  <div className={`input-field ${this.state.dose_type === 'pills' ? 'col l2 offset-l3' : 'col l1 offset-l3'}`}>
+                    <input type="number" id="amount" name="amount" min="1" value={this.state.amount} onChange={this.handleChange.bind(this)} disabled={this.state.dosingFormat !== 'default' && this.state.dosingFormat !== 'other'}/>
+                    <label className='active' htmlFor='amount'>Amount</label>
+                    <div className="input-response red-text text-darken-2">{this.props.showErrors ? this.props.treatment.errors.amount : ''}</div>
+                  </div>
+
+                  {this.state.dose_type !== 'pills' &&
+                    <div className="input-field col l2">
+                      <input className={`ui ${this.state.dose_type === 'pills' && 'disabled'} input`}
+                        type="number" id="dose" name="dose" value={this.state.dose_type === 'pills' ? '' : this.state.dose} min="0" step="25"
+                        onChange={(e) => {
+                          if (this.state.dose_type !== 'pills') {
+                            this.handleChange(e);
+                          }
+                        }}
+                      />
+                      <label className='active' htmlFor='dose'>Dose</label>
+                      <div className="input-response red-text text-darken-2">{this.props.showErrors ? this.props.treatment.errors.dose : ''}</div>
+                    </div>
+                  }
+
+                  <Input s={this.state.dose_type !== 'pills' ? 1 : 2} type='select' name="dose_type" value={this.state.dose_type} onChange={this.handleChange.bind(this)}>
+                    <option value="mg">mg</option>
+                    <option value="iu">iu</option>
+                    <option value="pills">{this.state.amount == 1 ? 'pill' : 'pills'}</option>
+                	</Input>
+
+                  <div className="input-field col l2">
+                      <input type="number" name="frequency" value={this.state.frequency} min="1" onChange={this.handleChange.bind(this)} />
+                    <label className='active' htmlFor='frequency'>Times Per Day</label>
+                    <div className="input-response red-text text-darken-2">{this.props.showErrors ? this.props.treatment.errors.frequency : ''}</div>
+                  </div>
+                </Row>
+                :
+                this.state.dosingFormat === 'generalTimes' ?
+                <div>
+                  <Row>
+                    {this.state.dose_type !== 'pills' &&
+                      <Col l={2} offset='l4'>
+                        <div className="input-field">
+                          <input className={`ui ${this.state.dose_type === 'pills' && 'disabled'} input`}
+                            type="number" id="dose" name="dose" value={this.state.dose_type === 'pills' ? '' : this.state.dose} min="0" step="25"
+                            onChange={(e) => {
+                              if (this.state.dose_type !== 'pills') {
+                                this.handleChange(e);
+                              }
+                            }}
+                          />
+                          <label className='active' htmlFor='dose'>Dose</label>
+                          <div className="input-response red-text text-darken-2">{this.props.showErrors ? this.props.treatment.errors.dose : ''}</div>
+                        </div>
+                      </Col>
                     }
-                  }}
-                />
-                <label className='active' htmlFor='dose'>Dose</label>
-                <div className="input-response red-text text-darken-2">{this.props.showErrors ? this.props.errors.dose : ''}</div>
-              </div>
+                    <Col l={3}>
+                      <Input type='select' name="dose_type" label='Unit of Measurement' value={this.state.dose_type} onChange={this.handleChange.bind(this)}>
+                        <option value="mg">mg</option>
+                        <option value="iu">iu</option>
+                        <option value="pills">{this.state.amount == 1 ? 'pill' : 'pills'}</option>
+                  	   </Input>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <div className='col l8 offset-l1'>
+                      {this.state.dosingDetails.generalDoses.map((dose, index) =>
+                        <div className='row' key={index}>
+                          <div className="col s2">
+                            {dose.time.charAt(0).toUpperCase() + dose.time.slice(1) + ':'}
+                          </div>
+                          <div className="col s2">
+                            <div className="input-field">
+                              <input type="number" id={`${this.state.name}_${dose.time}_dose`} value={dose.quantity} min="0"  onChange={(e) => this.handleDosingDetailsChange({type: 'generalDoses', index, targetProperty: 'quantity', changedValue: e.target.value})}/>
+                              <label className='active' htmlFor={`${this.state.name}_${dose.time}_dose`}>Amount</label>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </Row>
+                </div>
+                :
+                this.state.dosingFormat === 'specificTimes' ?
+                <div>
+                  <Row>
+                    {this.state.dose_type !== 'pills' &&
+                      <Col l={2} offset='l3'>
+                        <div className="input-field">
+                          <input className={`ui ${this.state.dose_type === 'pills' && 'disabled'} input`}
+                            type="number" id="dose" name="dose" value={this.state.dose_type === 'pills' ? '' : this.state.dose} min="0" step="25"
+                            onChange={(e) => {
+                              if (this.state.dose_type !== 'pills') {
+                                this.handleChange(e);
+                              }
+                            }}
+                          />
+                          <label className='active' htmlFor='dose'>Dose</label>
+                          <div className="input-response red-text text-darken-2">{this.props.showErrors ? this.props.treatment.errors.dose : ''}</div>
+                        </div>
+                      </Col>
+                    }
+                    <Col l={2}>
+                      <Input type='select' name="dose_type" value={this.state.dose_type} onChange={this.handleChange.bind(this)}>
+                        <option value="mg">mg</option>
+                        <option value="iu">iu</option>
+                        <option value="pills">{this.state.amount == 1 ? 'pill' : 'pills'}</option>
+                  	   </Input>
+                    </Col>
+                    <div className="input-field col l2">
+                      <input type="number" name="frequency" value={this.state.frequency} min="1" onChange={this.handleChange.bind(this)} />
+                      <label className='active' htmlFor='frequency'>Times Per Day</label>
+                      <div className="input-response red-text text-darken-2">{this.props.showErrors ? this.props.treatment.errors.frequency : ''}</div>
+                    </div>
+                  </Row>
+                  <Row>
+                    <ol className='col l8 offset-l1'>
+                      {this.state.dosingDetails.specificDoses.map((dose, index) =>
+                        <li className='row' key={index}>
+                          <div className="col s4">
+                            <TimePicker
+                              showSecond={false}
+                              value={moment(dose.time)}
+                              className="xxx browser-default"
+                              onChange={(newDoseTime) => this.handleDosingDetailsChange({type: 'specificDoses', index, targetProperty: 'time', changedValue: newDoseTime.valueOf()})}
+                              format={'h:mm a'}
+                              use12Hours
+                            />
+                          </div>
+                          <div className="col s2">
+                            <div className="input-field">
+                              <input type="number"  id={`${this.state.name}_${dose.time}_dose`} value={dose.quantity} min=".1" onChange={(e) => this.handleDosingDetailsChange({type: 'specificDoses', index, targetProperty: 'quantity', changedValue: e.target.value})}/>
+                              <label className='active' htmlFor={`${this.state.name}_${dose.time}_dose`}>Amount</label>
+                            </div>
+                          </div>
+                        </li>
+                      )}
+                    </ol>
+                  </Row>
+                </div>
+                :
+                this.state.dosingFormat === 'byHours' ?
+                <Row>
+                  <div className={`input-field ${this.state.dose_type === 'pills' ? 'col l2 offset-l3' : 'col l1 offset-l3'}`}>
+                    <input type="number" id={`${this.state.name}_hourlyDoseQuantity`} value={this.state.dosingDetails.hourlyDose.quantity} min=".0" onChange={(e) => this.handleDosingDetailsChange({type: 'hourlyDose', targetProperty: 'quantity', changedValue: e.target.value})}/>
+                    <label className='active' htmlFor={`${this.state.name}_hourlyDoseQuantity`}>Take</label>
+                  </div>
 
-              <div className="col l1">
-                <select className="browser-default" ref="dose_type" name="dose_type" value={this.state.dose_type} onChange={this.handleChange.bind(this)}>
-                  <option value="mg">mg</option>
-                  <option value="iu">iu</option>
-                  <option value="pills">pills</option>
-                </select>
-                {/* <label className='active' htmlFor='dose_type'>dose type</label> */}
-              </div>
+                  {this.state.dose_type !== 'pills' &&
+                    <div className="input-field col l2">
+                      <input className={`ui ${this.state.dose_type === 'pills' && 'disabled'} input`}
+                        type="number" id="dose" name="dose" value={this.state.dose_type === 'pills' ? '' : this.state.dose} min="0" step="25"
+                        onChange={(e) => {
+                          if (this.state.dose_type !== 'pills') {
+                            this.handleChange(e);
+                          }
+                        }}
+                      />
+                      <label className='active' htmlFor='dose'>Dose</label>
+                      <div className="input-response red-text text-darken-2">{this.props.showErrors ? this.props.treatment.errors.dose : ''}</div>
+                    </div>
+                  }
+
+                  <Input s={this.state.dose_type !== 'pills' ? 1 : 2} type='select' name="dose_type" value={this.state.dose_type} onChange={this.handleChange.bind(this)}>
+                    <option value="mg">mg</option>
+                    <option value="iu">iu</option>
+                    <option value="pills">{this.state.amount == 1 ? 'pill' : 'pills'}</option>
+                	</Input>
+
+                  <Input
+                    s={2}
+                    type='select'
+                    value={this.state.dosingDetails.hourlyDose.hourInterval}
+                    label={`Every ${this.state.dosingDetails.hourlyDose.hourInterval} ${this.state.dosingDetails.hourlyDose.hourInterval == 1 ? 'hour' : 'hours'}`}
+                    onChange={(e) => this.handleDosingDetailsChange({type: 'hourlyDose', targetProperty: 'hourInterval', changedValue: e.target.value})}>
+                      {[1,2,3,4,5,6,7,8,9,10,11,12].map(hour =>
+                        <option key={hour} value={hour}>{hour}</option>
+                      )}
+                  </Input>
+                </Row>
+                : this.state.dosingFormat === 'prn' ?
+                <Row>
+                  <div className="col s2 offset-l1">
+                    <span>Take up to</span>
+                  </div>
+
+                  <div className={`input-field ${this.state.dose_type === 'pills' ? 'col l2' : 'col l1'}`}>
+                    <input type="number" value={this.state.dosingDetails.prnDose.quantity} min=".0" onChange={(e) => this.handleDosingDetailsChange({type: 'prnDose', targetProperty: 'quantity', changedValue: e.target.value})}/>
+                  </div>
+
+                  {this.state.dose_type !== 'pills' &&
+                    <div className="input-field col l2">
+                      <input className={`ui ${this.state.dose_type === 'pills' && 'disabled'} input`}
+                        type="number" id="dose" name="dose" value={this.state.dose_type === 'pills' ? '' : this.state.dose} min="0" step="25"
+                        onChange={(e) => {
+                          if (this.state.dose_type !== 'pills') {
+                            this.handleChange(e);
+                          }
+                        }}
+                      />
+                      <label className='active' htmlFor='dose'>Dose</label>
+                      <div className="input-response red-text text-darken-2">{this.props.showErrors ? this.props.treatment.errors.dose : ''}</div>
+                    </div>
+                  }
+
+                  <Input s={this.state.dose_type !== 'pills' ? 1 : 2} type='select' name="dose_type" value={this.state.dose_type} onChange={this.handleChange.bind(this)}>
+                    <option value="mg">mg</option>
+                    <option value="iu">iu</option>
+                    <option value="pills">{this.state.amount == 1 ? 'pill' : 'pills'}</option>
+                	</Input>
+
+                  <div className="col s1">
+                    <span>Every</span>
+                  </div>
+                  <Input
+                    s={2}
+                    type='select'
+                    value={this.state.dosingDetails.prnDose.hourInterval}
+                    label={`${this.state.dosingDetails.prnDose.hourInterval == 1 ? 'hour' : 'hours'}`}
+                    onChange={(e) => this.handleDosingDetailsChange({type: 'prnDose', targetProperty: 'hourInterval', changedValue: e.target.value})}>
+                      {[24,12,6,4,3,2,1].map(hour =>
+                        <option key={hour} value={hour}>{hour}</option>
+                      )}
+                  </Input>
+                </Row>
+                :
+                <Row>
+                  <div className='input-field col l8 offset-l2'>
+                    <textarea className="materialize-textarea" id="otherDosingInstructions" value={this.state.dosingDetails.other.dosingInstructions} onChange={(e) => this.handleDosingDetailsChange({type: 'other', targetProperty: 'dosingInstructions', changedValue: e.target.value})}></textarea>
+                    <label htmlFor="otherDosingInstructions" className='active'>Dosing Instructions</label>
+                  </div>
+                </Row>
+              }
+            </div> */}
 
 
-              <div className="input-field col l4">
-                {/* <div className="ui right labeled input"> */}
-                  <input type="number" name="frequency" ref="frequency" value={this.state.frequency} min="1" onChange={this.handleChange.bind(this)} disabled={this.state.dosingFormat === 'generalTimes' || this.state.dosingFormat === 'byHours' || this.state.dosingFormat === 'prn'} />
-                {/* </div> */}
-                {/* <label className='active' htmlFor='frequency'>{this.state.frequency == "1" ? "time" : "times" } per day</label> */}
-                <label className='active' htmlFor='frequency'>Times Per Day</label>
-                <div className="input-response red-text text-darken-2">{this.props.showErrors ? this.props.errors.frequency : ''}</div>
-              </div>
-
-              {/* <div className='treatment-details-section'> */}
+            {/* <div>
               <div className='grey-text'>Details</div>
-              	{/* <CollapsibleItem header='Dates' icon='date_range'> */}
               <div className="Collapsible__container z-depth-2">
               	<Collapsible trigger=
                   {
                     <div className='valign-wrapper'>
                       <i className='material-icons'>date_range</i>
                       <div>Dates
-                        <span className="red-text text-darken-2">{this.props.showErrors && (this.props.errors.daysOfWeek || this.props.errors.dateRange || this.props.errors.individualDates) ? 'Invalid dates' : ''}</span>
+                        <span className="red-text text-darken-2">{this.props.showErrors && (this.props.treatment.errors.daysOfWeek || this.props.treatment.errors.dateRange || this.props.treatment.errors.individualDates) ? 'Invalid dates' : ''}</span>
                       </div>
                     </div>
                   }
@@ -439,7 +826,7 @@ export class TreatmentEditor extends React.Component {
                           onClick={() => this.handleWeekdayChange(undefined, ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])}>
                           Select All
                         </button>}
-                        <div className="input-response red-text text-darken-2">{this.props.showErrors ? this.props.errors.daysOfWeek : ''}</div>
+                        <div className="input-response red-text text-darken-2">{this.props.showErrors ? this.props.treatment.errors.daysOfWeek : ''}</div>
                       </div>
                     </div>
                     <div className='col l3'>
@@ -450,13 +837,11 @@ export class TreatmentEditor extends React.Component {
                             onClick={() => {
                               Meteor.call('userTreatments.update', this.props.treatment._id, {
                                 dateSelectMode,
-                                // startDateValue: undefined,
-                                // endDateValue: undefined,
                               }, (err, res) => {
                                 if (err) {
                                   console.log(err);
                                 } else {
-                                  this.props.getAllErrors();
+                                  this.getAllErrors();
                                 }
                               });
                               this.setState({dateSelectMode})
@@ -480,7 +865,7 @@ export class TreatmentEditor extends React.Component {
                                 if (err) {
                                   console.log(err);
                                 } else {
-                                  this.props.getAllErrors();
+                                  this.getAllErrors();
                                 }
                               });
                               this.setState({ startDate, endDate });
@@ -491,7 +876,7 @@ export class TreatmentEditor extends React.Component {
                             isOutsideRange={(day) => this.state.daysOfWeek.includes(day.format('dddd')) ? false : true}
                             numberOfMonths={2}
                           />
-                          <div className="input-response red-text text-darken-2 align-right">{this.props.showErrors ? this.props.errors.dateRange : ''}</div>
+                          <div className="input-response red-text text-darken-2 align-right">{this.props.showErrors ? this.props.treatment.errors.dateRange : ''}</div>
                         </div>
                       : this.state.dateSelectMode === 'individual select' ?
                         <div className='date-picker-wrapper individual-date-picker'>
@@ -499,9 +884,8 @@ export class TreatmentEditor extends React.Component {
                             date={null}
                             onDateChange={date => this.handleIndividualDateSelection(date)}
                             isDayHighlighted={date => this.state.individualDateValues.map(dateValue => moment(dateValue).format('MM DD YYYY')).includes(date.format('MM DD YYYY'))}
-                            // isOutsideRange={(day) => (day.isSameOrAfter(moment().startOf('day')) ) ? false : true}
                           />
-                          <div className="input-response red-text text-darken-2 align-right">{this.props.showErrors ? this.props.errors.individualDates : ''}</div>
+                          <div className="input-response red-text text-darken-2 align-right">{this.props.showErrors ? this.props.treatment.errors.individualDates : ''}</div>
                         </div>
                       : undefined
                     }
@@ -558,7 +942,7 @@ export class TreatmentEditor extends React.Component {
                   <div className='col l8'>
                     <div className='row'>
                       <div className="input-field col l4">
-                        <input type="number" name="frequency" ref="frequency" value={this.state.frequency} min="1" onChange={this.handleChange.bind(this)}/>
+                        <input type="number" name="frequency" value={this.state.frequency} min="1" onChange={this.handleChange.bind(this)}/>
                         <label className='active' htmlFor='frequency'>Times Per Day</label>
                       </div>
                     </div>
@@ -697,11 +1081,10 @@ export class TreatmentEditor extends React.Component {
                   </div>
               	</Collapsible>
               </div>
-            </div>
+            </div> */}
           {/* </div>
         </div> */}
         <Link className='red-text' to="#" onClick={this.handleRemove.bind(this)}>Delete Treatment</Link>
-        {/* <button className='grey lighten-2 red-text btn btn-flat' onClick={this.handleRemove.bind(this)}>Delete Treatment</button> */}
       </div>
     );
   }

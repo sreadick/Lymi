@@ -29,7 +29,10 @@ export const TreatmentSelectSidebar = (props) => (
             key={treatment._id}
             className={`treatment-select-sidebar__item ${Session.get('currentTreatmentId') === treatment._id && 'selected'}`}
             onClick={() => Session.set('currentTreatmentId', treatment._id)}>
-            <div className='title'>{capitalizePhrase(treatment.name) || "Untitled Treatment"}</div>
+            {/* <div className=''> */}
+              <span className={treatment.name ? 'black-text' : 'grey-text'}>{capitalizePhrase(treatment.name) || "Untitled Treatment"}</span>
+              {Object.keys(treatment.errors).length > 0 && <i className="material-icons red-text text-lighten-2 right">priority_high</i>}
+            {/* </div> */}
           </div>
         )
       }

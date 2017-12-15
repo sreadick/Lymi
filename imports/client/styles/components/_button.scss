@@ -72,6 +72,10 @@
   opacity: .85;
 }
 
+.btn:hover.no-hover-effect, .btn-large:hover.no-hover-effect {
+  opacity: 1;
+}
+
 .button--icon:hover {
   cursor: pointer;
 }
