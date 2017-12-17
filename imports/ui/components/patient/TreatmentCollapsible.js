@@ -54,10 +54,15 @@ export default class TreatmentCollapsible extends React.Component {
                   }
                   {treatment.dosingFormat === 'byHours' &&
                   <div>
-                    {(treatment.dosingDetails.hourlyDose.hourInterval > 0 && treatment.dosingDetails.hourlyDose.quantity > 0) &&
-                      <div className='grey-text text-darken-2'>Take {treatment.dosingDetails.hourlyDose.quantity} every {treatment.dosingDetails.hourlyDose.hourInterval == 1 ? 'hour' : treatment.dosingDetails.hourlyDose.hourInterval + ' hours'}</div>
+                    {(treatment.dosingDetails.recurringDose.recurringInterval > 0 && treatment.dosingDetails.recurringDose.quantity > 0) &&
+                      <div className='grey-text text-darken-2'>Take {treatment.dosingDetails.recurringDose.quantity} every {treatment.dosingDetails.recurringDose.recurringInterval == 1 ? treatment.dosingDetails.recurringDose.timeUnit : treatment.dosingDetails.recurringDose.recurringInterval + " " + treatment.dosingDetails.recurringDose.timeUnit + 's'}</div>
                     }
                   </div>
+                  // {/* <div>
+                  //   {(treatment.dosingDetails.hourlyDose.hourInterval > 0 && treatment.dosingDetails.hourlyDose.quantity > 0) &&
+                  //     <div className='grey-text text-darken-2'>Take {treatment.dosingDetails.hourlyDose.quantity} every {treatment.dosingDetails.hourlyDose.hourInterval == 1 ? 'hour' : treatment.dosingDetails.hourlyDose.hourInterval + ' hours'}</div>
+                  //   }
+                  // </div> */}
                   }
                   {treatment.dosingFormat === 'prn' &&
                   <div>
@@ -81,7 +86,7 @@ export default class TreatmentCollapsible extends React.Component {
           <div>
             <h5 className="grey-text text-darken-2">Dates:</h5>
             <div>
-              {(treatment.dateSelectMode === 'from now on' && treatment.daysOfWeek.length === 7) ?
+              {(treatment.dateSelectMode === 'daily' || (treatment.dateSelectMode === 'from now on' && treatment.daysOfWeek.length === 7)) ?
                 <div>Every Day</div>
                 :
                 (treatment.dateSelectMode === 'from now on' && treatment.daysOfWeek.length !== 7) ?

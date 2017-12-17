@@ -11,35 +11,47 @@ export default TreatmentInstructions = (props) => {
     );
   }
   return (
-    <div>
-      Meals:
-      {['None', 'Take with', 'Take before', 'Take after'].map(mealInstruction =>
-        <p key={mealInstruction}>
-          <input
-            type="radio"
-            name={`${props.treatment.name}_meals`}
-            id={`${props.treatment.name}_mealInstructions_${mealInstruction}`}
-            value={mealInstruction}
-            checked={props.treatment.otherInstructions.meals === mealInstruction}
-            onChange={(e) => props.handleInstructionsChange('meals', e.target.value)}/>
-          <label htmlFor={`${props.treatment.name}_mealInstructions_${mealInstruction}`}>{mealInstruction}</label>
-        </p>
-      )}
-      Contraindications:
-      {['None', 'antibiotic', 'probiotic'].map(contraindicatedInstruction =>
-        <p key={contraindicatedInstruction}>
-          <input
-            type="radio"
-            name={`${props.treatment.name}_contraindications`}
-            id={`${props.treatment.name}_contraindicatedInstructions_${contraindicatedInstruction}`}
-            value={contraindicatedInstruction}
-            checked={props.treatment.otherInstructions.contraindications === contraindicatedInstruction}
-            onChange={(e) => props.handleInstructionsChange('contraindications', e.target.value)}/>
-          <label htmlFor={`${props.treatment.name}_contraindicatedInstructions_${contraindicatedInstruction}`}>{contraindicatedInstruction !== 'None' ? "Don't take within 3 hours of" : ''} {contraindicatedInstruction}</label>
-        </p>
-      )}
-      Custom:
-      <div className='container'>
+    <Row className='treatment-editor__column-group__flex-wrapper'>
+      <Col className="white z-depth-2 treatment-editor__column-group">
+        <div className='treatment-editor__column-group__title'>
+          Food Instructions:
+        </div>
+        {['None', 'With Food', 'With Fatty Food', 'On Empty Stomach'].map(mealInstruction =>
+          <p key={mealInstruction}>
+            <input
+              type="radio"
+              name={`${props.treatment.name}_meals`}
+              id={`${props.treatment.name}_mealInstructions_${mealInstruction}`}
+              value={mealInstruction}
+              checked={props.treatment.otherInstructions.meals === mealInstruction}
+              onChange={(e) => props.handleInstructionsChange('meals', e.target.value)}/>
+            <label htmlFor={`${props.treatment.name}_mealInstructions_${mealInstruction}`}>{mealInstruction}</label>
+          </p>
+        )}
+      </Col>
+      <Col className="white z-depth-2 treatment-editor__column-group">
+        <div className='treatment-editor__column-group__title'>
+          Antibiotic/Probiotic Cycle:
+        </div>
+        {['None', 'antibiotic', 'probiotic'].map(contraindicatedInstruction =>
+          <p key={contraindicatedInstruction}>
+            <input
+              type="radio"
+              name={`${props.treatment.name}_contraindications`}
+              id={`${props.treatment.name}_contraindicatedInstructions_${contraindicatedInstruction}`}
+              value={contraindicatedInstruction}
+              checked={props.treatment.otherInstructions.contraindications === contraindicatedInstruction}
+              onChange={(e) => props.handleInstructionsChange('contraindications', e.target.value)}/>
+            <label htmlFor={`${props.treatment.name}_contraindicatedInstructions_${contraindicatedInstruction}`}>
+              {contraindicatedInstruction !== 'None' ? "Take between " + contraindicatedInstruction + " doses"  : 'N/A'}
+            </label>
+          </p>
+        )}
+      </Col>
+      <Col className="white z-depth-2 treatment-editor__column-group">
+        <div className='treatment-editor__column-group__title'>
+          Other:
+        </div>
         <div className="input-field">
           <textarea
             className="materialize-textarea"
@@ -50,7 +62,7 @@ export default TreatmentInstructions = (props) => {
           </textarea>
           <label className='active' htmlFor={`${props.treatment.name}_userDefinedInstructions`}>Specify</label>
         </div>
-      </div>
-    </div>
+      </Col>
+    </Row>
   );
 }

@@ -38,7 +38,7 @@ Meteor.methods({
       daysOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
       startDateValue: undefined,
       endDateValue: undefined,
-      dateSelectMode: 'from now on',
+      dateSelectMode: 'daily',
       individualDateValues: [],
       dosingFormat: 'default',
       createdAt: moment().valueOf(),
@@ -67,10 +67,15 @@ Meteor.methods({
             quantity: 1,
           }
         ],
-        hourlyDose: {
-          hourInterval: 1,
+        recurringDose: {
+          recurringInterval: 1,
+          timeUnit: 'hour',
           quantity: 1
         },
+        // hourlyDose: {
+        //   hourInterval: 1,
+        //   quantity: 1
+        // },
         prnDose: {
           hourInterval: 24,
           quantity: 1
@@ -210,18 +215,34 @@ Meteor.methods({
         type: Number,
         optional: true
       },
-      'dosingDetails.hourlyDose': {
+      'dosingDetails.recurringDose': {
         type: Object,
         optional: true
       },
-      'dosingDetails.hourlyDose.hourInterval': {
+      'dosingDetails.recurringDose.recurringInterval': {
         type: Number,
         optional: true
       },
-      'dosingDetails.hourlyDose.quantity': {
+      'dosingDetails.recurringDose.timeUnit': {
+        type: String,
+        optional: true
+      },
+      'dosingDetails.recurringDose.quantity': {
         type: Number,
         optional: true
       },
+      // 'dosingDetails.hourlyDose': {
+      //   type: Object,
+      //   optional: true
+      // },
+      // 'dosingDetails.hourlyDose.hourInterval': {
+      //   type: Number,
+      //   optional: true
+      // },
+      // 'dosingDetails.hourlyDose.quantity': {
+      //   type: Number,
+      //   optional: true
+      // },
       'dosingDetails.prnDose': {
         type: Object,
         optional: true

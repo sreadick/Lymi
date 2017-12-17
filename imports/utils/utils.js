@@ -26,7 +26,9 @@ export const capitalizePhrase = (phrase) => {
 
 export const filterCurrentDayTreatments = (treatments) => {
   return treatments.filter((treatment) => {
-    if (treatment.dateSelectMode === 'from now on') {
+    if (treatment.dateSelectMode === 'daily') {
+      return true;
+    } else if (treatment.dateSelectMode === 'from now on') {
       return treatment.daysOfWeek.includes(moment().format('dddd'));
     } else if (treatment.dateSelectMode === 'date range') {
       return treatment.daysOfWeek.includes(moment().format('dddd')) && moment().isBetween(treatment.startDateValue, treatment.endDateValue);
@@ -37,7 +39,9 @@ export const filterCurrentDayTreatments = (treatments) => {
 }
 
 export const isTreatmentPrescribed = (treatment, thisDateMoment) => {
-  if (treatment.dateSelectMode === 'from now on') {
+  if (treatment.dateSelectMode === 'daily') {
+    return true;
+  } else if (treatment.dateSelectMode === 'from now on') {
     return treatment.daysOfWeek.includes(thisDateMoment.format('dddd'));
   } else if (treatment.dateSelectMode === 'date range') {
     return treatment.daysOfWeek.includes(thisDateMoment.format('dddd')) && thisDateMoment.isBetween(treatment.startDateValue, treatment.endDateValue);

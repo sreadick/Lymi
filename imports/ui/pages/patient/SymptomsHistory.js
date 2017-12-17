@@ -227,8 +227,9 @@ class SymptomsHistory extends React.Component {
                           treatments: checkin.treatments ? checkin.treatments.map(treatment => {
                             return {
                               name: treatment.name,
-                              dateSelectMode: 'from now on',
-                              daysOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+                              dateSelectMode: 'daily',
+                              // dateSelectMode: 'from now on',
+                              // daysOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
                             };
                           }) : undefined
                         },

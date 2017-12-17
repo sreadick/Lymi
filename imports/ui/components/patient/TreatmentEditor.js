@@ -40,14 +40,15 @@ export class TreatmentEditor extends React.Component {
       dosingDetails: treatment ? treatment.dosingDetails : {
         generalDoses: [],
         specificDoses: [],
-        hourlyDose: {},
+        // hourlyDose: {},
+        recurringDose: {},
         prnDose: {},
         other: {}
       },
       otherInstructions: treatment ? treatment.otherInstructions : {},
       info: treatment ? treatment.info : {},
       treatmentSuggestions: [],
-      selectedTab: 'dosing',
+      selectedTab: 'dates',
     };
 
     this.handleWeekdayChange = this.handleWeekdayChange.bind(this);
@@ -83,9 +84,9 @@ export class TreatmentEditor extends React.Component {
     if (parseInt(treatment.amount) !== parseFloat(treatment.amount) || parseInt(treatment.amount) <= 0) {
       errors.amount = "should be a positive whole number"
     }
-    if (treatment.dose_type !== 'pills' && treatment.dose <= 0) {
-      errors.dose = "should be a positive number";
-    }
+    // if (treatment.dose_type !== 'pills' && treatment.dose <= 0) {
+    //   errors.dose = "should be a positive number";
+    // }
     if (parseInt(treatment.frequency) !== parseFloat(treatment.frequency) || parseInt(treatment.frequency) <= 0) {
       errors.frequency = "should be a positive whole number"
     }
@@ -214,9 +215,32 @@ export class TreatmentEditor extends React.Component {
   }
 
   handleDosingDetailsChange({type, index, targetProperty, changedValue}) {
-    if (targetProperty === 'hourInterval') {
+    let otherUpdates = {};
+
+    if (targetProperty === 'hourInterval' || targetProperty === 'recurringInterval') {
       changedValue = parseFloat(changedValue) || 0
+    } else if (targetProperty === 'timeUnit') {
+      if (changedValue === 'day' && this.state.dosingDetails.recurringDose.recurringInterval > 7 || changedValue === 'week' && this.state.dosingDetails.recurringDose.recurringInterval > 4) {
+        Meteor.call('userTreatments.details.update', this.props.treatment._id, {
+          type,
+          index,
+          targetProperty: 'recurringInterval',
+          changedValue: 1
+        }, (err, res) => {
+          if (err) {
+            console.log(err);
+          } else {
+            this.getAllErrors();
+          }
+        });
+        otherUpdates = {
+          dosingDetails: Object.assign({}, this.props.treatment.dosingDetails.recurringDose, {recurringInterval: 1})
+        }
+      }
     }
+    // if (targetProperty === 'hourInterval') {
+    //   changedValue = parseFloat(changedValue) || 0
+    // }
     Meteor.call('userTreatments.details.update', this.props.treatment._id, {
       type, index, targetProperty, changedValue
     }, (err, res) => {
@@ -233,7 +257,7 @@ export class TreatmentEditor extends React.Component {
       dosingDetails[type][targetProperty] = changedValue;
     }
 
-    this.setState({dosingDetails})
+    this.setState({dosingDetails, ...otherUpdates})
   }
 
   handleInstructionsChange(targetInstruction, value) {
@@ -266,6 +290,7 @@ export class TreatmentEditor extends React.Component {
 
   handleRemove() {
     Meteor.call('userTreatments.remove', this.props.treatment._id)
+    Session.set('currentTreatmentId', undefined)
   }
 
   handleDateModeChange(dateSelectMode) {
@@ -478,8 +503,8 @@ export class TreatmentEditor extends React.Component {
             </div> */}
 
 
-            <div className='row'>
-              <div className="input-field col l6 offset-l3">
+            <div className='row row--marginless valign-wrapper'>
+              <div className="input-field col l4 offset-l4">
                 <Autosuggest
                   suggestions={this.state.treatmentSuggestions}
                   onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
@@ -491,36 +516,42 @@ export class TreatmentEditor extends React.Component {
                 />
                 {/* <input type="text" id="name" name="name" value={this.state.name} onChange={this.handleChange.bind(this)} autoFocus/>
                 <label className='active' htmlFor='name'>Medication/Supplement</label> */}
-                <div className="input-response red-text text-darken-2 center-align">{this.props.showErrors ? this.props.treatment.errors.name : ''}</div>
+                {/* <div className="input-response red-text text-darken-2 center-align">{this.props.showErrors ? this.props.treatment.errors.name : ''}</div> */}
               </div>
+              <Link className='col l2 offset-l2 red-text' to="#" onClick={this.handleRemove.bind(this)}>Delete Treatment</Link>
             </div>
 
-            {/* <div className={`card z-depth-4 ${this.state.selectedTab === 'dosing' ? 'blue' : this.state.selectedTab === 'dates' ? 'red' : this.state.selectedTab === 'instructions' ? 'green' : 'orange'} lighten-5`}> */}
-            <div className={`card z-depth-4`}>
+            <div className={`treatment-editor__details-box card z-depth-4 ${this.state.selectedTab === 'dosing' ? 'red darken-2' : this.state.selectedTab === 'dates' ? 'light-blue darken-2' : this.state.selectedTab === 'instructions' ? 'green darken-2' : 'orange darken-2'}`}>
+            {/* <div className={`treatment-editor__details-box card z-depth-4`}> */}
+
+            {/* cyan darken-2
+            red darken-2
+            indigo lighten-2
+            orange darken-2 */}
               <Row>
                 <button
                   // className={`col s3 blue btn no-hover-effect hoverable ${this.state.selectedTab === 'dosing' && 'z-depth-4'}`}
-                  className={`col s3 blue white-text btn-flat btn-large`}
+                  className={`col s3 light-blue darken-2 white-text btn-flat btn-large`}
+                  onClick={() => this.setState({selectedTab: 'dates'})}>
+                  Schedule
+                </button>
+                <button
+                  // className={`col s3 red btn no-hover-effect hoverable ${this.state.selectedTab === 'dates' && 'z-depth-4'}`}
+                  className={`col s3 red darken-2 white-text btn-flat btn-large`}
                   onClick={() => this.setState({selectedTab: 'dosing'})}>
                   Dosing
                 </button>
                 <button
-                  // className={`col s3 red btn no-hover-effect hoverable ${this.state.selectedTab === 'dates' && 'z-depth-4'}`}
-                  className={`col s3 red white-text btn-flat btn-large`}
-                  onClick={() => this.setState({selectedTab: 'dates'})}>
-                  Dates
-                </button>
-                <button
                   // className={`col s3 green btn no-hover-effect hoverable ${this.state.selectedTab === 'instructions' && 'z-depth-4'}`}
-                  className={`col s3 green white-text btn-flat btn-large`}
+                  className={`col s3 green darken-2 white-text btn-flat btn-large`}
                   onClick={() => this.setState({selectedTab: 'instructions'})}>
                   Special Instructions
                 </button>
                 <button
                   // className={`col s3 orange btn no-hover-effect hoverable ${this.state.selectedTab === 'info' && 'z-depth-4'}`}
-                  className={`col s3 orange white-text btn-flat btn-large`}
+                  className={`col s3 orange darken-2 white-text btn-flat btn-large`}
                   onClick={() => this.setState({selectedTab: 'info'})}>
-                  RX Info
+                  Treatment Info
                 </button>
               </Row>
               {this.state.selectedTab === 'dosing' ?
@@ -1084,7 +1115,6 @@ export class TreatmentEditor extends React.Component {
             </div> */}
           {/* </div>
         </div> */}
-        <Link className='red-text' to="#" onClick={this.handleRemove.bind(this)}>Delete Treatment</Link>
       </div>
     );
   }

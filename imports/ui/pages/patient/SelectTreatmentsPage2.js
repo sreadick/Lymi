@@ -52,9 +52,9 @@ class SelectTreatmentsPage2 extends React.Component {
            />
         </div>
         <div className='row'>
-          <Link className="col s2 waves-effect waves-light btn-large white blue-text" to="/patient/selectsymptoms">Back: Symptoms</Link>
+          <Link className="col s2 waves-effect waves-light btn white blue-text" to="/patient/selectsymptoms">Back: Symptoms</Link>
           <span className="col s8 center-align select-treatment-bottom-error red-text" ref="errorMessage">{this.props.errorMessage}</span>
-          <button className={"col s2 right waves-effect waves-light white green-text " + (this.props.userTreatments.length > 0 ? "btn-large" : "btn-large disabled")}
+          <button className={"col s2 right waves-effect waves-light white green-text " + (this.props.userTreatments.length > 0 ? "btn" : "btn disabled")}
              onClick={() => {
                const hasErrors = this.validateTreatments();
                hasErrors ? Session.set('showErrors', true) : this.props.history.push('/patient/dashboard')
@@ -70,6 +70,10 @@ class SelectTreatmentsPage2 extends React.Component {
 export default createContainer(() => {
   const treatmentHandle = Meteor.subscribe('userTreatments');
   Meteor.subscribe('commonTreatments');
+  
+  if (!Session.get('currentTreatmentId') && UserTreatments.find().fetch().length > 0) {
+    Session.set('currentTreatmentId', UserTreatments.find().fetch()[UserTreatments.find().fetch().length - 1]._id)
+  }
 
   return {
     userTreatments: UserTreatments.find({}, {sort: {createdAt: -1}}).fetch(),
