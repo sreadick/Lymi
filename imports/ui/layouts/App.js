@@ -17,11 +17,14 @@ import WelcomePage from '../pages/patient/WelcomePage';
 import SelectSymptomsPage from '../pages/patient/SelectSymptomsPage';
 import SelectTreatmentsPage from '../pages/patient/SelectTreatmentsPage';
 import SelectTreatmentsPage2 from '../pages/patient/SelectTreatmentsPage2';
+import SelectTreatmentsPage3 from '../pages/patient/SelectTreatmentsPage3';
 import Dashboard from '../pages/patient/Dashboard';
 import Checkin from '../pages/patient/Checkin';
 import SymptomsHistory from '../pages/patient/SymptomsHistory';
 import TreatmentsHistory from '../pages/patient/TreatmentsHistory';
 import Account from '../pages/patient/Account';
+import ForumHome from '../pages/patient/ForumHome';
+import ForumPost from '../pages/patient/ForumPost';
 
 import Doctor from './Doctor';
 import DoctorHomepage from '../pages/doctor/Home';
@@ -54,11 +57,14 @@ const App = appProps => {
         <AuthPatientRoute exact path="/patient/selecttreatments" component={SelectTreatmentsPage} {...appProps} />
         <AuthPatientRoute exact path="/patient/selecttreatments2" component={SelectTreatmentsPage2} {...appProps} />
         <AuthPatientRoute exact path="/patient/selecttreatments2/:treatmentId" component={SelectTreatmentsPage2} {...appProps} />
+        <AuthPatientRoute exact path="/patient/selecttreatments3" component={SelectTreatmentsPage3} {...appProps} />
         <AuthPatientRoute exact path="/patient/dashboard" component={Dashboard} {...appProps} />
         <AuthPatientRoute exact path="/patient/checkin" component={Checkin} {...appProps} />
         <AuthPatientRoute exact path="/patient/history/symptoms" component={SymptomsHistory} {...appProps} />
         <AuthPatientRoute exact path="/patient/history/treatments" component={TreatmentsHistory} {...appProps} />
         <AuthPatientRoute exact path="/patient/account" component={Account} {...appProps} />
+        <AuthPatientRoute exact path="/patient/forum/home" component={ForumHome} {...appProps} />
+        <AuthPatientRoute path="/patient/forum/post/:postId" component={ForumPost} {...appProps} />
 
         <AuthDoctorRoute exact path="/doctor" component={Doctor} {...appProps} />
         <AuthDoctorRoute exact path="/doctor/home" component={DoctorHomepage} {...appProps} />

@@ -40,7 +40,8 @@ Meteor.methods({
       endDateValue: undefined,
       dateSelectMode: 'daily',
       individualDateValues: [],
-      dosingFormat: 'default',
+      dosingFormat: 'unspecified',
+      // dosingFormat: 'default',
       createdAt: moment().valueOf(),
       dosingDetails: {
         generalDoses: [

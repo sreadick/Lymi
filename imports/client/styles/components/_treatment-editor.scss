@@ -4,7 +4,6 @@
   border: 1px solid #ddd;
   padding: 0 2.5rem;
   margin: 1rem 0 1rem 1rem;
-  // overflow-y: auto;
 }
 
 .treatment-editor--no-treatment-message {
@@ -48,8 +47,219 @@
 }
 
 .rx-detail-form {
-  width: 80% !important;
+  // margin-top: 2rem;
+  width: 90% !important;
   padding: 3rem 0 !important;
   border-radius: 15px !important;
   background: white !important;
+}
+
+.rx-detail-form--dosing__wrapper {
+  // background: pink;
+  display: flex;
+  align-items: center;
+  // justify-content: center;
+  height: 70%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.treatment-editor2__overlay {
+  height: 100vh !important;
+  width: 100vw !important;
+  overflow: hidden !important;
+  position: fixed !important;
+  // margin: 0 !important;
+  // padding: 0 !important;
+  z-index: 5 !important;
+  background: transparentize(black, .5) !important;
+  // background: blue !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.treatment-editor2 {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  overflow: hidden !important;
+
+  background: white;
+  border: 1px solid #ddd;
+
+  width: 85%;
+  height: 93%;
+
+  box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+  padding: .5rem 1.5rem;
+
+  -webkit-animation: modal_fadein .5s ease;
+  -moz-animation: modal_fadein .5s ease;
+  -o-animation: modal_fadein .5s ease;
+  animation: modal_fadein .5s ease;
+
+  @-webkit-keyframes modal_fadein {
+    from { opacity: 0 }
+    to { opacity: 1 }
+  }
+  @-moz-keyframes modal_fadein {
+    from { opacity: 0 }
+    to { opacity: 1 }
+  }
+  @-o-keyframes modal_fadein {
+    from { opacity: 0 }
+    to { opacity: 1 }
+  }
+  @keyframes modal_fadein {
+    from { opacity: 0 }
+    to { opacity: 1 }
+  }
+
+  // edit for TreatmentEditor3
+
+}
+
+.treatment-editor2__section--name {
+  width: 85%;
+  height: 90%;
+  border: 2px solid black;
+  border-radius: 20px;
+
+  // edit for TreatmentEditor3
+  margin-bottom: .5rem !important;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-top: none;
+}
+
+.treatment-editor2__section--dates {
+  width: 85%;
+  height: 90%;
+  border: 1px solid red;
+  border-radius: 20px;
+
+  // edit for TreatmentEditor3
+  margin-bottom: .5rem !important;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-top: none;
+}
+
+.treatment-editor2__section--dosing {
+  width: 85%;
+  height: 90%;
+  border: 2px solid blue;
+  border-radius: 20px;
+
+  // edit for TreatmentEditor3
+  margin-bottom: .5rem !important;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-top: none;
+
+  .treatment-editor2__section--dosing__dosing-format-container {
+    border-right: 1px solid grey !important;
+    // margin-left: 1rem !important;
+  }
+}
+
+.treatment-editor2__section--instructions {
+  width: 85%;
+  height: 90%;
+  border: 2px solid green;
+  border-radius: 20px;
+
+  // edit for TreatmentEditor3
+  margin-bottom: .5rem !important;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-top: none;
+}
+
+.treatment-editor2__section--info {
+  width: 85%;
+  height: 90%;
+  border: 2px solid purple;
+  border-radius: 20px;
+
+  // edit for TreatmentEditor3
+  margin-bottom: .5rem !important;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-top: none;
+}
+
+.treatment-editor2__section__header {
+  margin: 0;
+  padding: 1rem 0;
+  font-size: 3rem;
+  // text-decoration: underline;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+
+  // edit for TreatmentEditor3
+  font-size: 2rem;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  margin-bottom: 1rem;
+
+  .material-icons {
+    font-size: 3rem;
+  }
+}
+
+.treatment-editor2__section__subheader {
+  margin-top: 1rem;
+  font-size: 1.5rem;
+}
+
+// .treatment-editor2__finish-button {
+//   align-self: center;
+// }
+// .treatment-editor2__prvious-button {
+//   align-self: flex-end;
+// }
+// .treatment-editor2__next-button {
+//   align-self: flex-end;
+// }
+
+.treatment-editor2__section__tab__container {
+  display: flex;
+  justify-content: space-between;
+  // border: 1px solid #ddd;
+  width: 85%;
+  height: 2rem;
+  margin: auto;
+}
+.treatment-editor2__section__tab {
+  // border-top: 1px solid #fff;
+  border-left: 1px solid #dfdfdf;
+  border-right: 1px solid #dfdfdf;
+  width: 20%;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+.treatment-editor2__section__tab:first-child {
+  border-left: none;
+}
+.treatment-editor2__section__tab:last-child {
+  border-right: none;
 }

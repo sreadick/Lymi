@@ -47,7 +47,7 @@ const Home = (props) => {
 
 export default createContainer(() => {
   const currentPatientsHandle = Meteor.subscribe('currentPatients');
-  const currentPatients = Meteor.users.find({accountType: 'patient'}).fetch();
+  const currentPatients = Meteor.users.find({'account.type': 'patient'}).fetch();
   return {
     currentPatients,
     sixCharKey: Meteor.user() ? Meteor.user().sixCharKey : '',

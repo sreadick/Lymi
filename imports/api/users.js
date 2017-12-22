@@ -18,9 +18,13 @@ if (Meteor.isServer) {
   });
 
   Meteor.publish('currentPatients', function() {
+    // console.log(1);
     if (this.userId && Meteor.users.findOne(this.userId).account.type === 'doctor') {
+      console.log(2);
+      console.log(Meteor.users.find({'account.type': 'patient', doctorId: this.userId}).fetch());
       return Meteor.users.find({'account.type': 'patient', doctorId: this.userId});
     } else {
+      console.log(3);
       this.ready();
     }
   });

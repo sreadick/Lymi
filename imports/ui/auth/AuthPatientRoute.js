@@ -27,7 +27,7 @@ const AuthPatientRoute = ({ loggingIn, authenticated, accountType, component, si
               }}></div>
             }
             <div>
-              {(React.createElement(component, {...props}))}
+              {(React.createElement(component, {...props, ...rest}))}
             </div>
           </div>
       );

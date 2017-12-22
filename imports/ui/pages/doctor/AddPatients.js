@@ -20,14 +20,14 @@ class AddPatients extends React.Component {
   handlePatientNameChange(e) {
     const patientNameSplit = e.target.value.trim().toLowerCase().split(' ').map(name => capitalize(name));
     if (patientNameSplit.length === 1) {
-      const firstNameQueryResults = Meteor.users.find({accountType: 'patient', ['profile.firstName']: patientNameSplit[0]}).fetch();
-      const lastNameQueryResults = Meteor.users.find({accountType: 'patient', ['profile.lastName']: patientNameSplit[0]}).fetch();
+      const firstNameQueryResults = Meteor.users.find({'account.type': 'patient', ['profile.firstName']: patientNameSplit[0]}).fetch();
+      const lastNameQueryResults = Meteor.users.find({'account.type': 'patient', ['profile.lastName']: patientNameSplit[0]}).fetch();
       this.setState({
         patients: firstNameQueryResults.concat(lastNameQueryResults)
       })
     } else if (patientNameSplit.length === 2) {
       const fullNameResults = Meteor.users.find({
-        accountType: 'patient',
+        'account.type': 'patient',
         ['profile.firstName']: patientNameSplit[0],
         ['profile.lastName']: patientNameSplit[1]
       }).fetch();
@@ -105,7 +105,7 @@ class AddPatients extends React.Component {
 
 export default createContainer(() => {
   const allPatientsHandle = Meteor.subscribe('allPatients');
-  const allPatients = Meteor.users.find({accountType: 'patient'}).fetch();
+  const allPatients = Meteor.users.find({'account.type': 'patient'}).fetch();
   const requestsHandle = Meteor.subscribe('requestsFromDoctor');
   const requests = Requests.find().fetch();
   return {

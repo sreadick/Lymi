@@ -9,6 +9,7 @@ import '../imports/api/requests';
 import '../imports/api/common-symptoms';
 import '../imports/api/common-treatments';
 import '../imports/api/images';
+import '../imports/api/forum-posts';
 
 import { seedDbWithCommonSymptoms, seedDbWithCommonTreatments } from '../imports/utils/dbSeeds';
 

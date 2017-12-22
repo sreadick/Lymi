@@ -8,10 +8,12 @@ import { UserTreatments } from '../../../api/user-treatments';
 import { CommonTreatments } from '../../../api/common-treatments';
 
 // import { TreatmentList } from '../../components/patient/TreatmentList';
-import { TreatmentSelectSidebar } from '../../components/patient/TreatmentSelectSidebar';
-import { TreatmentEditor } from '../../components/patient/TreatmentEditor';
+import { TreatmentSelectSidebar2 } from '../../components/patient/TreatmentSelectSidebar2';
+import { TreatmentEditor2 } from '../../components/patient/TreatmentEditor2';
+import { TreatmentEditor3 } from '../../components/patient/TreatmentEditor3';
+import { TreatmentDetailDisplay } from '../../components/patient/TreatmentDetailDisplay';
 
-class SelectTreatmentsPage2 extends React.Component {
+class SelectTreatmentsPage3 extends React.Component {
   validateTreatments() {
     const treatmentNames = [];
     for (let i = 0; i < this.props.userTreatments.length; ++i) {
@@ -43,18 +45,23 @@ class SelectTreatmentsPage2 extends React.Component {
     return (
       <div className="page-content page-content--select-treatment-page2">
         <div className="page-content--select-treatment-page2__flex-wrapper">
-          <TreatmentSelectSidebar userTreatments={this.props.userTreatments}/>
-          <TreatmentEditor
-            treatment={this.props.selectedTreatment}
-            commonTreatments={this.props.commonTreatments}
-            showErrors={true}
-            // showErrors={this.props.showErrors}
-           />
+          <TreatmentSelectSidebar2 userTreatments={this.props.userTreatments}/>
+          <TreatmentDetailDisplay treatment={this.props.selectedTreatmentDetails} />
+
+          {this.props.selectedTreatment &&
+            <TreatmentEditor3
+              treatment={this.props.selectedTreatment}
+              commonTreatments={this.props.commonTreatments}
+              otherUserTreatmentNames={this.props.userTreatments.filter(treatment => treatment._id !== this.props.selectedTreatment._id).map(treatment => treatment.name.toLowerCase())}
+              // showErrors={this.props.showErrors}
+             />
+         }
+
         </div>
         <div className='row'>
-          <Link className="col s2 waves-effect waves-light btn white blue-text" to="/patient/selectsymptoms">Back: Symptoms</Link>
+          <Link className="col s2 waves-effect waves-light btn-large white blue-text" to="/patient/selectsymptoms">Back: Symptoms</Link>
           <span className="col s8 center-align select-treatment-bottom-error red-text" ref="errorMessage">{this.props.errorMessage}</span>
-          <button className={"col s2 right waves-effect waves-light white green-text " + (this.props.userTreatments.length > 0 ? "btn" : "btn disabled")}
+          <button className={"col s2 right waves-effect waves-light white green-text " + (this.props.userTreatments.length > 0 ? "btn-large" : "btn-large disabled")}
              onClick={() => {
                const hasErrors = this.validateTreatments();
                hasErrors ? Session.set('showErrors', true) : this.props.history.push('/patient/dashboard')
@@ -71,16 +78,17 @@ export default createContainer(() => {
   const treatmentHandle = Meteor.subscribe('userTreatments');
   Meteor.subscribe('commonTreatments');
 
-  if (!Session.get('currentTreatmentId') && UserTreatments.find().fetch().length > 0) {
-    Session.set('currentTreatmentId', UserTreatments.find().fetch()[UserTreatments.find().fetch().length - 1]._id)
+  if (!Session.get('selectedTreatmentDetails') && UserTreatments.find().fetch().length > 0) {
+    Session.set('selectedTreatmentDetails', UserTreatments.find().fetch()[UserTreatments.find().fetch().length - 1]._id)
   }
 
   return {
     userTreatments: UserTreatments.find({}, {sort: {createdAt: -1}}).fetch(),
     selectedTreatment: UserTreatments.findOne(Session.get('currentTreatmentId')),
+    selectedTreatmentDetails: UserTreatments.findOne(Session.get('selectedTreatmentDetails')),
     commonTreatments: CommonTreatments.find({}, {sort: {class: 1}}).fetch(),
     isFetching: !treatmentHandle.ready(),
     showErrors: Session.get('showErrors'),
     errorMessage: Session.get('errorMessage'),
   }
-}, SelectTreatmentsPage2);
+}, SelectTreatmentsPage3);
