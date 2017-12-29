@@ -1,0 +1,51 @@
+.page-content--symptom-history {
+  width: 100%;
+  padding: 4rem 0 0 0;
+}
+
+.symptom-history__flex-wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.symptom-history__navbar__container {
+  width: 15%;
+}
+
+.symptom-history__navbar {
+  position: fixed;
+  border-right: 1px solid lightblue;
+  height: calc(100vh - 4rem);
+  padding: 2rem $space 0 $space;
+  width: 15%;
+}
+
+.symptom-history__navbar__link {
+  color: grey;
+  cursor: pointer;
+  margin-bottom: .4rem;
+
+  &.active {
+    color: black;
+    font-size: 1.1rem;
+    // border-bottom: 2px solid black;
+    text-decoration: underline;
+  }
+}
+
+.symptom-history__graph-view__container {
+  background: $eggshell;
+  min-height: calc(100vh - 4rem);
+  width: 85%;
+  padding-top: 2rem;
+}
+
+.symptom-history__graph-view {
+  padding: 0 2rem;
+}
+
+
+.symptom-history__title--system {
+  font-size: 2rem;
+  margin: 0;
+}

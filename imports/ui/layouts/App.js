@@ -21,6 +21,7 @@ import SelectTreatmentsPage3 from '../pages/patient/SelectTreatmentsPage3';
 import Dashboard from '../pages/patient/Dashboard';
 import Checkin from '../pages/patient/Checkin';
 import SymptomsHistory from '../pages/patient/SymptomsHistory';
+import SymptomsHistory2 from '../pages/patient/SymptomsHistory2';
 import TreatmentsHistory from '../pages/patient/TreatmentsHistory';
 import Account from '../pages/patient/Account';
 import ForumHome from '../pages/patient/ForumHome';
@@ -61,6 +62,7 @@ const App = appProps => {
         <AuthPatientRoute exact path="/patient/dashboard" component={Dashboard} {...appProps} />
         <AuthPatientRoute exact path="/patient/checkin" component={Checkin} {...appProps} />
         <AuthPatientRoute exact path="/patient/history/symptoms" component={SymptomsHistory} {...appProps} />
+        <AuthPatientRoute exact path="/patient/history/symptoms2" component={SymptomsHistory2} {...appProps} />
         <AuthPatientRoute exact path="/patient/history/treatments" component={TreatmentsHistory} {...appProps} />
         <AuthPatientRoute exact path="/patient/account" component={Account} {...appProps} />
         <AuthPatientRoute exact path="/patient/forum/home" component={ForumHome} {...appProps} />

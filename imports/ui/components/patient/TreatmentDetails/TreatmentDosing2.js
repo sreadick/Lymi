@@ -15,7 +15,9 @@ const RxQuantityInput = ({props, col}) => (
       min="1"
       onChange={(e) => props.handleDosingChange({attr: e.target.name, value: e.target.value})} />
     <label className='active' htmlFor='amount'>Amount</label>
-    <div className="input-response red-text text-darken-2">{Session.get('showErrors') ? props.treatment.errors.amount : ''}</div>
+    {(Session.get('showErrors') && props.treatment.errors.amount) &&
+      <div className="treatment-editor2__error-message">{props.treatment.errors.amount}</div>
+    }
   </div>
 )
 
@@ -34,7 +36,10 @@ const RxDoseInput = ({props, col}) => (
         }
       }} />
     <label className='active' htmlFor='dose'>Dose</label>
-    <div className="input-response red-text text-darken-2">{Session.get('showErrors') ? props.treatment.errors.dose : ''}</div>
+    {(Session.get('showErrors') && props.treatment.errors.dose) &&
+      <div className="treatment-editor2__error-message">{props.treatment.errors.dose}</div>
+    }
+    {/* <div className="input-response red-text text-darken-2">{Session.get('showErrors') ? props.treatment.errors.dose : ''}</div> */}
   </div>
 )
 
@@ -47,7 +52,10 @@ const RxFrequencyInput = ({props, col}) => (
       min="1"
       onChange={(e) => props.handleDosingChange({attr: e.target.name, value: e.target.value})} />
     <label className='active' htmlFor='frequency'>Times Per Day</label>
-    <div className="input-response red-text text-darken-2">{Session.get('showErrors') ? props.treatment.errors.frequency : ''}</div>
+    {(Session.get('showErrors') && props.treatment.errors.frequency) &&
+      <div className="treatment-editor2__error-message">{props.treatment.errors.frequency}</div>
+    }
+    {/* <div className="input-response red-text text-darken-2">{Session.get('showErrors') ? props.treatment.errors.frequency : ''}</div> */}
   </div>
 )
 
@@ -91,14 +99,12 @@ export default TreatmentDosing2 = (props) => {
     );
   }
   return (
-    <div className='treatment-editor2__section--dosing row'>
-      <h1 className='treatment-editor2__section__header center-align blue white-text'>
+    <div className='treatment-editor2__section treatment-editor2__section--dosing row'>
+      <h1 className='treatment-editor2__section__header dosing'>
         <i className='medium left material-icons button--icon grey-text text-lighten-2' onClick={() => props.changeModalView('dates')}>keyboard_arrow_left</i>
-        {/* Dosing */}
-        How is {props.treatment.name} prescribed?
+          How is {props.treatment.name} prescribed?
         <i className='medium right material-icons button--icon grey-text text-lighten-2' onClick={() => props.changeModalView('instructions')}>keyboard_arrow_right</i>
       </h1>
-      {/* <p className='treatment-editor2__section__subheader center-align'>How is {props.treatment.name} prescribed?</p> */}
 
       <Row className='rx-detail-form--dosing__wrapper'>
         <Col className='treatment-editor2__section--dosing__dosing-format-container' s={2}>
@@ -153,7 +159,7 @@ export default TreatmentDosing2 = (props) => {
             <Row className='z-depth-4 rx-detail-form'>
               <RxQuantityInput
                 props={props}
-                col={props.treatment.dose_type === 'pills' ? 'col l2 offset-l2' : 'col l1 offset-l2'}/>
+                col={props.treatment.dose_type === 'pills' ? 'col l2 offset-l2' : 'col l2 offset-l2'}/>
               {/* <div className={`input-field ${props.treatment.dose_type === 'pills' ? 'col l2 offset-l3' : 'col l1 offset-l3'}`}>
                 <input
                   type="number"
@@ -269,9 +275,12 @@ export default TreatmentDosing2 = (props) => {
                         </div>
                       </div>
                     )}
-                    <div className="input-response red-text text-darken-2">{Session.get('showErrors') ? props.treatment.errors.generalTimes : ''}</div>
+                    {/* <div className="input-response red-text text-darken-2">{Session.get('showErrors') ? props.treatment.errors.generalTimes : ''}</div> */}
                   </div>
                 </Row>
+                {(Session.get('showErrors') && props.treatment.errors.generalTimes) &&
+                  <div className="treatment-editor2__error-message container">{props.treatment.errors.generalTimes}</div>
+                }
               </Row>
             : props.treatment.dosingFormat === 'specificTimes' ?
               <Row className='z-depth-4 rx-detail-form'>
@@ -340,7 +349,10 @@ export default TreatmentDosing2 = (props) => {
                     )}
                   </ol>
                   <div className='col l3'>
-                    <div className="input-response red-text text-darken-2">{Session.get('showErrors') ? props.treatment.errors.specificTimes : ''}</div>
+                    {(Session.get('showErrors') && props.treatment.errors.specificTimes) &&
+                      <div className="treatment-editor2__error-message">{props.treatment.errors.specificTimes}</div>
+                    }
+                    {/* <div className="input-response red-text text-darken-2">{Session.get('showErrors') ? props.treatment.errors.specificTimes : ''}</div> */}
                   </div>
                 </Row>
               </Row>
@@ -355,13 +367,16 @@ export default TreatmentDosing2 = (props) => {
                   {/* <div className="input-response red-text text-darken-2">{props.showErrors ? props.treatment.errors.amount : ''}</div> */}
                   <input type="number" id={`${props.treatment.name}_hourlyDoseQuantity`} value={props.treatment.dosingDetails.recurringDose.quantity} step='1' min="1" onChange={(e) => props.handleDosingDetailsChange({type: 'recurringDose', targetProperty: 'quantity', changedValue: e.target.value})}/>
                   <label className='active' htmlFor={`${props.treatment.name}_hourlyDoseQuantity`}>Amount</label>
-                  <div className="input-response red-text text-darken-2">{Session.get('showErrors') ? props.treatment.errors.recurringDoseQuantity : ''}</div>
+                  {(Session.get('showErrors') && props.treatment.errors.recurringDoseQuantity) &&
+                    <div className="treatment-editor2__error-message">{props.treatment.errors.recurringDoseQuantity}</div>
+                  }
+                  {/* <div className="input-response red-text text-darken-2">{Session.get('showErrors') ? props.treatment.errors.recurringDoseQuantity : ''}</div> */}
                 </div>
 
                 {props.treatment.dose_type !== 'pills' &&
                   <RxDoseInput
                     props={props}
-                    col='col l1'/>
+                    col='col l2'/>
                   // <div className="input-field col l2">
                   //   <input
                   //     className={`ui ${props.treatment.dose_type === 'pills' && 'disabled'} input`}
@@ -393,7 +408,7 @@ export default TreatmentDosing2 = (props) => {
                 </div>
 
                 <Input
-                  s={2}
+                  s={1}
                   type='select'
                   value={props.treatment.dosingDetails.recurringDose.recurringInterval}
                   // label={`Every ${props.treatment.dosingDetails.hourlyDose.hourInterval} ${props.treatment.dosingDetails.hourlyDose.hourInterval == 1 ? 'hour' : 'hours'}`}
@@ -429,14 +444,17 @@ export default TreatmentDosing2 = (props) => {
               </Row>
             : props.treatment.dosingFormat === 'prn' ?
               <Row className='z-depth-4 z-depth-4 rx-detail-form'>
-                <div className="col s2 offset-l1">
-                  <span className='dosing-form__text'>Take up to</span>
+                <div className="col s2">
+                  <span className='dosing-form__text right'>Take up to</span>
                 </div>
 
                 <div className={`input-field ${props.treatment.dose_type === 'pills' ? 'col l2' : 'col l1'}`}>
                   <input type="number" id={`${props.treatment.name}_hourlyDoseQuantity`} value={props.treatment.dosingDetails.prnDose.quantity} step='1' min="1" onChange={(e) => props.handleDosingDetailsChange({type: 'prnDose', targetProperty: 'quantity', changedValue: e.target.value})}/>
                   <label className='active' htmlFor={`${props.treatment.name}_hourlyDoseQuantity`}>Amount</label>
-                  <div className="input-response red-text text-darken-2">{Session.get('showErrors') ? props.treatment.errors.prnDoseQuantity : ''}</div>
+                  {(Session.get('showErrors') && props.treatment.errors.prnDoseQuantity) &&
+                    <div className="treatment-editor2__error-message">{props.treatment.errors.prnDoseQuantity}</div>
+                  }
+                  {/* <div className="input-response red-text text-darken-2">{Session.get('showErrors') ? props.treatment.errors.prnDoseQuantity : ''}</div> */}
                 </div>
 
                 {props.treatment.dose_type !== 'pills' &&

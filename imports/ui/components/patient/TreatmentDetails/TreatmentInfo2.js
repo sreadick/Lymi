@@ -11,11 +11,11 @@ export default TreatmentInfo2 = (props) => {
     );
   }
   return (
-    <div className='treatment-editor2__section--info row'>
-      <h1 className='treatment-editor2__section__header center-align purple white-text'>
+    <div className='treatment-editor2__section treatment-editor2__section--info row'>
+      <h1 className='treatment-editor2__section__header info'>
         <i className='medium left material-icons button--icon grey-text text-lighten-2' onClick={() => props.changeModalView('instructions')}>keyboard_arrow_left</i>
         Treatment Info
-        <i className='medium right material-icons button--icon purple-text'>keyboard_arrow_right</i>
+        <i className='medium right material-icons button--icon deep-purple-text text-darken-2'>keyboard_arrow_right</i>
       </h1>
       {/* <p className='center-align'>Any Special Instructions? {props.treatment.name}?</p> */}
 

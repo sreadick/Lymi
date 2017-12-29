@@ -5,17 +5,17 @@ import { DayPickerRangeController, DayPickerSingleDateController } from 'react-d
 import moment from 'moment';
 
 export default TreatmentDates2 = (props) => {
-  if (props.isFetching) {
-    return (
-      <div className="progress">
-        <div className="indeterminate"></div>
-      </div>
-    );
-  }
+  // if (props.isFetching) {
+  //   return (
+  //     <div className="progress">
+  //       <div className="indeterminate"></div>
+  //     </div>
+  //   );
+  // }
   return (
-    <div className='treatment-editor2__section--dates row'>
-      <h1 className='treatment-editor2__section__header center-align red white-text'>
-        <i className='medium left material-icons button--icon grey-text text-lighten-2' onClick={() => props.changeModalView('')}>keyboard_arrow_left</i>
+    <div className='treatment-editor2__section treatment-editor2__section--dates row'>
+      <h1 className='treatment-editor2__section__header dates'>
+        <i className='medium left material-icons button--icon grey-text text-lighten-2' onClick={() => props.changeModalView('name')}>keyboard_arrow_left</i>
         {/* Schedule */}
         When do you plan to take {props.treatment.name}?
         <i className='medium right material-icons button--icon grey-text text-lighten-2' onClick={() => props.changeModalView('dosing')}>keyboard_arrow_right</i>
@@ -41,24 +41,26 @@ export default TreatmentDates2 = (props) => {
 
       { props.treatment.dateSelectMode === 'from now on' ?
         <Row className='rx-detail-form'>
-          {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) =>
-            <Col s={2} key={day}>
-              <input
-                type="checkbox"
-                className='filled-in'
-                id={`${props.treatment._id}_${day}`}
-                checked={props.treatment.daysOfWeek.includes(day)}
-                onChange={(e) => props.handleWeekdayChange(e, [day])} />
-              <label htmlFor={`${props.treatment._id}_${day}`}>{day}</label>
-            </Col>
-          )}
+          <Col s={4} offset='l4'>
+            {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) =>
+              <div key={day}>
+                <input
+                  type="checkbox"
+                  className='filled-in'
+                  id={`${props.treatment.name}_${day}`}
+                  checked={props.treatment.daysOfWeek.includes(day)}
+                  onChange={(e) => props.handleWeekdayChange(e, [day])} />
+                <label htmlFor={`${props.treatment.name}_${day}`}>{day}</label>
+              </div>
+            )}
+            {(Session.get('showErrors') && props.treatment.errors.daysOfWeek) &&
+              <div className="treatment-editor2__error-message">{props.treatment.errors.daysOfWeek}</div>
+            }
+          </Col>
           {/* <button className='btn-flat'
             onClick={() => props.handleWeekdayChange(undefined, ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])}>
             Select All
           </button> */}
-          <div className="input-response red-text text-darken-2">
-            {Session.get('showErrors') ? props.treatment.errors.daysOfWeek : ''}
-          </div>
         </Row>
         :
         props.treatment.dateSelectMode === 'date range' ?
@@ -76,29 +78,31 @@ export default TreatmentDates2 = (props) => {
                 isOutsideRange={(day) => props.treatment.daysOfWeek.includes(day.format('dddd')) ? false : true}
                 numberOfMonths={2}
               />
-              <div className="input-response red-text text-darken-2 align-right">{Session.get('showErrors') ? props.treatment.errors.dateRange : ''}</div>
+              {(Session.get('showErrors') && props.treatment.errors.dateRange) &&
+                <div className="treatment-editor2__error-message">{props.treatment.errors.dateRange}</div>
+              }
             </div>
           </Col>
-          <Col className='white' s={2} offset='s2'>
+          <Col className='white' s={3} offset='s1'>
             {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) =>
               <div key={day}>
                 <input
                   type="checkbox"
                   className='filled-in'
-                  id={`${props.treatment._id}_${day}`}
+                  id={`${props.treatment.name}_${day}`}
                   checked={props.treatment.daysOfWeek.includes(day)}
                   // disabled={props.treatment.dateSelectMode === 'individual select'}
                   onChange={(e) => props.handleWeekdayChange(e, [day])} />
-                <label htmlFor={`${props.treatment._id}_${day}`}>{day}</label>
+                <label htmlFor={`${props.treatment.name}_${day}`}>{day}</label>
               </div>
             )}
             {/* <button className='btn-link'
               onClick={() => props.handleWeekdayChange(undefined, ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])}>
               Select All
             </button> */}
-            <div className="input-response red-text text-darken-2">
-              {Session.get('showErrors') ? props.treatment.errors.daysOfWeek : ''}
-            </div>
+            {(Session.get('showErrors') && props.treatment.errors.daysOfWeek) &&
+              <div className="treatment-editor2__error-message">{props.treatment.errors.daysOfWeek}</div>
+            }
           </Col>
         </Row>
         : props.treatment.dateSelectMode === 'individual select' ?
@@ -111,7 +115,10 @@ export default TreatmentDates2 = (props) => {
                 isDayHighlighted={date => props.treatment.individualDateValues.map(dateValue => moment(dateValue).format('MM DD YYYY')).includes(date.format('MM DD YYYY'))}
                 // isOutsideRange={(day) => (day.isSameOrAfter(moment().startOf('day')) ) ? false : true}
               />
-              <div className="input-response red-text text-darken-2 align-right">{Session.get('showErrors') ? props.treatment.errors.individualDates : ''}</div>
+              {(Session.get('showErrors') && props.treatment.errors.individualDates) &&
+                <div className="treatment-editor2__error-message">{props.treatment.errors.individualDates}</div>
+              }
+              {/* <div className="treatment-editor2__error-message align-right">{Session.get('showErrors') ? props.treatment.errors.individualDates : ''}</div> */}
             </div>
           </Col>
         </Row>

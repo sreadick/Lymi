@@ -1,7 +1,6 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Link } from 'react-router-dom'
-import { Session } from 'meteor/session';
 
 import Collapsible from 'react-collapsible';
 import { Row, Col, Input, Button } from 'react-materialize';
@@ -9,14 +8,16 @@ import moment from 'moment';
 import { DayPickerRangeController, DayPickerSingleDateController } from 'react-dates';
 import TimePicker from 'rc-time-picker';
 import 'rc-time-picker/assets/index.css';
-import Autosuggest from 'react-autosuggest';
+// import Autosuggest from 'react-autosuggest';
 import { capitalizePhrase } from '../../../utils/utils';
 // import autoSuggestTheme from '../../../client/styles/_react-autosuggest';
 
+import TreatmentName2 from './TreatmentDetails/TreatmentName2';
 import TreatmentDates2 from './TreatmentDetails/TreatmentDates2';
 import TreatmentDosing2 from './TreatmentDetails/TreatmentDosing2';
 import TreatmentInstructions2 from './TreatmentDetails/TreatmentInstructions2';
 import TreatmentInfo2 from './TreatmentDetails/TreatmentInfo2';
+import TreatmentUpdateConfirmation from './TreatmentDetails/TreatmentUpdateConfirmation';
 
 export class TreatmentEditor3 extends React.Component {
   constructor(props) {
@@ -25,31 +26,107 @@ export class TreatmentEditor3 extends React.Component {
     // const { name, amount, dose, dose_type, frequency, daysOfWeek, startDate, endDate } = props.treatment;
     const { treatment } = props;
 
+    // this.state = {
+    //   name: treatment === null ? '' : treatment.name,
+    //   amount: treatment === null ? 1 : treatment.amount,
+    //   dose: treatment === null ? treatment.dose : 0,
+    //   dose_type: treatment === null ? treatment.dose_type : '',
+    //   frequency: treatment === null ? treatment.frequency : 0,
+    //   daysOfWeek: treatment === null ? treatment.daysOfWeek : [],
+    //   startDate: (treatment && treatment.startDateValue) ? moment(treatment.startDateValue) : null,
+    //   endDate: (treatment && treatment.endDateValue) ? moment(treatment.endDateValue) : null,
+    //   focusedInput: 'startDate',
+    //   dateSelectMode: treatment ? treatment.dateSelectMode : '',
+    //   individualDateValues: treatment ? treatment.individualDateValues : [],
+    //   dosingFormat: treatment ? treatment.dosingFormat : '',
+    //   dosingDetails: treatment ? treatment.dosingDetails : {
+    //     generalDoses: [],
+    //     specificDoses: [],
+    //     // hourlyDose: {},
+    //     recurringDose: {},
+    //     prnDose: {},
+    //     other: {}
+    //   },
+    //   otherInstructions: treatment ? treatment.otherInstructions : {},
+    //   info: treatment ? treatment.info : {},
+    //   treatmentSuggestions: [],
+    //   selectedTab: '',
+    // };
     this.state = {
-      name: treatment ? treatment.name : '',
-      amount: treatment ? treatment.amount : 0,
-      dose: treatment ? treatment.dose : 0,
-      dose_type: treatment ? treatment.dose_type : '',
-      frequency: treatment ? treatment.frequency : 0,
-      daysOfWeek: treatment ? treatment.daysOfWeek : [],
-      startDate: (treatment && treatment.startDateValue) ? moment(treatment.startDateValue) : null,
-      endDate: (treatment && treatment.endDateValue) ? moment(treatment.endDateValue) : null,
-      focusedInput: 'startDate',
-      dateSelectMode: treatment ? treatment.dateSelectMode : '',
-      individualDateValues: treatment ? treatment.individualDateValues : [],
-      dosingFormat: treatment ? treatment.dosingFormat : '',
-      dosingDetails: treatment ? treatment.dosingDetails : {
-        generalDoses: [],
-        specificDoses: [],
-        // hourlyDose: {},
-        recurringDose: {},
-        prnDose: {},
-        other: {}
-      },
-      otherInstructions: treatment ? treatment.otherInstructions : {},
-      info: treatment ? treatment.info : {},
+      name: treatment === null ? '' : treatment.name,
+      commonTreatmentId: treatment === null ? '' : treatment.commonTreatmentId,
+      amount: treatment === null ? 1 : treatment.amount,
+      dose: treatment === null ? 0 : treatment.dose,
+      dose_type: treatment === null ? 'mg' : treatment.dose_type,
+      frequency: treatment === null ? '1' : treatment.frequency,
+      daysOfWeek: treatment === null ? ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] : treatment.daysOfWeek,
+      startDateValue: treatment === null ? 0 : treatment.startDateValue,
+      endDateValue: treatment === null ? 0 : treatment.endDateValue,
+      dateSelectMode: treatment === null ? 'daily' : treatment.dateSelectMode,
+      individualDateValues: treatment === null ? [] : treatment.individualDateValues,
+      dosingFormat: treatment === null ? 'unspecified' : treatment.dosingFormat,
+      dosingDetails: treatment === null ?
+        {
+          generalDoses: [
+            {
+              time: 'morning',
+              quantity: 0,
+            },
+            {
+              time: 'afternoon',
+              quantity: 0,
+            },
+            {
+              time: 'evening',
+              quantity: 0,
+            },
+            {
+              time: 'bedtime',
+              quantity: 0,
+            },
+          ],
+          specificDoses: [
+            {
+              time: moment().hour(0).minute(0).valueOf(),
+              quantity: 1,
+            }
+          ],
+          recurringDose: {
+            recurringInterval: 1,
+            timeUnit: 'hour',
+            quantity: 1
+          },
+          prnDose: {
+            hourInterval: 24,
+            quantity: 1
+          },
+          other: {
+            dosingInstructions: ''
+          }
+        } : treatment.dosingDetails,
+      otherInstructions: treatment === null ?
+        {
+          meals: 'None',
+          contraindications: 'None',
+          userDefined: ''
+        } : treatment.otherInstructions,
+      info: treatment === null ?
+        {
+          type: 'N/A',
+          typeOtherValue: '',
+          category: '',
+          usedToTreat: ''
+        } : treatment.info,
+      errors: treatment === null ? { name: "needs to be at least three characters.", } : treatment.errors,
+      // Editor Specific State //
+      editorMode: treatment === null ? 'create' : 'update',
       treatmentSuggestions: [],
-      selectedTab: '',
+      selectedTab: 'name',
+      focusedInput: 'startDate',
+      startDate: treatment === null ? null : !treatment.startDateValue ? null : moment(treatment.startDateValue),
+      endDate: treatment === null ? null : !treatment.endDateValue ? null : moment(treatment.endDateValue),
+      showUpdateConfirmation: false,
+      deltaGroups: {}
     };
 
     this.handleWeekdayChange = this.handleWeekdayChange.bind(this);
@@ -67,18 +144,58 @@ export class TreatmentEditor3 extends React.Component {
         name, amount, dose, dose_type, frequency, daysOfWeek, startDateValue, endDateValue, startDate, endDate, dateSelectMode, individualDateValues, dosingFormat, dosingDetails, otherInstructions, info
       })
     }
+
+    if (!Object.is(prevState, this.state)) {
+      if (Object.is(prevState.errors, this.state.errors)) {
+        this.getAllErrors();
+      }
+    }
   }
 
   componentDidMount() {
-    // this.getAllErrors();
+    Session.set('showErrors', false)
   }
 
   getAllErrors() {
-    console.log(this.props.commonTreatments);
     const errors = {};
-    const treatment = this.props.treatment;
-    // if (this.props.userTreatments.find((treatment) => this.props.userTreatments[i].name.toLowerCase() === treatment.name.toLowerCase() && this.props.userTreatments[i]._id !== treatment._id)) {
-    //   errors.name = "needs to be unique"
+    const treatment = this.state;
+    // if (property === 'name') {
+    //   if (newValue.length < 3) {
+    //     errors.name = "needs to be at least three characters";
+    //   } else if (this.props.otherUserTreatmentNames.includes(newValue.toLowerCase())) {
+    //     errors.name = `treatment: "${capitalizePhrase(newValue)}" already exists`
+    //   }
+    // } else if (property === 'daysOfWeek') {
+    //   if ((this.state.dateSelectMode === 'from now on' || this.state.dateSelectMode === 'date range') && newValue.length === 0) {
+    //     errors.daysOfWeek = 'Select at least one day of the week'
+    //   }
+    //   if (this.state.dateSelectMode === 'date range' && (!this.state.startDateValue || !this.state.endDateValue || this.state.startDateValue === this.state.endDateValue)) {
+    //     errors.dateRange = 'Select a start and end date';
+    //   }
+    // } else if (property === 'dateRange') {
+    //   if (this.state.dateSelectMode === 'date range' && (!newValue.startDateValue || !newValue.endDateValue || newValue.startDateValue === newValue.endDateValue)) {
+    //     errors.dateRange = 'Select a start and end date';
+    //   }
+    //   if (this.state.daysOfWeek.length === 0) {
+    //     errors.daysOfWeek = 'Select at least one day of the week'
+    //   }
+    // } else if (property === 'individualDateValues') {
+    //   if (this.state.dateSelectMode === 'individual select' && newValue.length === 0) {
+    //     errors.individualDates = 'Select at least one day';
+    //   }
+    // } else if (property === 'dateSelectMode') {
+    //   if (newValue === 'from now on' && this.state.daysOfWeek.length === 0) {
+    //     errors.daysOfWeek = 'Select at least one day of the week'
+    //   } else if (newValue === 'date range') {
+    //     if (!this.state.startDateValue || !this.state.endDateValue || this.state.startDateValue === this.state.endDateValue) {
+    //       errors.dateRange = 'Select a start and end date';
+    //     }
+    //     if (this.state.daysOfWeek.length === 0) {
+    //       errors.daysOfWeek = 'Select at least one day of the week'
+    //     }
+    //   } else if (newValue === 'individual select' && this.state.individualDateValues.length === 0) {
+    //     errors.individualDates = 'Select at least one day';
+    //   }
     // }
     if (treatment.name.length < 3) {
       errors.name = "needs to be at least three characters";
@@ -119,13 +236,14 @@ export class TreatmentEditor3 extends React.Component {
     if (treatment.dateSelectMode === 'individual select' && treatment.individualDateValues.length === 0) {
       errors.individualDates = 'Select at least one day';
     }
-
-    Meteor.call('userTreatments.update', treatment._id, {
-      errors,
-      // showDateDetails: (this.props.showErrors && (errors.daysOfWeek || errors.dateRange || errors.individualDates)) ? true : false
-    });
+    this.setState({errors});
+    // Meteor.call('userTreatments.update', treatment._id, {
+    //   errors,
+    // });
+    // return errors
   }
 
+  // change function name ... only used by TreatmentName
   handleChange(e) {
     if (e.target.name) {
       const otherUpdates = {};
@@ -160,19 +278,20 @@ export class TreatmentEditor3 extends React.Component {
       } else {
         this.setState({
           [e.target.name]: e.target.value,
+          // errors: this.getAllErrors(e.target.name, e.target.value)
         });
       }
 
-      Meteor.call('userTreatments.update', this.props.treatment._id, {
-        [e.target.name]: e.target.value,
-        ...otherUpdates
-      }, (err, res) => {
-        if (err) {
-          console.log(err);
-        } else {
-          this.getAllErrors();
-        }
-      });
+      // Meteor.call('userTreatments.update', this.props.treatment._id, {
+      //   [e.target.name]: e.target.value,
+      //   ...otherUpdates
+      // }, (err, res) => {
+      //   if (err) {
+      //     console.log(err);
+      //   } else {
+      //     this.getAllErrors();
+      //   }
+      // });
     }
   }
 
@@ -219,19 +338,20 @@ export class TreatmentEditor3 extends React.Component {
       });
     } else {
       this.setState({
-        [attr]: value
+        [attr]: value,
+        // errors: this.getAllErrors(attr, value)
       });
     }
-    Meteor.call('userTreatments.update', this.props.treatment._id, {
-      [attr]: value,
-      ...otherUpdates
-    }, (err, res) => {
-      if (err) {
-        console.log(err);
-      } else {
-        this.getAllErrors();
-      }
-    });
+    // Meteor.call('userTreatments.update', this.props.treatment._id, {
+    //   [attr]: value,
+    //   ...otherUpdates
+    // }, (err, res) => {
+    //   if (err) {
+    //     console.log(err);
+    //   } else {
+    //     this.getAllErrors();
+    //   }
+    // });
   }
 
   handleDosingDetailsChange({type, index, targetProperty, changedValue}) {
@@ -239,37 +359,35 @@ export class TreatmentEditor3 extends React.Component {
 
     if (targetProperty === 'hourInterval' || targetProperty === 'recurringInterval' || targetProperty === 'quantity') {
       changedValue = parseFloat(changedValue) || 0
-    } else if (targetProperty === 'timeUnit') {
-      if (changedValue === 'day' && this.state.dosingDetails.recurringDose.recurringInterval > 7 || changedValue === 'week' && this.state.dosingDetails.recurringDose.recurringInterval > 4) {
-        Meteor.call('userTreatments.details.update', this.props.treatment._id, {
-          type,
-          index,
-          targetProperty: 'recurringInterval',
-          changedValue: 1
-        }, (err, res) => {
-          if (err) {
-            console.log(err);
-          } else {
-            this.getAllErrors();
-          }
-        });
-        otherUpdates = {
-          dosingDetails: Object.assign({}, this.props.treatment.dosingDetails.recurringDose, {recurringInterval: 1})
-        }
-      }
     }
-    // if (targetProperty === 'hourInterval') {
-    //   changedValue = parseFloat(changedValue) || 0
+    // else if (targetProperty === 'timeUnit') {
+    //   if (changedValue === 'day' && this.state.dosingDetails.recurringDose.recurringInterval > 7 || changedValue === 'week' && this.state.dosingDetails.recurringDose.recurringInterval > 4) {
+    //     // Meteor.call('userTreatments.details.update', this.props.treatment._id, {
+    //     //   type,
+    //     //   index,
+    //     //   targetProperty: 'recurringInterval',
+    //     //   changedValue: 1
+    //     // }, (err, res) => {
+    //     //   if (err) {
+    //     //     console.log(err);
+    //     //   } else {
+    //     //     this.getAllErrors();
+    //     //   }
+    //     // });
+    //     otherUpdates = {
+    //       dosingDetails: Object.assign({}, this.state.dosingDetails.recurringDose, {recurringInterval: 1})
+    //     }
+    //   }
     // }
-    Meteor.call('userTreatments.details.update', this.props.treatment._id, {
-      type, index, targetProperty, changedValue
-    }, (err, res) => {
-      if (err) {
-        console.log(err);
-      } else {
-        this.getAllErrors();
-      }
-    });
+    // Meteor.call('userTreatments.details.update', this.props.treatment._id, {
+    //   type, index, targetProperty, changedValue
+    // }, (err, res) => {
+    //   if (err) {
+    //     console.log(err);
+    //   } else {
+    //     this.getAllErrors();
+    //   }
+    // });
     const dosingDetails = Object.assign({}, this.state.dosingDetails);
     if (index !== undefined) {
       dosingDetails[type][index][targetProperty] = changedValue;
@@ -277,20 +395,25 @@ export class TreatmentEditor3 extends React.Component {
       dosingDetails[type][targetProperty] = changedValue;
     }
 
-    this.setState({dosingDetails, ...otherUpdates})
+    if (targetProperty === 'timeUnit' && changedValue === 'day' && this.state.dosingDetails.recurringDose.recurringInterval > 7 || changedValue === 'week' && this.state.dosingDetails.recurringDose.recurringInterval > 4) {
+      dosingDetails.recurringDose.recurringInterval = 1;
+    }
+
+    this.setState({dosingDetails})
+    // this.setState({dosingDetails, ...otherUpdates})
   }
 
   handleInstructionsChange(targetInstruction, value) {
     const otherInstructions = Object.assign({}, this.state.otherInstructions);
     otherInstructions[targetInstruction] = value;
 
-    Meteor.call('userTreatments.update', this.props.treatment._id, {otherInstructions}, (err, res) => {
-      if (err) {
-        console.log(err);
-      } else {
-        this.getAllErrors();
-      }
-    });
+    // Meteor.call('userTreatments.update', this.props.treatment._id, {otherInstructions}, (err, res) => {
+    //   if (err) {
+    //     console.log(err);
+    //   } else {
+    //     this.getAllErrors();
+    //   }
+    // });
     this.setState({otherInstructions});
   }
 
@@ -298,13 +421,13 @@ export class TreatmentEditor3 extends React.Component {
     const info = Object.assign({}, this.state.info);
     info[targetGroup] = value;
 
-    Meteor.call('userTreatments.update', this.props.treatment._id, {info}, (err, res) => {
-      if (err) {
-        console.log(err);
-      } else {
-        this.getAllErrors();
-      }
-    });
+    // Meteor.call('userTreatments.update', this.props.treatment._id, {info}, (err, res) => {
+    //   if (err) {
+    //     console.log(err);
+    //   } else {
+    //     this.getAllErrors();
+    //   }
+    // });
     this.setState({info});
   }
 
@@ -314,31 +437,42 @@ export class TreatmentEditor3 extends React.Component {
   }
 
   handleDateModeChange(dateSelectMode) {
-    Meteor.call('userTreatments.update', this.props.treatment._id, {
+    // Meteor.call('userTreatments.update', this.props.treatment._id, {
+    //   dateSelectMode,
+    // }, (err, res) => {
+    //   if (err) {
+    //     console.log(err);
+    //   } else {
+    //     this.getAllErrors();
+    //   }
+    // });
+    this.setState({
       dateSelectMode,
-    }, (err, res) => {
-      if (err) {
-        console.log(err);
-      } else {
-        this.getAllErrors();
-      }
+      // errors: this.getAllErrors('dateSelectMode', dateSelectMode)
     });
-    this.setState({dateSelectMode})
   }
 
   handleDateRangeSelection(startDate, endDate) {
-    console.log(startDate, '...', endDate);
-    Meteor.call('userTreatments.update', this.props.treatment._id, {
-      startDateValue: startDate ? startDate.startOf('day').valueOf() : undefined,
-      endDateValue: endDate ? endDate.startOf('day').valueOf() : undefined
-    }, (err, res) => {
-      if (err) {
-        console.log(err);
-      } else {
-        this.getAllErrors();
-      }
+
+    // Meteor.call('userTreatments.update', this.props.treatment._id, {
+    //   startDateValue: startDate ? startDate.startOf('day').valueOf() : undefined,
+    //   endDateValue: endDate ? endDate.startOf('day').valueOf() : undefined
+    // }, (err, res) => {
+    //   if (err) {
+    //     console.log(err);
+    //   } else {
+    //     this.getAllErrors();
+    //   }
+    // });
+    const startDateValue = startDate ? startDate.startOf('day').valueOf() : undefined;
+    const endDateValue = endDate ? endDate.startOf('day').valueOf() : undefined;
+    this.setState({
+      startDate,
+      endDate,
+      startDateValue,
+      endDateValue,
+      // errors: this.getAllErrors('dateRange', {startDateValue, endDateValue})
     });
-    this.setState({ startDate, endDate });
   }
 
   handleDateRangeFocusChange(focusedInput) {
@@ -353,60 +487,70 @@ export class TreatmentEditor3 extends React.Component {
     } else {
       individualDateValues.splice(dateTargetIndex, 1)
     }
-    Meteor.call('userTreatments.update', this.props.treatment._id, {individualDateValues}, (err, res) => {
-      if (err) {
-        console.log(err);
-      } else {
-        this.getAllErrors();
-      }
+    // Meteor.call('userTreatments.update', this.props.treatment._id, {individualDateValues}, (err, res) => {
+    //   if (err) {
+    //     console.log(err);
+    //   } else {
+    //     this.getAllErrors();
+    //   }
+    // });
+    this.setState({
+      individualDateValues,
+      // errors: this.getAllErrors('individualDateValues', individualDateValues)
     });
-    this.setState({individualDateValues});
   }
 
   handleWeekdayChange(e, days) {
-    if (e) {
-      e.preventDefault();
-    }
+    // if (e) {
+    //   e.preventDefault();
+    // }
     if (days.length === 1) {
       if (this.state.daysOfWeek.includes(days[0])) {
-        Meteor.call('userTreatments.update', this.props.treatment._id, {
-          daysOfWeek: this.state.daysOfWeek.filter((dayOfWeek) => dayOfWeek !== days[0])
-        }, (err, res) => {
-          if (err) {
-            console.log(err);
-          } else {
-            this.getAllErrors();
-          }
-        });
+        // Meteor.call('userTreatments.update', this.props.treatment._id, {
+        //   daysOfWeek: this.state.daysOfWeek.filter((dayOfWeek) => dayOfWeek !== days[0])
+        // }, (err, res) => {
+        //   if (err) {
+        //     console.log(err);
+        //   } else {
+        //     this.getAllErrors();
+        //   }
+        // });
         this.setState({
-          daysOfWeek: this.state.daysOfWeek.filter((dayOfWeek) => dayOfWeek !== days[0])
+          daysOfWeek: this.state.daysOfWeek.filter((dayOfWeek) => dayOfWeek !== days[0]),
+          // errors: this.getAllErrors('daysOfWeek', this.state.daysOfWeek.filter((dayOfWeek) => dayOfWeek !== days[0]))
         });
       } else {
         const daysOfWeek = this.state.daysOfWeek.slice();
         const position = days[0] === "Monday" ? 0 : days[0] === "Tuesday" ? 1 : days[0] === "Wednesday" ? 2 : days[0] === "Thursday" ? 3 : days[0] === "Friday" ? 4 : days[0] === "Saturday" ? 5 : 6;
         daysOfWeek.splice(position, 0, days[0]);
-        Meteor.call('userTreatments.update', this.props.treatment._id, {
-          daysOfWeek
-        }, (err, res) => {
-          if (err) {
-            console.log(err);
-          } else {
-            this.getAllErrors();
-          }
+        // Meteor.call('userTreatments.update', this.props.treatment._id, {
+        //   daysOfWeek
+        // }, (err, res) => {
+        //   if (err) {
+        //     console.log(err);
+        //   } else {
+        //     this.getAllErrors();
+        //   }
+        // });
+        this.setState({
+          daysOfWeek,
+          // errors: this.getAllErrors('daysOfWeek', daysOfWeek)
         });
-        this.setState({daysOfWeek});
       }
     } else {
-      Meteor.call('userTreatments.update', this.props.treatment._id, {
-        daysOfWeek: days
-      }, (err, res) => {
-        if (err) {
-          console.log(err);
-        } else {
-          this.getAllErrors();
-        }
+      // Meteor.call('userTreatments.update', this.props.treatment._id, {
+      //   daysOfWeek: days
+      // }, (err, res) => {
+      //   if (err) {
+      //     console.log(err);
+      //   } else {
+      //     this.getAllErrors();
+      //   }
+      // });
+      this.setState({
+        daysOfWeek: days,
+        // errors: this.getAllErrors('daysOfWeek', days)
       });
-      this.setState({ daysOfWeek: days });
     }
   }
 
@@ -486,44 +630,207 @@ export class TreatmentEditor3 extends React.Component {
   };
 
   onSuggestionSelected(e, {suggestion, suggestionValue}) {
-    Meteor.call('userTreatments.update', this.props.treatment._id, {
+    // Meteor.call('userTreatments.update', this.props.treatment._id, {
+    //   name: suggestionValue,
+    //   commonTreatmentId: suggestion._id,
+    // }, (err, res) => {
+    //   if (err) {
+    //     console.log(err);
+    //   } else {
+    //     this.getAllErrors();
+    //   }
+    // });
+    this.setState({
       name: suggestionValue,
       commonTreatmentId: suggestion._id,
-    }, (err, res) => {
-      if (err) {
-        console.log(err);
-      } else {
-        this.getAllErrors();
-      }
-    });
-    this.setState({name: suggestionValue})
+      // errors: this.getAllErrors('name', suggestionValue)
+    })
+    // this.getAllErrors();
   }
 
   changeModalView(display) {
-    this.setState({selectedTab: display});
+    if (Object.keys(this.state.errors).length > 0) {
+        Session.set('showErrors', true)
+    } else {
+      Session.set('showErrors', false)
+      this.setState({selectedTab: display});
+    }
   }
 
+  handleSubmit() {
+    if (Object.keys(this.state.errors).length > 0) {
+      Session.set('showErrors', true);
+    } else {
+      const treatmentData = {
+        name: this.state.name,
+        commonTreatmentId: this.state.commonTreatmentId,
+        amount: this.state.amount,
+        dose: this.state.dose,
+        dose_type: this.state.dose_type,
+        frequency: this.state.frequency,
+        daysOfWeek: this.state.daysOfWeek,
+        startDateValue: this.state.startDateValue,
+        endDateValue: this.state.endDateValue,
+        dateSelectMode: this.state.dateSelectMode,
+        individualDateValues: this.state.individualDateValues,
+        dosingFormat: this.state.dosingFormat,
+        dosingDetails: this.state.dosingDetails,
+        otherInstructions: this.state.otherInstructions,
+        info: this.state.info,
+        errors: this.state.errors
+      }
+      Meteor.call('userTreatments.insert', treatmentData, (err, res) => {
+        if (err) {
+          console.log(err);
+        } else {
+          Session.set({
+            'displayTreatmentEditor': false,
+            'currentTreatmentId': null,
+            'selectedTreatmentDetails': res,
+          });
+        }
+      })
+    }
+  }
+
+  handleUpdate() {
+    if (Object.keys(this.state.errors).length > 0) {
+      Session.set('showErrors', true);
+    } else {
+      const treatmentData = {
+        name: this.state.name,
+        commonTreatmentId: this.state.commonTreatmentId,
+        amount: this.state.amount,
+        dose: this.state.dose,
+        dose_type: this.state.dose_type,
+        frequency: this.state.frequency,
+        daysOfWeek: this.state.daysOfWeek,
+        startDateValue: this.state.startDateValue,
+        endDateValue: this.state.endDateValue,
+        dateSelectMode: this.state.dateSelectMode,
+        individualDateValues: this.state.individualDateValues,
+        dosingFormat: this.state.dosingFormat,
+        dosingDetails: this.state.dosingDetails,
+        otherInstructions: this.state.otherInstructions,
+        info: this.state.info,
+        errors: this.state.errors
+      };
+
+      const deltaGroups = {namesGroup: [], datesGroup: [], dosesGroup: [], instructionsGroup: [], informationGroup: []};
+      Object.entries(treatmentData).forEach(([dataProp, dataValue]) => {
+        if (Object.keys(this.props.treatment).includes(dataProp)) {
+          if (JSON.stringify(this.props.treatment[dataProp]) !== JSON.stringify(dataValue)) {
+            const deltaSet = { property: dataProp, initialValue: this.props.treatment[dataProp], updatedValue: dataValue };
+            if (dataProp === 'name' || dataProp === 'commonTreatmentId') {
+              deltaGroups.namesGroup.push(deltaSet);
+            } else if ( dataProp === 'dateSelectMode' || dataProp === 'daysOfWeek' || dataProp === 'startDateValue' || dataProp === 'endDateValue' || dataProp === 'individualDateValues') {
+              deltaGroups.datesGroup.push(deltaSet);
+            } else if ( dataProp === 'dosingFormat' || dataProp === 'amount' || dataProp === 'dose' || dataProp === 'dose_type' || dataProp === 'frequency' || dataProp === 'dosingDetails') {
+              deltaGroups.dosesGroup.push(deltaSet);
+            } else if ( dataProp === 'otherInstructions') {
+              deltaGroups.instructionsGroup.push(deltaSet);
+            } else if ( dataProp === 'info') {
+              deltaGroups.informationGroup.push(deltaSet);
+            } else {
+              console.log(dataProp);
+            }
+            // deltaGroups.push({
+            //   property: dataProp,
+            //   initialValue: this.props.treatment[dataProp],
+            //   updatedValue: dataValue
+            // });
+          }
+        } else {
+          console.log('false.....', dataProp);
+        }
+      });
+      console.log(deltaGroups);
+      if (!Object.keys(deltaGroups).find(groupKey => deltaGroups[groupKey].length > 0)) {
+        this.handleConfirmResponse('confirm')
+      } else {
+        this.setState({
+          'showUpdateConfirmation': true,
+          'deltaGroups': deltaGroups
+        });
+      }
+    }
+  }
+  handleConfirmResponse(response) {
+    if (response === 'confirm') {
+      const treatmentData = {
+        name: this.state.name,
+        commonTreatmentId: this.state.commonTreatmentId,
+        amount: this.state.amount,
+        dose: this.state.dose,
+        dose_type: this.state.dose_type,
+        frequency: this.state.frequency,
+        daysOfWeek: this.state.daysOfWeek,
+        startDateValue: this.state.startDateValue,
+        endDateValue: this.state.endDateValue,
+        dateSelectMode: this.state.dateSelectMode,
+        individualDateValues: this.state.individualDateValues,
+        dosingFormat: this.state.dosingFormat,
+        dosingDetails: this.state.dosingDetails,
+        otherInstructions: this.state.otherInstructions,
+        info: this.state.info,
+        errors: this.state.errors
+      };
+      Meteor.call('userTreatments.update2', this.props.treatment._id, treatmentData, (err, res) => {
+        if (err) {
+          console.log(err);
+        } else {
+          Session.set({
+            'displayTreatmentEditor': false,
+            'currentTreatmentId': null,
+            'selectedTreatmentDetails': this.props.treatment._id,
+          });
+        }
+      })
+    } else {
+      this.setState({
+        'showUpdateConfirmation': false,
+        'deltaGroups': []
+      });
+    }
+  }
 
   render() {
-    if (!this.props.treatment) {
-      return <div className='treatment-editor treatment-editor--no-treatment-message z-depth-2'>Select a treatment or create a new one</div>
-    }
+    // if (this.state.showUpdateConfirmation) {
+    //   return <TreatmentUpdateConfirmation deltaGroups={this.state.deltaGroups} handleConfirmResponse={this.handleConfirmResponse.bind(this)} />
+    // }
     return (
       <div className='treatment-editor2__overlay'>
         <div className="treatment-editor2 z-depth-2">
-          {/* <Link className='treatment-editor2__remove-link light-blue-text' to="#" onClick={this.handleRemove.bind(this)}>cancel</Link> */}
-
-          <i
-            className='small right material-icons button--icon blue-text'
-            onClick={() => {
-              Session.set('showErrors', false);
-              this.handleRemove();
-            }}>
-            close
-          </i>
+          {this.state.showUpdateConfirmation &&
+            <TreatmentUpdateConfirmation originalTreatment={this.props.treatment} updatedTreatmentState={this.state} deltaGroups={this.state.deltaGroups} handleConfirmResponse={this.handleConfirmResponse.bind(this)} />
+          }
+          <span>
+            <i
+              className='small material-icons button--icon blue-text'
+              onClick={() => {
+                Session.set({
+                  'displayTreatmentEditor': false,
+                  'currentTreatmentId': null,
+                });
+              }}>
+              close
+            </i>
+          </span>
 
           <div className='treatment-editor2__section__tab__container'>
-            <div className={`treatment-editor2__section__tab ${this.state.selectedTab === '' ? 'black white-text' : 'black-text'}`}>
+            {['name', 'dates', 'dosing', 'instructions', 'info'].map(tabName =>
+              <div
+                key={tabName}
+                className={`treatment-editor2__section__tab ${tabName} ${this.state.selectedTab === tabName ? 'active' : ''}`}
+                onClick={(e) => {
+                  if (!e.target.classList.contains('active')) {
+                    this.changeModalView(tabName)
+                  }
+                }}>
+                {tabName.toUpperCase()}
+              </div>
+            )}
+            {/* <div className={`treatment-editor2__section__tab ${this.state.selectedTab === 'name' ? 'black white-text' : 'black-text'}`}>
               Name
             </div>
             <div className={`treatment-editor2__section__tab ${this.state.selectedTab === 'dates' ? 'red white-text' : 'red-text'}`}>
@@ -537,139 +844,12 @@ export class TreatmentEditor3 extends React.Component {
             </div>
             <div className={`treatment-editor2__section__tab ${this.state.selectedTab === 'info' ? 'purple white-text' : 'purple-text'}`}>
               Info
-            </div>
+            </div> */}
           </div>
 
-          {this.state.selectedTab === 'dates' ?
-            <TreatmentDates2
-              className='treatment-editor2__section'
-              treatment={this.props.treatment}
-              handleDateModeChange={this.handleDateModeChange.bind(this)}
-              handleWeekdayChange={this.handleWeekdayChange.bind(this)}
-              startDate={this.state.startDate}
-              endDate={this.state.endDate}
-              focusedInput={this.state.focusedInput}
-              handleDateRangeSelection={this.handleDateRangeSelection.bind(this)}
-              handleDateRangeFocusChange={this.handleDateRangeFocusChange.bind(this)}
-              handleIndividualDateSelection={this.handleIndividualDateSelection.bind(this)}
-              changeModalView={this.changeModalView.bind(this)}
-            />
-          : this.state.selectedTab === 'dosing' ?
-            <TreatmentDosing2
-              treatment={this.props.treatment}
-              handleDosingChange={this.handleDosingChange.bind(this)}
-              handleDosingDetailsChange={this.handleDosingDetailsChange.bind(this)}
-              changeModalView={this.changeModalView.bind(this)}
-            />
-          :  this.state.selectedTab === 'instructions' ?
-              <TreatmentInstructions2
-                treatment={this.props.treatment}
-                handleInstructionsChange={this.handleInstructionsChange.bind(this)}
-                changeModalView={this.changeModalView.bind(this)}
-               />
-          : this.state.selectedTab === 'info' ?
-            <TreatmentInfo2
-              treatment={this.props.treatment}
-              handleInfoChange={this.handleInfoChange.bind(this)}
-              changeModalView={this.changeModalView.bind(this)}
-            />
-          :
-            <div className='treatment-editor2__section--name row'>
-              <h1 className='treatment-editor2__section__header center-align black white-text'>
-                <i className='small left material-icons button--icon black-text'>keyboard_arrow_left</i>
-                Enter your treatment's name
-                <i className='small right material-icons button--icon grey-text text-lighten-2' onClick={() => this.changeModalView('dates')}>keyboard_arrow_right</i>
-              </h1>
-              {/* <p className='treatment-editor2__section__subheader center-align'>Select your treatment. You can click on a treatment from the dropdown for more acurate data.</p> */}
-
-              <Row className='treatment-editor2__section'>
-                <div className="input-field col l4 offset-l4">
-                  <Autosuggest
-                    suggestions={this.state.treatmentSuggestions}
-                    onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
-                    onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
-                    getSuggestionValue={this.getSuggestionValue.bind(this)}
-                    renderSuggestion={this.renderSuggestion.bind(this)}
-                    onSuggestionSelected={this.onSuggestionSelected.bind(this)}
-                    inputProps={{className: 'treatment-editor__title center-align', name:'name', value: this.state.name, placeholder: "Treatment Name", onChange: this.handleChange.bind(this), autoFocus: true}}
-                  />
-                  <div className="input-response red-text text-darken-2 center-align">{Session.get('showErrors') ? this.props.treatment.errors.name : ''}</div>
-                </div>
-                {/* <Button
-                  className='col l2 offset-l5 light-blue'
-                  onClick={() => this.setState({selectedTab: 'dates'})}
-                  disabled={!!this.props.treatment.errors.name}>
-                  Next
-                </Button> */}
-              </Row>
-              <p className='center-align'>If you see your treatment in the dropdown list, select it to prefill the form with Rx data.</p>
-
-            </div>
-
-            // <div>
-            //   <h1 className='center-align'>New Treatment</h1>
-            //   <Row className='treatment-editor2__section'>
-            //     <div className="input-field col l4 offset-l4">
-            //       <Autosuggest
-            //         suggestions={this.state.treatmentSuggestions}
-            //         onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
-            //         onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
-            //         getSuggestionValue={this.getSuggestionValue.bind(this)}
-            //         renderSuggestion={this.renderSuggestion.bind(this)}
-            //         onSuggestionSelected={this.onSuggestionSelected.bind(this)}
-            //         inputProps={{className: 'treatment-editor__title center-align', name:'name', value: this.state.name, placeholder: "Treatment Name", onChange: this.handleChange.bind(this), autoFocus: true}}
-            //       />
-            //       {/* <div className="input-response red-text text-darken-2 center-align">{this.props.showErrors ? this.props.treatment.errors.name : ''}</div> */}
-            //     </div>
-            //     <p className='col l6 offset-l3 center-align'>
-            //       Select your treatment. You can click on a treatment from the dropdown for more acurate data.
-            //     </p>
-            //     <Button
-            //       className='col l2 offset-l5 light-blue'
-            //       onClick={() => this.setState({selectedTab: 'dates'})}
-            //       disabled={!!this.props.treatment.errors.name}>
-            //       Next
-            //     </Button>
-            //   </Row>
-            // </div>
-          }
-
-
-          {/* <div className={`treatment-editor__details-box card z-depth-4 ${this.state.selectedTab === 'dosing' ? 'red darken-2' : this.state.selectedTab === 'dates' ? 'light-blue darken-2' : this.state.selectedTab === 'instructions' ? 'green darken-2' : 'orange darken-2'}`}>
-            <Row>
-              <button
-                // className={`col s3 blue btn no-hover-effect hoverable ${this.state.selectedTab === 'dosing' && 'z-depth-4'}`}
-                className={`col s3 light-blue darken-2 white-text btn-flat btn-large`}
-                onClick={() => this.setState({selectedTab: 'dates'})}>
-                Schedule
-              </button>
-              <button
-                // className={`col s3 red btn no-hover-effect hoverable ${this.state.selectedTab === 'dates' && 'z-depth-4'}`}
-                className={`col s3 red darken-2 white-text btn-flat btn-large`}
-                onClick={() => this.setState({selectedTab: 'dosing'})}>
-                Dosing
-              </button>
-              <button
-                // className={`col s3 green btn no-hover-effect hoverable ${this.state.selectedTab === 'instructions' && 'z-depth-4'}`}
-                className={`col s3 green darken-2 white-text btn-flat btn-large`}
-                onClick={() => this.setState({selectedTab: 'instructions'})}>
-                Special Instructions
-              </button>
-              <button
-                // className={`col s3 orange btn no-hover-effect hoverable ${this.state.selectedTab === 'info' && 'z-depth-4'}`}
-                className={`col s3 orange darken-2 white-text btn-flat btn-large`}
-                onClick={() => this.setState({selectedTab: 'info'})}>
-                Treatment Info
-              </button>
-            </Row>
-            {this.state.selectedTab === 'dosing' ?
-              <TreatmentDosing
-                treatment={this.props.treatment}
-                handleDosingChange={this.handleDosingChange.bind(this)}
-                handleDosingDetailsChange={this.handleDosingDetailsChange.bind(this)} />
-            : this.state.selectedTab === 'dates' ?
-              <TreatmentDates
-                treatment={this.props.treatment}
+          { this.state.selectedTab === 'dates' ?
+              <TreatmentDates2
+                treatment={this.state}
                 handleDateModeChange={this.handleDateModeChange.bind(this)}
                 handleWeekdayChange={this.handleWeekdayChange.bind(this)}
                 startDate={this.state.startDate}
@@ -677,108 +857,101 @@ export class TreatmentEditor3 extends React.Component {
                 focusedInput={this.state.focusedInput}
                 handleDateRangeSelection={this.handleDateRangeSelection.bind(this)}
                 handleDateRangeFocusChange={this.handleDateRangeFocusChange.bind(this)}
-                handleIndividualDateSelection={this.handleIndividualDateSelection.bind(this)} />
+                handleIndividualDateSelection={this.handleIndividualDateSelection.bind(this)}
+                changeModalView={this.changeModalView.bind(this)}
+              />
+            : this.state.selectedTab === 'dosing' ?
+              <TreatmentDosing2
+                treatment={this.state}
+                handleDosingChange={this.handleDosingChange.bind(this)}
+                handleDosingDetailsChange={this.handleDosingDetailsChange.bind(this)}
+                changeModalView={this.changeModalView.bind(this)}
+              />
             : this.state.selectedTab === 'instructions' ?
-              <TreatmentInstructions
-                treatment={this.props.treatment}
-                handleInstructionsChange={this.handleInstructionsChange.bind(this)} />
+              <TreatmentInstructions2
+                treatment={this.state}
+                handleInstructionsChange={this.handleInstructionsChange.bind(this)}
+                changeModalView={this.changeModalView.bind(this)}
+              />
+            : this.state.selectedTab === 'info' ?
+              <TreatmentInfo2
+                treatment={this.state}
+                handleInfoChange={this.handleInfoChange.bind(this)}
+                changeModalView={this.changeModalView.bind(this)}
+              />
             :
-              <TreatmentInfo
-                treatment={this.props.treatment}
-                handleInfoChange={this.handleInfoChange.bind(this)} />
-            }
-          </div> */}
-          <div>
-            <Row className='row--marginless'>
-              <Col l={1} offset={'l1'}>
-                {this.state.selectedTab !== 'info' &&
-                  <Link
-                    className='btn treatment-editor2__finish-button black white-text'
-                    to="#"
-                    onClick={() => {
-                      if (Object.keys(this.props.treatment.errors).length > 0) {
-                          Session.set('showErrors', true)
-                      } else {
-                        Session.set('showErrors', false)
-                        Session.set('selectedTreatmentDetails', this.props.treatment._id)
-                        Session.set('currentTreatmentId', undefined)
-                      }
-                    }}
-                    // disabled={!!this.props.treatment.errors.name}
-                    >
-                    Done
-                  </Link>
+            <TreatmentName2
+              treatment={this.state}
+              treatmentSuggestions={this.state.treatmentSuggestions}
+              onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
+              onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
+              getSuggestionValue={this.getSuggestionValue.bind(this)}
+              renderSuggestion={this.renderSuggestion.bind(this)}
+              onSuggestionSelected={this.onSuggestionSelected.bind(this)}
+              changeModalView={this.changeModalView.bind(this)}
+              handleChange={this.handleChange.bind(this)}
+            />
+          }
+
+          <div className='treatment-editor2__bottom-row__container'>
+            {/* <Row className='row--marginless'> */}
+              {/* <Col l={2} offset={'l1'}> */}
+                { this.state.editorMode === 'update' ?
+                    <div
+                      className='btn treatment-editor2__finish-button black white-text'
+                      to="#"
+                      disabled={Session.get('showErrors') && Object.keys(this.state.errors).length > 0}
+                      onClick={() => this.handleUpdate()}>
+                      Update
+                    </div>
+                  // : this.state.editorMode ==='create' && this.state.selectedTab !== 'info' ?
+                  :
+                    <div
+                      className='btn treatment-editor2__finish-button black white-text'
+                      to="#"
+                      disabled={Session.get('showErrors') && Object.keys(this.state.errors).length > 0}
+                      onClick={() => this.handleSubmit()}>
+                      Done
+                    </div>
                 }
-              </Col>
-              <Col l={2} offset='l6'>
-                <Link
-                  className='btn treatment-editor2__prvious-button light-blue white-text'
-                  to="#"
-                  disabled={this.state.selectedTab === ''}
-                  onClick={() => {
-                    if (Object.keys(this.props.treatment.errors).length > 0) {
-                      Session.set('showErrors', true)
-                    } else {
-                      Session.set('showErrors', false)
-                      if (this.state.selectedTab === 'dates') {
-                        this.setState({selectedTab: ''});
-                      } else if (this.state.selectedTab === 'dosing') {
-                        this.setState({selectedTab: 'dates'});
-                      } else if (this.state.selectedTab === 'instructions') {
-                        this.setState({selectedTab: 'dosing'});
-                      } else if (this.state.selectedTab === 'info') {
-                        this.setState({selectedTab: 'instructions'});
-                      }
+              {/* </Col> */}
+              {/* <Col l={2} offset='l6'> */}
+                <div
+                  className={`treatment-editor2__prvious-button ${this.state.selectedTab === 'name' || (Session.get('showErrors') && Object.keys(this.state.errors).length > 0) ? 'disabled' : ''}`}
+                  // to="#"
+                  // disabled={this.state.selectedTab === 'name' || (Session.get('showErrors') && Object.keys(this.state.errors).length > 0)}
+                  onClick={(e) => {
+                    if (!e.target.classList.contains('disabled')) {
+                      this.changeModalView(this.state.selectedTab === 'dates' ? 'name' : this.state.selectedTab === 'dosing' ? 'dates' : this.state.selectedTab === 'instructions' ? 'dosing' : 'instructions');
                     }
                   }}>
                   Previous
-                </Link>
-              </Col>
-              <Col l={1}>
-                {this.state.selectedTab !== 'info' ?
-                  <Link
-                    className='btn treatment-editor2__next-button white black-text'
-                    to="#"
-                    onClick={() => {
-                      if (Object.keys(this.props.treatment.errors).length > 0) {
-                          Session.set('showErrors', true)
-                      } else {
-                        Session.set('showErrors', false)
-                        if (this.state.selectedTab === '') {
-                          this.setState({selectedTab: 'dates'});
-                        } else if (this.state.selectedTab === 'dates') {
-                          this.setState({selectedTab: 'dosing'});
-                        } else if (this.state.selectedTab === 'dosing') {
-                          this.setState({selectedTab: 'instructions'});
-                        } else if (this.state.selectedTab === 'instructions') {
-                          this.setState({selectedTab: 'info'});
-                        }
+                </div>
+              {/* </Col> */}
+              {/* <Col l={1}> */}
+                {this.state.selectedTab !== 'info' || this.state.editorMode === 'update' ?
+                  <div
+                    className={`treatment-editor2__next-button ${(Session.get('showErrors') && Object.keys(this.state.errors).length > 0) || (this.state.editorMode === 'update' && this.state.selectedTab === 'info') ? 'disabled' : ''}`}
+                    // to="#"
+                    // disabled={(Session.get('showErrors') && Object.keys(this.state.errors).length > 0) || (this.state.editorMode === 'update' && this.state.selectedTab === 'info')}
+                    onClick={(e) => {
+                      if (!e.target.classList.contains('disabled')) {
+                        this.changeModalView(this.state.selectedTab === 'name' ? 'dates' : this.state.selectedTab === 'dates' ? 'dosing' : this.state.selectedTab === 'dosing' ? 'instructions' : 'info');
                       }
-                    }}
-                    // disabled={!!this.props.treatment.errors.name}
-                    >
+                    }}>
                     Next
-                  </Link>
+                  </div>
                   :
-                  <Link
-                    className='btn treatment-editor2__finish-button white black-text'
-                    to="#"
-                    onClick={() => {
-                      if (Object.keys(this.props.treatment.errors).length > 0) {
-                          Session.set('showErrors', true)
-                      } else {
-                        Session.set('showErrors', false)
-                        Session.set('selectedTreatmentDetails', this.props.treatment._id)
-                        Session.set('currentTreatmentId', undefined)
-                      }
-                    }}
-                    // disabled={!!this.props.treatment.errors.name}
-                    >
+                  <div
+                    className={`treatment-editor2__next-button ${Session.get('showErrors') && Object.keys(this.state.errors).length > 0 ? 'disabled' : ''}`}
+                    // to="#"
+                    // disabled={Session.get('showErrors') && Object.keys(this.state.errors).length > 0}
+                    onClick={() => this.handleSubmit()}>
                     Finish
-                  </Link>
+                  </div>
                 }
-              </Col>
-            </Row>
+              {/* </Col> */}
+            {/* </Row> */}
           </div>
 
         </div>

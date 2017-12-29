@@ -10,13 +10,17 @@ export const TreatmentSelectSidebar2 = (props) => (
       <button
         className='black white-text btn waves-effect waves-light hoverable'
         onClick={() => {
-          Meteor.call('userTreatments.insert', (err, res) => {
-            if (err) {
-              console.log(err);
-            } else {
-              Session.set('currentTreatmentId', res)
-            }
-          })
+          Session.set({
+            'displayTreatmentEditor': true,
+            'currentTreatmentId': null
+          });
+          // Meteor.call('userTreatments.insert', (err, res) => {
+          //   if (err) {
+          //     console.log(err);
+          //   } else {
+          //     Session.set('currentTreatmentId', res)
+          //   }
+          // })
         }}
         >New Treatment
       </button>
@@ -49,7 +53,12 @@ export const TreatmentSelectSidebar2 = (props) => (
               <i
                 id='treatment_edit_icon'
                 className='right material-icons button--icon'
-                onClick={() => Session.set('currentTreatmentId', treatment._id)}>
+                onClick={() => {
+                  Session.set({
+                    'displayTreatmentEditor': true,
+                    'currentTreatmentId': treatment._id
+                  });
+                }}>
                 edit
               </i>
             </div>

@@ -48,11 +48,15 @@ class SelectTreatmentsPage3 extends React.Component {
           <TreatmentSelectSidebar2 userTreatments={this.props.userTreatments}/>
           <TreatmentDetailDisplay treatment={this.props.selectedTreatmentDetails} />
 
-          {this.props.selectedTreatment &&
+          {/* {this.props.selectedTreatment && */}
+          { this.props.displayTreatmentEditor &&
             <TreatmentEditor3
-              treatment={this.props.selectedTreatment}
+              treatment={this.props.selectedTreatment || null}
               commonTreatments={this.props.commonTreatments}
-              otherUserTreatmentNames={this.props.userTreatments.filter(treatment => treatment._id !== this.props.selectedTreatment._id).map(treatment => treatment.name.toLowerCase())}
+              otherUserTreatmentNames={!this.props.selectedTreatment ?
+                this.props.userTreatments.map(treatment => treatment.name.toLowerCase())
+                :
+                this.props.userTreatments.filter(treatment => treatment._id !== this.props.selectedTreatment._id).map(treatment => treatment.name.toLowerCase())}
               // showErrors={this.props.showErrors}
              />
          }
@@ -90,5 +94,6 @@ export default createContainer(() => {
     isFetching: !treatmentHandle.ready(),
     showErrors: Session.get('showErrors'),
     errorMessage: Session.get('errorMessage'),
+    displayTreatmentEditor: Session.get('displayTreatmentEditor')
   }
 }, SelectTreatmentsPage3);

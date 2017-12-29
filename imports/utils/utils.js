@@ -49,3 +49,85 @@ export const isTreatmentPrescribed = (treatment, thisDateMoment) => {
     return treatment.individualDateValues.map(dateValue => moment(dateValue).format('MM DD YYYY')).includes(thisDateMoment.format('MM DD YYYY'));
   }
 }
+
+export const sortSymptoms = (sortBy, symptoms, checkins) => {
+  if (sortBy === 'changes') {
+  //   const weeklySymptomCheckins = [[]];
+  //   let startOfWeek = moment(checkins[0].date, 'MMMM Do YYYY');
+  //   let numWeeks = 1;
+  //   checkins.forEach(checkinGroup => {
+  //     if (!moment(checkinGroup.date, 'MMMM Do YYYY').isSameOrBefore(moment(startOfWeek).add(3, 'days'))) {
+  //       weeklySymptomCheckins.push([]);
+  //       startOfWeek =  moment(checkinGroup.date, 'MMMM Do YYYY');
+  //       numWeeks++;
+  //     }
+  //     weeklySymptomCheckins[numWeeks - 1].push(checkinGroup);
+  //   })
+  //   console.log(weeklySymptomCheckins);
+  //
+  //   const symptomsWithChangeAttr = symptoms.map((symptom, index) => {
+  //
+  //     let weeklyChangeAverages = [];
+  //     weeklySymptomCheckins.forEach(checkinWeekArray => {
+  //
+  //       let dailyChangeScores = [];
+  //       let lastSeverityScore;
+  //       checkinWeekArray.forEach(checkinGroup => {
+  //         if (checkinGroup.symptoms.find(checkinSymptom => checkinSymptom.name === symptom.name)) {
+  //           if (lastSeverityScore) dailyChangeScores.push(Math.abs(checkinGroup.symptoms.find(checkinSymptom => checkinSymptom.name === symptom.name).severity - lastSeverityScore));
+  //           lastSeverityScore = checkinGroup.symptoms.find(checkinSymptom => checkinSymptom.name === symptom.name).severity;
+  //         }
+  //       });
+  //
+  //       weeklyChangeAverages.push((dailyChangeScores.reduce((acc, currentVal) => acc + currentVal)) / dailyChangeScores.length )
+  //       console.log(symptom.name);
+  //       console.log(dailyChangeScores);
+  //       console.log('...');
+  //     });
+  //   });
+
+
+    let symptomsWithChangeAttr = [];
+    console.log(checkins);
+    symptomsWithChangeAttr = symptoms.map(symptom => {
+      // const weeklyChangeAverages = [];
+      let startOfWeek = moment(checkins[0].date, 'MMMM Do YYYY');
+      const weeklySeverityScoreSet = [[0, 0]];
+      let numWeeks = 1;
+      checkins.forEach(checkin => {
+        foundSymptomCheckin = checkin.symptoms.find(symptomCheckin => symptomCheckin.name === symptom.name)
+        if (foundSymptomCheckin && foundSymptomCheckin.severity > 0) {
+
+          if (!moment(checkin.date, 'MMMM Do YYYY').isBetween(moment(startOfWeek), moment(startOfWeek).add(2, 'days'), 'days', [])) {
+            startOfWeek = moment(checkin.date, 'MMMM Do YYYY');
+            numWeeks++;
+          }
+
+          if (!weeklySeverityScoreSet[numWeeks - 1]) {
+            weeklySeverityScoreSet[numWeeks - 1] = [foundSymptomCheckin.severity, 1]
+          } else {
+            weeklySeverityScoreSet[numWeeks - 1] = [weeklySeverityScoreSet[numWeeks - 1][0] + foundSymptomCheckin.severity, weeklySeverityScoreSet[numWeeks - 1][1] + 1];
+          }
+        }
+      })
+      // console.log(symptom.name, weeklySeverityScoreSet);
+      const weeklySeverityScores = weeklySeverityScoreSet.map(scoreSet => scoreSet[0] / scoreSet[1]);
+      const biggestChangeScores = weeklySeverityScores.map((severityScore, index) => {
+        if (index === 0) return 0;
+        return Math.abs(severityScore - weeklySeverityScores[index - 1]);
+      });
+      console.log(symptom.name);
+      console.log(weeklySeverityScores);
+      console.log(biggestChangeScores);
+      console.log('...');
+      // return {
+      //   averageSeverityScore: totalSeverityScore / symptomCount,
+      //   lastSeverityScore,
+      //   ...symptom
+      // }
+    });
+
+  }
+
+
+}

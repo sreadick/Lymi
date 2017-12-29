@@ -36,18 +36,23 @@
   border: 1px solid #ddd;
   margin: 1rem 0 1rem 1rem;
   overflow-y: auto;
+
+  display: flex;
+  flex-direction: column;
 }
 
 .treatment-detail-display__item__name {
-  font-size: 2.5rem;
-  text-decoration: underline;
+  font-size: 2.3rem;
+  // text-decoration: underline;
+  font-weight: 500;
   text-align: center;
   color: #555;
+  flex: 1;
 }
 
 .treatment-detail-display__item__section {
   padding: 1.5rem 2.5rem;
-  // background: $eggshell;
+  flex: 2;
 }
 
 .treatment-detail-display__item__section__title {
