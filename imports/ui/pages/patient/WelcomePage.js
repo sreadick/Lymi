@@ -47,16 +47,16 @@ export default class WelcomePage extends React.Component {
           <p>Select which items you wish to track in addition to your symptoms. We <strong>strongly</strong> recommend leaving treatments selected so that you and your physician can better monitor your progression. These options can be changed at any time via your account page</p>
         </div>
         <div className='section'>
-          <Input className='filled-in' name='trackedItems' type='checkbox' label='Symptoms' value='symptoms' defaultChecked={this.state.trackedItems.includes('symptoms')} labelClassName={this.state.trackedItems.includes('symptoms') && 'black-text'} disabled='disabled' />
-          <Input className='filled-in' name='trackedItems' type='checkbox' label='Treatments' value='treatments' defaultChecked={this.state.trackedItems.includes('treatments')} labelClassName={this.state.trackedItems.includes('treatments') && 'black-text'} onChange={this.toggleTrackedItem.bind(this)} />
-          <Input className='filled-in' name='trackedItems' type='checkbox' label='Notable Events' value='notable events' defaultChecked={this.state.trackedItems.includes('notable events')} labelClassName={this.state.trackedItems.includes('notable events') && 'black-text'} onChange={this.toggleTrackedItem.bind(this)}/>
+          <Input className='filled-in' name='trackedItems' type='checkbox' label='Symptoms' value='symptoms' defaultChecked={this.state.trackedItems.includes('symptoms')} labelClassName={this.state.trackedItems.includes('symptoms') ? 'black-text' : ''} disabled='disabled' />
+          <Input className='filled-in' name='trackedItems' type='checkbox' label='Treatments' value='treatments' defaultChecked={this.state.trackedItems.includes('treatments')} labelClassName={this.state.trackedItems.includes('treatments') ? 'black-text' : ''} onChange={this.toggleTrackedItem.bind(this)} />
+          <Input className='filled-in' name='trackedItems' type='checkbox' label='Notable Events' value='notable events' defaultChecked={this.state.trackedItems.includes('notable events')} labelClassName={this.state.trackedItems.includes('notable events') ? 'black-text' : ''} onChange={this.toggleTrackedItem.bind(this)}/>
         </div>
         <div className='section'></div>
         <div className='section'>
           <Button
             className='waves-effect waves-light btn-large black'
             onClick={() => {
-              Meteor.call('users.updateAccountStatus', 'initialized', (err, res) => {
+              Meteor.call('users.updateAccountStatus', {userId: Meteor.userId(), status: 'initialized'}, (err, res) => {
                 if (err) {
                   console.log(err);
                 } else {

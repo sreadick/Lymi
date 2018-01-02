@@ -16,6 +16,8 @@ const AuthPatientRoute = ({ loggingIn, authenticated, accountType, component, si
           <Redirect to="/" />
         : accountType === 'doctor' ?
           <Redirect to="/doctor" />
+        : accountType === 'admin' ?
+          <Redirect to="/admin" />
         :
           <div className="page">
             <SidebarMenu currentPath={props.location.pathname} sidebarToggled={sidebarToggled}/>

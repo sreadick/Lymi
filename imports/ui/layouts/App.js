@@ -31,6 +31,9 @@ import Doctor from './Doctor';
 import DoctorHomepage from '../pages/doctor/Home';
 import AddPatients from '../pages/doctor/AddPatients';
 import PatientSummary from '../pages/doctor/PatientSummary';
+import PendingPage from '../pages/doctor/PendingPage';
+
+import Admin from './Admin';
 
 // ToDo
 // Replace materialize frameworks with Material-UI
@@ -72,7 +75,9 @@ const App = appProps => {
         <AuthDoctorRoute exact path="/doctor/home" component={DoctorHomepage} {...appProps} />
         <AuthDoctorRoute exact path="/doctor/addpatients" component={AddPatients} {...appProps} />
         <AuthDoctorRoute path="/doctor/patientsummary/:patientId" component={PatientSummary} {...appProps} />
+        <AuthDoctorRoute exact path="/doctor/pending" component={PendingPage} {...appProps} />
 
+        <Route exact path="/admin" component={Admin}/>
         <Route path="*" component={NotFound}/>
       </Switch>
     </Router>

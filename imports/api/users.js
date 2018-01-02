@@ -18,13 +18,10 @@ if (Meteor.isServer) {
   });
 
   Meteor.publish('currentPatients', function() {
-    // console.log(1);
     if (this.userId && Meteor.users.findOne(this.userId).account.type === 'doctor') {
-      console.log(2);
-      console.log(Meteor.users.find({'account.type': 'patient', doctorId: this.userId}).fetch());
+      // console.log(Meteor.users.find({'account.type': 'patient', doctorId: this.userId}).fetch());
       return Meteor.users.find({'account.type': 'patient', doctorId: this.userId});
     } else {
-      console.log(3);
       this.ready();
     }
   });
@@ -52,11 +49,17 @@ if (Meteor.isServer) {
       });
     } else {
       return this.ready();
-      // return {}
     }
   });
 }
 
+Meteor.publish('allUsers', function() {
+  if (this.userId && Meteor.users.findOne(this.userId).account.type === 'admin') {
+    return Meteor.users.find({});
+  } else {
+    this.ready();
+  }
+});
 
 Accounts.validateNewUser((user) => {
   const email = user.emails[0].address;
@@ -84,6 +87,13 @@ Accounts.onCreateUser((options, user) => {
   user.profile.lastName = options.lastName;
 
   if (user.account.type === 'doctor') {
+    user.profile.officeAddress = options.doctorInfo.officeAddress;
+    user.profile.city = options.doctorInfo.city;
+    user.profile.state = options.doctorInfo.state;
+    user.profile.zip = options.doctorInfo.zip;
+    user.profile.phone = options.doctorInfo.phone;
+    user.profile.npi = options.doctorInfo.npi;
+
     user.sixCharKey = Random.id(6);
     user.account.status = 'pending approval'
   } else if (user.account.type === 'patient') {
@@ -132,11 +142,11 @@ Meteor.methods({
       }
     });
   },
-  'users.updateAccountStatus'(status) {
-    Meteor.users.update(this.userId, {
+  'users.updateAccountStatus'({userId, status}) {
+    Meteor.users.update(userId, {
       $set: {
         'account.status': status
       }
     })
-  }
+  },
 })

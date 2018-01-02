@@ -22,6 +22,8 @@ const AuthDoctorRoute = ({ loggingIn, authenticated, account, component, sidebar
               {(React.createElement(component, {...props, ...rest}))}
             </div>
           </div>
+        : account.type === 'admin' ?
+          <Redirect to="/admin" />
         :
           <Redirect to="/patient" />
       );

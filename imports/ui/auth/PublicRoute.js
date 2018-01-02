@@ -15,6 +15,8 @@ const PublicRoute = ({ loggingIn, authenticated, account, component, ...rest }) 
           </div>
         : account.type === 'doctor' ?
           <Redirect to="/doctor" />
+        : account.type === 'admin' ?
+          <Redirect to="/admin" />
         :
           <Redirect to="/patient" />
       );
