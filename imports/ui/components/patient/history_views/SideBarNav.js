@@ -13,10 +13,13 @@ export default SideBarNav = (props) => (
       Grouped by system
     </div>
     <div className={`symptom-history__navbar__link ${props.selectedTab === 'symptomWorstGraph' && 'active'}`} onClick={() => props.handleTabChange('symptomWorstGraph')}>
-      Most Severe 
+      Most Severe
     </div>
-    <div className={`symptom-history__navbar__link ${props.selectedTab === 'fsdaffsf' && 'active'}`} onClick={() => props.handleTabChange('fsdaffsf')}>
-      group 4
+    <div className={`symptom-history__navbar__link ${props.selectedTab === 'symptomChangesGraph' && 'active'}`} onClick={() => props.handleTabChange('symptomChangesGraph')}>
+      Biggest Changes
+    </div>
+    <div className={`symptom-history__navbar__link ${props.selectedTab === 'symptomHistoryTable' && 'active'}`} onClick={() => props.handleTabChange('symptomHistoryTable')}>
+      History Record Table
     </div>
   </div>
 );

@@ -100,7 +100,7 @@ export default class SymptomChart extends React.Component {
         fill: false,
         // cubicInterpolationMode: 'monotone',
         lineTension: .0,
-        data: this.props.checkins.map((checkin) => {
+        data: this.props.checkins.filter(checkin => moment(checkin.date, 'MMMM Do YYYY').isBetween( moment(startDate, 'MMMM Do YYYY'), moment(endDate, 'MMMM Do YYYY'), 'days', [] )).map((checkin) => {
           const targetSymptomCheckin = checkin.symptoms.find((checkinSymptom) => {
             return checkinSymptom.name === symptom;
           });

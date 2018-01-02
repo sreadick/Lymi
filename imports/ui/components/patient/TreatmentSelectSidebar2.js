@@ -27,7 +27,7 @@ export const TreatmentSelectSidebar2 = (props) => (
     </div>
     <div className='section'>
       { props.userTreatments.length === 0 ?
-        <div>Add at least one treatment before proceding.</div>
+        <div className='center-align'>Add at least one treatment before proceding.</div>
         :
         props.userTreatments.map(treatment =>
           <div

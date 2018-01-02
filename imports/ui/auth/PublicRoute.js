@@ -10,7 +10,7 @@ const PublicRoute = ({ loggingIn, authenticated, account, component, ...rest }) 
       return (
         !authenticated ?
           <div>
-            <PublicHeader />
+            <PublicHeader currentPath={props.location.pathname} />
             {(React.createElement(component, {...props}))}
           </div>
         : account.type === 'doctor' ?

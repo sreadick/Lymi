@@ -12,7 +12,8 @@ const AuthPatientRoute = ({ loggingIn, authenticated, accountType, component, si
     <Route render={(props) => {
       return (
         !authenticated ?
-          <Redirect to="/login" />
+          // <Redirect to="/login" />
+          <Redirect to="/" />
         : accountType === 'doctor' ?
           <Redirect to="/doctor" />
         :

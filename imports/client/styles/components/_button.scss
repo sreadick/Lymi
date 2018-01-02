@@ -25,6 +25,20 @@
   color: $navy;
 }
 
+.button--auth.login {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 0;
+  background: white;
+  // padding: .6rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 2px;
+  border: 1px solid transparent;
+  font-weight: 400;
+  width: 100%;
+}
+
 .button--auth:hover {
   background: $navy;
   border: 1px solid $navy;

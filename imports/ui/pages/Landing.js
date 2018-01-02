@@ -1,13 +1,19 @@
 import React from 'react';
 // import { HashLink as Link } from 'react-router-hash-link';
 import { Link } from 'react-router-dom';
+import { createContainer } from 'meteor/react-meteor-data';
+import { Session } from 'meteor/session';
+
 import ScrollableAnchor, {configureAnchors} from 'react-scrollable-anchor'
 import { Accounts } from 'meteor/accounts-base';
 import PropTypes from 'prop-types';
 
+import Login from './Login';
+
 configureAnchors({scrollDuration: 800});
-export default Landing = (props) => (
+const Landing = (props) => (
   <div>
+    {props.showLogin && <Login />}
     <div className="landing__section">
       <div className="landing__section__flex-wrapper">
         <h1 className="landing__main-heading">Lyme Disease Management,<br/>Made <span>Easy</span>.</h1>
@@ -18,9 +24,10 @@ export default Landing = (props) => (
               <p className='landing__caption'>Organize your treatment process and track your progress with the click of a button!</p>
             </div>
             <div className='row'>
-              <Link className="landing__button left" to="/Signup">Get Started</Link>
+              <Link className="landing__button left" to="/signup">Get Started</Link>
               <span>Or</span>
-              <Link className="landing__button right" to="/Login">Login</Link>
+              {/* <Link className="landing__button right" to="/Login">Login</Link> */}
+              <Link className="landing__button right" to="#" onClick={() => Session.set('showLogin', true)}>Login</Link>
             </div>
           </div>
           <div className='col s6'>
@@ -43,3 +50,10 @@ export default Landing = (props) => (
 
   </div>
 );
+
+export default createContainer(() => {
+
+  return {
+    showLogin: Session.get('showLogin') || false
+  }
+}, Landing);

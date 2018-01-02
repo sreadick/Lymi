@@ -2,30 +2,24 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import moment from 'moment';
 import { Row, Input, Button } from 'react-materialize';
+import {capitalizePhrase} from '/imports/utils/utils';
 
 import SymptomChart from '../SymptomChart';
 
-export default class SymptomSelectGraph extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      graphedSymptoms: [],
-    }
-    // this.handleChange = this.handleChange.bind(this);
-  }
-
-  // handleChange(e) {
-  //   this.setState({
-  //     [e.target.name]: e.target.value
-  //   });
+export default class SymptomChangesGraph extends React.Component {
+  // constructor(props) {
+  //   super(props);
+  //
+  //   this.state = {
+  //     graphedSymptoms: [],
+  //   }
   // }
 
   render() {
     return (
       <div className='symptom-history__graph-view'>
         <Row>
-          <div className='symptom-history__title col s8'>Select up to 5 symptoms to graph:</div>
+          <div className='symptom-history__title col s8'>Top 5 Symptoms with most Drastic Changes:</div>
           <Input s={2} type='select' label='Start Date' value={this.props.startDate || ''} onChange={(e) => this.props.handleDateRangeChange('graphStartDate', e.target.value)}>
             {this.props.checkinDates.map(date =>
               <option
@@ -48,30 +42,20 @@ export default class SymptomSelectGraph extends React.Component {
           </Input>
         </Row>
         <div className='card'>
-          {this.props.symptoms.map(symptom =>
-            <Input
-              key={symptom.name}
-              type='checkbox'
-              name='graphedSymptoms'
-              value={symptom.name}
-              label={symptom.name}
-              defaultChecked={this.state.graphedSymptoms.includes(symptom.name)}
-              disabled={this.state.graphedSymptoms.map(graphedSymptom => graphedSymptom.name).includes(symptom.name) === false && this.state.graphedSymptoms.length >= 5}
-              onChange={() => {
-                const graphedSymptoms = this.state.graphedSymptoms.slice();
-                if (graphedSymptoms.map(graphedSymptom => graphedSymptom.name).includes(symptom.name)) {
-                  const symptomIndex = graphedSymptoms.indexOf(symptom)
-                  graphedSymptoms.splice(symptomIndex, 1);
-                } else {
-                  graphedSymptoms.push(symptom)
-                }
-                this.setState({graphedSymptoms})
-              }}
-            />
-          )}
+          {this.props.symptoms.map((symptom, index) => (
+            <div key={symptom._id}>
+              <span
+                className={`checkin-symptom-item ${!this.props.currentSymptomNames.find(userSymptomName => userSymptomName === symptom.name) ? 'deleted' : ''}`}
+                style={{
+                  color: symptom.color,
+                }}>
+                {capitalizePhrase(symptom.name)}
+              </span>
+            </div>
+          ))}
           <SymptomChart
-            symptomNames={this.state.graphedSymptoms.map(symptom => symptom.name)}
-            symptomColors={this.state.graphedSymptoms.map(symptom => symptom.color)}
+            symptomNames={this.props.symptoms.map(symptom => symptom.name)}
+            symptomColors={this.props.symptoms.map(symptom => symptom.color)}
             checkins={this.props.checkins}
             currentSymptomNames={this.props.currentSymptomNames}
             startDate={this.props.startDate}

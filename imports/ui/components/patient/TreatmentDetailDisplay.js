@@ -17,7 +17,7 @@ export const TreatmentDetailDisplay = (props) => {
         {treatment.name.charAt(0).toUpperCase() + treatment.name.slice(1)}
       </h2>
 
-      <div className='treatment-detail-display__item__section light-blue lighten-2'>
+      <div className='treatment-detail-display__item__section light-blue lighten-3'>
         <h3 className='treatment-detail-display__item__section__title'>Schedule:</h3>
         <div>
           {(treatment.dateSelectMode === 'daily' || (treatment.dateSelectMode === 'from now on' && treatment.daysOfWeek.length === 7)) ?
@@ -40,7 +40,7 @@ export const TreatmentDetailDisplay = (props) => {
         </div>
       </div>
 
-      <div className='treatment-detail-display__item__section red lighten-2'>
+      <div className='treatment-detail-display__item__section red lighten-3'>
         <h3 className='treatment-detail-display__item__section__title'>Dosing:</h3>
         { treatment.dosingFormat === 'default' ?
           <div>
@@ -137,7 +137,7 @@ export const TreatmentDetailDisplay = (props) => {
         } */}
       </div>
 
-      <div className='treatment-detail-display__item__section green lighten-2'>
+      <div className='treatment-detail-display__item__section green lighten-3'>
         <h3 className='treatment-detail-display__item__section__title'>Special Instructions:</h3>
         <div>
           {(treatment.otherInstructions.meals !== 'None' || treatment.otherInstructions.contraindications !== 'None' || treatment.otherInstructions.userDefined.trim()) ?
@@ -168,7 +168,7 @@ export const TreatmentDetailDisplay = (props) => {
         </div>
       </div>
 
-      <div className='treatment-detail-display__item__section deep-purple lighten-2'>
+      <div className='treatment-detail-display__item__section deep-purple lighten-3'>
         <h3 className='treatment-detail-display__item__section__title'>Rx Info:</h3>
         <div>
           {(treatment.info.type !== 'N/A' || treatment.info.category.trim() || treatment.info.usedToTreat.trim()) ?

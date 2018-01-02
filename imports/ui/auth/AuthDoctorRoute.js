@@ -12,7 +12,8 @@ const AuthDoctorRoute = ({ loggingIn, authenticated, account, component, sidebar
     <Route render={(props) => {
       return (
         !authenticated ?
-          <Redirect to="/login" />
+          // <Redirect to="/login" />
+          <Redirect to="/" />
         : account.type === 'doctor' ?
           <div className="page doctor">
             {/* <SidebarMenu currentPath={props.location.pathname} sidebarToggled={sidebarToggled}/> */}

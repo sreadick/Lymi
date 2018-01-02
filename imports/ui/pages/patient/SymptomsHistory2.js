@@ -19,6 +19,8 @@ import SideBarNav from '../../components/patient/history_views/SideBarNav';
 import SymptomSelectGraph from '../../components/patient/history_views/SymptomSelectGraph';
 import SymptomSystemGraph from '../../components/patient/history_views/SymptomSystemGraph';
 import SymptomWorstGraph from '../../components/patient/history_views/SymptomWorstGraph';
+import SymptomChangesGraph from '../../components/patient/history_views/SymptomChangesGraph';
+import SymptomHistoryTable from '../../components/patient/history_views/SymptomHistoryTable';
 
 
 class SymptomsHistory2 extends React.Component {
@@ -30,10 +32,10 @@ class SymptomsHistory2 extends React.Component {
       // includeDeletedSymptoms: false,
       // displayedSymptoms: []
       graphedSymptoms: [],
-      graphStartDate: null,
-      graphEndDate: null,
-      checkinDates: [],
-      selectedTab: 'symptomSelectGraph'
+      // graphStartDate: null,
+      // graphEndDate: null,
+      // checkinDates: [],
+      selectedTab: 'symptomSelectGraph',
     }
   }
   //
@@ -46,22 +48,25 @@ class SymptomsHistory2 extends React.Component {
   //   });
   // }
 
-  componentDidUpdate(prevProps) {
-    // if (prevProps.displayedSymptoms !== this.props.displayedSymptoms) {
-    //   this.setState({
-    //     displayedSymptoms: this.props.displayedSymptoms,
-    //   });
-    // }
-    if (this.props.checkinHistory && (!this.state.graphStartDate || !this.state.graphEndDate)) {
-      const graphStartDate = this.props.checkinHistory.checkins[0].date;
-      const graphEndDate = this.props.checkinHistory.checkins[this.props.checkinHistory.checkins.length -1].date;
-      const totalDatesNumber = moment(graphEndDate, 'MMMM Do YYYY').diff(moment(graphStartDate, 'MMMM Do YYYY') , 'days') + 1;
-      const checkinDates = [...Array(totalDatesNumber).keys()].map((dateOffset) =>
-        moment(graphStartDate, 'MMMM Do YYYY').add(dateOffset, "d").format('MMMM Do YYYY')
-      );
-      this.setState({graphStartDate, graphEndDate, checkinDates})
-    }
-  }
+  // componentDidUpdate(prevProps) {
+  //   // if (prevProps.displayedSymptoms !== this.props.displayedSymptoms) {
+  //   //   this.setState({
+  //   //     displayedSymptoms: this.props.displayedSymptoms,
+  //   //   });
+  //   // }
+  //   if (this.props.checkinHistory && (!Session.get('graphStartDate') || !Session.get('graphEndDate'))) {
+  //   // if (this.props.checkinHistory && (!this.state.graphStartDate || !this.state.graphEndDate)) {
+  //     console.log(1);
+  //     const graphStartDate = this.props.checkinHistory.checkins[0].date;
+  //     const graphEndDate = this.props.checkinHistory.checkins[this.props.checkinHistory.checkins.length -1].date;
+  //     const totalDatesNumber = moment(graphEndDate, 'MMMM Do YYYY').diff(moment(graphStartDate, 'MMMM Do YYYY') , 'days') + 1;
+  //     const checkinDates = [...Array(totalDatesNumber).keys()].map((dateOffset) =>
+  //       moment(graphStartDate, 'MMMM Do YYYY').add(dateOffset, "d").format('MMMM Do YYYY')
+  //     );
+  //     // this.setState({graphStartDate, graphEndDate, checkinDates})
+  //     // Session.set({graphStartDate, graphEndDate, checkinDates})
+  //   }
+  // }
   //
   // handleToggleOption(e, target) {
   //   Session.set(target, !Session.get(target))
@@ -69,6 +74,48 @@ class SymptomsHistory2 extends React.Component {
   // }
   handleTabChange(tabName) {
     this.setState({'selectedTab': tabName})
+  }
+
+  handleDateRangeChange(customRangeControl, rangeValue) {
+    const finalCheckinDate = this.props.checkinHistory.checkins[this.props.checkinHistory.checkins.length - 1].date;
+    const initialCheckinDate = this.props.checkinHistory.checkins[0].date;
+
+    if (customRangeControl === undefined) {
+      if (rangeValue === 'all_dates') {
+        Session.set({
+          'graphStartDate': initialCheckinDate,
+          'graphEndDate': finalCheckinDate
+        });
+      } else if (rangeValue === 'seven_days') {
+        Session.set({
+          'graphStartDate': moment(finalCheckinDate, 'MMMM Do YYYY').subtract(6, 'days').format('MMMM Do YYYY'),
+          'graphEndDate': finalCheckinDate
+        });
+      } else if (rangeValue === 'thirty_days') {
+        Session.set({
+          'graphStartDate': moment(finalCheckinDate, 'MMMM Do YYYY').subtract(29, 'days').format('MMMM Do YYYY'),
+          'graphEndDate': finalCheckinDate
+        });
+      } else if (rangeValue === 'twelve_months') {
+        Session.set({
+          'graphStartDate': moment(finalCheckinDate, 'MMMM Do YYYY').subtract(1, 'year').format('MMMM Do YYYY'),
+          'graphEndDate': finalCheckinDate
+        });
+      } else if (rangeValue === 'year_to_current') {
+        Session.set({
+          'graphStartDate': moment(finalCheckinDate, 'MMMM Do YYYY').startOf('year').format('MMMM Do YYYY'),
+          'graphEndDate': finalCheckinDate
+        });
+      } else if (rangeValue === 'custom' && Session.get('dateRangeOption') !== 'custom') {
+        Session.set({
+          'graphStartDate': initialCheckinDate,
+          'graphEndDate': finalCheckinDate
+        });
+      }
+      Session.set('dateRangeOption', rangeValue);
+    } else {
+      Session.set(customRangeControl, rangeValue);
+    }
   }
 
   render() {
@@ -89,6 +136,11 @@ class SymptomsHistory2 extends React.Component {
                 symptoms={this.props.displayedSymptoms}
                 checkins={this.props.checkinHistory.checkins}
                 currentSymptomNames={this.props.currentSymptoms.map(symptom => symptom.name)}
+                startDate={this.props.graphStartDate}
+                endDate={this.props.graphEndDate}
+                checkinDates={this.props.checkinHistory.checkins.map(checkin => checkin.date)}
+                handleDateRangeChange={this.handleDateRangeChange.bind(this)}
+                dateRangeOption={this.props.dateRangeOption}
               />
               : this.state.selectedTab === 'symptomSystemGraph' ?
               <SymptomSystemGraph
@@ -96,12 +148,39 @@ class SymptomsHistory2 extends React.Component {
                 symptoms={this.props.displayedSymptoms}
                 checkins={this.props.checkinHistory.checkins}
                 currentSymptomNames={this.props.currentSymptoms.map(symptom => symptom.name)}
+                startDate={this.props.graphStartDate}
+                endDate={this.props.graphEndDate}
+                checkinDates={this.props.checkinHistory.checkins.map(checkin => checkin.date)}
+                handleDateRangeChange={this.handleDateRangeChange.bind(this)}
+                dateRangeOption={this.props.dateRangeOption}
               />
               : this.state.selectedTab === 'symptomWorstGraph' ?
               <SymptomWorstGraph
                 symptoms={this.props.worstSymptoms}
                 checkins={this.props.checkinHistory.checkins}
                 currentSymptomNames={this.props.currentSymptoms.map(symptom => symptom.name)}
+                startDate={this.props.graphStartDate}
+                endDate={this.props.graphEndDate}
+                checkinDates={this.props.checkinHistory.checkins.map(checkin => checkin.date)}
+                handleDateRangeChange={this.handleDateRangeChange.bind(this)}
+                dateRangeOption={this.props.dateRangeOption}
+              />
+              : this.state.selectedTab === 'symptomChangesGraph' ?
+              <SymptomChangesGraph
+                symptoms={this.props.symptomsByChanges}
+                checkins={this.props.checkinHistory.checkins}
+                currentSymptomNames={this.props.currentSymptoms.map(symptom => symptom.name)}
+                startDate={this.props.graphStartDate}
+                endDate={this.props.graphEndDate}
+                checkinDates={this.props.checkinHistory.checkins.map(checkin => checkin.date)}
+                handleDateRangeChange={this.handleDateRangeChange.bind(this)}
+                dateRangeOption={this.props.dateRangeOption}
+              />
+              : this.state.selectedTab === 'symptomHistoryTable' ?
+              <SymptomHistoryTable
+                checkins={this.props.displayedCheckinTableItems}
+                currentSymptoms={this.props.currentSymptoms}
+                currentTreatments={this.props.userTreatments}
               />
               :
               <div></div>
@@ -193,77 +272,6 @@ class SymptomsHistory2 extends React.Component {
               ))}
             </div>
           }
-        </div>
-        <div className='section'>
-          <h5>Checkins:</h5>
-          {this.props.displayedCheckinTableItems.map(checkin =>
-            <div className="section" key={checkin.date}>
-              <h4>{checkin.date}</h4>
-              { checkin.symptoms === undefined ?
-                <div>
-                  <p>You didn't check in on this date</p>
-                  <Link
-                    className="waves-effect waves-light pink btn"
-                    to={{
-                      pathname: "/patient/checkin",
-                      state: {
-                        checkinDate: checkin.date,
-                        symptoms: this.props.currentSymptoms,
-                        treatments: this.props.userTreatments,
-                        position: (this.props.displayedCheckinTableItems.length - checkin.index - 1)
-                      },
-                    }}>
-                    Check in now
-                  </Link>
-                </div>
-                :
-                <div>
-                  {moment(checkin.date, 'MMMM Do YYYY').startOf('day').isBetween(moment().subtract(3, 'days'), moment()) &&
-                    <Link
-                      className="waves-effect waves-light deep-purple btn"
-                      to={{
-                        pathname: "/patient/checkin",
-                        state: {
-                          checkinDate: checkin.date,
-                          symptoms: checkin.symptoms ? checkin.symptoms.map(symptom => {
-                            return {
-                              name: symptom.name
-                            };
-                          }) : undefined,
-                          treatments: checkin.treatments ? checkin.treatments.map(treatment => {
-                            return {
-                              name: treatment.name,
-                              dateSelectMode: 'daily',
-                              // dateSelectMode: 'from now on',
-                              // daysOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-                            };
-                          }) : undefined
-                        },
-                      }}>
-                      Edit check-in
-                    </Link>
-                  }
-                  <table className='striped'>
-                    <thead>
-                      <tr>
-                        <th>Symptom</th>
-                        <th>Severity</th>
-                      </tr>
-                    </thead>
-
-                    <tbody>
-                      {checkin.symptoms.map(checkinSymptom =>
-                        <tr key={checkinSymptom.name}>
-                          <td>{capitalizePhrase(checkinSymptom.name)}</td>
-                          <td>{checkinSymptom.severity === 0 ? 'N/A' : checkinSymptom.severity}</td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              }
-            </div>
-          )}
         </div> */}
       </div>
     );
@@ -300,6 +308,7 @@ export default createContainer((props) => {
   const displayedSymptoms = Session.get('includeDeletedSymptoms') ? currentAndDeletedSymptoms : currentSymptoms;
   const maxSymptomsPerSegment = Session.get('maxSymptomsPerSegment') || 3;
   const symptomSystems = [];
+
   displayedSymptoms.map(symptom => symptom.system).forEach(system => !symptomSystems.includes(system) && symptomSystems.push(system));
 
   // edit
@@ -326,6 +335,7 @@ export default createContainer((props) => {
       }
     });
   }
+
   displayedSymptomsExtended.sort((a, b) => {
     if (Session.get('sortSymptomsBy') === 'currentWorst') {
       return b.lastSeverityScore - a.lastSeverityScore
@@ -334,9 +344,35 @@ export default createContainer((props) => {
     }
   });
 
-  let symptomsByBiggestChanges = [];
+  const graphStartDate = Session.get('graphStartDate') ? Session.get('graphStartDate') : checkinHistoryIsReady ? CheckinHistories.findOne().checkins[0].date : null;
+  const graphEndDate = Session.get('graphEndDate') ? Session.get('graphEndDate') : checkinHistoryIsReady ? CheckinHistories.findOne().checkins[CheckinHistories.findOne().checkins.length -1].date : null;
+  // const totalDatesNumber = checkinHistoryIsReady ? moment(graphEndDate, 'MMMM Do YYYY').diff(moment(graphStartDate, 'MMMM Do YYYY') , 'days') + 1 : 0;
+  // const checkinDates = checkinHistoryIsReady ? [...Array(totalDatesNumber).keys()].map((dateOffset) =>
+  //   moment(graphStartDate, 'MMMM Do YYYY').add(dateOffset, "d").format('MMMM Do YYYY')
+  // ) : [];
+  const symptomsWithScoreDetails = checkinHistoryIsReady ? sortSymptoms(displayedSymptoms, CheckinHistories.findOne().checkins, graphStartDate, graphEndDate) : undefined;
+
+
+  const symptomsSeveritySorted = symptomsWithScoreDetails ? symptomsWithScoreDetails.sort((a, b) => b.severityAverage - a.severityAverage) : []
   if (checkinHistoryIsReady) {
-    symptomsByBiggestChanges = sortSymptoms('changes', displayedSymptoms, CheckinHistories.findOne().checkins);
+    symptomSystems.sort((a, b) => {
+      const systemASymptoms = symptomsWithScoreDetails.filter(symptom => symptom.system === a);
+      const systemBSymptoms = symptomsWithScoreDetails.filter(symptom => symptom.system === b);
+      const systemASeverityAverage = systemASymptoms.map(symptom => symptom.severityAverage).reduce((acc, currentVal) => (acc + currentVal)) / systemASymptoms.length;
+      const systemBSeverityAverage = systemBSymptoms.map(symptom => symptom.severityAverage).reduce((acc, currentVal) => (acc + currentVal)) / systemBSymptoms.length;
+
+      if (systemASeverityAverage >= systemBSeverityAverage) {
+        // console.log(1);
+        // console.log(a, '===>', b);
+        // console.log(systemASeverityAverage, '===>', systemBSeverityAverage);
+        return -1;
+      } else {
+        // console.log(2);
+        // console.log(a, '===>', b);
+        // console.log(systemASeverityAverage, '===>', systemBSeverityAverage);
+        return 1;
+      }
+    });
   }
   return {
     displayedSymptoms: displayedSymptomsExtended,
@@ -353,7 +389,14 @@ export default createContainer((props) => {
     maxSymptomsPerSegment,
     symptomSystems,
     //edit for history2
-    worstSymptoms: displayedSymptomsExtended.sort((a,b) => b.averageSeverityScore - a.averageSeverityScore).slice(0, 5)
+    // worstSymptoms: displayedSymptomsExtended.sort((a,b) => b.averageSeverityScore - a.averageSeverityScore).slice(0, 5),
+    // worstSymptoms: !checkinHistoryIsReady ? [] : sortSymptoms('highest', displayedSymptoms, CheckinHistories.findOne().checkins, graphStartDate, graphEndDate).slice(0, 5),
+    // symptomsByChanges: !checkinHistoryIsReady ? [] : sortSymptoms('changes', displayedSymptoms, CheckinHistories.findOne().checkins, graphStartDate, graphEndDate).slice(0, 5),
+    worstSymptoms: symptomsSeveritySorted.slice(0, 5),
+    symptomsByChanges: symptomsWithScoreDetails ? symptomsWithScoreDetails.sort((a, b) => b.biggestChangeAverage - a.biggestChangeAverage).slice(0, 5) : [],
+    dateRangeOption: Session.get('dateRangeOption') || 'all_dates',
+    graphStartDate,
+    graphEndDate,
   };
 
 }, SymptomsHistory2);
