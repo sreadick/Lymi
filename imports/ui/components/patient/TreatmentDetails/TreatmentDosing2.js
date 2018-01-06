@@ -91,13 +91,6 @@ const RxDoseTypeDropdown = ({props, col, offset = 's0'}) => (
 )
 
 export default TreatmentDosing2 = (props) => {
-  if (props.isFetching) {
-    return (
-      <div className="progress">
-        <div className="indeterminate"></div>
-      </div>
-    );
-  }
   return (
     <div className='treatment-editor2__section treatment-editor2__section--dosing row'>
       <h1 className='treatment-editor2__section__header dosing'>

@@ -5,6 +5,8 @@ import { Mongo } from 'meteor/mongo';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Tabs, Tab } from 'react-materialize';
 
+import Loader from '/imports/ui/components/Loader';
+
 import Settings from '../../components/patient/account/Settings';
 import Preferences from '../../components/patient/account/Preferences';
 import PersonalInfo from '../../components/patient/account/PersonalInfo';
@@ -21,11 +23,7 @@ class Account extends React.Component {
 
   render() {
     if (this.props.isFetching) {
-      return (
-        <div className="progress">
-          <div className="indeterminate"></div>
-        </div>
-      );
+      return <Loader />
     }
     return (
       <div className="page-content">

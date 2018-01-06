@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import FlipMove from 'react-flip-move';
 import { getNextColor, capitalizePhrase } from '../../../utils/utils';
 
+import Loader from '/imports/ui/components/Loader';
+
 import { SymptomGroup } from '../../components/patient/SymptomGroup';
 
 import { UserSymptoms } from '../../../api/user-symptoms';
@@ -129,9 +131,7 @@ class SelectSymptomsPage extends React.Component {
   render() {
     if (this.props.isFetching) {
       return (
-        <div className="progress">
-          <div className="indeterminate"></div>
-        </div>
+        <Loader />
       );
     }
     return (

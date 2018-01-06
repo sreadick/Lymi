@@ -8,7 +8,7 @@ import ScrollableAnchor, {configureAnchors} from 'react-scrollable-anchor'
 import { Accounts } from 'meteor/accounts-base';
 import PropTypes from 'prop-types';
 
-import Login from './Login';
+import Login from '../components/Login';
 
 configureAnchors({scrollDuration: 800});
 const Landing = (props) => (

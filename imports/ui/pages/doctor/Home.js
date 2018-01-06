@@ -2,14 +2,13 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Link } from 'react-router-dom';
 import { createContainer } from 'meteor/react-meteor-data';
-// import { Button } from 'react-materialize';
+
+import Loader from '/imports/ui/components/Loader';
 
 const Home = (props) => {
   if (props.isFetching) {
     return (
-      <div className="progress">
-        <div className="indeterminate"></div>
-      </div>
+      <Loader />
     );
   }
   return (

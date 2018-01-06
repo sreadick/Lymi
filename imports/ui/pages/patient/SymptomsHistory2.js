@@ -11,6 +11,7 @@ import { UserSymptoms } from '../../../api/user-symptoms';
 import { UserTreatments } from '../../../api/user-treatments';
 import { CheckinHistories } from '../../../api/checkin-histories';
 
+import Loader from '/imports/ui/components/Loader';
 import SymptomChart from '../../components/patient/SymptomChart';
 import SymptomChartItem from '../../components/patient/SymptomChartItem';
 import Checkin from './Checkin';
@@ -120,7 +121,7 @@ class SymptomsHistory2 extends React.Component {
 
   render() {
     if (this.props.isFetching) {
-      return <div></div>
+      return <Loader />
     }
     return (
       <div className="page-content page-content--symptom-history">

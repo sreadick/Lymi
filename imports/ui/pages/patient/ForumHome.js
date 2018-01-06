@@ -8,6 +8,7 @@ import { Session } from 'meteor/session';
 import { ForumPosts } from '../../../api/forum-posts';
 
 import { ForumPostForm } from '../../components/patient/forum/ForumPostForm';
+import Loader from '/imports/ui/components/Loader';
 
 class ForumHome extends React.Component {
   constructor(props) {
@@ -20,11 +21,7 @@ class ForumHome extends React.Component {
 
   render() {
     if (this.props.isFetching) {
-      return (
-        <div className="progress">
-          <div className="indeterminate"></div>
-        </div>
-      );
+      return <Loader />
     }
     return (
       <div className="page-content page-content--forum">

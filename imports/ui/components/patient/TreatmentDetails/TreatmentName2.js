@@ -5,13 +5,6 @@ import { Session } from 'meteor/session';
 import Autosuggest from 'react-autosuggest';
 
 export default TreatmentName2 = (props) => {
-  // if (props.isFetching) {
-  //   return (
-  //     <div className="progress">
-  //       <div className="indeterminate"></div>
-  //     </div>
-  //   );
-  // }
   const { name, errors } = props.treatment;
   return (
     <div className='treatment-editor2__section treatment-editor2__section--name row'>

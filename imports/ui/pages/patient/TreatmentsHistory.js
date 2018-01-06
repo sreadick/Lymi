@@ -9,13 +9,15 @@ import { UserSymptoms } from '../../../api/user-symptoms';
 import { UserTreatments } from '../../../api/user-treatments';
 import { CheckinHistories } from '../../../api/checkin-histories';
 
-import Checkin from './Checkin';
+import Loader from '/imports/ui/components/Loader';
 import TreatmentChart from '../../components/patient/TreatmentChart';
+
+import Checkin from './Checkin';
 
 class TreatmentsHistory extends React.Component {
   render() {
     if (this.props.isFetching) {
-      return <div></div>
+      return <Loader />
     }
     return (
       <div className="page-content">

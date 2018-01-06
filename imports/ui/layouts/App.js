@@ -3,13 +3,16 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import { createContainer } from 'meteor/react-meteor-data';
 
+import Loader from '/imports/ui/components/Loader';
+
+import AuthAdminRoute from '../auth/AuthAdminRoute';
 import AuthPatientRoute from '../auth/AuthPatientRoute';
 import AuthDoctorRoute from '../auth/AuthDoctorRoute';
 import PublicRoute from '../auth/PublicRoute';
 
 import Landing from '../pages/Landing';
 import Signup from '../pages/Signup';
-import Login from '../pages/Login';
+// import Login from '../pages/Login';
 import NotFound from '../pages/NotFound';
 
 import Patient from './Patient';
@@ -43,16 +46,18 @@ import Admin from './Admin';
 const App = appProps => {
   if (appProps.authenticated && !appProps.account) {
     return (
-      <div className="progress">
-        <div className="indeterminate"></div>
-      </div>
+      // <div className="progress">
+      //   <div className="indeterminate"></div>
+      // </div>
+      <Loader />
+
     );
   }
   return (
     <Router onUpdate={() => window.scrollTo(0, 0)} history={history}>
       <Switch>
         <PublicRoute exact path="/" component={Landing} {...appProps} />
-        <PublicRoute path="/login" component={Login} {...appProps} />
+        {/* <PublicRoute path="/login" component={Login} {...appProps} /> */}
         <PublicRoute path="/signup" component={Signup} {...appProps} />
 
         <AuthPatientRoute exact path="/patient" component={Patient} {...appProps} />
@@ -77,7 +82,7 @@ const App = appProps => {
         <AuthDoctorRoute path="/doctor/patientsummary/:patientId" component={PatientSummary} {...appProps} />
         <AuthDoctorRoute exact path="/doctor/pending" component={PendingPage} {...appProps} />
 
-        <Route exact path="/admin" component={Admin}/>
+        <AuthAdminRoute exact path="/admin" component={Admin} {...appProps}/>
         <Route path="*" component={NotFound}/>
       </Switch>
     </Router>

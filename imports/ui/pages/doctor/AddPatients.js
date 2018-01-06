@@ -5,6 +5,8 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Button, Row, Col, Input, Icon } from 'react-materialize';
 import { capitalize } from '../../../utils/utils';
 
+import Loader from '/imports/ui/components/Loader';
+
 import { Requests } from '../../../api/requests';
 
 class AddPatients extends React.Component {
@@ -46,9 +48,7 @@ class AddPatients extends React.Component {
   render() {
     if (this.props.isFetching) {
       return (
-        <div className="progress">
-          <div className="indeterminate"></div>
-        </div>
+        <Loader />
       );
     }
     return (

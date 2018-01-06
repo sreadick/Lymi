@@ -9,6 +9,7 @@ import { filterCurrentDayTreatments } from '../../../utils/utils';
 // import { UserTreatments } from '../../../api/user-treatments';
 import { CheckinHistories } from '../../../api/checkin-histories';
 
+import Loader from '/imports/ui/components/Loader';
 import SymptomsCheckin from '../../components/patient/SymptomsCheckin';
 import TreatmentsCheckin from '../../components/patient/TreatmentsCheckin';
 import NotableEventsCheckin from '../../components/patient/NotableEventsCheckin';
@@ -34,6 +35,9 @@ class Checkin extends React.Component {
     }
   }
   render() {
+    if (this.props.isFetching) {
+      return <Loader />
+    }
     return (
       <div className='page-content'>
         <h3 className='center-align'>Check in for {this.props.location.state.checkinDate}</h3>

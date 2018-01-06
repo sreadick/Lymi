@@ -42,15 +42,24 @@ if (Meteor.isServer) {
     }
   });
 
-  Meteor.publish('searchedDoctor', function(sixCharKeyQuery) {
+  Meteor.publish('searchedDoctor', function(docInfo) {
     if (this.userId) {
-      return Meteor.users.find({'account.type': 'doctor', sixCharKey: sixCharKeyQuery}, {
+      return Meteor.users.find({'account.type': 'doctor', 'profile.firstName': docInfo.firstName, 'profile.lastName': docInfo.lastName, 'profile.zip': docInfo.zip}, {
         fields: { emails: 0 }
       });
     } else {
       return this.ready();
     }
   });
+  // Meteor.publish('searchedDoctor', function(sixCharKeyQuery) {
+  //   if (this.userId) {
+  //     return Meteor.users.find({'account.type': 'doctor', sixCharKey: sixCharKeyQuery}, {
+  //       fields: { emails: 0 }
+  //     });
+  //   } else {
+  //     return this.ready();
+  //   }
+  // });
 }
 
 Meteor.publish('allUsers', function() {
@@ -136,6 +145,9 @@ Accounts.onCreateUser((options, user) => {
 
 Meteor.methods({
   'users.updateLymeDoctor'(doctorId) {
+    if (!this.userId) {
+      throw new Meteor.Error("not-authorized");
+    }
     Meteor.users.update(this.userId, {
       $set: {
         doctorId

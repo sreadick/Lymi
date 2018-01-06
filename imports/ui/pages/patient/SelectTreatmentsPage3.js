@@ -7,6 +7,7 @@ import { Session } from 'meteor/session';
 import { UserTreatments } from '../../../api/user-treatments';
 import { CommonTreatments } from '../../../api/common-treatments';
 
+import Loader from '/imports/ui/components/Loader';
 // import { TreatmentList } from '../../components/patient/TreatmentList';
 import { TreatmentSelectSidebar2 } from '../../components/patient/TreatmentSelectSidebar2';
 import { TreatmentEditor2 } from '../../components/patient/TreatmentEditor2';
@@ -38,7 +39,7 @@ class SelectTreatmentsPage3 extends React.Component {
   }
   render() {
     if (this.props.isFetching) {
-      return <div></div>
+      return <Loader />
     } else if (!Meteor.user().profile.settings.trackedItems.includes('treatments')) {
       return <Redirect to='/patient'/>
     }

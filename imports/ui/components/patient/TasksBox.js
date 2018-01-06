@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { createContainer } from 'meteor/react-meteor-data';
 import moment from 'moment';
 
+import Loader from '/imports/ui/components/Loader';
+
 import { Requests } from '../../../api/requests';
 
 class TasksBox extends React.Component {
@@ -22,9 +24,10 @@ class TasksBox extends React.Component {
   render() {
     if (this.props.isFetching) {
       return (
-        <div className="progress">
-          <div className="indeterminate"></div>
-        </div>
+        // <div className="progress">
+        //   <div className="indeterminate"></div>
+        // </div>
+        <Loader />
       );
     }
     return (
@@ -83,7 +86,7 @@ class TasksBox extends React.Component {
                       </div>
                       <div className='col s1'>
                         {/* <button className='btn-floating waves-effect waves-light red'><i className="material-icons">clear</i></button> */}
-                        <i className="material-icons red-text button--icon">clear</i>
+                        <i className="material-icons red-text button--icon" onClick={() => this.denyDoctorRequest(request.doctorId)}>clear</i>
                       </div>
                     </div>
                   </div>

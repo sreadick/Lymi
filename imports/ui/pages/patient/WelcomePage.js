@@ -30,13 +30,6 @@ export default class WelcomePage extends React.Component {
   }
 
   render() {
-    if (this.props.isFetching) {
-      return (
-        <div className="progress">
-          <div className="indeterminate"></div>
-        </div>
-      );
-    }
     return (
       <div className="page-content page-content-welcome-page">
         <div className='section'>

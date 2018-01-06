@@ -17,13 +17,15 @@ import ProfileBackgroundModel from '../../components/patient/ProfileBackgroundMo
 import ProfileImageModel from '../../components/patient/ProfileImageModel';
 import Pagination from '../../components/patient/Pagination';
 import TreatmentCollapsible from '../../components/patient/TreatmentCollapsible';
+import Loader from '/imports/ui/components/Loader';
 
 const Dashboard = (props) => {
   if (props.isFetching) {
     return (
-      <div className="progress">
-        <div className="indeterminate"></div>
-      </div>
+      // <div className="progress">
+      //   <div className="indeterminate"></div>
+      // </div>
+      <Loader />
     );
   } else if (Meteor.user().account.status === 'initializing' || props.userSymptoms.length === 0 || (props.userTreatments.length === 0 && props.trackedItems.includes('treatments'))) {
     return <Redirect to="/patient" />

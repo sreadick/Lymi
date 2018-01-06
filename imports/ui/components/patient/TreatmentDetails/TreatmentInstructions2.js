@@ -3,13 +3,6 @@ import { Meteor } from 'meteor/meteor';
 import { Row, Col, Input, Button, Card } from 'react-materialize';
 
 export default TreatmentInstructions2 = (props) => {
-  if (props.isFetching) {
-    return (
-      <div className="progress">
-        <div className="indeterminate"></div>
-      </div>
-    );
-  }
   return (
     <div className='treatment-editor2__section treatment-editor2__section--instructions row'>
       <h1 className='treatment-editor2__section__header instructions'>

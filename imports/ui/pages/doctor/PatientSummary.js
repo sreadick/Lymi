@@ -8,15 +8,14 @@ import { CheckinHistories } from '../../../api/checkin-histories';
 import { UserSymptoms } from '../../../api/user-symptoms';
 import { UserTreatments } from '../../../api/user-treatments';
 
+import Loader from '/imports/ui/components/Loader';
 import SymptomChart from '../../components/patient/SymptomChart';
 import TreatmentChart from '../../components/patient/TreatmentChart';
 
 const PatientSummary = (props) => {
   if (props.isFetching) {
     return (
-      <div className="progress">
-        <div className="indeterminate"></div>
-      </div>
+      <Loader />
     );
   } else if (!props.patient) {
     return (

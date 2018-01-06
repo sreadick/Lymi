@@ -4,9 +4,11 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Redirect } from 'react-router-dom';
 import { Accounts } from 'meteor/accounts-base';
 
+import Loader from '/imports/ui/components/Loader';
+
 const Admin = (props) => {
   if (props.isFetching) {
-    return <div></div>;
+    return <Loader />;
   } else if (props.account.type !== 'admin') {
     if (props.account.type === 'doctor') {
       return <Redirect to ='/doctor' />
@@ -14,7 +16,6 @@ const Admin = (props) => {
       return <Redirect to="/patient" />
     }
   }
-  console.log(props.doctors);
 
   return (
     <div>

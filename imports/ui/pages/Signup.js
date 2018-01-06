@@ -5,7 +5,7 @@ import { capitalize } from '../../utils/utils';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Row, Input, Button } from 'react-materialize';
 
-import Login from './Login';
+import Login from '../components/Login';
 
 class Signup extends React.Component {
   constructor(props, state) {

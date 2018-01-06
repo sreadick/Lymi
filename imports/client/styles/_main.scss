@@ -1,6 +1,7 @@
 @import './variables';
 @import './base';
-@import './landing';
+// @import './landing';
+@import './components/landing';
 @import './components/boxed-view';
 @import './components/button';
 @import './components/nav-header';
@@ -23,3 +24,4 @@
 @import './components/materialize';
 @import './components/forum';
 @import './components/symptom-history';
+@import './components/loader';

@@ -5,6 +5,8 @@ import { Row, Col, Input, Button, Modal } from 'react-materialize';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
 
+import Loader from '/imports/ui/components/Loader';
+
 import { ForumPosts } from '../../../api/forum-posts';
 
 class ForumPost extends React.Component {
@@ -18,11 +20,7 @@ class ForumPost extends React.Component {
 
   render() {
     if (this.props.isFetching) {
-      return (
-        <div className="progress">
-          <div className="indeterminate"></div>
-        </div>
-      );
+      return <Loader />
     }
     return (
       <div className="page-content">
