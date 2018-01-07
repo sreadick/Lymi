@@ -46,6 +46,11 @@ class DoctorSearch extends React.Component {
         console.log(err);
       } else {
         Meteor.call('requests.remove', {patientId: Meteor.userId(), doctorId: doctorId});
+        Meteor.users.update(Meteor.userId(), {
+          $set: {
+            'profile.medical.appointments': []
+          }
+        })
         Session.set({'searchedDocInfo': undefined, 'isDocLinked': true});
       }
     });
@@ -132,15 +137,11 @@ class DoctorSearch extends React.Component {
                 </div>
                 <div>
                   <Row>
-                    {/* <Col s={12}> */}
-                      <Input s={6} name='searchDocFirstName' defaultValue={this.state.searchDocFirstName} label='First Name' onChange={this.handleChange} />
-                      <Input s={6} name='searchDocLastName' defaultValue={this.state.searchDocLastName} label='First Name' onChange={this.handleChange} />
-                    {/* </Col> */}
+                    <Input s={6} name='searchDocFirstName' value={this.state.searchDocFirstName} label='First Name' onChange={this.handleChange} />
+                    <Input s={6} name='searchDocLastName' value={this.state.searchDocLastName} label='First Name' onChange={this.handleChange} />
                   </Row>
                   <Row>
-                    {/* <Col s={4} offset='s4'> */}
-                      <Input s={6} name='searchDocZip' defaultValue={this.state.searchDocZip} label='Zip' onChange={this.handleChange} />
-                    {/* </Col> */}
+                    <Input s={6} name='searchDocZip' value={this.state.searchDocZip} label='Zip' onChange={this.handleChange} />
                   </Row>
                 </div>
                 <Row>

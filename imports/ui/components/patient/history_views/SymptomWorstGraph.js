@@ -26,6 +26,9 @@ export default class SymptomWorstGraph extends React.Component {
             <option value='thirty_days'>Last 30 Days</option>
             <option value='twelve_months'>Last 12 Months</option>
             <option value='year_to_current'>Year to Date</option>
+            {Meteor.user().profile.medical.appointments &&
+              <option value='prev_appt_to_current'>Since Last Appointment</option>
+            }
             <option value='custom'>Custom Range</option>
           </Input>
           {this.props.dateRangeOption === 'custom' &&

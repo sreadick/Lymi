@@ -107,6 +107,11 @@ class SymptomsHistory2 extends React.Component {
           'graphStartDate': moment(finalCheckinDate, 'MMMM Do YYYY').startOf('year').format('MMMM Do YYYY'),
           'graphEndDate': finalCheckinDate
         });
+      } else if (rangeValue === 'prev_appt_to_current') {
+        Session.set({
+          // 'graphStartDate': moment(finalCheckinDate, 'MMMM Do YYYY').startOf('year').format('MMMM Do YYYY'),
+          'graphEndDate': finalCheckinDate
+        });
       } else if (rangeValue === 'custom' && Session.get('dateRangeOption') !== 'custom') {
         Session.set({
           'graphStartDate': initialCheckinDate,

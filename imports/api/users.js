@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import SimpleSchema from 'simpl-schema';
 import { Accounts } from 'meteor/accounts-base';
-import { Random } from 'meteor/random'
+import { Random } from 'meteor/random';
 
 import { CheckinHistories } from './checkin-histories';
 import { backgroundImages } from '../public/resources/backgroundImages';
@@ -155,10 +155,47 @@ Meteor.methods({
     });
   },
   'users.updateAccountStatus'({userId, status}) {
+    if (!this.userId) {
+      throw new Meteor.Error("not-authorized");
+    }
     Meteor.users.update(userId, {
       $set: {
         'account.status': status
       }
-    })
+    });
+  },
+  'users.appointments.create'(date) {
+    if (!this.userId) {
+      throw new Meteor.Error("not-authorized");
+    }
+    Meteor.users.update(this.userId, {
+      $push: {
+        'profile.medical.appointments': date
+      }
+    });
+  },
+  'users.appointments.updateLast'(date) {
+    if (!this.userId) {
+      throw new Meteor.Error("not-authorized");
+    }
+    const appts = Meteor.user().profile.medical.appointments.slice();
+    appts[appts.length - 1] = date;
+
+    Meteor.users.update(this.userId, {
+      $set: {
+        'profile.medical.appointments': appts
+      }
+    });
+  },
+  'users.appointments.removeLast'() {
+    if (!this.userId) {
+      throw new Meteor.Error("not-authorized");
+    }
+    
+    Meteor.users.update(this.userId, {
+      $pop: {
+        'profile.medical.appointments': 1
+      }
+    });
   },
 })
