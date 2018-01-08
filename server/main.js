@@ -14,6 +14,8 @@ import '../imports/api/forum-posts';
 import { seedDbWithCommonSymptoms, seedDbWithCommonTreatments } from '../imports/utils/dbSeeds';
 
 import '../imports/startup/simple-schema-configuration';
+import '../imports/startup/slingshot-configuration';
+
 
 // import { SelectedSymptoms } from '../imports/api/ui'
 

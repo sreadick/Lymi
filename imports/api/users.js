@@ -191,7 +191,7 @@ Meteor.methods({
     if (!this.userId) {
       throw new Meteor.Error("not-authorized");
     }
-    
+
     Meteor.users.update(this.userId, {
       $pop: {
         'profile.medical.appointments': 1

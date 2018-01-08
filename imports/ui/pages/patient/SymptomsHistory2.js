@@ -108,8 +108,11 @@ class SymptomsHistory2 extends React.Component {
           'graphEndDate': finalCheckinDate
         });
       } else if (rangeValue === 'prev_appt_to_current') {
+        const appts = Meteor.user().profile.medical.appointments.slice().reverse();
+        const lastAppt = appts.find(date => moment(date).isBefore(moment()));
+        console.log(moment(lastAppt));
         Session.set({
-          // 'graphStartDate': moment(finalCheckinDate, 'MMMM Do YYYY').startOf('year').format('MMMM Do YYYY'),
+          'graphStartDate': moment(lastAppt).format('MMMM Do YYYY'),
           'graphEndDate': finalCheckinDate
         });
       } else if (rangeValue === 'custom' && Session.get('dateRangeOption') !== 'custom') {

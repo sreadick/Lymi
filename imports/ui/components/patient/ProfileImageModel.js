@@ -4,27 +4,45 @@ import { Session } from 'meteor/session';
 
 export default class ProfileImageModel extends React.Component {
   selectProfilePhoto() {
-    const file = this.refs.photoInput.files[0];
-    const imageType = /image.*/;
+    var uploader = new Slingshot.Upload("myFileUploads");
 
-    if (file.type.match(imageType)) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const img = new Image();
-        img.src = reader.result;
+    uploader.send(this.refs.photoInput.files[0], function (error, downloadUrl) {
+      if (error) {
+        // Log service detailed response.
+        console.error('Error uploading', uploader.xhr.response);
+        alert (error);
+      }
+      else {
         Meteor.users.update(Meteor.userId(), {
           $set: {
-            'profile.userPhoto': img.src
+            'profile.userPhoto': downloadUrl
           }
         });
-        Session.set('showProfileImageModel', false)
       }
-
-      reader.readAsDataURL(file);
-    } else {
-      alert('File type not supported');
-    }
+    });
   }
+  // selectProfilePhoto() {
+  //   const file = this.refs.photoInput.files[0];
+  //   const imageType = /image.*/;
+  //
+  //   if (file.type.match(imageType)) {
+  //     const reader = new FileReader();
+  //     reader.onload = (e) => {
+  //       const img = new Image();
+  //       img.src = reader.result;
+  //       Meteor.users.update(Meteor.userId(), {
+  //         $set: {
+  //           'profile.userPhoto': img.src
+  //         }
+  //       });
+  //       Session.set('showProfileImageModel', false)
+  //     }
+  //
+  //     reader.readAsDataURL(file);
+  //   } else {
+  //     alert('File type not supported');
+  //   }
+  // }
   render() {
     return (
       <div className="boxed-view__box--profile-model__wrapper">
