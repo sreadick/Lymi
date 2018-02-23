@@ -1,9 +1,0 @@
-{
-  "galaxy.meteor.com": {
-    "env": {
-      "MONGO_URL": "mongodb://sky:undecisive@ds113566.mlab.com:13566/lymelogdb"
-    }
-  },
-  "AWSAccessKeyId": "AKIAIW5MPZOOCZPAKLYA",
-  "AWSSecretAccessKey": "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"
-}
