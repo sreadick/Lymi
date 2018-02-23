@@ -677,7 +677,9 @@ export class TreatmentEditor3 extends React.Component {
         dosingDetails: this.state.dosingDetails,
         otherInstructions: this.state.otherInstructions,
         info: this.state.info,
-        errors: this.state.errors
+        errors: this.state.errors,
+
+        color: this.props.nextColor
       }
       Meteor.call('userTreatments.insert', treatmentData, (err, res) => {
         if (err) {

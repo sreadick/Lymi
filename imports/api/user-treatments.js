@@ -202,6 +202,10 @@ Meteor.methods({
         type: Object,
         optional: true,
         blackbox: true
+      },
+      color: {
+        type: String,
+        optional: true
       }
     }).validate({ ...treatmentData });
 

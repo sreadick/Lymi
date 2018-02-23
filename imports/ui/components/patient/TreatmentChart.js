@@ -10,17 +10,57 @@ const colorsArray = ['#b39ddb', '#e57373', '#90caf9', '#ffab91', '#81C784', '#A1
 
 const TreatmentChart = (props) => {
   return (
-    <div className='treatment-chart__item__container'>
-      {props.treatments.map((treatment) =>
-        <div key={treatment.name}>
-          <h5 className={`grey-text text-darken-2 center-align treatment-chart__item__title ${!props.currentTreatmentNames.includes(treatment.name) ? 'deleted' : ''} `}>{treatment.name.charAt(0).toUpperCase() + treatment.name.slice(1)}</h5>
-          <div className='treatment-chart__item z-depth-1'>
+    <div className='treatment-chart'>
+      <div className='treatment-chart__label__container'>
+        {props.treatments.map((treatment) =>
+          <div
+            key={treatment.name}
+            className={`grey-text text-darken-2 treatment-chart__label ${!props.currentTreatmentNames.includes(treatment.name) ? 'deleted' : ''} `}
+          >
+            {treatment.name.charAt(0).toUpperCase() + treatment.name.slice(1)}
+          </div>
+        )}
+      </div>
+      <div className='treatment-chart__item__container z-depth-3'>
+        {props.treatments.map((treatment) =>
+          <div key={treatment.name} className='treatment-chart__item'>
             {props.checkins.map((checkin, index) => {
               let checkinTreatment;
               if (checkin.treatments !== null) {
                 checkinTreatment = checkin.treatments.find(checkinTreatment => checkinTreatment.name === treatment.name)
+
+                // if (treatment.dateSelectMode === "date range") {
+                //   if ( moment(treatment.createdAt).isBefore('') )
+                // }
               }
-              return <div key={checkin.date} className={`treatment-chart__block-segment ${checkinTreatment && checkinTreatment.compliance}`}></div>
+              return (
+                <div
+                  key={checkin.date}
+                  className={`treatment-chart__block-segment ${!checkinTreatment ? 'null' : checkinTreatment.compliance}`}
+                  style={{background:
+                    checkinTreatment ?
+                      checkinTreatment.compliance === 'Some' ? `repeating-linear-gradient(-55deg, ${treatment.color}, ${treatment.color} 3px, #f5f5f5 6px, #f5f5f5 9px )`
+                      :
+                      checkinTreatment.compliance === 'NPD' ? '#fff'
+                      :
+                      treatment.color
+                      // (checkinTreatment.compliance === 'Yes' || checkinTreatment.compliance === 'No' || checkinTreatment.compliance === 'NPD') ? treatment.color
+
+                      // checkinTreatment.compliance === 'No' ? 'red' :
+                    :
+                    treatment.color
+                  }} >
+                  {
+                    checkinTreatment && checkinTreatment.compliance === "No" ?
+                      <span>X</span>
+                    :
+                    !checkinTreatment || checkinTreatment.compliance === null ?
+                      <span>?</span>
+                    :
+                    <span></span>
+                  }
+                  </div>
+              );
               // Edit Experiment
               // return (
               //   <div
@@ -41,10 +81,10 @@ const TreatmentChart = (props) => {
               //   </div>
               // )
             })}
-        </div>
-        </div>
-      )}
-      <div>
+          </div>
+        )}
+      </div>
+      <div className='treatment-chart__date__container'>
         {props.checkins.map((checkin) =>
           <div className={`treatment-chart__date ${checkin.treatments === null ? 'missing' : ''}`} key={checkin.date}>{moment(checkin.date, "MMMM Do YYYY").format('M/D/YY')} </div>
         )}
@@ -52,37 +92,37 @@ const TreatmentChart = (props) => {
       <div className='right treatment-chart__legend'>
         <div className='treatment-chart__legend__item'>
           <div className='treatment-chart__legend__item__block yes'></div>
-          <span className='treatment-chart__legend__item__title'>
+          <span>
             All doses taken
           </span>
         </div>
         <div className='treatment-chart__legend__item'>
           <div className='treatment-chart__legend__item__block some'></div>
-          <span className='treatment-chart__legend__item__title'>
+          <span>
             Some doses taken
           </span>
         </div>
         <div className='treatment-chart__legend__item'>
           <div className='treatment-chart__legend__item__block no'></div>
-          <span className='treatment-chart__legend__item__title'>
+          <span>
             No doses taken
           </span>
         </div>
         <div className='treatment-chart__legend__item'>
           <div className='treatment-chart__legend__item__block missing'></div>
-          <span className='treatment-chart__legend__item__title'>
+          <span>
             Not Specified
           </span>
         </div>
         <div className='treatment-chart__legend__item'>
           <div className='treatment-chart__legend__item__block NPD'></div>
-          <span className='treatment-chart__legend__item__title'>
+          <span>
             Not Prescribed
           </span>
         </div>
         <div className='treatment-chart__legend__item'>
           <div className='treatment-chart__legend__item__block checkin-missing'>x/x/xx</div>
-          <span className='treatment-chart__legend__item__title'>
+          <span>
             Check-In Missing
           </span>
         </div>

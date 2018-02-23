@@ -78,47 +78,46 @@ class SymptomsHistory2 extends React.Component {
   }
 
   handleDateRangeChange(customRangeControl, rangeValue) {
-    const finalCheckinDate = this.props.checkinHistory.checkins[this.props.checkinHistory.checkins.length - 1].date;
+    const currentDate = moment().format('MMMM Do YYYY');
+    // const finalCheckinDate = this.props.checkinHistory.checkins[this.props.checkinHistory.checkins.length - 1].date;
     const initialCheckinDate = this.props.checkinHistory.checkins[0].date;
-
     if (customRangeControl === undefined) {
       if (rangeValue === 'all_dates') {
         Session.set({
           'graphStartDate': initialCheckinDate,
-          'graphEndDate': finalCheckinDate
+          'graphEndDate': currentDate
         });
       } else if (rangeValue === 'seven_days') {
         Session.set({
-          'graphStartDate': moment(finalCheckinDate, 'MMMM Do YYYY').subtract(6, 'days').format('MMMM Do YYYY'),
-          'graphEndDate': finalCheckinDate
+          'graphStartDate': moment(currentDate, 'MMMM Do YYYY').subtract(6, 'days').format('MMMM Do YYYY'),
+          'graphEndDate': currentDate
         });
       } else if (rangeValue === 'thirty_days') {
         Session.set({
-          'graphStartDate': moment(finalCheckinDate, 'MMMM Do YYYY').subtract(29, 'days').format('MMMM Do YYYY'),
-          'graphEndDate': finalCheckinDate
+          'graphStartDate': moment(currentDate, 'MMMM Do YYYY').subtract(29, 'days').format('MMMM Do YYYY'),
+          'graphEndDate': currentDate
         });
       } else if (rangeValue === 'twelve_months') {
         Session.set({
-          'graphStartDate': moment(finalCheckinDate, 'MMMM Do YYYY').subtract(1, 'year').format('MMMM Do YYYY'),
-          'graphEndDate': finalCheckinDate
+          'graphStartDate': moment(currentDate, 'MMMM Do YYYY').subtract(1, 'year').format('MMMM Do YYYY'),
+          'graphEndDate': currentDate
         });
       } else if (rangeValue === 'year_to_current') {
         Session.set({
-          'graphStartDate': moment(finalCheckinDate, 'MMMM Do YYYY').startOf('year').format('MMMM Do YYYY'),
-          'graphEndDate': finalCheckinDate
+          'graphStartDate': moment(currentDate, 'MMMM Do YYYY').startOf('year').format('MMMM Do YYYY'),
+          'graphEndDate': currentDate
         });
       } else if (rangeValue === 'prev_appt_to_current') {
         const appts = Meteor.user().profile.medical.appointments.slice().reverse();
         const lastAppt = appts.find(date => moment(date).isBefore(moment()));
-        console.log(moment(lastAppt));
         Session.set({
           'graphStartDate': moment(lastAppt).format('MMMM Do YYYY'),
-          'graphEndDate': finalCheckinDate
+          'graphEndDate': currentDate
         });
       } else if (rangeValue === 'custom' && Session.get('dateRangeOption') !== 'custom') {
         Session.set({
           'graphStartDate': initialCheckinDate,
-          'graphEndDate': finalCheckinDate
+          'graphEndDate': currentDate
         });
       }
       Session.set('dateRangeOption', rangeValue);

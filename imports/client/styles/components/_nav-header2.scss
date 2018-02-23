@@ -1,0 +1,160 @@
+.nav-header {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  z-index: 5;
+
+  height: $header-height;
+  // background: #f5f5f5;
+
+  &.public.landing {
+    // mix-blend-mode: difference;
+    &.scrolled {
+      background: #f5f5f5;
+
+      .nav-header__link {
+        color: $dark-blue;
+        // color: $dark-blue;
+      }
+      .nav-header__link--title {
+        color: green;
+      }
+      .nav-header__link--signup {
+        border-color: $dark-blue;
+        &:hover {
+          color: #fff;
+          background: $dark-blue;
+          // border-color: $dark-blue;
+        }
+      }
+    }
+  }
+  &.public.signup {
+    // border-bottom: 1px solid black;
+    background: #52527a;
+    .nav-header__link--title {
+      color: white;
+    }
+    .nav-header__link {
+      color: #ddd;
+    }
+    .nav-header__link--signup {
+      border-color: #fff;
+    }
+  }
+}
+
+.nav-header__link {
+  color: $deep-purple-lighten-3;
+  margin-left: 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+
+  &.public {
+    color: white;
+
+    &.nav-header__link--signup {
+      padding: .5rem 1rem;
+      border: 1px solid #fff;
+      // border: 1px solid $lime;
+      // color: $lime;
+      &:hover {
+        // color: #fff;
+        background: #fff;
+        border-color: #fff;
+      }
+    }
+  }
+}
+
+.nav-header__link--title {
+  margin: 0;
+  margin-left: 2rem;
+
+  font-size: 1.7rem;
+  font-style: italic;
+  font-weight: 300;
+  color: $deep-purple-darken-1;
+
+  &.public {
+    color: white;
+    // color: #B5FFDD;
+  }
+}
+
+
+.nav-header__content {
+  // color: $leather;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 99rem;
+  width: 90%;
+  margin: 0 auto;
+  height: 100%;
+
+  // @include link-font-style;
+}
+
+.nav-header__user-email {
+  color: grey;
+}
+
+.nav-header__sidebar-icon i {
+  margin: 0 !important;
+  width: 23px !important;
+  cursor: pointer;
+  color: $navy !important;
+
+  // mix-blend-mode: difference;
+}
+
+.nav-header__link:hover {
+  color: $violet;
+}
+
+
+.nav-header.private {
+
+  .nav-header__link, {
+    color: black;
+  }
+
+  .nav-header__link:hover, {
+    color: $grey;
+  }
+  .nav-header__link--title:hover {
+    color: #D07878;
+  }
+
+  background: transparentize(white, .1);
+
+  &.doctor {
+    background: black;
+
+    .nav-header__link--title {
+      color: $deep-purple-lighten-1;
+    }
+
+    .nav-header__link, {
+      color: white;
+    }
+
+    .nav-header__user-email {
+      color: #ddd;
+    }
+
+    .nav-header__sidebar-icon i {
+      color: white !important;
+    }
+  }
+}
+
+
+// Doctor Laning //
+.nav-header__link--title--doctor.public {
+  color: $green-lighten-1;
+  sup {
+    color: #aaa;
+  }
+}

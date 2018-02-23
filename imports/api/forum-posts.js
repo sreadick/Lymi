@@ -32,10 +32,14 @@ Meteor.methods({
     });
 
     ForumPosts.insert({
-      patientId: this.userId,
-      patientFirstName: Meteor.users.findOne(this.userId).profile.firstName,
+      // patientId: this.userId, // change to authorId
+      // patientFirstName: Meteor.users.findOne(this.userId).profile.firstName,  // ""
+      authorId: this.userId,
+      authorFirstName: Meteor.users.findOne(this.userId).profile.firstName,
+      authorAlias: Meteor.users.findOne(this.userId).profile.userPhoto,
       title,
       body,
+      responses: [],
       createdAt: moment().valueOf(),
     });
   },
@@ -60,5 +64,41 @@ Meteor.methods({
     });
 
     return ForumPosts.remove({patientId, doctorId});
-  }
+  },
+
+  'forumPosts.responses.insert'({postId, responseBody}) {
+    if (!this.userId) {
+      throw new Meteor.Error('not-authorized');
+    }
+    new SimpleSchema({
+      postId: {
+        type: String,
+        min: 1
+      },
+      responseBody: {
+        type: String,
+        min: 1
+      }
+    }).validate({
+      postId,
+      responseBody,
+    });
+
+    ForumPosts.update({ _id: postId }, {
+      $push: {
+        responses: {
+          $each: [{
+            postId,
+            authorId: this.userId,
+            authorFirstName: Meteor.users.findOne(this.userId).profile.firstName,
+            authorAlias: Meteor.users.findOne(this.userId).profile.userPhoto,
+            body: responseBody,
+            responseTarget: 'top_level',
+            createdAt: moment().valueOf()
+          }]
+        }
+      }
+    })
+  },
+
 });

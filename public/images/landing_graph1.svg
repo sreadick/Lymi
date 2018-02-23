@@ -1,0 +1,38 @@
+<!-- <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid meet" viewBox="0 0 640 640" width="640" height="640"><defs><path d="M640 231.72L526.76 351.48L458.28 423.91L388.75 340.31L249.69 527.81L144.22 433.28L0 506.72L0 640L640 640L640 231.72Z" id="d1YeLdBcxB"></path><linearGradient id="gradienth4GTSUFllO" gradientUnits="userSpaceOnUse" x1="592.95" y1="388.14" x2="74.26" y2="632.25"><stop style="stop-color: #21a73e;stop-opacity: 1" offset="0%"></stop><stop style="stop-color: #27954a;stop-opacity: 1" offset="100%"></stop></linearGradient><path d="M394.49 343.05C394.49 345.85 391.93 348.12 388.78 348.12C385.62 348.12 383.06 345.85 383.06 343.05C383.06 340.24 385.62 337.97 388.78 337.97C391.93 337.97 394.49 340.24 394.49 343.05Z" id="h2sh1RKBCZ"></path><path d="M149.36 434.86C149.36 437.66 146.8 439.94 143.65 439.94C140.5 439.94 137.94 437.66 137.94 434.86C137.94 432.06 140.5 429.78 143.65 429.78C146.8 429.78 149.36 432.06 149.36 434.86Z" id="a1wApKBNxg"></path><path d="M646.71 233.86C646.71 236.66 644.15 238.94 641 238.94C637.85 238.94 635.29 236.66 635.29 233.86C635.29 231.06 637.85 228.78 641 228.78C644.15 228.78 646.71 231.06 646.71 233.86Z" id="caJKEH7Hr"></path><path d="M254.36 524.86C254.36 527.66 251.8 529.94 248.65 529.94C245.5 529.94 242.94 527.66 242.94 524.86C242.94 522.06 245.5 519.78 248.65 519.78C251.8 519.78 254.36 522.06 254.36 524.86Z" id="a1sehyn62R"></path><path d="M464.43 420.68C464.43 423.48 461.87 425.76 458.71 425.76C455.56 425.76 453 423.48 453 420.68C453 417.88 455.56 415.6 458.71 415.6C461.87 415.6 464.43 417.88 464.43 420.68Z" id="adLidYjK3"></path></defs><g><g><g><use xlink:href="#d1YeLdBcxB" opacity="1" fill="url(#gradienth4GTSUFllO)"></use><g><use xlink:href="#d1YeLdBcxB" opacity="1" fill-opacity="0" stroke="#000000" stroke-width="1" stroke-opacity="1"></use></g></g><g><use xlink:href="#h2sh1RKBCZ" opacity="1" fill="#ffffff" fill-opacity="1"></use><g><use xlink:href="#h2sh1RKBCZ" opacity="1" fill-opacity="0" stroke="#150f15" stroke-width="1" stroke-opacity="0.7"></use></g></g><g><use xlink:href="#a1wApKBNxg" opacity="1" fill="#ffffff" fill-opacity="1"></use><g><use xlink:href="#a1wApKBNxg" opacity="1" fill-opacity="0" stroke="#140e15" stroke-width="1" stroke-opacity="0.7"></use></g></g><g><use xlink:href="#caJKEH7Hr" opacity="1" fill="#ffffff" fill-opacity="1"></use><g><use xlink:href="#caJKEH7Hr" opacity="1" fill-opacity="0" stroke="#140e15" stroke-width="1" stroke-opacity="0.7"></use></g></g><g><use xlink:href="#a1sehyn62R" opacity="1" fill="#ffffff" fill-opacity="1"></use><g><use xlink:href="#a1sehyn62R" opacity="1" fill-opacity="0" stroke="#140e15" stroke-width="1" stroke-opacity="0.7"></use></g></g><g><use xlink:href="#adLidYjK3" opacity="1" fill="#ffffff" fill-opacity="1"></use><g><use xlink:href="#adLidYjK3" opacity="1" fill-opacity="0" stroke="#140e15" stroke-width="1" stroke-opacity="0.7"></use></g></g></g></g></svg> -->
+<?xml-stylesheet type="stylesheet/scss" href="_svg.scss" ?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" width="640" height="640" preserveAspectRatio='none meet'>
+<style>
+  .a{
+    fill:#fff;
+  }
+  .b{
+    fill:none;
+    stroke-opacity:0.7;
+    stroke:#140e15;
+  }
+</style>
+  <defs>
+    <path d="M640 231.7L526.8 351.5 458.3 423.9 388.8 340.3 249.7 527.8 144.2 433.3 0 506.7 0 640 640 640 640 231.7Z" id="d1YeLdBcxB"/>
+    <linearGradient id="gradienth4GTSUFllO" gradientUnits="userSpaceOnUse" x1="593" y1="388.1" x2="74.3" y2="632.3">
+      <stop offset="0%" stop-color="#21a73e"/>
+      <stop offset="100%" stop-color="#27954a"/>
+    </linearGradient>
+    <path d="M394.5 343.1C394.5 345.9 391.9 348.1 388.8 348.1 385.6 348.1 383.1 345.9 383.1 343.1 383.1 340.2 385.6 338 388.8 338 391.9 338 394.5 340.2 394.5 343.1Z" id="h2sh1RKBCZ"/>
+    <path d="M149.4 434.9C149.4 437.7 146.8 439.9 143.7 439.9 140.5 439.9 137.9 437.7 137.9 434.9 137.9 432.1 140.5 429.8 143.7 429.8 146.8 429.8 149.4 432.1 149.4 434.9Z" id="a1wApKBNxg"/>
+    <path d="M646.7 233.9C646.7 236.7 644.2 238.9 641 238.9 637.9 238.9 635.3 236.7 635.3 233.9 635.3 231.1 637.9 228.8 641 228.8 644.2 228.8 646.7 231.1 646.7 233.9Z" id="caJKEH7Hr"/>
+    <path d="M254.4 524.9C254.4 527.7 251.8 529.9 248.7 529.9 245.5 529.9 242.9 527.7 242.9 524.9 242.9 522.1 245.5 519.8 248.7 519.8 251.8 519.8 254.4 522.1 254.4 524.9Z" id="a1sehyn62R"/>
+    <path d="M464.4 420.7C464.4 423.5 461.9 425.8 458.7 425.8 455.6 425.8 453 423.5 453 420.7 453 417.9 455.6 415.6 458.7 415.6 461.9 415.6 464.4 417.9 464.4 420.7Z" id="adLidYjK3"/>
+  </defs>
+        <use href="#d1YeLdBcxB" fill="url(#gradienth4GTSUFllO)"/>
+          <use href="#d1YeLdBcxB" style="fill:none;stroke:#000"/>
+        <use href="#h2sh1RKBCZ" class="a"/>
+          <use href="#h2sh1RKBCZ" style="fill:none;stroke-opacity:0.7;stroke:#150f15"/>
+        <use href="#a1wApKBNxg" class="a"/>
+          <use href="#a1wApKBNxg" class="b"/>
+        <use href="#caJKEH7Hr" class="a"/>
+          <use href="#caJKEH7Hr" class="b"/>
+        <use href="#a1sehyn62R" class="a"/>
+          <use href="#a1sehyn62R" class="b"/>
+        <use href="#adLidYjK3" class="a"/>
+          <use href="#adLidYjK3" class="b"/>
+</svg>

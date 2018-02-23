@@ -1,10 +1,11 @@
 @import './variables';
 @import './base';
 // @import './landing';
-@import './components/landing';
+@import './components/landing5';
 @import './components/boxed-view';
 @import './components/button';
-@import './components/nav-header';
+// @import './components/nav-header';
+@import './components/nav-header2';
 @import './components/page-content';
 @import './components/checkbox';
 @import './components/item';
@@ -25,3 +26,4 @@
 @import './components/forum';
 @import './components/symptom-history';
 @import './components/loader';
+@import './components/svg';

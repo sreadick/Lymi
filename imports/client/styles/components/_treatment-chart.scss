@@ -1,4 +1,6 @@
 .treatment-chart__wrapper {
+  // For dashboard and pt summary pages //
+
   margin-top: 8px;
   border: 1px solid #aaa;
   background: white;
@@ -8,47 +10,95 @@
   min-height: 34rem;
 }
 
+.treatment-chart {
+  // width: 100vw;
+}
+
+.treatment-chart__label__container {
+  display: inline-block;
+  width: 15%;
+  vertical-align: top;
+  text-align: right;
+  padding-right: 10px;
+}
+.treatment-chart__label {
+  // float: left;
+  height: 26px;
+}
+
+.treatment-chart__label.deleted {
+  text-decoration: line-through;
+}
+
+
 .treatment-chart__item__container {
-  padding: $space / 4;
-  width: max-content;
-  min-width: 100%;
+  display: inline-block;
+  // padding: $space / 4;
+  // width: 800px;
+  // width: max-content;
+  // min-width: 100%;
+  border: 1px solid #777;
+  border-radius: 7px;
+  overflow: hidden;
+
 }
 
 .treatment-chart__item {
-  border: 1px solid black;
-  border-radius: 10px;
+  border-bottom: 1px solid #999;
+  // border-radius: 10px;
   background: transparent;
-  height: 25px;
-  display: inline-block;
+  // height: 25px;
+  // display: inline-block;
   min-width: 100%;
   overflow: hidden;
-}
-
-.treatment-chart__item__title.deleted {
-  text-decoration: line-through;
+  &:last-of-type {
+    border: none;
+  }
 }
 
 .treatment-chart__block-segment {
   height: 100%;
+  height: 25px;
   width: 45px;
   background: white;
-  display: inline-block;
+  // display: inline-block;
+  float: left;
 }
 
 .treatment-chart__block-segment.Yes {
-  background: $yes-checkin-answer-primary;
+  // background: $yes-checkin-answer-primary;
 }
 .treatment-chart__block-segment.No {
-  background: $no-checkin-answer-primary;
+  // background: $no-checkin-answer-primary;
+  text-align: center;
+  vertical-align: top;
+  font-weight: 300;
+  // trans
+  span {
+    display: inline-block;
+    transform:scale(4, 2);
+    color: #111;
+  }
 }
 .treatment-chart__block-segment.Some {
-  background: $some-checkin-answer-primary;
+  // background: $some-checkin-answer-primary;
 }
 .treatment-chart__block-segment.null {
-  background: grey;
+  // background: grey;
+  text-align: center;
+  vertical-align: top;
+  font-weight: 700;
+  span {
+    font-size: 1.5rem;
+    line-height: 25px;
+  }
 }
-.treatment-chart__block-segment.aaa {
-  background: pink;
+// .treatment-chart__block-segment.aaa {
+//   background: pink;
+// }
+
+.treatment-chart__date__container {
+  margin-left: 15%;
 }
 
 .treatment-chart__date {
@@ -63,8 +113,8 @@
 }
 
 .treatment-chart__date.missing {
-  color: red;
-  text-decoration: line-through;
+  // color: red;
+  // text-decoration: line-through;
 }
 
 .treatment-chart__legend {

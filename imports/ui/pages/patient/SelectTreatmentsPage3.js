@@ -14,6 +14,8 @@ import { TreatmentEditor2 } from '../../components/patient/TreatmentEditor2';
 import { TreatmentEditor3 } from '../../components/patient/TreatmentEditor3';
 import { TreatmentDetailDisplay } from '../../components/patient/TreatmentDetailDisplay';
 
+import { getNextColor, capitalizePhrase } from '../../../utils/utils';
+
 class SelectTreatmentsPage3 extends React.Component {
   validateTreatments() {
     const treatmentNames = [];
@@ -59,6 +61,7 @@ class SelectTreatmentsPage3 extends React.Component {
                 :
                 this.props.userTreatments.filter(treatment => treatment._id !== this.props.selectedTreatment._id).map(treatment => treatment.name.toLowerCase())}
               // showErrors={this.props.showErrors}
+              nextColor={this.props.nextColor}
              />
          }
 
@@ -87,14 +90,18 @@ export default createContainer(() => {
     Session.set('selectedTreatmentDetails', UserTreatments.find().fetch()[UserTreatments.find().fetch().length - 1]._id)
   }
 
+  const userTreatments = UserTreatments.find({}, {sort: {createdAt: -1}}).fetch();
   return {
-    userTreatments: UserTreatments.find({}, {sort: {createdAt: -1}}).fetch(),
+    userTreatments,
+    // userTreatments: UserTreatments.find({}, {sort: {createdAt: -1}}).fetch(),
     selectedTreatment: UserTreatments.findOne(Session.get('currentTreatmentId')),
     selectedTreatmentDetails: UserTreatments.findOne(Session.get('selectedTreatmentDetails')),
     commonTreatments: CommonTreatments.find({}, {sort: {class: 1}}).fetch(),
     isFetching: !treatmentHandle.ready(),
     showErrors: Session.get('showErrors'),
     errorMessage: Session.get('errorMessage'),
-    displayTreatmentEditor: Session.get('displayTreatmentEditor')
+    displayTreatmentEditor: Session.get('displayTreatmentEditor'),
+
+    nextColor: userTreatments.length > 0 ? getNextColor(userTreatments.length) : getNextColor(0),
   }
 }, SelectTreatmentsPage3);

@@ -19,7 +19,7 @@ export default class SymptomWorstGraph extends React.Component {
     return (
       <div className='symptom-history__graph-view'>
         <Row>
-          <div className='symptom-history__title col s6'>Top 5 Most Severe Symptoms:</div>
+          <div className='symptom-history__title col s5'>Top 5 Most Severe Symptoms:</div>
           <Input s={2} type='select' label='Date Range' value={this.props.dateRangeOption} onChange={(e) => this.props.handleDateRangeChange(undefined, e.target.value)}>
             <option value='all_dates'>All Dates</option>
             <option value='seven_days'>Last 7 Days</option>

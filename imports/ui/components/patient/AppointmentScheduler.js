@@ -40,7 +40,7 @@ export default class AppointmentScheduler extends React.Component {
             <DayPickerSingleDateController
               date={this.state.appointmentDate}
               onDateChange={date => this.setState({appointmentDate: date})}
-              isOutsideRange={(day) => (day.isBefore(moment().startOf('day')) ) ? true : false}
+              // isOutsideRange={(day) => (day.isBefore(moment().startOf('day')) ) ? true : false}
             />
           </div>
           <TimePicker

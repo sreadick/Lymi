@@ -124,6 +124,7 @@ Accounts.onCreateUser((options, user) => {
 
     user.profile.medical = {
       tickBorneDiseases: [],
+      appointments: [],
       initialInfectionDate: '',
     }
 
