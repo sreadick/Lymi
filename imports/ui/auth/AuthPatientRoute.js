@@ -5,9 +5,10 @@ import { Session } from 'meteor/session';
 import PropTypes from 'prop-types';
 
 import PrivateHeader from '../components/PrivateHeader';
+import ForumHeader from '../components/ForumHeader';
 import SidebarMenu from '../components/patient/SidebarMenu';
 
-const AuthPatientRoute = ({ loggingIn, authenticated, accountType, component, sidebarToggled, showProfileBackgroundModel, showProfileImageModel, ...rest }) => {
+const AuthPatientRoute = ({ loggingIn, authenticated, accountType, component, sidebarToggled, showProfileBackgroundModel, showProfileImageModel, isForumPage, ...rest }) => {
   return (
     <Route render={(props) => {
       return (
@@ -19,9 +20,20 @@ const AuthPatientRoute = ({ loggingIn, authenticated, accountType, component, si
         : accountType === 'admin' ?
           <Redirect to="/admin" />
         :
-          <div className="page">
+          <div className="page" onClick={(e) => {
+            const navHeaderProfileDropdown = document.getElementById('nav-header__dropdown--avatar');
+            const navHeaderAvatarButton = document.getElementById('nav-header__button--avatar');
+            if (navHeaderProfileDropdown.classList.contains('active') && !e.target.classList.contains('nav-header__profile-item')) {
+              navHeaderAvatarButton.classList.remove('active')
+              navHeaderProfileDropdown.classList.remove('active')
+            }
+          }}>
             <SidebarMenu currentPath={props.location.pathname} sidebarToggled={sidebarToggled}/>
-            <PrivateHeader title="LymeLog" accountType={accountType} />
+            {isForumPage ?
+              <ForumHeader title="LymeLog" accountType={accountType} {...rest} />
+              :
+              <PrivateHeader title="LymeLog" accountType={accountType} {...rest} />
+            }
             {(sidebarToggled || showProfileBackgroundModel || showProfileImageModel) &&
               <div className='page-content--overlay' onClick={() => {
                 Session.set('sidebarToggled', false);
@@ -44,15 +56,15 @@ AuthPatientRoute.propTypes = {
   component: PropTypes.func
 }
 
-export default createContainer(() => {
+export default createContainer((props) => {
   const sidebarToggled = Session.get('sidebarToggled') || false
   const showProfileBackgroundModel = Session.get('showProfileBackgroundModel') || false;
   const showProfileImageModel = Session.get('showProfileImageModel') || false;
   document.body.style.overflow = (sidebarToggled || showProfileBackgroundModel || showProfileImageModel) ? 'hidden' : 'auto';
-
   return {
     sidebarToggled,
     showProfileBackgroundModel,
-    showProfileImageModel
+    showProfileImageModel,
+    isForumPage: props.path.substring(0, 14) === '/patient/forum'
   }
 }, AuthPatientRoute);

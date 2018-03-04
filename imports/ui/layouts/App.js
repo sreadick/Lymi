@@ -30,8 +30,11 @@ import SymptomsHistory from '../pages/patient/SymptomsHistory';
 import SymptomsHistory2 from '../pages/patient/SymptomsHistory2';
 import TreatmentsHistory from '../pages/patient/TreatmentsHistory';
 import Account from '../pages/patient/Account';
-import ForumHome from '../pages/patient/ForumHome';
-import ForumPost from '../pages/patient/ForumPost';
+import Profile from '../pages/patient/Profile';
+
+import ForumHome from '../pages/patient/forum/ForumHome';
+import Subforum from '../pages/patient/forum/Subforum';
+import ForumTopic from '../pages/patient/forum/ForumTopic';
 
 import Doctor from './Doctor';
 import DoctorHomepage from '../pages/doctor/Home';
@@ -77,8 +80,11 @@ const App = appProps => {
         <AuthPatientRoute exact path="/patient/history/symptoms" component={SymptomsHistory2} {...appProps} />
         <AuthPatientRoute exact path="/patient/history/treatments" component={TreatmentsHistory} {...appProps} />
         <AuthPatientRoute exact path="/patient/account" component={Account} {...appProps} />
-        <AuthPatientRoute exact path="/patient/forum/home" component={ForumHome} {...appProps} />
-        <AuthPatientRoute path="/patient/forum/post/:postId" component={ForumPost} {...appProps} />
+        <AuthPatientRoute exact path="/patient/profile" component={Profile} {...appProps} />
+        <AuthPatientRoute exact path="/patient/forum" component={ForumHome} {...appProps} />
+        <AuthPatientRoute path="/patient/forum/subforum/:subforumId/topic/:topicId" component={ForumTopic} {...appProps} />
+        <AuthPatientRoute path="/patient/forum/subforum/:subforumId" component={Subforum} {...appProps} />
+        {/* <AuthPatientRoute path="/patient/forum/topic/:postId" component={ForumTopic} {...appProps} /> */}
 
         <AuthDoctorRoute exact path="/doctor" component={Doctor} {...appProps} />
         <AuthDoctorRoute exact path="/doctor/home" component={DoctorHomepage} {...appProps} />

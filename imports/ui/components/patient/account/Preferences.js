@@ -20,7 +20,7 @@ class Preferences extends React.Component {
         <div className='section'>
           <p>Current Alias Image:</p>
           {this.props.userPhoto ?
-            <img style={{width: '100px', height: '100px'}} src={this.props.userPhoto}/>
+            <img style={{width: '100px', height: '100px', borderRadius: '50%'}} src={this.props.userPhoto}/>
             :
             <span>None Selected</span>
           }

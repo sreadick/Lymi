@@ -32,10 +32,10 @@ class Account extends React.Component {
           <Tab className='col s3' title="Settings" active={!this.props.location.state || !this.props.location.state.activeTab}>
             <Settings settingsInfo={this.props.userInfo.profile.settings}/>
           </Tab>
-          <Tab className='col s3' title="Preferences">
+          <Tab className='col s3' title="Preferences" active={this.props.location.state && this.props.location.state.activeTab === 'preferences'}>
             <Preferences userInfo={this.props.userInfo}/>
           </Tab>
-      		<Tab className='col s3' title="Personal Info">
+      		<Tab className='col s3' title="Personal Info" active={this.props.location.state && this.props.location.state.activeTab === 'personalInfo'}>
             <PersonalInfo userInfo={this.props.userInfo}/>
           </Tab>
       		<Tab className='col s3' title="Medical Info" active={this.props.location.state && this.props.location.state.activeTab === 'medicalInfo'}>

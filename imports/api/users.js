@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import SimpleSchema from 'simpl-schema';
 import { Accounts } from 'meteor/accounts-base';
 import { Random } from 'meteor/random';
+import moment from 'moment';
 
 import { CheckinHistories } from './checkin-histories';
 import { backgroundImages } from '../public/resources/backgroundImages';
@@ -36,7 +37,9 @@ if (Meteor.isServer) {
 
   Meteor.publish('currentDoctor', function(doctorId) {
     if (this.userId) {
-      return Meteor.users.find({'account.type': 'doctor', _id: doctorId});
+      return Meteor.users.find({'account.type': 'doctor', _id: doctorId}, {
+        fields: { 'profile.npi': 0 }
+      });
     } else {
       return this.ready();
     }
@@ -87,7 +90,8 @@ Accounts.onCreateUser((options, user) => {
 
   // user.accountType = options.accountType;
   user.account = {
-    type: options.accountType
+    type: options.accountType,
+    createdAt: moment().valueOf()
   };
 
   user.profile = options.profile || {};

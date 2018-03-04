@@ -3,9 +3,19 @@ import { Mongo } from 'meteor/mongo';
 import SimpleSchema from 'simpl-schema';
 import moment from 'moment';
 
+export const SubForums = new Mongo.Collection('subforums');
+export const Topics = new Mongo.Collection('topics');
 export const ForumPosts = new Mongo.Collection('forumPosts');
 
 if (Meteor.isServer) {
+  Meteor.publish('subforums', function() {
+    return SubForums.find({});
+    this.ready();
+  });
+  Meteor.publish('topics', function() {
+    return Topics.find({});
+    this.ready();
+  });
   Meteor.publish('forumPosts', function() {
     return ForumPosts.find({});
     this.ready();
@@ -13,13 +23,39 @@ if (Meteor.isServer) {
 }
 
 Meteor.methods({
-  'forumPosts.insert'({category, title, body}) {
+  'subforums.insert'({category, name}) {
+    // console.log(this.userId || '3333333');
+    // if (!this.userId) {
+    //   throw new Meteor.Error('not-authorized');
+    // }
+
+    new SimpleSchema({
+      category: {
+        type: String,
+        min: 1
+      },
+      name: {
+        type: String,
+        min: 1
+      }
+    }).validate({category, name});
+
+    SubForums.insert({
+      name,
+      category,
+      numTopics: 0,
+      numPosts: 0,
+      lastPostTime: undefined,
+      createdAt: moment().valueOf(),
+    });
+  },
+  'topics.insert'({subforum, title, body}) {
     if (!this.userId) {
       throw new Meteor.Error('not-authorized');
     }
 
     new SimpleSchema({
-      category: {
+      subforum: {
         type: String,
         min: 1
       },
@@ -32,20 +68,62 @@ Meteor.methods({
         optional: true
       }
     }).validate({
-      category, title, body
+      subforum, title, body
+    });
+
+    Topics.insert({
+      authorId: this.userId,
+      authorFirstName: Meteor.users.findOne(this.userId).profile.firstName,
+      authorAvatar: Meteor.users.findOne(this.userId).profile.userPhoto,
+      subforum,
+      title,
+      body,
+      createdAt: moment().valueOf(),
+    });
+    SubForums.update({name: subforum}, {
+      $inc: { numTopics: 1 }
+    });
+  },
+  'forumPosts.insert'({topicId, subforumId, body}) {
+    if (!this.userId) {
+      throw new Meteor.Error('not-authorized');
+    }
+
+    new SimpleSchema({
+      topicId: {
+        type: String,
+        min: 1
+      },
+      subforumId: {
+        type: String,
+        min: 1
+      },
+      body: {
+        type: String,
+        optional: true
+      }
+    }).validate({
+      topicId, subforumId, body
     });
 
     ForumPosts.insert({
       // patientId: this.userId, // change to authorId
       // patientFirstName: Meteor.users.findOne(this.userId).profile.firstName,  // ""
+      topicId,
+      subforumId,
+      body,
       authorId: this.userId,
       authorFirstName: Meteor.users.findOne(this.userId).profile.firstName,
       authorAlias: Meteor.users.findOne(this.userId).profile.userPhoto,
-      category,
-      title,
-      body,
-      responses: [],
       createdAt: moment().valueOf(),
+    });
+    SubForums.update({_id: subforumId}, {
+      $inc: {
+        numPosts: 1
+      },
+      $set: {
+        lastPostTime: moment().valueOf()
+      }
     });
   },
   'forumPosts.remove'({patientId, postId}) {

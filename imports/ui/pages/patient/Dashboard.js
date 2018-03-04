@@ -37,11 +37,11 @@ const Dashboard = (props) => {
       <div className='dashboard-user-info' style={{backgroundImage: Meteor.user() ? `url(${Meteor.user().profile.backgroundURL})` : '' }}>
         <div className='dashboard-user-info__top-row valign-wrapper'>
           <div>
-            {props.userPhoto &&
+            {/* {props.userPhoto &&
               <div className='userPhoto__wrapper'>
                 <img className='userPhoto' src={props.userPhoto} />
               </div>
-            }
+            } */}
           </div>
           <div className='dashboard-user-info__name'>
             {Meteor.user() && <div>{Meteor.user().profile.firstName} {Meteor.user().profile.lastName}</div>}
