@@ -63,7 +63,7 @@ class ForumHome extends React.Component {
                     showCategory = true;
                   }
                   return (
-                    <tbody key={subforum.name}>
+                    <tbody key={subforum._id}>
                       {showCategory &&
                         <tr>
                           <td colSpan='4' className='forum-table__category'><b>{subforum.category}</b></td>
@@ -89,13 +89,16 @@ class ForumHome extends React.Component {
           <div className='forum-topic__list--home z-depth-1'>
             <h5>Latest Topics:</h5>
             <ul>
-              {this.props.latestTopics.map(topic =>
-                <li key={topic._id}>
-                  <Link to={`/patient/forum/subforum/${topic.subforumId}/topic/${topic._id}`}>
-                    {topic.title}
-                  </Link>
-                  <p>By {topic.authorFirstName}</p>
-                </li>
+              {this.props.latestTopics.map(topic => {
+                return (
+                  <li key={topic._id}>
+                    <Link to={`/patient/forum/subforum/${topic.subforumId}/topic/${topic._id}`}>
+                      {topic.title.length > 43 ? topic.title.substring(1, 40) + '...' : topic.title}
+                    </Link>
+                    <p>By {topic.authorFirstName}</p>
+                  </li>
+                )
+              }
               )}
             </ul>
           </div>
@@ -110,7 +113,7 @@ export default createContainer(props => {
   const topicsHandle = Meteor.subscribe('topics');
   return {
     showForumTopicForm: Session.get('showForumTopicForm'),
-    latestTopics: Topics.find({}, {sort: {createdAt: -1}}).fetch(),
+    latestTopics: Topics.find({}, {sort: {createdAt: -1}, limit: 10}).fetch(),
     subforums: SubForums.find().fetch(),
     isFetching: !subforumsHandle.ready() || !topicsHandle.ready()
   }

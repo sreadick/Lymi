@@ -15,8 +15,8 @@ export const capitalize = (word) => {
 }
 
 export const capitalizePhrase = (phrase) => {
-  return phrase.split(/\s/).map(word => {
-    if (word === 'the' || word === 'or' || word === 'at' || word === 'of' || word === 'in' || word === 'on' || word === 'to') {
+  return phrase.split(/\s/).map((word, index) => {
+    if ((index !== 0) && (word === 'the' || word === 'or' || word === 'at' || word === 'of' || word === 'in' || word === 'on' || word === 'to' || word === 'a' || word === 'for' || word === 'as')) {
       return word
     } else {
       return capitalize(word)

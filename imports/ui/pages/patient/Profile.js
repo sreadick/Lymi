@@ -13,6 +13,8 @@ import { UserTreatments } from '../../../api/user-treatments';
 import { CheckinHistories } from '../../../api/checkin-histories';
 // import { ForumPosts } from '../../../api/forum-posts';
 import { ForumPosts } from '../../../api/forum';
+import { Topics } from '../../../api/forum';
+// import { SubForums } from '../../../api/forum';
 
 import Loader from '/imports/ui/components/Loader';
 import CheckinPieChart from '../../components/patient/CheckinPieChart';
@@ -43,11 +45,12 @@ class Profile extends React.Component {
     return (
       <div className="profile__page">
         <div className='profile z-depth-2'>
+          {/* <div className='section profile__section'> */}
           <div className='profile__header'>
             {this.props.userInfo.profile.userPhoto ?
-              <img className='profile__alias' src={this.props.userInfo.profile.userPhoto} />
+              <img className='profile__avatar' src={this.props.userInfo.profile.userPhoto} />
             :
-              <div className='profile__alias--inital'>{this.props.userInfo.profile.firstName.charAt(0)}</div>
+              <div className='profile__avatar--inital'>{this.props.userInfo.profile.firstName.charAt(0)}</div>
             }
             <div>
               <div className='profile__user-name'>
@@ -58,7 +61,8 @@ class Profile extends React.Component {
               }
             </div>
           </div>
-          <Link className='profile__link' to={{pathname: '/patient/account', state: {activeTab: 'preferences'}}}>Change Avatar Pic</Link>
+          <Link className='' to={{pathname: '/patient/account', state: {activeTab: 'preferences'}}}>Change Avatar Pic</Link>
+          {/* </div> */}
           <hr />
 
           {this.props.userInfo.account.createdAt &&
@@ -71,19 +75,26 @@ class Profile extends React.Component {
                />
             </div>
           }
+          <hr />
 
-          <div className='section'>
-            <p>Tracking Items:</p>
+          <div className='section profile__section'>
+            <div className='profile__heading__wrapper'>
+              <p className='profile__heading'>Tracking Items:</p>
+              <Link className='profile__link' to={'/patient/account'}>edit</Link>
+            </div>
             <Row>
               <Input name='trackedItems' type='checkbox' label='Symptoms' value='symptoms' defaultChecked={this.props.userInfo.profile.settings.trackedItems.includes('symptoms')} disabled='disabled' />
               <Input name='trackedItems' type='checkbox' label='Treatments' value='treatments' defaultChecked={this.props.userInfo.profile.settings.trackedItems.includes('treatments')} disabled='disabled' />
               <Input name='trackedItems' type='checkbox' label='Notable Events' value='notable events' defaultChecked={this.props.userInfo.profile.settings.trackedItems.includes('notable events')} disabled='disabled' />
             </Row>
-            <Link className='deep-purple-text' to={'/patient/account'}>Edit</Link>
           </div>
           <hr />
-          <div className='section'>
-            <p>Current Symptoms:</p>
+
+          <div className='section profile__section'>
+            <div className='profile__heading__wrapper'>
+              <p className='profile__heading'>Current Symptoms:</p>
+              <Link className='profile__link' to={'/patient/selectsymptoms'}>edit</Link>
+            </div>
             <ul>
               {this.props.userSymptoms.map(symptom =>
                 <li key={symptom.name}>{symptom.name}</li>
@@ -92,8 +103,11 @@ class Profile extends React.Component {
           </div>
           <hr />
           {this.props.userInfo.profile.settings.trackedItems.includes('treatments') &&
-            <div className='section'>
-              <p>Current Treatments:</p>
+            <div className='section profile__section'>
+              <div className='profile__heading__wrapper'>
+                <p className='profile__heading'>Current Treatments:</p>
+                <Link className='profile__link' to={'/patient/selecttreatments'}>edit</Link>
+              </div>
               <ul>
                 {this.props.userTreatments.map(treatment =>
                   <li key={treatment.name}>{treatment.name.charAt(0).toUpperCase() + treatment.name.slice(1)}</li>
@@ -102,56 +116,84 @@ class Profile extends React.Component {
             </div>
           }
           <hr />
-          My Forum Posts:
-          <ul>
-            {this.props.userPosts.map(post =>
-              <li key={post._id}>{post.title}</li>
-            )}
-          </ul>
+
+          <div className='section profile__section'>
+            <p className='profile__heading'>Lyme Share Topics:</p>
+            <ul className='profile__topics'>
+              {this.props.userTopics.map(topic => {
+                const posts =  ForumPosts.find({topicId: topic._id}).fetch();
+                let lastPost;
+                if (posts.length > 0) {
+                  lastPost = posts.pop()
+                }
+                return (
+                  <li key={topic._id}>
+                    <Link to={`/patient/forum/subforum/${topic.subforumId}/topic/${topic._id}`}>{topic.title}</Link>
+                    <p>Replies: {posts.length}</p>
+                    <p>{lastPost ? `Last Post: ${moment(lastPost.createdAt).fromNow()} by ${lastPost.authorFirstName}` : ''}</p>
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
           <hr />
-          {this.props.currentDoctor &&
-            <div>Lyme Doctor: {this.props.currentDoctor.profile.firstName}
-              <hr />
+
+          <div className='section profile__section'>
+            <div className='profile__heading__wrapper'>
+              <p className='profile__heading'>Lyme Practioner:</p>
+              <Link className='profile__link' to={{pathname: '/patient/account', state: {activeTab: 'medicalInfo'}}}>edit</Link>
             </div>
-          }
-          My Personal Info:
-          <div>
-            <p>Date of Birth:
-              <span>
-                {(this.props.userInfo.profile.birthYear && this.props.userInfo.profile.birthMonth && this.props.userInfo.profile.birthDay)
-                  ? moment(`${this.props.userInfo.profile.birthYear} ${this.props.userInfo.profile.birthMonth} ${this.props.userInfo.profile.birthDay}`, 'YYYY MMM DD').format('MM/DD/YY')
-                  : 'N/A'
-                }
-              </span>
-            </p>
-            <div>Address:
-                {/* {(this.props.userInfo.profile.street && this.props.userInfo.profile.city && this.props.userInfo.profile.state && this.props.userInfo.profile.zip) */}
-                {this.props.userInfo.profile.street ?
-                  <div>
-                    <p>{this.props.userInfo.profile.street} {this.props.userInfo.profile.apartment && 'Apt ' + this.props.userInfo.profile.apartment}</p>
-                    <p>
-                      {(this.props.userInfo.profile.city && this.props.userInfo.profile.state && this.props.userInfo.profile.zip)
-                        ?
-                        `${this.props.userInfo.profile.city}, ${this.props.userInfo.profile.state} ${this.props.userInfo.profile.zip}`
-                        :
-                        <span>
-                          {`${this.props.userInfo.profile.city} ${this.props.userInfo.profile.state} ${this.props.userInfo.profile.zip}`} <br />
-                            - Address is incomplete <Link to={{pathname: '/patient/account', state: {activeTab: 'personalInfo'}}}>(edit)</Link>
-                          </span>
-                      }
-                    </p>
-                  </div>
-                  : (this.props.userInfo.profile.state || this.props.userInfo.profile.city || this.props.userInfo.profile.zip || this.props.userInfo.profile.apartment) ?
-                    // <span>{` (${this.props.userInfo.profile.city && 'City: ' + this.props.userInfo.profile.city} ${this.props.userInfo.profile.state && 'State: ' + this.props.userInfo.profile.state})`}</span>
+            {this.props.currentDoctor ?
+              <div>{this.props.currentDoctor.profile.firstName} {this.props.currentDoctor.profile.lastName}</div>
+              :
+              <div>None</div>
+            }
+          </div>
+          <hr />
+
+          <div className='section profile__section'>
+            <div className='profile__heading__wrapper'>
+              <p className='profile__heading'>My Personal Info:</p>
+              <Link className='profile__link' to={'/patient/account'}>edit</Link>
+            </div>
+            <div>
+              <p>Date of Birth:
+                <span>
+                  {(this.props.userInfo.profile.birthYear && this.props.userInfo.profile.birthMonth && this.props.userInfo.profile.birthDay)
+                    ? moment(`${this.props.userInfo.profile.birthYear} ${this.props.userInfo.profile.birthMonth} ${this.props.userInfo.profile.birthDay}`, 'YYYY MMM DD').format('MM/DD/YY')
+                    : 'N/A'
+                  }
+                </span>
+              </p>
+              <div>Address:
+                  {/* {(this.props.userInfo.profile.street && this.props.userInfo.profile.city && this.props.userInfo.profile.state && this.props.userInfo.profile.zip) */}
+                  {this.props.userInfo.profile.street ?
                     <div>
-                      <div>{this.props.userInfo.profile.city && 'City: ' + this.props.userInfo.profile.city}</div>
-                      <div>{this.props.userInfo.profile.state && 'State: ' + this.props.userInfo.profile.state}</div>
-                      <div>{this.props.userInfo.profile.zip && 'Zip: ' + this.props.userInfo.profile.zip}</div>
-                      <div>{this.props.userInfo.profile.apartment && 'Apartment #: ' + this.props.userInfo.profile.apartment}</div>
-                      <div>Address is incompete (edit)</div>
+                      <p>{this.props.userInfo.profile.street} {this.props.userInfo.profile.apartment && 'Apt ' + this.props.userInfo.profile.apartment}</p>
+                      <p>
+                        {(this.props.userInfo.profile.city && this.props.userInfo.profile.state && this.props.userInfo.profile.zip)
+                          ?
+                          `${this.props.userInfo.profile.city}, ${this.props.userInfo.profile.state} ${this.props.userInfo.profile.zip}`
+                          :
+                          <span>
+                            {`${this.props.userInfo.profile.city} ${this.props.userInfo.profile.state} ${this.props.userInfo.profile.zip}`} <br />
+                              - Address is incomplete <Link to={{pathname: '/patient/account', state: {activeTab: 'personalInfo'}}}>(Update Now)</Link>
+                            </span>
+                        }
+                      </p>
                     </div>
-                  : "N/A"
-                }
+                    : (this.props.userInfo.profile.state || this.props.userInfo.profile.city || this.props.userInfo.profile.zip || this.props.userInfo.profile.apartment) ?
+                      // <span>{` (${this.props.userInfo.profile.city && 'City: ' + this.props.userInfo.profile.city} ${this.props.userInfo.profile.state && 'State: ' + this.props.userInfo.profile.state})`}</span>
+                      <div>
+                        <div>{this.props.userInfo.profile.city && 'City: ' + this.props.userInfo.profile.city}</div>
+                        <div>{this.props.userInfo.profile.state && 'State: ' + this.props.userInfo.profile.state}</div>
+                        <div>{this.props.userInfo.profile.zip && 'Zip: ' + this.props.userInfo.profile.zip}</div>
+                        <div>{this.props.userInfo.profile.apartment && 'Apartment #: ' + this.props.userInfo.profile.apartment}</div>
+                        <div>Address is incompete <Link to={{pathname: '/patient/account', state: {activeTab: 'personalInfo'}}}>(Update Now)</Link></div>
+                      </div>
+                    : "N/A"
+                  }
+              </div>
             </div>
           </div>
         </div>
@@ -165,6 +207,8 @@ export default createContainer(props => {
   const treatmentsHandle = Meteor.subscribe('userTreatments');
   const checkinHandle = Meteor.subscribe('checkinHistories');
   const forumPostsHandle = Meteor.subscribe('forumPosts');
+  const topicsHandle = Meteor.subscribe('topics');
+  // const subforumsHandle = Meteor.subscribe('subforums');
   // const userAppts = Meteor.user() ? Meteor.user().profile.medical.appointments : undefined;
   const currentdDoctorHandle = Meteor.subscribe('currentDoctor', Meteor.user() && Meteor.user().doctorId);
   return {
@@ -172,8 +216,8 @@ export default createContainer(props => {
     userSymptoms:  UserSymptoms.find().fetch(),
     userTreatments: UserTreatments.find().fetch(),
     checkinHistory: CheckinHistories.findOne(),
-    userPosts: ForumPosts.find({authorId: Meteor.userId()}).fetch(),
+    userTopics: Topics.find({authorId: Meteor.userId()}).fetch(),
     currentDoctor: Meteor.user() && Meteor.users.findOne({ 'account.type': 'doctor', _id: Meteor.user().doctorId }),
-    isFetching: !Meteor.user() || !symptomsHandle.ready() || !treatmentsHandle.ready() || !checkinHandle.ready() || !currentdDoctorHandle.ready(),
+    isFetching: !Meteor.user() || !symptomsHandle.ready() || !treatmentsHandle.ready() || !checkinHandle.ready() || !currentdDoctorHandle.ready() || !topicsHandle.ready() || !forumPostsHandle.ready(),
   }
 }, Profile)

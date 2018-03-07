@@ -49,13 +49,13 @@ Meteor.methods({
       createdAt: moment().valueOf(),
     });
   },
-  'topics.insert'({subforum, title, body}) {
+  'topics.insert'({subforumId, title, body}) {
     if (!this.userId) {
       throw new Meteor.Error('not-authorized');
     }
 
     new SimpleSchema({
-      subforum: {
+      subforumId: {
         type: String,
         min: 1
       },
@@ -65,22 +65,23 @@ Meteor.methods({
       },
       body: {
         type: String,
-        optional: true
+        min: 1,
+        // optional: true
       }
     }).validate({
-      subforum, title, body
+      subforumId, title, body
     });
 
     Topics.insert({
       authorId: this.userId,
       authorFirstName: Meteor.users.findOne(this.userId).profile.firstName,
       authorAvatar: Meteor.users.findOne(this.userId).profile.userPhoto,
-      subforum,
+      subforumId,
       title,
       body,
       createdAt: moment().valueOf(),
     });
-    SubForums.update({name: subforum}, {
+    SubForums.update(subforumId, {
       $inc: { numTopics: 1 }
     });
   },
@@ -114,7 +115,7 @@ Meteor.methods({
       body,
       authorId: this.userId,
       authorFirstName: Meteor.users.findOne(this.userId).profile.firstName,
-      authorAlias: Meteor.users.findOne(this.userId).profile.userPhoto,
+      authorAvatar: Meteor.users.findOne(this.userId).profile.userPhoto,
       createdAt: moment().valueOf(),
     });
     SubForums.update({_id: subforumId}, {
@@ -174,7 +175,7 @@ Meteor.methods({
             postId,
             authorId: this.userId,
             authorFirstName: Meteor.users.findOne(this.userId).profile.firstName,
-            authorAlias: Meteor.users.findOne(this.userId).profile.userPhoto,
+            authorAvatar: Meteor.users.findOne(this.userId).profile.userPhoto,
             body: responseBody,
             responseTarget: 'top_level',
             createdAt: moment().valueOf()

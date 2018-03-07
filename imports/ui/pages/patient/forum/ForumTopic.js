@@ -28,14 +28,14 @@ class ForumTopic extends React.Component {
       return (
         <div className='forum-post' key={post._id}>
           <div className='forum-post__subheading'>
-            {post.authorAlias ?
-              <img className='forum-post__alias' src={post.authorAlias} />
+            {post.authorAvatar ?
+              <img className='forum-post__avatar circle' src={post.authorAvatar} />
               :
-              <span className='forum-post__alias--initial'>{post.authorFirstName.charAt(0)}</span>
+              <span className='forum-post__avatar--initial'>{post.authorFirstName.charAt(0)}</span>
             }
             <div>
               <h5 className='forum-post__author'>{post.authorFirstName}
-                 <span> (Patient)</span>
+                 {/* <span> (Patient)</span> */}
               </h5>
               <h6 className='forum-post__timestamp'>{moment(post.createdAt).fromNow()}</h6>
             </div>
@@ -52,16 +52,7 @@ class ForumTopic extends React.Component {
       return <Loader />
     }
     return (
-      <div className="page-content--forum-post">
-        <nav className='forum-breadcrumb__wrapper'>
-          <div className="nav-wrapper">
-            <div className="col s12">
-              <Link to="/patient/forum" className="breadcrumb forum-nav-box__breadcrumb">Lyme Share</Link>
-              <Link to={`/patient/forum/subforum/${this.props.subforumId}`} className="breadcrumb forum-nav-box__breadcrumb">{this.props.subforumTitle}</Link>
-              <a href="#" className="breadcrumb forum-nav-box__breadcrumb active">{this.props.topic.title}</a>
-            </div>
-          </div>
-        </nav>
+      <div className="page-content--forum-topic">
         <div className='forum__message__wrapper'>
           <div className='forum__message--success' id='forum__message--success'>
             <span>Response Successful!</span>
@@ -72,35 +63,63 @@ class ForumTopic extends React.Component {
           </div>
         </div>
 
-        <div className='forum-topic'>
+        <nav className='forum-breadcrumb__wrapper'>
+          <div className="nav-wrapper">
+            <div className="col s12">
+              <Link to="/patient/forum" className="breadcrumb forum-nav-box__breadcrumb">Lyme Share</Link>
+              <Link to={`/patient/forum/subforum/${this.props.subforumId}`} className="breadcrumb forum-nav-box__breadcrumb">{this.props.subforumTitle}</Link>
+              <a href="#" className="breadcrumb forum-nav-box__breadcrumb active">{this.props.topic.title}</a>
+            </div>
+          </div>
+        </nav>
+
+        <div className='forum-topic z-depth-2'>
           <div className='forum-topic__header'>
             <h2 className='forum-topic__title'>{this.props.topic.title}</h2>
             {/* <Button className='blue btn forum-topic__button--new-topic' onClick={() => Session.set('showPostForm', true)}>Respond</Button> */}
+            {this.props.topic.authorId === Meteor.userId() ?
+              <div>
+                <button className='grey lighten-2 grey-text text-darken-2 btn'
+                  onClick={() => Session.set('showPostForm', true)}>
+                  {/* <i className="material-icons left">mode_edit</i> */}
+                  Respond
+                </button>
+                <button className='forum-topic__button--edit blue lighten-2 white-text btn'
+                  onClick={() => alert('edit feature coming soon...')}>
+                  {/* <i className="material-icons left">mode_edit</i> */}
+                  Edit
+                </button>
+              </div>
+              :
+              <button className='grey lighten-2 grey-text text-darken-2 btn btn-flat'
+                onClick={() => Session.set('showPostForm', true)}>
+                <i className="material-icons left">mode_edit</i>
+                Respond
+              </button>
+            }
           </div>
           <div className='forum-topic__flex-wrapper'>
             <div className='forum-topic__flex-wrapper--left'>
               <div className='forum-topic__body'>{this.props.topic.body}</div>
-              {this.props.topic.authorId === Meteor.userId() ?
-                <Link to='#'>Edit</Link>
-                :
-                <button className='forum-topic__button--respond grey lighten-2 grey-text text-darken-2 btn btn-flat'
-                  onClick={() => Session.set('showPostForm', true)}>
-                  <i className="material-icons left">mode_edit</i>
-                  Respond
-                </button>
-              }
+
               {this.props.showPostForm &&
                 <ForumPostForm topicId={this.props.topic._id} subforumId={this.props.subforumId} firstName={this.props.topic.authorFirstName}/>
               }
               <p
-                className='forum-topic__num-answers'>
-                {this.props.posts.length} {this.props.posts.length === 1 ? 'Answer' : 'Answers'}
+                className='forum-topic__num-responses'>
+                {this.props.posts.length} {this.props.posts.length === 1 ? 'Response' : 'Responses'}
               </p>
             </div>
             <div className='forum-topic__flex-wrapper--right'>
-              <p>Submitted: today</p>
-              <p>By: Sky</p>
-              <p>Viewed: 2 times</p>
+              <p>Submitted: {moment(this.props.topic.createdAt).format('MM-DD-YY')}</p>
+              <p>By: {this.props.topic.authorFirstName}
+                {this.props.topic.authorAvatar ?
+                  <img className='forum-topic__avatar' src={this.props.topic.authorAvatar} />
+                  :
+                  <span className='profile__avatar--inital forum-topic__avatar--initial'>{this.props.topic.authorFirstName.charAt(0)}</span>
+                }
+              </p>
+              <p>Viewed: 10 times</p>
               {/* <div className='forum-topic__info'>
                 {this.props.post.authorAlias ?
                   <img className='forum-post__alias' src={this.props.post.authorAlias} />

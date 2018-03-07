@@ -18,10 +18,25 @@ class Subforum extends React.Component {
     super(props);
 
     this.state = {
-
+      topicListGroup: 1
     };
   }
-
+  componentDidMount() {
+    const numTopics = this.props.topics.length;
+    const topicListGroup = Math.ceil(numTopics / 3);
+    console.log(numTopics);
+    console.log(topicListGroup);
+    // this.setState({topicListGroup})
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.topics.length !== this.props.topics.length) {
+      const numTopics = this.props.topics.length;
+      const topicListGroup = Math.ceil(numTopics / 3);
+      console.log(numTopics);
+      console.log(topicListGroup);
+      // this.setState({topicListGroup})
+    }
+  }
   render() {
     if (this.props.isFetching) {
       return <Loader />
@@ -35,7 +50,7 @@ class Subforum extends React.Component {
           <Button onClick={() => Session.set('showForumTopicForm', true)}>New Topic</Button>
         </div> */}
         { this.props.showForumTopicForm &&
-          <ForumTopicForm subforum={this.props.subforum.name} category={this.props.subforum.category} />
+          <ForumTopicForm subforumId={this.props.subforum._id} category={this.props.subforum.category} />
         }
         <div className='forum-nav-box forum-nav-box--subforum'>
           {/* <div className='forum-nav-box--subforum__flex-wrapper'> */}
@@ -63,23 +78,57 @@ class Subforum extends React.Component {
         {/* <div className='forum-sidebar'></div> */}
         <div className='forum-topic__section--subforum-page'>
           <div className='forum-topic__menu--subforum-page'>
-            <Button className='white black-text' onClick={() => Session.set('showForumTopicForm', true)}>New Topic</Button>
+            <button className='grey darken-4 white-text btn btn-flat' onClick={() => Session.set('showForumTopicForm', true)}>Start a Topic</button>
             <div className='forum-topic__pagination'>
-              <span>Prev</span>
-              <span>1</span>
-              <span>Next</span>
+              <span
+                // className={this.state.topicListGroup !== 1 ? 'black-text' : 'grey-text'}
+                className={`forum-topic__pagination__nav-text ${this.state.topicListGroup !== 1 ? '' : 'disabled'}`}
+                onClick={() => {
+                  if (this.state.topicListGroup !== 1) {
+                    this.setState({topicListGroup: this.state.topicListGroup - 1})
+                  }
+                }}>
+                Previous
+              </span>
+              {this.props.topics.length > 3 ?
+                <span>
+                  {[...Array(Math.ceil(this.props.topics.length / 3)).keys()].map(num =>
+                    <span
+                      key={num}
+                      className={`forum-topic__pagination__number ${this.state.topicListGroup === num + 1 && 'active'}`}
+                      onClick={() => this.setState({topicListGroup: num + 1})}>
+                      {num + 1}
+                    </span>
+                  )}
+                </span>
+                :
+                <span className='forum-topic__pagination__number active'>1</span>
+              }
+              <span
+                className={`forum-topic__pagination__nav-text ${this.state.topicListGroup < this.props.totalTopicListGroups ? '' : 'disabled'}`}
+                onClick={() => {
+                  if (this.state.topicListGroup < this.props.totalTopicListGroups) {
+                    this.setState({topicListGroup: this.state.topicListGroup + 1})
+                  }
+                }}>
+                Next
+              </span>
             </div>
           </div>
           <h5>{this.props.topics.length} {this.props.topics.length === 1 ? 'Topic:' : 'Topics'}</h5>
           {/* <div className='forum__wrapper--subform-page--topics'> */}
             <ul className="forum-topic__list">
-              {this.props.topics.map((topic) => {
+              {this.props.topics.slice(((this.state.topicListGroup - 1) * 3), (this.state.topicListGroup * 3)).map((topic) => {
                 const postResponses = this.props.thisSubforumPosts.filter(post => post.topicId === topic._id);
                 const lastPost = postResponses.length > 0 ? postResponses[postResponses.length - 1] : undefined;
                 return (
                   <li key={topic._id} className="forum-topic__list__item">
                     <div className='forum-topic__list__item--left'>
-                      <img src={topic.authorAvatar} alt="" className="circle" />
+                      {topic.authorAvatar ?
+                        <img src={topic.authorAvatar} alt="" className="circle" />
+                        :
+                        <span className='profile__avatar--inital forum-topic__list__item__avatar--inital'>{topic.authorFirstName.charAt(0)}</span>
+                      }
                       <div className='forum-topic__list__item__main-content'>
                         <Link
                           className='forum-topic__list__item__title'
@@ -122,10 +171,14 @@ export default createContainer(props => {
   const forumPostsHandle = Meteor.subscribe('forumPosts');
   const subforumId = props.computedMatch.params.subforumId;
   const subforum = SubForums.findOne(subforumId);
+  const topics = subforumsHandle.ready() ? Topics.find({subforumId: subforumId}, {sort: {createdAt: -1}}).fetch() : [];
+
   // const userData = Meteor.user() ? Meteor.user() : undefined;
   return {
     subforum,
-    topics: subforumsHandle.ready() ? Topics.find({subforum: subforum.name}).fetch() : [],
+    topics,
+    totalTopicListGroups: Math.ceil(topics.length / 3),
+    // topics: subforumsHandle.ready() ? Topics.find({subforumId: subforumId}).fetch() : [],
     thisSubforumPosts: ForumPosts.find({subforumId: subforumId}).fetch(),
     showForumTopicForm: Session.get('showForumTopicForm') || false,
     isFetching: !subforumsHandle.ready() || !topicsHandle.ready() || !forumPostsHandle.ready() || !Meteor.user(),

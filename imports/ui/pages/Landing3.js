@@ -244,7 +244,7 @@ class Landing extends React.Component {
             <div className="row">
               <div className="col l6 s12">
                 <h5 className="white-text">Have a Question?</h5>
-                <p className="grey-text text-lighten-4">See our <a href='#'>FAQ Page</a> or call our delightful support staff at (212) 787 8000.</p>
+                <p className="grey-text text-lighten-4">See our <a href='#'>FAQ Page</a> or call our support staff at (555)-555-5555.</p>
               </div>
               <div className="col l4 offset-l2 s12">
                 {/* <h5 className="white-text">Links</h5> */}

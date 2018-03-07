@@ -6,6 +6,7 @@ import moment from 'moment';
 import { Session } from 'meteor/session';
 
 import { SubForums } from '/imports/api/forum';
+import { capitalizePhrase } from '/imports/utils/utils';
 
 class ForumTopicForm extends React.Component {
   constructor(props) {
@@ -14,21 +15,52 @@ class ForumTopicForm extends React.Component {
     this.state = {
       title: '',
       body: '',
+      subforumId: props.subforumId || '',
       category: props.category || '',
-      subforum: props.subforum || ''
+      errors: {
+        titleMessage: '',
+        bodyMessage: '',
+        subforumMessage: ''
+      }
     };
   }
 
   handleSubmit(e) {
-    Meteor.call('topics.insert', {subforum: this.state.subforum, title: this.state.title, body: this.state.body},
-      (err, res) => {
-        if (err) {
-          console.log(err);
-        } else {
-          Session.set('showForumTopicForm', false)
+    const title = this.state.title.trim();
+    const body = this.state.body.trim();
+    const subforumId = this.state.subforumId;
+    // console.log(subforumId);
+    const subforumName = SubForums.findOne(subforumId);
+    const errors = {};
+    if (!title) {
+      errors.titleMessage = 'Field is required.';
+    }
+    if (title.length > 140) {
+      errors.titleMessage = 'Title must be less than 140 characters.';
+    }
+    if (!body) {
+      errors.bodyMessage = 'Field is required.';
+    }
+    if (body.length > 2000) {
+      errors.bodyMessage = 'Please shorten your message.';
+    }
+    if (!subforumName) {
+      errors.subforumMessage = 'Please select a board/subforum.';
+    }
+    // console.log(subforum);
+    if (Object.keys(errors).length > 0) {
+      this.setState({errors})
+    } else {
+      Meteor.call('topics.insert', {subforumId, title: capitalizePhrase(title), body},
+        (err, res) => {
+          if (err) {
+            console.log(err);
+          } else {
+            Session.set('showForumTopicForm', false)
+          }
         }
-      }
-    )
+      )
+    }
   }
 
 
@@ -39,36 +71,49 @@ class ForumTopicForm extends React.Component {
     return (
       <div className="forum-topic__form__overlay">
         <div className="forum-topic__form">
-          {/* <h2 className='forum-topic__form__header'>New Post</h2> */}
-
-          {/* <Input s={8} label='Title' labelClassName='active' placeholder='Question/Comment' onChange={(e) => this.setState({title: e.target.value})}/> */}
-          <label htmlFor='title'>Title</label>
-          <div>
-            <textarea id='title' className='forum-topic__form__textarea title' placeholder='Question/Comment' onChange={(e) => this.setState({title: e.target.value})}></textarea>
+          <div className='forum-topic__form__close-icon__wrapper'>
+            <i className='forum-topic__form__close-icon material-icons' onClick={() => Session.set('showForumTopicForm', false)}>close</i>
           </div>
+          <div className="forum-topic__form__flex-wrapper">
+            <div className="forum-topic__form__header">
+              <h3>New Topic</h3>
+              <Input className='forum-topic__form__input--title' name='title' label='Title' value={this.state.title} onChange={(e) => this.setState({title: e.target.value})} />
+              {this.state.errors.titleMessage && <p className='forum__message--error--topic-form'>{this.state.errors.titleMessage}</p>}
+            </div>
+            {/* <Input s={8} label='Title' labelClassName='active' placeholder='Question/Comment' onChange={(e) => this.setState({title: e.target.value})}/> */}
+            {/* <Row> */}
 
-            {/* <Input s={12} type='textarea' label='Details (optional)' onChange={(e) => this.setState({body: e.target.value})}/> */}
-          <label htmlFor='body'>Details (optional)</label>
-          <div>
-            <textarea id='body' className='forum-topic__form__textarea body' onChange={(e) => this.setState({body: e.target.value})}></textarea>
-          </div>
-          {/* <Input s={4} type='select' name='category' label='category' value={this.state.category} onChange={(e) => this.setState({category: e.target.value})}>
-            {this.props.categories.map(category =>
-              <optgroup label='abc'>
-                <option key={category} value={category}>{category}</option>
-              </optgroup>
-            )}
-          </Input> */}
-          <Input s={4} type='select' name='subforum' label='subforum' value={this.state.subforum} onChange={(e) => this.setState({subforum: e.target.value})}>
-            {this.props.subforumsByCat.map(subforumGroup =>
-              <optgroup key={subforumGroup.category} label={subforumGroup.category}>
-                {subforumGroup.subforums.map(subforum =>
-                  <option key={subforum.name} value={subforum.name}>{subforum.name}</option>
+            {/* <label htmlFor='title'>Title</label>
+            <div>
+              <textarea id='title' className='forum-topic__form__textarea title' placeholder='Question/Comment' onChange={(e) => this.setState({title: e.target.value})}></textarea>
+            </div> */}
+            {/* </Row> */}
+
+              {/* <Input s={12} type='textarea' label='Details (optional)' onChange={(e) => this.setState({body: e.target.value})}/> */}
+            <div className='forum-topic__form__textarea-body'>
+              <label htmlFor='body'>Body</label>
+              {/* <div> */}
+              <textarea id='body' onChange={(e) => this.setState({body: e.target.value})}></textarea>
+              {/* </div> */}
+            </div>
+            {this.state.errors.bodyMessage && <p className='forum__message--error--topic-form'>{this.state.errors.bodyMessage}</p>}
+            {/* <Input className='forum-topic__form__dropdown' type='textarea' label='Body' name='body' value={this.state.body} onChange={(e) => this.setState({body: e.target.value})} /> */}
+            {/* <Row> */}
+              <Input className='forum-topic__form__dropdown' type='select' name='subforum' value={this.state.subforumId} onChange={(e) => this.setState({subforumId: e.target.value})}>
+                <option value="" disabled>Select a Board</option>
+                {this.props.subforumsByCat.map(subforumGroup =>
+                  <optgroup key={subforumGroup.category} label={subforumGroup.category}>
+                    {subforumGroup.subforums.map(subforum =>
+                      <option key={subforum._id} value={subforum._id}>{subforum.name}</option>
+                    )}
+                  </optgroup>
                 )}
-              </optgroup>
-            )}
-          </Input>
-          <Button onClick={() => this.handleSubmit()}>Submit</Button>
+              </Input>
+              {this.state.errors.subforumMessage && <p className='forum__message--error--topic-form'>{this.state.errors.subforumMessage}</p>}
+
+            {/* </Row> */}
+            <button className='forum-topic__form__submit-button grey btn btn-flat' onClick={() => this.handleSubmit()}>Submit</button>
+          </div>
         </div>
       </div>
     );

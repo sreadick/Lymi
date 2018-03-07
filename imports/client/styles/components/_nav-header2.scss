@@ -366,12 +366,19 @@
   .nav-header__link--title {
     margin: 0 2rem 0 0;
     color: #f5f5f5;
+    &.topic-page {
+      // color: $green;
+    }
   }
   .nav-header__link--dashboard {
     color: #ccc;
     font-size: 1.2rem;
     font-weight: 500;
     margin-right: 2rem;
+
+    &.topic-page {
+      // color: $green;
+    }
   }
   .nav-header__content--right {
     // width: 18.5rem;
@@ -381,4 +388,9 @@
   .nav-header__button--forum {
     background: black;
   }
+}
+
+.page-footer {
+  // display: none;
+  border-top: 1px solid #aaa;
 }

@@ -29,7 +29,7 @@ const PrivateHeader = (props) => {
           <div className="nav-header__content--right">
             {/* {Meteor.user() && <span className='nav-header__user-email'>{Meteor.user().emails[0].address}</span>} */}
             {/* <Link className="nav-header__link" to="#" onClick={() => Accounts.logout()}>Logout</Link> */}
-            <div className='nav-header__icon__wrapper'>
+            <div className='nav-header__icon__wrapper' onClick={() => alert('FAQ Page Coming Soon!')}>
               <i className='nav-header__icon--help material-icons'>help</i>
             </div>
             {props.path !== '/patient/account' &&

@@ -5,6 +5,7 @@ import { Session } from 'meteor/session';
 import PropTypes from 'prop-types';
 
 import PrivateHeader from '../components/PrivateHeader';
+import Footer from '../components/Footer';
 import ForumHeader from '../components/ForumHeader';
 import SidebarMenu from '../components/patient/SidebarMenu';
 
@@ -30,7 +31,7 @@ const AuthPatientRoute = ({ loggingIn, authenticated, accountType, component, si
           }}>
             <SidebarMenu currentPath={props.location.pathname} sidebarToggled={sidebarToggled}/>
             {isForumPage ?
-              <ForumHeader title="LymeLog" accountType={accountType} {...rest} />
+              <ForumHeader title="Lyme Share" accountType={accountType} {...rest} />
               :
               <PrivateHeader title="LymeLog" accountType={accountType} {...rest} />
             }
@@ -44,6 +45,7 @@ const AuthPatientRoute = ({ loggingIn, authenticated, accountType, component, si
             <div>
               {(React.createElement(component, {...props, ...rest}))}
             </div>
+            <Footer />
           </div>
       );
     }}/>

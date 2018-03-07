@@ -128,9 +128,13 @@ export default createContainer(() => {
         path: "/patient/history/treatments",
         errorMessage: (CheckinHistories.findOne() && checkinHistory.checkins.length === 0) ? "No history to report" : undefined
       },
+      // {
+      //   name: "Account",
+      //   path: "/patient/account",
+      // },
       {
-        name: "Account",
-        path: "/patient/account",
+        name: "Lyme Share",
+        path: "/patient/forum",
       }
     ]
   }
