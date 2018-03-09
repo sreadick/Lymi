@@ -50,11 +50,21 @@ class Profile extends React.Component {
             {this.props.userInfo.profile.userPhoto ?
               <img className='profile__avatar' src={this.props.userInfo.profile.userPhoto} />
             :
-              <div className='profile__avatar--inital'>{this.props.userInfo.profile.firstName.charAt(0)}</div>
+              <div className='profile__avatar--inital'>
+                {this.props.userInfo.username ?
+                  this.props.userInfo.username.charAt(0)
+                  :
+                  this.props.userInfo.profile.firstName.charAt(0)
+                }
+              </div>
             }
             <div>
               <div className='profile__user-name'>
-                { capitalizePhrase(this.props.userInfo.profile.firstName + " " + this.props.userInfo.profile.lastName) }
+                { this.props.userInfo.username ?
+                  this.props.userInfo.username
+                  :
+                  capitalizePhrase(this.props.userInfo.profile.firstName + " " + this.props.userInfo.profile.lastName)
+                }
               </div>
               {this.props.userInfo.account.createdAt &&
                 <div>Joined {moment(this.props.userInfo.account.createdAt).format('MMMM DD, YYYY')}</div>
@@ -130,7 +140,7 @@ class Profile extends React.Component {
                   <li key={topic._id}>
                     <Link to={`/patient/forum/subforum/${topic.subforumId}/topic/${topic._id}`}>{topic.title}</Link>
                     <p>Replies: {posts.length}</p>
-                    <p>{lastPost ? `Last Post: ${moment(lastPost.createdAt).fromNow()} by ${lastPost.authorFirstName}` : ''}</p>
+                    <p>{lastPost ? `Last Post: ${moment(lastPost.createdAt).fromNow()} by ${lastPost.authorUsername || lastPost.authorFirstName}` : ''}</p>
                   </li>
                 )
               })}

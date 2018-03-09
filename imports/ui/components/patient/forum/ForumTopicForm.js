@@ -4,6 +4,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Row, Col, Input, Button } from 'react-materialize';
 import moment from 'moment';
 import { Session } from 'meteor/session';
+import { Redirect } from 'react-router-dom'
 
 import { SubForums } from '/imports/api/forum';
 import { capitalizePhrase } from '/imports/utils/utils';
@@ -21,7 +22,8 @@ class ForumTopicForm extends React.Component {
         titleMessage: '',
         bodyMessage: '',
         subforumMessage: ''
-      }
+      },
+      submitSuccess: false
     };
   }
 
@@ -51,12 +53,16 @@ class ForumTopicForm extends React.Component {
     if (Object.keys(errors).length > 0) {
       this.setState({errors})
     } else {
-      Meteor.call('topics.insert', {subforumId, title: capitalizePhrase(title), body},
+      topicId = Meteor.call('topics.insert', {subforumId, title: capitalizePhrase(title), body},
         (err, res) => {
           if (err) {
             console.log(err);
           } else {
-            Session.set('showForumTopicForm', false)
+            Session.set({
+              'newTopicId': res,
+              'showForumTopicForm': false
+            });
+            this.setState({submitSuccess: true});
           }
         }
       )
@@ -67,6 +73,8 @@ class ForumTopicForm extends React.Component {
   render() {
     if (this.props.isFetching) {
       return <div></div>
+    } else if (this.state.submitSuccess) {
+      return <Redirect to={`/patient/forum/subforum/${this.state.subforumId}/topic/${Session.get('newTopicId')}`} />
     }
     return (
       <div className="forum-topic__form__overlay">
@@ -112,7 +120,7 @@ class ForumTopicForm extends React.Component {
               {this.state.errors.subforumMessage && <p className='forum__message--error--topic-form'>{this.state.errors.subforumMessage}</p>}
 
             {/* </Row> */}
-            <button className='forum-topic__form__submit-button grey btn btn-flat' onClick={() => this.handleSubmit()}>Submit</button>
+            <button className='forum-topic__form__submit-button grey lighten-1 btn btn-flat' onClick={() => this.handleSubmit()}>Submit</button>
           </div>
         </div>
       </div>

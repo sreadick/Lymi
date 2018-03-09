@@ -31,11 +31,17 @@ class ForumTopic extends React.Component {
             {post.authorAvatar ?
               <img className='forum-post__avatar circle' src={post.authorAvatar} />
               :
-              <span className='forum-post__avatar--initial'>{post.authorFirstName.charAt(0)}</span>
+              <span className='forum-post__avatar--initial'>
+                {post.authorUsername ?
+                  post.authorUsername.charAt(0)
+                  :
+                  post.authorFirstName.charAt(0)
+                }
+              </span>
             }
             <div>
-              <h5 className='forum-post__author'>{post.authorFirstName}
-                 {/* <span> (Patient)</span> */}
+              <h5 className='forum-post__author'>
+                {post.authorUsername || post.authorFirstName}
               </h5>
               <h6 className='forum-post__timestamp'>{moment(post.createdAt).fromNow()}</h6>
             </div>
@@ -103,7 +109,7 @@ class ForumTopic extends React.Component {
               <div className='forum-topic__body'>{this.props.topic.body}</div>
 
               {this.props.showPostForm &&
-                <ForumPostForm topicId={this.props.topic._id} subforumId={this.props.subforumId} firstName={this.props.topic.authorFirstName}/>
+                <ForumPostForm topicId={this.props.topic._id} subforumId={this.props.subforumId} />
               }
               <p
                 className='forum-topic__num-responses'>
@@ -112,11 +118,17 @@ class ForumTopic extends React.Component {
             </div>
             <div className='forum-topic__flex-wrapper--right'>
               <p>Submitted: {moment(this.props.topic.createdAt).format('MM-DD-YY')}</p>
-              <p>By: {this.props.topic.authorFirstName}
+              <p>By: {this.props.topic.authorUsername || this.props.topic.authorFirstName}
                 {this.props.topic.authorAvatar ?
                   <img className='forum-topic__avatar' src={this.props.topic.authorAvatar} />
                   :
-                  <span className='profile__avatar--inital forum-topic__avatar--initial'>{this.props.topic.authorFirstName.charAt(0)}</span>
+                  <span className='profile__avatar--inital forum-topic__avatar--initial'>
+                    {this.props.topic.authorUsername ?
+                      this.props.topic.authorUsername.charAt(0)
+                      :
+                      this.props.topic.authorFirstName.charAt(0)
+                    }
+                  </span>
                 }
               </p>
               <p>Viewed: 10 times</p>

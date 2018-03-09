@@ -50,7 +50,11 @@ const ForumHeader = (props) => {
                 <img src={Meteor.user().profile.userPhoto} className='nav-header__avatar nav-header__profile-item' onClick={() => document.getElementById('nav-header__button--avatar').classList.add('active')} />
               :
                 <div className='nav-header__avatar--initial nav-header__profile-item' onClick={() => document.getElementById('nav-header__button--avatar').classList.add('active')}>
-                  {Meteor.user().profile.firstName.charAt(0)}
+                  { Meteor.user().username ?
+                    Meteor.user().username.charAt(0)
+                    :
+                    Meteor.user().profile.firstName.charAt(0)
+                  }
                 </div>
               }
               <div className='nav-header__dropdown--avatar nav-header__profile-item z-depth-4' id='nav-header__dropdown--avatar'>
@@ -59,11 +63,23 @@ const ForumHeader = (props) => {
                     {Meteor.user().profile.userPhoto ?
                       <img src={Meteor.user().profile.userPhoto} className='nav-header__avatar' />
                       :
-                      <div className='nav-header__avatar--initial'> {Meteor.user().profile.firstName.charAt(0)}</div>
+                      <div className='nav-header__avatar--initial'>
+                        { Meteor.user().username ?
+                          Meteor.user().username.charAt(0)
+                          :
+                          Meteor.user().profile.firstName.charAt(0)
+                        }
+                      </div>
                     }
                   </div>
                   <div className='nav-header__dropdown--avatar__top-row__right'>
-                    <div className='nav-header__dropdown--avatar__text'>{Meteor.user().profile.firstName} {Meteor.user().profile.lastName}</div>
+                    <div className='nav-header__dropdown--avatar__text'>
+                      {Meteor.user().username ?
+                        Meteor.user().username
+                        :
+                        Meteor.user().profile.firstName + ' ' + Meteor.user().profile.lastName
+                      }
+                    </div>
                     <div className='nav-header__dropdown--avatar__text--email'>{Meteor.user().emails[0].address}</div>
                     <Link className="btn blue" to="/patient/profile">My Profile</Link>
                   </div>

@@ -95,7 +95,7 @@ class ForumHome extends React.Component {
                     <Link to={`/patient/forum/subforum/${topic.subforumId}/topic/${topic._id}`}>
                       {topic.title.length > 43 ? topic.title.substring(1, 40) + '...' : topic.title}
                     </Link>
-                    <p>By {topic.authorFirstName}</p>
+                    <p>By {topic.authorUsername || topic.authorFirstName}</p>
                   </li>
                 )
               }

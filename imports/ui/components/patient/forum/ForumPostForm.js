@@ -45,12 +45,19 @@ class ForumPostForm extends React.Component {
         <div className="forum-post__form__header valign-wrapper">
           {/* <img src={this.props.userData.profile.userPhoto}/> */}
           <div>
-            <h6>{this.props.userData.profile.firstName}</h6>
+            <h6>{this.props.userData.username || this.props.userData.profile.firstName}</h6>
           </div>
           {this.props.userData.profile.userPhoto ?
             <img className='forum-post__form__avatar' src={this.props.userData.profile.userPhoto} />
             :
-            <div className='profile__avatar--inital forum-post__form__avatar forum-post__form__avatar--initial'>{this.props.userData.profile.firstName.charAt(0)}</div>
+            <div className='profile__avatar--inital forum-post__form__avatar forum-post__form__avatar--initial'>
+              {/* {this.props.userData.profile.firstName.charAt(0)} */}
+              {this.props.userData.username ?
+                this.props.userData.username.charAt(0)
+                :
+                this.props.userData.profile.firstName.charAt(0)
+              }
+            </div>
           }
         </div>
         <textarea id='body' className='forum-post__form__body' placeholder='Write your response' value={this.state.body} onChange={(e) => this.setState({body: e.target.value})}>

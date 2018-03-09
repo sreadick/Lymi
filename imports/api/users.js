@@ -75,13 +75,19 @@ Meteor.publish('allUsers', function() {
 
 Accounts.validateNewUser((user) => {
   const email = user.emails[0].address;
-
+  const username = user.username;
+  console.log(username);
   new SimpleSchema({
     email: {
       type: String,
       regEx: SimpleSchema.RegEx.Email
+    },
+    username: {
+      type: String,
+      min: 4,
+      max: 14
     }
-  }).validate({ email });
+  }).validate({ email, username });
 
   return true;
 });

@@ -18,6 +18,7 @@ class Signup extends React.Component {
       email: '',
       password: '',
       passwordConfirm: '',
+      username: '',
 
       // Doc Specific
       officeAddress: '',
@@ -34,6 +35,7 @@ class Signup extends React.Component {
   }
   handleSubmit() {
     // e.preventDefault();
+    const username = this.state.username.trim();
     const email = this.state.email.trim();
     const password = this.state.password.trim();
     const passwordConfirm = this.state.passwordConfirm.trim();
@@ -75,7 +77,7 @@ class Signup extends React.Component {
       }
     }
 
-    Accounts.createUser({email, password, firstName, lastName, accountType, doctorInfo}, (err) => {
+    Accounts.createUser({username, email, password, firstName, lastName, accountType, doctorInfo}, (err) => {
       if (err) {
         this.setState({error: err.reason});
       } else {
@@ -112,6 +114,10 @@ class Signup extends React.Component {
                   <input type="text" id='lastName' name="lastName" required className='validate' onChange={this.handleChange.bind(this)} />
                   <label className='active' htmlFor='lastName'>Last Name</label>
                 </div>
+              </div>
+              <div className="input-field">
+                <input type="text" id='username' name="username" onChange={this.handleChange.bind(this)}/>
+                <label className='active' htmlFor='username'>User Name</label>
               </div>
               <div className="input-field">
                 <input type="email" id='email' name="email" onChange={this.handleChange.bind(this)}/>

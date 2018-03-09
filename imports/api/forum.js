@@ -72,17 +72,18 @@ Meteor.methods({
       subforumId, title, body
     });
 
-    Topics.insert({
+    SubForums.update(subforumId, {
+      $inc: { numTopics: 1 }
+    });
+    return Topics.insert({
       authorId: this.userId,
+      authorUsername: Meteor.users.findOne(this.userId).username,
       authorFirstName: Meteor.users.findOne(this.userId).profile.firstName,
       authorAvatar: Meteor.users.findOne(this.userId).profile.userPhoto,
       subforumId,
       title,
       body,
       createdAt: moment().valueOf(),
-    });
-    SubForums.update(subforumId, {
-      $inc: { numTopics: 1 }
     });
   },
   'forumPosts.insert'({topicId, subforumId, body}) {
@@ -114,6 +115,7 @@ Meteor.methods({
       subforumId,
       body,
       authorId: this.userId,
+      authorUsername: Meteor.users.findOne(this.userId).username,
       authorFirstName: Meteor.users.findOne(this.userId).profile.firstName,
       authorAvatar: Meteor.users.findOne(this.userId).profile.userPhoto,
       createdAt: moment().valueOf(),

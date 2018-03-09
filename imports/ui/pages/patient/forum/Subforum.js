@@ -8,6 +8,7 @@ import { Session } from 'meteor/session';
 
 import Loader from '/imports/ui/components/Loader';
 import ForumTopicForm from '/imports/ui/components/patient/forum/ForumTopicForm';
+import { TopicPagination } from '/imports/ui/components/patient/forum/TopicPagination';
 
 import { SubForums } from '/imports/api/forum';
 import { Topics } from '/imports/api/forum';
@@ -20,6 +21,8 @@ class Subforum extends React.Component {
     this.state = {
       topicListGroup: 1
     };
+
+    this.changeTopicListGroup = this.changeTopicListGroup.bind(this);
   }
   componentDidMount() {
     const numTopics = this.props.topics.length;
@@ -36,6 +39,9 @@ class Subforum extends React.Component {
       console.log(topicListGroup);
       // this.setState({topicListGroup})
     }
+  }
+  changeTopicListGroup(newGroup) {
+    this.setState({topicListGroup: newGroup})
   }
   render() {
     if (this.props.isFetching) {
@@ -79,20 +85,29 @@ class Subforum extends React.Component {
         <div className='forum-topic__section--subforum-page'>
           <div className='forum-topic__menu--subforum-page'>
             <button className='grey darken-4 white-text btn btn-flat' onClick={() => Session.set('showForumTopicForm', true)}>Start a Topic</button>
-            <div className='forum-topic__pagination'>
-              <span
-                // className={this.state.topicListGroup !== 1 ? 'black-text' : 'grey-text'}
-                className={`forum-topic__pagination__nav-text ${this.state.topicListGroup !== 1 ? '' : 'disabled'}`}
+            {this.props.topics.length > 10 &&
+              <TopicPagination
+                topicListGroup={this.state.topicListGroup}
+                totalTopicListGroups={this.props.totalTopicListGroups}
+                changeTopicListGroup={this.changeTopicListGroup}
+                position='top'
+              />
+            }
+            {/* <div className='forum-topic__pagination'>
+              <div
+                className={`forum-topic__pagination__nav-text valign-wrapper ${this.state.topicListGroup !== 1 ? '' : 'disabled'}`}
                 onClick={() => {
                   if (this.state.topicListGroup !== 1) {
                     this.setState({topicListGroup: this.state.topicListGroup - 1})
                   }
                 }}>
-                Previous
-              </span>
-              {this.props.topics.length > 3 ?
+                <i className='material-icons'>chevron_left</i>
+
+                <span>Previous</span>
+              </div>
+              {this.props.topics.length > 10 ?
                 <span>
-                  {[...Array(Math.ceil(this.props.topics.length / 3)).keys()].map(num =>
+                  {[...Array(Math.ceil(this.props.topics.length / 10)).keys()].map(num =>
                     <span
                       key={num}
                       className={`forum-topic__pagination__number ${this.state.topicListGroup === num + 1 && 'active'}`}
@@ -104,21 +119,22 @@ class Subforum extends React.Component {
                 :
                 <span className='forum-topic__pagination__number active'>1</span>
               }
-              <span
-                className={`forum-topic__pagination__nav-text ${this.state.topicListGroup < this.props.totalTopicListGroups ? '' : 'disabled'}`}
+              <div
+                className={`forum-topic__pagination__nav-text valign-wrapper ${this.state.topicListGroup < this.props.totalTopicListGroups ? '' : 'disabled'}`}
                 onClick={() => {
                   if (this.state.topicListGroup < this.props.totalTopicListGroups) {
                     this.setState({topicListGroup: this.state.topicListGroup + 1})
                   }
                 }}>
-                Next
-              </span>
-            </div>
+                <span>Next</span>
+                <i className='material-icons'>chevron_right</i>
+              </div>
+            </div> */}
           </div>
           <h5>{this.props.topics.length} {this.props.topics.length === 1 ? 'Topic:' : 'Topics'}</h5>
           {/* <div className='forum__wrapper--subform-page--topics'> */}
             <ul className="forum-topic__list">
-              {this.props.topics.slice(((this.state.topicListGroup - 1) * 3), (this.state.topicListGroup * 3)).map((topic) => {
+              {this.props.topics.slice(((this.state.topicListGroup - 1) * 10), (this.state.topicListGroup * 10)).map((topic) => {
                 const postResponses = this.props.thisSubforumPosts.filter(post => post.topicId === topic._id);
                 const lastPost = postResponses.length > 0 ? postResponses[postResponses.length - 1] : undefined;
                 return (
@@ -135,10 +151,10 @@ class Subforum extends React.Component {
                           to={`/patient/forum/subforum/${this.props.subforum._id}/topic/${topic._id}`}>
                           {topic.title}
                         </Link>
-                        <p>By <span>{topic.authorFirstName}</span> on {moment(topic.createdAt).format('MM-DD-YY')}</p>
+                        <p>By <span>{topic.authorUsername || topic.authorFirstName}</span> on {moment(topic.createdAt).format('MM-DD-YY')}</p>
                         {/* <a href="#!" className="secondary-content"><i className="material-icons">grade</i></a> */}
                         {lastPost &&
-                          <p>Latest post: {moment(lastPost.createdAt).fromNow()} by <span>{lastPost.authorFirstName}</span>.</p>
+                          <p>Latest post: {moment(lastPost.createdAt).fromNow()} by <span>{lastPost.authorUsername || lastPost.authorFirstName}</span>.</p>
                         }
                       </div>
                     </div>
@@ -158,6 +174,15 @@ class Subforum extends React.Component {
                 // </li> */}
               )}
             </ul>
+
+            {this.props.topics.length > 10 &&
+              <TopicPagination
+                topicListGroup={this.state.topicListGroup}
+                totalTopicListGroups={this.props.totalTopicListGroups}
+                changeTopicListGroup={this.changeTopicListGroup}
+                position='bottom'
+              />
+            }
           {/* </div> */}
         </div>
       </div>
@@ -177,7 +202,7 @@ export default createContainer(props => {
   return {
     subforum,
     topics,
-    totalTopicListGroups: Math.ceil(topics.length / 3),
+    totalTopicListGroups: Math.ceil(topics.length / 10),
     // topics: subforumsHandle.ready() ? Topics.find({subforumId: subforumId}).fetch() : [],
     thisSubforumPosts: ForumPosts.find({subforumId: subforumId}).fetch(),
     showForumTopicForm: Session.get('showForumTopicForm') || false,
