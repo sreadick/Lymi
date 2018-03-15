@@ -150,14 +150,39 @@ class Profile extends React.Component {
 
           <div className='section profile__section'>
             <div className='profile__heading__wrapper'>
-              <p className='profile__heading'>Lyme Practioner:</p>
+              <p className='profile__heading'>My Medical Info:</p>
+
               <Link className='profile__link' to={{pathname: '/patient/account', state: {activeTab: 'medicalInfo'}}}>edit</Link>
+              {/* <p className='profile__heading'>Lyme Practioner:</p> */}
             </div>
-            {this.props.currentDoctor ?
-              <div>{this.props.currentDoctor.profile.firstName} {this.props.currentDoctor.profile.lastName}</div>
-              :
-              <div>None</div>
-            }
+            <div>
+              <span className=''>Lyme Practioner: </span>
+              {this.props.currentDoctor ?
+                <span>{this.props.currentDoctor.profile.firstName} {this.props.currentDoctor.profile.lastName}</span>
+                :
+                <span>None</span>
+              }
+            </div>
+            <div>
+              <span className=''>Inital Date of Infection: </span>
+              {this.props.userInfo.profile.medical.initialInfectionDate.month ?
+                <span>{this.props.userInfo.profile.medical.initialInfectionDate.month} {this.props.userInfo.profile.medical.initialInfectionDate.day}, {this.props.userInfo.profile.medical.initialInfectionDate.year}</span>
+                :
+                <span>N/A</span>
+              }
+            </div>
+            <div>
+              <span className=''>Tick-Born Infections: </span>
+              {this.props.userInfo.profile.medical.tickBorneDiseases.length > 0 ?
+                <ul>
+                  {this.props.userInfo.profile.medical.tickBorneDiseases.map(diseaseName =>
+                    <li key={diseaseName} className='grey-text'> - {diseaseName}</li>
+                  )}
+                </ul>
+                :
+                <span>N/A</span>
+              }
+            </div>
           </div>
           <hr />
 

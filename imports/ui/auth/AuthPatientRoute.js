@@ -9,32 +9,37 @@ import Footer from '../components/Footer';
 import ForumHeader from '../components/ForumHeader';
 import SidebarMenu from '../components/patient/SidebarMenu';
 
-const AuthPatientRoute = ({ loggingIn, authenticated, accountType, component, sidebarToggled, showProfileBackgroundModel, showProfileImageModel, isForumPage, ...rest }) => {
+const AuthPatientRoute = ({ loggingIn, authenticated, account, component, sidebarToggled, showProfileBackgroundModel, showProfileImageModel, isForumPage, ...rest }) => {
   return (
     <Route render={(props) => {
       return (
         !authenticated ?
           // <Redirect to="/login" />
           <Redirect to="/" />
-        : accountType === 'doctor' ?
+        : account.type === 'doctor' ?
           <Redirect to="/doctor" />
-        : accountType === 'admin' ?
+        : account.type === 'admin' ?
           <Redirect to="/admin" />
         :
           <div className="page" onClick={(e) => {
             const navHeaderProfileDropdown = document.getElementById('nav-header__dropdown--avatar');
             const navHeaderAvatarButton = document.getElementById('nav-header__button--avatar');
+            const navHeaderNotificationsDropdown = document.getElementById('nav-header__dropdown--notifications');
+            const navHeaderNotificationsButton = document.getElementById('nav-header__button--notifications');
             if (navHeaderProfileDropdown.classList.contains('active') && !e.target.classList.contains('nav-header__profile-item')) {
               navHeaderAvatarButton.classList.remove('active')
               navHeaderProfileDropdown.classList.remove('active')
+            } else if (navHeaderNotificationsDropdown && navHeaderNotificationsDropdown.classList.contains('active') && !e.target.classList.contains('nav-header__notifications-item')) {
+              navHeaderNotificationsButton.classList.remove('active')
+              navHeaderNotificationsDropdown.classList.remove('active')
             }
           }}>
             <SidebarMenu currentPath={props.location.pathname} sidebarToggled={sidebarToggled}/>
-            {isForumPage ?
-              <ForumHeader title="Lyme Share" accountType={accountType} {...rest} />
-              :
-              <PrivateHeader title="LymeLog" accountType={accountType} {...rest} />
-            }
+            {/* {isForumPage ?
+              <ForumHeader title="Lyme Share" accountType={account.type} {...rest} />
+              : */}
+              <PrivateHeader title={!isForumPage ? 'LymeLog' : "Lyme Share" } accountType={account.type} isForumPage={isForumPage} {...rest} />
+            {/* } */}
             {(sidebarToggled || showProfileBackgroundModel || showProfileImageModel) &&
               <div className='page-content--overlay' onClick={() => {
                 Session.set('sidebarToggled', false);

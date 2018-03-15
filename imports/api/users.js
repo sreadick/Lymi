@@ -135,7 +135,12 @@ Accounts.onCreateUser((options, user) => {
     user.profile.medical = {
       tickBorneDiseases: [],
       appointments: [],
-      initialInfectionDate: '',
+      // initialInfectionDate: '',
+      initialInfectionDate: {
+        month: undefined,
+        day: undefined,
+        year: undefined,
+      },
     }
 
     user.profile.settings = {

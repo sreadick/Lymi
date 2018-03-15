@@ -15,7 +15,14 @@ const AuthDoctorRoute = ({ loggingIn, authenticated, account, component, sidebar
           // <Redirect to="/login" />
           <Redirect to="/" />
         : account.type === 'doctor' ?
-          <div className="page doctor">
+          <div className="page doctor" onClick={(e) => {
+            const navHeaderProfileDropdown = document.getElementById('nav-header__dropdown--avatar');
+            const navHeaderAvatarButton = document.getElementById('nav-header__button--avatar');
+            if (navHeaderProfileDropdown.classList.contains('active') && !e.target.classList.contains('nav-header__profile-item')) {
+              navHeaderAvatarButton.classList.remove('active')
+              navHeaderProfileDropdown.classList.remove('active')
+            }
+          }}>
             {/* <SidebarMenu currentPath={props.location.pathname} sidebarToggled={sidebarToggled}/> */}
             <PrivateHeader title="LymeLog-MD" accountType={account.type} />
             <div>

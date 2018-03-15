@@ -16,11 +16,18 @@ class MedicalInfo extends React.Component {
     const { tickBorneDiseases, initialInfectionDate, appointments } = props.medicalInfo;
 
     this.state = {
-      tickBorneDiseases, initialInfectionDate, appointments,
-      // searchedDocInfo: {}
+      tickBorneDiseases,
+      appointments,
+      initialInfectionDate: {
+        month: initialInfectionDate.month || undefined,
+        day: initialInfectionDate.day || 0,
+        year: initialInfectionDate.year || 0
+      },
+      errors: {}
     };
 
     this.handleChange = this.handleChange.bind(this);
+    this.handleDiagnosisChange = this.handleDiagnosisChange.bind(this);
     this.toggleTickBorneDisease = this.toggleTickBorneDisease.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.confirmAppointmentDate = this.confirmAppointmentDate.bind(this);
@@ -29,6 +36,17 @@ class MedicalInfo extends React.Component {
     this.setState({
       [e.target.name]: e.target.value
     });
+  }
+  handleDiagnosisChange(newValue, field) {
+    const initialInfectionDate = Object.assign({}, this.state.initialInfectionDate);
+    initialInfectionDate[field] = newValue;
+    if (field === 'day' && newValue.length > 2) {
+      return;
+    } else if (field === 'year' && newValue.length > 4) {
+      return;
+    } else {
+      this.setState({initialInfectionDate});
+    }
   }
   toggleTickBorneDisease(e) {
     const tickBorneDiseases = this.state.tickBorneDiseases.slice();
@@ -42,6 +60,23 @@ class MedicalInfo extends React.Component {
     });
   }
   handleSubmit(e) {
+    e.preventDefault();
+
+    if (this.state.initialInfectionDate.month) {
+      if (!this.state.initialInfectionDate.day || this.state.initialInfectionDate.day.length < 2 || this.state.initialInfectionDate.day < 1 || this.state.initialInfectionDate.day > 31) {
+        this.setState({errors: {initialInfectionDay: 'Invalid entry'}})
+        return;
+      } else if (!this.state.initialInfectionDate.year || this.state.initialInfectionDate.year.length < 4 || this.state.initialInfectionDate.year < 1900 || this.state.initialInfectionDate.year > 2018) {
+        this.setState({errors: {initialInfectionYear: 'Invalid entry'}})
+        return;
+      }
+    } else if (this.state.initialInfectionDate.day || this.state.initialInfectionDate.year) {
+      this.setState({errors: {initialInfectionMonth: 'Please select a month'}})
+      return;
+    }
+
+    this.setState({errors: {}});
+
     Object.entries(this.state).forEach(([key, value]) => {
       Meteor.users.update(Meteor.userId(), {
         $set: {
@@ -53,9 +88,7 @@ class MedicalInfo extends React.Component {
     this.refs.formSubmitResponse.classList.add('show');
     setTimeout(() => {
       this.refs.formSubmitResponse.classList.remove('show')
-    }, 2000)
-
-    e.preventDefault();
+    }, 2000);
   }
   confirmAppointmentDate(day, time, method) {
     // console.log(moment(day).add(4, 'hours'));
@@ -132,8 +165,40 @@ class MedicalInfo extends React.Component {
               <Input key={disease} name='tickBorneDiseases' type='checkbox' label={disease} value={disease} defaultChecked={this.state.tickBorneDiseases.includes(disease)} onChange={this.toggleTickBorneDisease} />
             )}
           </Row>
+          <div className='account-info__subheading'>Date of initial infection</div>
           <Row>
-            <Input s={4} name='initialInfectionDate' label='Date of initial infection' defaultValue={this.state.initialInfectionDate} placeholder='MM/YY' labelClassName='active' onChange={this.handleChange} />
+            {/* <Input s={4} name='initialInfectionDate' label='Date of initial infection' defaultValue={this.state.initialInfectionDate} placeholder='MM/YY' labelClassName='active' onChange={this.handleChange} /> */}
+            {/* <Input s={2} label='Month' defaultValue={this.state.initialInfectionDate.month} labelClassName='active' onChange={(e) => this.handleDiagnosisChange(e.target.value, 'month')} /> */}
+            <div className='col s4'>
+              <Input s={12} type='select' label='Month' value={this.state.initialInfectionDate.month} onChange={(e) => this.handleDiagnosisChange(e.target.value, 'month')}>
+                <option value=''></option>
+                <option value='January'>January</option>
+                <option value='February'>February</option>
+                <option value='March'>March</option>
+                <option value='April'>April</option>
+                <option value='May'>May</option>
+                <option value='June'>June</option>
+                <option value='July'>July</option>
+                <option value='August'>August</option>
+                <option value='September'>September</option>
+                <option value='October'>October</option>
+                <option value='November'>November</option>
+                <option value='December'>December</option>
+              </Input>
+              {this.state.errors.initialInfectionMonth && <p className='red-text'>{this.state.errors.initialInfectionMonth}</p>}
+            </div>
+            <div className='col s2 input-field'>
+              <input type='number' id='initialInfectionDay' label='Day' value={this.state.initialInfectionDate.day} placeholder='DD' onChange={(e) => this.handleDiagnosisChange(e.target.value, 'day')} />
+              <label className='active' htmlFor='initialInfectionDay'>Day</label>
+              {this.state.errors.initialInfectionDay && <p className='red-text'>{this.state.errors.initialInfectionDay}</p>}
+            </div>
+            <div className='col s2 input-field'>
+              <input type='number' id='initialInfectionYear' label='Year' value={this.state.initialInfectionDate.year} placeholder='YYYY' onChange={(e) => this.handleDiagnosisChange(e.target.value, 'year')} />
+              <label className='active' htmlFor='initialInfectionYear'>Year</label>
+              {this.state.errors.initialInfectionYear && <p className='red-text'>{this.state.errors.initialInfectionYear}</p>}
+            </div>
+            {/* <Input s={2} type='number' label='Day' value={this.state.initialInfectionDate.day} placeholder='DD' labelClassName='active' onChange={(e) => this.handleDiagnosisChange(e.target.value, 'day')} /> */}
+            {/* <Input s={2} type='number' label='Year' value={this.state.initialInfectionDate.year} placeholder='YYYY' labelClassName='active' onChange={(e) => this.handleDiagnosisChange(e.target.value, 'year')} /> */}
           </Row>
           <div className='center-align'>
             <Button className='black' waves='light'>Save</Button>

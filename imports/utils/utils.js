@@ -1,5 +1,10 @@
 import moment from 'moment';
 
+import { UserSymptoms } from '/imports/api/user-symptoms';
+import { UserTreatments } from '/imports/api/user-treatments';
+import { CheckinHistories } from '/imports/api/checkin-histories';
+import { Requests } from '/imports/api/requests';
+
 export const getNextColor = (lastSymptomIndex) => {
   // const colorsArray = ['#E57373', '#4DB6AC', '#BA68C8', '#D4E157', '#69F0AE', '#FF5722', '#795548', '#607D8B', '#FF8A80', '#5C6BC0', '#8C9EFF', '#009688', '#7CB342', '#FFEB3B', '#00BCD4', '#5E35B1', '#3949AB', '#D50000', '#80CBC4', '#880E4F', '#2196F3', '#9E9D24', '#558B2F'];
   const colorsArray = ['#b39ddb', '#e57373', '#90caf9', '#ffab91', '#81C784', '#A1887F', '#F06292', '#7986CB', '#E0E0E0', '#4DB6AC', '#BA68C8', '#DCE775', '#90A4AE', '#FFB74D', '#AED581', '#4FC3F7', '#FFD54F'];
@@ -93,7 +98,6 @@ export const sortSymptoms = (symptoms, checkins, startDate, endDate) => {
     }
   });
     // return symptomsWithChangeAttr.sort((a, b) => b.biggestChangeAverage - a.biggestChangeAverage);
-
 }
 
   // else if (sortBy === 'highest') {
@@ -129,3 +133,37 @@ export const sortSymptoms = (symptoms, checkins, startDate, endDate) => {
   //   });
   //   return symptomsWithChangeAttr.sort((a, b) => b.severityAverage - a.severityAverage);
   // }
+export const getTasks = () => {
+  const symptomsHandle = Meteor.subscribe('userSymptoms');
+  const treatmentsHandle = Meteor.subscribe('userTreatments');
+  const checkinHandle = Meteor.subscribe('checkinHistories');
+  const requestsHandle = Meteor.subscribe('requestsToUser');
+
+  const checkinHistory =  CheckinHistories.findOne();
+  const userTreatments = UserTreatments.find().fetch();
+  const userSymptoms =  UserSymptoms.find().fetch();
+
+  const todayTreatments = filterCurrentDayTreatments(userTreatments);
+
+  const currentDate = moment().format('MMMM Do YYYY');
+  const todaysCheckin = (checkinHandle.ready() && checkinHistory) ? checkinHistory.checkins.find((checkin) => checkin.date === currentDate) : undefined;
+
+  const trackedItems = Meteor.user().profile.settings.trackedItems;
+
+
+  let dailyCheckinStatus;
+  if ((checkinHandle.ready() && todaysCheckin) && (userSymptoms.every(userSymptom => todaysCheckin.symptoms.find(checkinSymptom => (checkinSymptom.name === userSymptom.name && checkinSymptom.severity > 0))) && (todayTreatments.every(userTreatment => todaysCheckin.treatments.find(checkinTreatment => (checkinTreatment.name === userTreatment.name && checkinTreatment.compliance !== null))) || !trackedItems.includes('treatments')))) {
+    dailyCheckinStatus = 'complete';
+  } else if ((checkinHandle.ready() && todaysCheckin) && (userSymptoms.some(userSymptom => todaysCheckin.symptoms.find(checkinSymptom => (checkinSymptom.name === userSymptom.name && checkinSymptom.severity > 0))) || (todayTreatments.some(userTreatment => todaysCheckin.treatments.find(checkinTreatment => (checkinTreatment.name === userTreatment.name && checkinTreatment.compliance !== null))) || !trackedItems.includes('treatments')))) {
+    dailyCheckinStatus = 'partially complete';
+  } else {
+    dailyCheckinStatus = 'incomplete';
+  }
+
+
+  return {
+    dailyCheckinStatus,
+    requests: Requests.find().fetch(),
+    doctorIsLinked: Meteor.user().doctorId ? true : false
+  }
+}

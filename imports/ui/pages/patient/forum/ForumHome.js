@@ -2,7 +2,7 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Link, Redirect } from 'react-router-dom';
 import moment from 'moment';
-import { Row, Col, Input, Button, Modal } from 'react-materialize';
+import { Row, Col, Input, Button, Modal, Autocomplete } from 'react-materialize';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
 
@@ -18,7 +18,8 @@ class ForumHome extends React.Component {
     super(props);
 
     this.state = {
-
+      searchText: '',
+      searchBoard: 'all'
     };
   }
 
@@ -42,7 +43,29 @@ class ForumHome extends React.Component {
         <div className='forum-nav-box forum-nav-box--home'>
           <h2>Welcome to Lyme Share</h2>
           <p>Search for a topic or <span onClick={() => Session.set('showForumTopicForm', true)}>start a new one</span>.</p>
-          <Input placeholder='Search'/>
+          <Row>
+            <Input s={8} value={this.state.searchText} placeholder='Search' />
+            {/* <Autocomplete s={8} value={this.state.searchText} placeholder='Search'
+              data={
+                this.props.topics.map(topic =>
+                  {
+                    ['topic.title']: null
+                  }
+                )
+              }
+            /> */}
+            <Input s={4} type='select' defaultValue={this.state.searchBoard}>
+              <option value='all' onChange={() => this.setState({searchBoard: 'all'})}>All Boards</option>
+              {this.props.subforums.map((subforum, index, array) =>
+                <option
+                  key={subforum._id}
+                  value={subforum._id}
+                  onChange={() => this.setState({searchBoard: subforum._id})}>
+                  {subforum.name}
+                </option>
+              )}
+            </Input>
+          </Row>
         </div>
         <div className='forum__flex-wrapper--home'>
           <div className='forum-table z-depth-1'>
@@ -113,6 +136,7 @@ export default createContainer(props => {
   const topicsHandle = Meteor.subscribe('topics');
   return {
     showForumTopicForm: Session.get('showForumTopicForm'),
+    topics: Topics.find({}).fetch(),
     latestTopics: Topics.find({}, {sort: {createdAt: -1}, limit: 10}).fetch(),
     subforums: SubForums.find().fetch(),
     isFetching: !subforumsHandle.ready() || !topicsHandle.ready()
