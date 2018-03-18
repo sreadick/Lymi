@@ -11,6 +11,8 @@ import { getTasks } from '../../utils/utils';
 
 import { UserSymptoms } from '/imports/api/user-symptoms';
 import { UserTreatments } from '/imports/api/user-treatments';
+// import { ForumPosts } from '/imports/api/forum';
+import { Topics } from '/imports/api/forum';
 
 const PrivateHeader = (props) => {
   // if (window.innerWidth > 768) {
@@ -54,13 +56,16 @@ const PrivateHeader = (props) => {
                 navHeaderNotificationsDropdown.classList.add('active');
               }}>
               <i
-                className={`nav-header__icon--help material-icons nav-header__notifications-item ${(props.currentTasks.dailyCheckinStatus !== 'complete' || props.currentTasks.requests.length > 0) ? 'green-text' : !props.currentTasks.doctorIsLinked ? 'blue-text text-darken-2' : 'black-text'}`}
+                className={`nav-header__icon--help material-icons nav-header__notifications-item ${(props.currentTasks.dailyCheckinStatus !== 'complete' || props.currentTasks.requests.length > 0) ? 'green-text' : (!props.currentTasks.doctorIsLinked || props.currentTasks.newPosts.length > 0) ? 'blue-text text-darken-2' : 'black-text'}`}
                 onClick={() => document.getElementById('nav-header__button--notifications').classList.add('active')}>
-                {props.currentTasks.dailyCheckinStatus !== 'complete' ? 'notifications_active' : !props.currentTasks.doctorIsLinked ? 'notifications' : 'notifications_none'}
+                {props.currentTasks.dailyCheckinStatus !== 'complete' ? 'notifications_active' : (!props.currentTasks.doctorIsLinked || props.currentTasks.newPosts.length > 0) ? 'notifications' : 'notifications_none'}
               </i>
 
               <div className='nav-header__dropdown--notifications nav-header__notifications-item z-depth-4' id='nav-header__dropdown--notifications'>
-                {props.currentTasks.dailyCheckinStatus !== 'complete' || props.currentTasks.requests.length > 0 || !props.currentTasks.doctorIsLinked
+                <div className='nav-header__dropdown--notifications__heading'>
+                  Notifications
+                </div>
+                {props.currentTasks.dailyCheckinStatus !== 'complete' || props.currentTasks.requests.length > 0 || !props.currentTasks.doctorIsLinked || props.currentTasks.newPosts.length > 0
                 ?
                 <div>
                   {props.currentTasks.dailyCheckinStatus !== 'complete' &&
@@ -127,8 +132,34 @@ const PrivateHeader = (props) => {
                         }}>
                         Select Lyme Doctor
                       </Link>
+                      </div>
                     </div>
-                    </div>
+                  }
+                  {props.currentTasks.newPosts.length > 0 &&
+                    props.currentTasks.newPosts.map((post) => {
+                      const topic = Topics.findOne(post.topicId);
+                      return (
+                        <div key={post._id}>
+                          <div className='row'>
+                            <div className='col s12'>
+                              <span className=''>{post.authorUsername || post.authorFirstName}</span>
+                              <span> responded to </span>
+                              <Link
+                                className=''
+                                onClick={() => Meteor.call('forumPosts.update',
+                                  {postId: post._id, updateProp: 'viewedByTopicAuthor', newValue: true}
+                                )}
+                                to={`/patient/forum/subforum/${topic.subforumId}/topic/${topic._id}`}>
+                                {topic.title}
+                              </Link>
+                            </div>
+                            <div className='col s12 grey-text text-darken-2'>
+                              -{moment(post.createdAt).fromNow()}
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    })
                   }
                 </div>
                 :
@@ -206,9 +237,14 @@ export default createContainer(props => {
 
   const symptomsHandle = Meteor.subscribe('userSymptoms');
   const treatmentsHandle = Meteor.subscribe('userTreatments');
+  // const forumPostsHandle = Meteor.subscribe('forumPosts');
+  const topicsHandle = Meteor.subscribe('topics');
 
   const userTreatments = UserTreatments.find().fetch();
   const userSymptoms =  UserSymptoms.find().fetch();
+  // const userTopics = Topics.find({authorId: Meteor.userId()}).fetch();
+  // const newPosts = ForumPosts.find({topicAuthorId: Meteor.userId(), viewedByTopicAuthor: false}).fetch();
+  // console.log(newPosts);
 
   return {
     sidebarToggled: Session.get('sidebarToggled') || false,
@@ -219,7 +255,7 @@ export default createContainer(props => {
     userTreatments,
     currentTasks,
     isTopicPage: props.path === '/patient/forum/subforum/:subforumId/topic/:topicId',
-    isfetching: !symptomsHandle.ready() || !treatmentsHandle.ready() || !Meteor.user(),
+    isfetching: !symptomsHandle.ready() || !treatmentsHandle.ready() || !topicsHandle.ready() || !Meteor.user(),
   }
 }, PrivateHeader)
 // export default PrivateHeader;

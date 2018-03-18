@@ -169,7 +169,7 @@ export default createContainer(props => {
     subforumId,
     subforumTitle: subforumsHandle.ready() && SubForums.findOne(subforumId).name,
     topic: Topics.findOne(topicId),
-    posts: ForumPosts.find({topicId: topicId}).fetch(),
+    posts: ForumPosts.find({topicId: topicId}, {sort: {createdAt: -1}}).fetch(),
     userData,
     showPostForm,
     isFetching: !forumPostsHandle || !topicsHandle.ready() || !subforumsHandle.ready() || !userData,

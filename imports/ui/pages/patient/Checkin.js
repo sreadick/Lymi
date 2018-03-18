@@ -31,7 +31,8 @@ class Checkin extends React.Component {
     if (component !== 'dashboard') {
       this.setState({checkinComponent: component})
     } else {
-      this.props.history.push('/patient')
+      document.getElementById('message--dashboard--success').classList.add('active');
+      this.props.history.push('/patient/dashboard')
     }
   }
   render() {

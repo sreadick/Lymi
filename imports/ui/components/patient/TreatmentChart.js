@@ -2,11 +2,11 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import moment from 'moment';
-import {isTreatmentPrescribed} from '../../../utils/utils';
+import { isTreatmentPrescribed, getColor} from '../../../utils/utils';
 
 import { UserTreatments } from '../../../api/user-treatments';
 
-const colorsArray = ['#b39ddb', '#e57373', '#90caf9', '#ffab91', '#81C784', '#A1887F', '#F06292', '#7986CB', '#E0E0E0', '#4DB6AC', '#BA68C8', '#DCE775', '#90A4AE', '#FFB74D', '#AED581', '#4FC3F7', '#FFD54F'];
+// const colorsArray = ['#b39ddb', '#e57373', '#90caf9', '#ffab91', '#81C784', '#A1887F', '#F06292', '#7986CB', '#E0E0E0', '#4DB6AC', '#BA68C8', '#DCE775', '#90A4AE', '#FFB74D', '#AED581', '#4FC3F7', '#FFD54F'];
 
 const TreatmentChart = (props) => {
   return (
@@ -23,7 +23,7 @@ const TreatmentChart = (props) => {
       </div>
       <div className='treatment-chart__container'>
         <div className='treatment-chart__item__container z-depth-3'>
-          {props.treatments.map((treatment) =>
+          {props.treatments.map((treatment, treatmentIndex) =>
             <div key={treatment.name} className='treatment-chart__item'>
               {props.checkins.map((checkin) => {
                 let checkinTreatment;
@@ -42,14 +42,15 @@ const TreatmentChart = (props) => {
                       checkinTreatment ?
                         (checkinTreatment.compliance === 'NPD' || !checkinTreatment.prescribedToday) ? '#fff'
                         :
-                        checkinTreatment.compliance === 'Some' ? `repeating-linear-gradient(-55deg, ${treatment.color}, ${treatment.color} 3px, #f5f5f5 6px, #f5f5f5 9px)`
+                        // checkinTreatment.compliance === 'Some' ? `repeating-linear-gradient(-55deg, ${treatment.color}, ${treatment.color} 3px, #f5f5f5 6px, #f5f5f5 9px)`
+                        checkinTreatment.compliance === 'Some' ? `repeating-linear-gradient(-55deg, ${getColor(treatmentIndex)}, ${getColor(treatmentIndex)} 3px, #333 6px)`
                         :
-                        treatment.color
+                        getColor(treatmentIndex)
                         // (checkinTreatment.compliance === 'Yes' || checkinTreatment.compliance === 'No' || checkinTreatment.compliance === 'NPD') ? treatment.color
 
                         // checkinTreatment.compliance === 'No' ? 'red' :
                       :
-                      treatment.color
+                      getColor(treatmentIndex)
                       // treatment.color
                       // '#fff'
                     }} >

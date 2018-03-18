@@ -112,12 +112,14 @@ Meteor.methods({
       // patientId: this.userId, // change to authorId
       // patientFirstName: Meteor.users.findOne(this.userId).profile.firstName,  // ""
       topicId,
+      topicAuthorId: Topics.findOne(topicId).authorId,
       subforumId,
       body,
       authorId: this.userId,
       authorUsername: Meteor.users.findOne(this.userId).username,
       authorFirstName: Meteor.users.findOne(this.userId).profile.firstName,
       authorAvatar: Meteor.users.findOne(this.userId).profile.userPhoto,
+      viewedByTopicAuthor: this.userId === Topics.findOne(topicId).authorId ? true : false,
       createdAt: moment().valueOf(),
     });
     SubForums.update({_id: subforumId}, {
@@ -126,6 +128,16 @@ Meteor.methods({
       },
       $set: {
         lastPostTime: moment().valueOf()
+      }
+    });
+  },
+  'forumPosts.update'({postId, updateProp, newValue}) {
+    if (!this.userId) {
+      throw new Meteor.Error('not-authorized');
+    }
+    ForumPosts.update({_id: postId}, {
+      $set: {
+        [updateProp]: newValue
       }
     });
   },

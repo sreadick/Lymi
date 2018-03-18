@@ -34,6 +34,11 @@ const Dashboard = (props) => {
   }
   return (
     <div className="">
+      {/* {props.showCheckinMessage && (
+        const el = document.getElementById('message--dashboard--success');
+        el.classList.remove('active')
+        )
+      } */}
       <div className='dashboard-user-info' style={{backgroundImage: Meteor.user() ? `url(${Meteor.user().profile.backgroundURL})` : '' }}>
         <div className='dashboard-user-info__top-row valign-wrapper'>
           <div>
@@ -227,6 +232,11 @@ export default createContainer(() => {
     dailyCheckinStatus = 'incomplete';
   }
   const activeSegmentNumber = userSymptoms.length > 3 ? (Session.get('activeSegmentNumber_dashboard') || 1) : undefined;
+
+  // const showCheckinMessage = Session.get('showCheckinMessage') || false;
+  // if (showCheckinMessage) {
+  //   document.getElementById
+  // }
   return {
     userSymptoms,
     userTreatments,
@@ -239,7 +249,7 @@ export default createContainer(() => {
     activeSegmentSymptoms: activeSegmentNumber ? userSymptoms.slice((activeSegmentNumber - 1) * 3, activeSegmentNumber * 3) : undefined,
     userPhoto: (Meteor.user() && Meteor.user().profile.userPhoto) ? Meteor.user().profile.userPhoto : undefined,
     todayTreatments,
-    trackedItems
-
+    trackedItems,
+    // showCheckinMessage
   };
 }, Dashboard);

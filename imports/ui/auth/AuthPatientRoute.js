@@ -38,8 +38,24 @@ const AuthPatientRoute = ({ loggingIn, authenticated, account, component, sideba
             {/* {isForumPage ?
               <ForumHeader title="Lyme Share" accountType={account.type} {...rest} />
               : */}
-              <PrivateHeader title={!isForumPage ? 'LymeLog' : "Lyme Share" } accountType={account.type} isForumPage={isForumPage} {...rest} />
+            <PrivateHeader title={!isForumPage ? 'LymeLog' : "Lyme Share" } accountType={account.type} isForumPage={isForumPage} {...rest} />
             {/* } */}
+            <div className='message__wrapper--dashboard'>
+              <div
+                className='message--dashboard--success'
+                id='message--dashboard--success'
+                onTransitionEnd={() => {
+                  this.setTimeout(() => {
+                    document.getElementById('message--dashboard--success').classList.remove('active');
+                  }, 5000);
+                }}>
+                <span>Thanks for checking in!</span>
+                <i className="material-icons right"
+                  onClick={(e) => document.getElementById('message--dashboard--success').classList.remove('active')}>
+                  close
+                </i>
+              </div>
+            </div>
             {(sidebarToggled || showProfileBackgroundModel || showProfileImageModel) &&
               <div className='page-content--overlay' onClick={() => {
                 Session.set('sidebarToggled', false);

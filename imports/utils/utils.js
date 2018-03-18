@@ -4,6 +4,8 @@ import { UserSymptoms } from '/imports/api/user-symptoms';
 import { UserTreatments } from '/imports/api/user-treatments';
 import { CheckinHistories } from '/imports/api/checkin-histories';
 import { Requests } from '/imports/api/requests';
+import { ForumPosts } from '/imports/api/forum';
+
 
 export const getNextColor = (lastSymptomIndex) => {
   // const colorsArray = ['#E57373', '#4DB6AC', '#BA68C8', '#D4E157', '#69F0AE', '#FF5722', '#795548', '#607D8B', '#FF8A80', '#5C6BC0', '#8C9EFF', '#009688', '#7CB342', '#FFEB3B', '#00BCD4', '#5E35B1', '#3949AB', '#D50000', '#80CBC4', '#880E4F', '#2196F3', '#9E9D24', '#558B2F'];
@@ -16,7 +18,7 @@ export const getNextColor = (lastSymptomIndex) => {
 }
 
 export const getColor = (itemIndex) => {
-  const colorsArray = ['#b39ddb', '#e57373', '#90caf9', '#ffab91', '#81C784', '#A1887F', '#F06292', '#7986CB', '#E0E0E0', '#4DB6AC', '#BA68C8', '#DCE775', '#90A4AE', '#FFB74D', '#AED581', '#4FC3F7', '#FFD54F'];
+  const colorsArray = ['#0000ff', '#ff0000', '#00ff00', '#ffff00', '#7f00ff', '#00ffff', '#ff8000', '#0000ff', '#ff0000', '#00ff00', '#ffff00', '#7f00ff', '#00ffff', '#ff8000'];
   return colorsArray[itemIndex];
 }
 
@@ -189,6 +191,7 @@ export const getTasks = () => {
   const treatmentsHandle = Meteor.subscribe('userTreatments');
   const checkinHandle = Meteor.subscribe('checkinHistories');
   const requestsHandle = Meteor.subscribe('requestsToUser');
+  const forumPostsHandle = Meteor.subscribe('forumPosts');
 
   const checkinHistory =  CheckinHistories.findOne();
   const userTreatments = UserTreatments.find().fetch();
@@ -211,10 +214,12 @@ export const getTasks = () => {
     dailyCheckinStatus = 'incomplete';
   }
 
-
+  const newPosts = ForumPosts.find({topicAuthorId: Meteor.userId(), viewedByTopicAuthor: false}).fetch();
+  console.log(newPosts);
   return {
     dailyCheckinStatus,
     requests: Requests.find().fetch(),
-    doctorIsLinked: Meteor.user().doctorId ? true : false
+    doctorIsLinked: Meteor.user().doctorId ? true : false,
+    newPosts: ForumPosts.find({topicAuthorId: Meteor.userId(), viewedByTopicAuthor: false}).fetch()
   }
 }
