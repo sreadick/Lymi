@@ -60,7 +60,8 @@ export class TreatmentEditor3 extends React.Component {
       dose_type: treatment === null ? 'mg' : treatment.dose_type,
       frequency: treatment === null ? '1' : treatment.frequency,
       daysOfWeek: treatment === null ? ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] : treatment.daysOfWeek,
-      startDateValue: treatment === null ? 0 : treatment.startDateValue,
+      // startDateValue: treatment === null ? 0 : treatment.startDateValue,
+      startDateValue: treatment === null ? moment().startOf('day').valueOf() : treatment.startDateValue,
       endDateValue: treatment === null ? 0 : treatment.endDateValue,
       dateSelectMode: treatment === null ? 'daily' : treatment.dateSelectMode,
       individualDateValues: treatment === null ? [] : treatment.individualDateValues,
@@ -123,7 +124,8 @@ export class TreatmentEditor3 extends React.Component {
       treatmentSuggestions: [],
       selectedTab: 'name',
       focusedInput: 'startDate',
-      startDate: treatment === null ? null : !treatment.startDateValue ? null : moment(treatment.startDateValue),
+      // startDate: treatment === null ? null : !treatment.startDateValue ? null : moment(treatment.startDateValue),
+      startDate: treatment === null ? moment().startOf('day') : !treatment.startDateValue ? moment().startOf('day') : moment(treatment.startDateValue),
       endDate: treatment === null ? null : !treatment.endDateValue ? null : moment(treatment.endDateValue),
       showUpdateConfirmation: false,
       deltaGroups: {}
@@ -131,6 +133,7 @@ export class TreatmentEditor3 extends React.Component {
 
     this.handleWeekdayChange = this.handleWeekdayChange.bind(this);
     this.handleIndividualDateSelection = this.handleIndividualDateSelection.bind(this);
+    this.handleStartDateChange = this.handleStartDateChange.bind(this);
   }
   componentDidUpdate(prevProps, prevState) {
     const currentTreatmentId = this.props.treatment ? this.props.treatment._id : undefined;
@@ -451,7 +454,13 @@ export class TreatmentEditor3 extends React.Component {
       // errors: this.getAllErrors('dateSelectMode', dateSelectMode)
     });
   }
-
+  handleStartDateChange(startDate) {
+    const startDateValue = startDate ? startDate.startOf('day').valueOf() : undefined;
+    this.setState({
+      startDate,
+      startDateValue
+    });
+  }
   handleDateRangeSelection(startDate, endDate) {
 
     // Meteor.call('userTreatments.update', this.props.treatment._id, {
@@ -494,8 +503,13 @@ export class TreatmentEditor3 extends React.Component {
     //     this.getAllErrors();
     //   }
     // });
+    individualDateValues.sort((a, b) => a - b);
+
+    console.log(moment(individualDateValues[0]))
     this.setState({
       individualDateValues,
+      startDate: moment(individualDateValues[0]),
+      startDateValue: moment(individualDateValues[0]).valueOf()
       // errors: this.getAllErrors('individualDateValues', individualDateValues)
     });
   }
@@ -860,6 +874,7 @@ export class TreatmentEditor3 extends React.Component {
                 handleDateRangeSelection={this.handleDateRangeSelection.bind(this)}
                 handleDateRangeFocusChange={this.handleDateRangeFocusChange.bind(this)}
                 handleIndividualDateSelection={this.handleIndividualDateSelection.bind(this)}
+                handleStartDateChange={this.handleStartDateChange.bind(this)}
                 changeModalView={this.changeModalView.bind(this)}
               />
             : this.state.selectedTab === 'dosing' ?

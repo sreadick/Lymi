@@ -40,8 +40,18 @@ export default TreatmentDates2 = (props) => {
       </Row>
 
       { props.treatment.dateSelectMode === 'from now on' ?
-        <Row className='rx-detail-form'>
-          <Col s={4} offset='l4'>
+        // <Row className='rx-detail-form'>
+        <Row className=''>
+          <Col offset='s3'>
+            <div className='date-picker-wrapper individual-date-picker'>
+              <DayPickerSingleDateController
+                date={props.startDate}
+                onDateChange={date => props.handleStartDateChange(date)}
+              />
+            </div>
+          </Col>
+          {/* <Col s={4} offset='l4'> */}
+          <Col s={4} offset=''>
             {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) =>
               <div key={day}>
                 <input
@@ -123,7 +133,19 @@ export default TreatmentDates2 = (props) => {
           </Col>
         </Row>
       :
-        <div></div>
+      <Row>
+        <Col offset='s3'>
+          <div className='date-picker-wrapper individual-date-picker'>
+            <DayPickerSingleDateController
+              date={props.startDate}
+              onDateChange={date => props.handleStartDateChange(date)}
+            />
+            {/* {(Session.get('showErrors') && props.treatment.errors.individualDates) &&
+              <div className="treatment-editor2__error-message">{props.treatment.errors.individualDates}</div>
+            } */}
+          </div>
+        </Col>
+      </Row>
       }
     </div>
   );

@@ -26,7 +26,9 @@ export default class TreatmentCollapsible extends React.Component {
 
 
               <div className=''>
-                { treatment.dosingFormat !== 'default' ?
+                { treatment.dosingFormat === 'unspecified' ? ''
+                  :
+                  treatment.dosingFormat !== 'default' ?
                   `${treatment.dose_type !== "pills" ? `${treatment.dose}${treatment.dose_type}` : ''}`
                   :
                   `${treatment.amount} ${treatment.dose_type !== "pills" ? `x ${treatment.dose}${treatment.dose_type}` : treatment.amount === 1 ? "pill" : "pills"} ${treatment.frequency}/day`

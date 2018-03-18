@@ -15,6 +15,11 @@ export const getNextColor = (lastSymptomIndex) => {
   return colorsArray[lastSymptomIndex];
 }
 
+export const getColor = (itemIndex) => {
+  const colorsArray = ['#b39ddb', '#e57373', '#90caf9', '#ffab91', '#81C784', '#A1887F', '#F06292', '#7986CB', '#E0E0E0', '#4DB6AC', '#BA68C8', '#DCE775', '#90A4AE', '#FFB74D', '#AED581', '#4FC3F7', '#FFD54F'];
+  return colorsArray[itemIndex];
+}
+
 export const capitalize = (word) => {
   return word.charAt(0).toUpperCase() + word.slice(1);
 }
@@ -44,16 +49,62 @@ export const filterCurrentDayTreatments = (treatments) => {
 }
 
 export const isTreatmentPrescribed = (treatment, thisDateMoment) => {
-  if (treatment.dateSelectMode === 'daily') {
-    return true;
-  } else if (treatment.dateSelectMode === 'from now on') {
-    return treatment.daysOfWeek.includes(thisDateMoment.format('dddd'));
-  } else if (treatment.dateSelectMode === 'date range') {
-    return treatment.daysOfWeek.includes(thisDateMoment.format('dddd')) && thisDateMoment.isBetween(treatment.startDateValue, treatment.endDateValue);
-  } else if (treatment.dateSelectMode === 'individual select') {
-    return treatment.individualDateValues.map(dateValue => moment(dateValue).format('MM DD YYYY')).includes(thisDateMoment.format('MM DD YYYY'));
+  if (typeof thisDateMoment === 'string') {
+    thisDateMoment = moment(thisDateMoment, 'MMMM Do YYYY');
+  }
+
+  // if (treatment.dateSelectMode === 'date range') {
+  //   return treatment.daysOfWeek.includes(thisDateMoment.format('dddd')) && thisDateMoment.isBetween(treatment.startDateValue, treatment.endDateValue);
+  // }
+  if (moment(treatment.startDateValue).isSameOrBefore(moment(thisDateMoment), 'day')) {
+    if (treatment.dateSelectMode === 'daily') {
+      return true;
+    } else if (treatment.dateSelectMode === 'from now on') {
+      return treatment.daysOfWeek.includes(thisDateMoment.format('dddd'));
+    } else if (treatment.dateSelectMode === 'date range') {
+      return treatment.daysOfWeek.includes(thisDateMoment.format('dddd')) && thisDateMoment.isBetween(treatment.startDateValue, treatment.endDateValue, 'day', '[]');
+    } else if (treatment.dateSelectMode === 'individual select') {
+      return treatment.individualDateValues.map(dateValue => moment(dateValue).format('MM DD YYYY')).includes(thisDateMoment.format('MM DD YYYY'));
+    }
+  } else {
+    return false;
   }
 }
+// export const isTreatmentPrescribed = (treatment, thisDateMoment) => {
+//   if (typeof thisDateMoment === 'string') {
+//     thisDateMoment = moment(thisDateMoment, 'MMMM Do YYYY');
+//   }
+//
+//   if (treatment.dateSelectMode === 'date range') {
+//     return treatment.daysOfWeek.includes(thisDateMoment.format('dddd')) && thisDateMoment.isBetween(treatment.startDateValue, treatment.endDateValue);
+//   }
+//   if (moment(treatment.createdAt).isSameOrBefore(moment(thisDateMoment), 'day')) {
+//     if (treatment.dateSelectMode === 'daily') {
+//       return true;
+//     } else if (treatment.dateSelectMode === 'from now on') {
+//       return treatment.daysOfWeek.includes(thisDateMoment.format('dddd'));
+//     } else if (treatment.dateSelectMode === 'individual select') {
+//       return treatment.individualDateValues.map(dateValue => moment(dateValue).format('MM DD YYYY')).includes(thisDateMoment.format('MM DD YYYY'));
+//     }
+//   } else {
+//     return false;
+//   }
+// }
+// export const isTreatmentPrescribed = (treatment, thisDateMoment) => {
+//   if (typeof thisDateMoment === 'string') {
+//     thisDateMoment = moment(thisDateMoment, 'MMMM Do YYYY');
+//   }
+//
+//   if (treatment.dateSelectMode === 'daily') {
+//     return true;
+//   } else if (treatment.dateSelectMode === 'from now on') {
+//     return treatment.daysOfWeek.includes(thisDateMoment.format('dddd'));
+//   } else if (treatment.dateSelectMode === 'date range') {
+//     return treatment.daysOfWeek.includes(thisDateMoment.format('dddd')) && thisDateMoment.isBetween(treatment.startDateValue, treatment.endDateValue);
+//   } else if (treatment.dateSelectMode === 'individual select') {
+//     return treatment.individualDateValues.map(dateValue => moment(dateValue).format('MM DD YYYY')).includes(thisDateMoment.format('MM DD YYYY'));
+//   }
+// }
 
 export const sortSymptoms = (symptoms, checkins, startDate, endDate) => {
   return symptoms.map(symptom => {

@@ -17,14 +17,26 @@ export const TreatmentDetailDisplay = (props) => {
         {treatment.name.charAt(0).toUpperCase() + treatment.name.slice(1)}
       </h2>
 
-      <div className='treatment-detail-display__item__section light-blue lighten-3'>
+      <div className='treatment-detail-display__item__section'>
         <h3 className='treatment-detail-display__item__section__title'>Schedule:</h3>
         <div>
           {(treatment.dateSelectMode === 'daily' || (treatment.dateSelectMode === 'from now on' && treatment.daysOfWeek.length === 7)) ?
-            <div>Every Day</div>
+            <div>
+              Every Day
+              <div
+                className='grey-text text-darken-3'> (from {moment(treatment.startDateValue).format('MMM Do YYYY')})
+              </div>
+            </div>
             :
             (treatment.dateSelectMode === 'from now on' && treatment.daysOfWeek.length !== 7) ?
-            <div>{treatment.daysOfWeek.map((dayOfWeek, index, array) => <span key={dayOfWeek}>{dayOfWeek}{index !== array.length - 1 ? ', ' : ''}</span>)}</div>
+              <div>
+                {treatment.daysOfWeek.map((dayOfWeek, index, array) =>
+                  <span key={dayOfWeek}>{dayOfWeek}{index !== array.length - 1 ? ', ' : ''}</span>
+                )}
+                <div
+                  className='grey-text text-darken-3'> (from {moment(treatment.startDateValue).format('MMM Do YYYY')})
+                </div>
+              </div>
             :
             (treatment.dateSelectMode === 'date range' && treatment.daysOfWeek.length === 7) ?
             <div>Every day <span className='grey-text text-darken-3'>(from {moment(treatment.startDateValue).format('MMM Do YY')} to {moment(treatment.endDateValue).format('MMM Do YY')})</span></div>
@@ -40,7 +52,7 @@ export const TreatmentDetailDisplay = (props) => {
         </div>
       </div>
 
-      <div className='treatment-detail-display__item__section red lighten-3'>
+      <div className='treatment-detail-display__item__section'>
         <h3 className='treatment-detail-display__item__section__title'>Dosing:</h3>
         { treatment.dosingFormat === 'default' ?
           <div>
@@ -137,7 +149,7 @@ export const TreatmentDetailDisplay = (props) => {
         } */}
       </div>
 
-      <div className='treatment-detail-display__item__section green lighten-3'>
+      <div className='treatment-detail-display__item__section'>
         <h3 className='treatment-detail-display__item__section__title'>Special Instructions:</h3>
         <div>
           {(treatment.otherInstructions.meals !== 'None' || treatment.otherInstructions.contraindications !== 'None' || treatment.otherInstructions.userDefined.trim()) ?
@@ -168,7 +180,7 @@ export const TreatmentDetailDisplay = (props) => {
         </div>
       </div>
 
-      <div className='treatment-detail-display__item__section deep-purple lighten-3'>
+      <div className='treatment-detail-display__item__section'>
         <h3 className='treatment-detail-display__item__section__title'>Rx Info:</h3>
         <div>
           {(treatment.info.type !== 'N/A' || treatment.info.category.trim() || treatment.info.usedToTreat.trim()) ?

@@ -25,20 +25,57 @@ const DeltaRow = ({title, initialValue, updatedValue}) => (
 export default class TreatmentUpdateConfirmation extends React.Component {
   parseDates(treatment) {
     if (treatment.dateSelectMode === 'daily' || (treatment.dateSelectMode === 'from now on' && treatment.daysOfWeek.length === 7)) {
-      return <div>Every Day</div>
+      // return <div>Every Day</div>
+      return (
+        <div>
+          Every Day
+          <div
+            className='grey-text text-darken-3'> (from {moment(treatment.startDateValue).format('MMM Do YYYY')})
+          </div>
+        </div>
+      );
     } else if (treatment.dateSelectMode === 'from now on' && treatment.daysOfWeek.length !== 7) {
-      return <div>{treatment.daysOfWeek.map((dayOfWeek, index, array) => <span key={dayOfWeek}>{dayOfWeek}{index !== array.length - 1 ? ', ' : ''}</span>)}</div>
+      return (
+        <div>
+          {treatment.daysOfWeek.map((dayOfWeek, index, array) =>
+            <span
+              key={dayOfWeek}>
+              {dayOfWeek}{index !== array.length - 1 ? ', ' : ''}
+            </span>
+          )}
+          <div
+            className='grey-text text-darken-3'> (from {moment(treatment.startDateValue).format('MMM Do YYYY')})
+          </div>
+        </div>
+      );
     } else if (treatment.dateSelectMode === 'date range' && treatment.daysOfWeek.length === 7) {
-      return <div>Every day <span className='grey-text text-darken-3'>(from {moment(treatment.startDateValue).format('MMM Do YY')} to {moment(treatment.endDateValue).format('MMM Do YY')})</span></div>
+      return (
+        <div>
+          Every day
+          <div
+            className='grey-text text-darken-3'> (from {moment(treatment.startDateValue).format('MMM Do YYYY')} to {moment(treatment.endDateValue).format('MMM Do YYYY')})
+          </div>
+        </div>
+      );
     } else if (treatment.dateSelectMode === 'date range' && treatment.daysOfWeek.length !== 7) {
       return (
         <div>
-          {treatment.daysOfWeek.map((dayOfWeek, index, array) => <span key={dayOfWeek}>{dayOfWeek}{index !== array.length - 1 ? ', ' : ''}</span>)}
-          <div className='grey-text text-darken-3'>(from {moment(treatment.startDateValue).format('MMM Do YY')} to {moment(treatment.endDateValue).format('MMM Do YY')})</div>
+          {treatment.daysOfWeek.map((dayOfWeek, index, array) =>
+            <span key={dayOfWeek}>
+              {dayOfWeek}{index !== array.length - 1 ? ', ' : ''}
+            </span>
+          )}
+          <div className='grey-text text-darken-3'>(from {moment(treatment.startDateValue).format('MMM Do YYYY')} to {moment(treatment.endDateValue).format('MMM Do YYYY')})</div>
         </div>
-      )
+      );
     } else {
-      return <div>{treatment.individualDateValues.sort((a, b) => a - b).map(dateValue => <div key={dateValue}>{moment(dateValue).format('MM-DD-YY')} </div>)}</div>
+      return (
+        <div>
+          {treatment.individualDateValues.sort((a, b) => a - b).map(dateValue =>
+            <div key={dateValue}>{moment(dateValue).format('MM-DD-YY')} </div>
+          )}
+        </div>
+      );
     }
   }
   parseDosing(treatment) {
@@ -47,7 +84,7 @@ export default class TreatmentUpdateConfirmation extends React.Component {
         <div>
           {`${treatment.amount} ${treatment.dose_type !== "pills" ? `x ${treatment.dose}${treatment.dose_type}` : treatment.amount === 1 ? "pill" : "pills"} ${treatment.frequency}/day`}
         </div>
-      )
+      );
     } else if (treatment.dosingFormat === 'generalTimes') {
       return (
         <div>
@@ -58,7 +95,7 @@ export default class TreatmentUpdateConfirmation extends React.Component {
             }
           })}
         </div>
-      )
+      );
     } else if (treatment.dosingFormat === 'specificTimes') {
       return (
         <div>
