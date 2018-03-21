@@ -27,6 +27,7 @@
     "react-scrollable-anchor": "^0.5.0",
     "react-slick": "^0.17.1",
     "react-toggle": "^4.0.1",
+    "react-tooltip": "^3.4.0",
     "shortid": "^2.2.8",
     "simpl-schema": "^0.3.1"
   },

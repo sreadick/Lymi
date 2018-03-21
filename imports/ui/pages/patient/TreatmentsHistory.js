@@ -4,13 +4,14 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Redirect, Link } from 'react-router-dom';
 import { Session } from 'meteor/session';
 import moment from 'moment';
+import { capitalizePhrase, getExtendedTreatmentHistory } from '/imports/utils/utils';
 
 import { UserSymptoms } from '../../../api/user-symptoms';
 import { UserTreatments } from '../../../api/user-treatments';
 import { CheckinHistories } from '../../../api/checkin-histories';
 
 import Loader from '/imports/ui/components/Loader';
-import TreatmentChart from '../../components/patient/TreatmentChart';
+import TreatmentChart from '../../components/patient/TreatmentChart2';
 
 import Checkin from './Checkin';
 
@@ -34,7 +35,9 @@ class TreatmentsHistory extends React.Component {
         {this.props.checkinHistory.checkins.length > 0 &&
           <TreatmentChart
             treatments={this.props.displayedTreatments}
-            checkins={this.props.checkinHistory.checkins}
+            currentTreatmentNames={this.props.displayedTreatments.map(treatment => treatment.name)}
+            checkins={this.props.extendedTreatmentCheckins}
+            // checkins={this.props.checkinHistory.checkins}
           />
         }
         <div className='section'>
@@ -143,15 +146,21 @@ export default createContainer((props) => {
       }
     })
   }
+  const displayedTreatments = Session.get('includeDeletedTreatments') ? currentAndDeletedTreatments : currentTreatments;
+  const checkinHistory = CheckinHistories.findOne();
+
   return {
     userSymptoms: UserSymptoms.find().fetch(),
     userTreatments: UserTreatments.find().fetch(),
-    checkinHistory: CheckinHistories.findOne(),
+    // checkinHistory: CheckinHistories.findOne(),
+    checkinHistory,
     displayedCheckinTableItems,
     isFetching: (!checkinHistoryIsReady || !displayedCheckinTableItems || !symptomsHandle.ready() || !treatmentsHandle.ready()),
     includeDeletedTreatments: Session.get('includeDeletedTreatments') || false,
     showDeletedTab: currentTreatments.map(treatment => treatment.name).toString() !== currentAndDeletedTreatments.map(treatment => treatment.name).toString(),
-    displayedTreatments: Session.get('includeDeletedTreatments') ? currentAndDeletedTreatments : currentTreatments,
+    // displayedTreatments: Session.get('includeDeletedTreatments') ? currentAndDeletedTreatments : currentTreatments,
+    displayedTreatments,
+    extendedTreatmentCheckins: (treatmentsHandle.ready() && checkinHandle.ready()) ? getExtendedTreatmentHistory(displayedTreatments, checkinHistory.checkins) : []
   };
 
 }, TreatmentsHistory);

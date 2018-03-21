@@ -147,14 +147,23 @@
   // border: 1px solid black;
   border: 1px solid #aaa;
   // padding: $space / 2 $space / 4;
-  padding: $space / 4;
-  margin-top: $space / 2;
-
+  // padding: $space / 4;
+  // padding: .3rem;
+  // margin-top: $space / 2;
+  margin: $space $space 0 0;
   float: right;
+
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  width: 40%;
 }
 
 .treatment-chart__legend__item {
   padding: .3rem;
+  // padding: .5rem;
+  width: 50%;
+  // width: auto;
 }
 
 .treatment-chart__legend__item__block {

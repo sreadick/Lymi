@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import Collapsible from 'react-collapsible';
+import ReactTooltip from 'react-tooltip'
 
 export default class TreatmentCollapsible extends React.Component {
   constructor(props, state) {
@@ -13,19 +14,32 @@ export default class TreatmentCollapsible extends React.Component {
     const {treatment, takeTreatmentToday} = this.props;
     return (
       <li className="collection-item" key={treatment._id}>
-        <Collapsible trigger=
-          {
+        <Collapsible
+          onOpen={() => this.setState({isOpen: true})}
+          onClose={() => this.setState({isOpen: false})}
+          trigger= {
             <div>
               <a href="#!" className="secondary-content">
                 <i className="material-icons">{this.state.isOpen ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}</i>
               </a>
               <div className='treatment-collection-item'>
                 {treatment.name.charAt(0).toUpperCase() + treatment.name.slice(1)}
-                {takeTreatmentToday && <i className="amber-text material-icons">today</i>}
+                {takeTreatmentToday &&
+                  <span>
+                    <i
+                      className="amber-text material-icons"
+                      data-tip data-for='takeRxToday'>
+                      today
+                    </i>
+                    <ReactTooltip id='takeRxToday' effect='solid'>
+                      Take Today
+                    </ReactTooltip>
+                  </span>
+                }
               </div>
 
 
-              <div className=''>
+              {/* <div className=''>
                 { treatment.dosingFormat === 'unspecified' ? ''
                   :
                   treatment.dosingFormat !== 'default' ?
@@ -60,11 +74,6 @@ export default class TreatmentCollapsible extends React.Component {
                       <div className='grey-text text-darken-2'>Take {treatment.dosingDetails.recurringDose.quantity} every {treatment.dosingDetails.recurringDose.recurringInterval == 1 ? treatment.dosingDetails.recurringDose.timeUnit : treatment.dosingDetails.recurringDose.recurringInterval + " " + treatment.dosingDetails.recurringDose.timeUnit + 's'}</div>
                     }
                   </div>
-                  // {/* <div>
-                  //   {(treatment.dosingDetails.hourlyDose.hourInterval > 0 && treatment.dosingDetails.hourlyDose.quantity > 0) &&
-                  //     <div className='grey-text text-darken-2'>Take {treatment.dosingDetails.hourlyDose.quantity} every {treatment.dosingDetails.hourlyDose.hourInterval == 1 ? 'hour' : treatment.dosingDetails.hourlyDose.hourInterval + ' hours'}</div>
-                  //   }
-                  // </div> */}
                   }
                   {treatment.dosingFormat === 'prn' &&
                   <div>
@@ -79,13 +88,67 @@ export default class TreatmentCollapsible extends React.Component {
                   </div>
                   }
                 </div>
+              } */}
+            </div>
+          }>
+
+          <div>
+            <h5 className="grey-text text-darken-2">Dose:</h5>
+            <div className=''>
+              { treatment.dosingFormat === 'unspecified' ? 'Not Specified'
+                :
+                treatment.dosingFormat !== 'default' ?
+                `${treatment.dose_type !== "pills" ? `${treatment.dose}${treatment.dose_type}` : ''}`
+                :
+                `${treatment.amount} ${treatment.dose_type !== "pills" ? `x ${treatment.dose}${treatment.dose_type}` : treatment.amount === 1 ? "pill" : "pills"} ${treatment.frequency}/day`
               }
             </div>
-          }
-          onOpen={() => this.setState({isOpen: true})}
-          onClose={() => this.setState({isOpen: false})}
-        >
-          <div>
+            {treatment.dosingFormat !== 'default' &&
+              <div>
+                {treatment.dosingFormat === 'generalTimes' &&
+                <div>
+                  {treatment.dosingDetails.generalDoses.map(dose => {
+                    if (dose.quantity > 0) {
+                      return <div className='grey-text text-darken-2' key={dose.time}>Take {dose.quantity} {dose.time === 'bedtime' ? 'at' : 'in the'} {dose.time}</div>
+                    }
+                  })}
+                </div>
+                }
+                {treatment.dosingFormat === 'specificTimes' &&
+                <div>
+                  {treatment.dosingDetails.specificDoses.map(dose => {
+                    if (dose.quantity > 0) {
+                      return <div className='grey-text text-darken-2' key={dose.time}>Take {dose.quantity} at {moment(dose.time).format('h:mm a')}</div>
+                    }
+                  })}
+                </div>
+                }
+                {treatment.dosingFormat === 'byHours' &&
+                <div>
+                  {(treatment.dosingDetails.recurringDose.recurringInterval > 0 && treatment.dosingDetails.recurringDose.quantity > 0) &&
+                    <div className='grey-text text-darken-2'>Take {treatment.dosingDetails.recurringDose.quantity} every {treatment.dosingDetails.recurringDose.recurringInterval == 1 ? treatment.dosingDetails.recurringDose.timeUnit : treatment.dosingDetails.recurringDose.recurringInterval + " " + treatment.dosingDetails.recurringDose.timeUnit + 's'}</div>
+                  }
+                </div>
+                }
+                {treatment.dosingFormat === 'prn' &&
+                <div>
+                  {(treatment.dosingDetails.prnDose.hourInterval > 0 && treatment.dosingDetails.prnDose.quantity > 0) &&
+                    <div className='grey-text text-darken-2'>Take up to {treatment.dosingDetails.prnDose.quantity} every {treatment.dosingDetails.prnDose.hourInterval == 1 ? 'hour' : treatment.dosingDetails.prnDose.hourInterval + ' hours'}</div>
+                  }
+                </div>
+                }
+                {treatment.dosingFormat === 'other' &&
+                <div>
+                  <div className='grey-text text-darken-2'>  {treatment.dosingDetails.other.dosingInstructions}</div>
+                </div>
+                }
+              </div>
+            }
+
+
+
+
+
             <h5 className="grey-text text-darken-2">Dates:</h5>
             <div>
               {(treatment.dateSelectMode === 'daily' || (treatment.dateSelectMode === 'from now on' && treatment.daysOfWeek.length === 7)) ?

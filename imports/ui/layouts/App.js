@@ -24,7 +24,7 @@ import SelectSymptomsPage from '../pages/patient/SelectSymptomsPage';
 import SelectTreatmentsPage from '../pages/patient/SelectTreatmentsPage';
 import SelectTreatmentsPage2 from '../pages/patient/SelectTreatmentsPage2';
 import SelectTreatmentsPage3 from '../pages/patient/SelectTreatmentsPage3';
-import Dashboard from '../pages/patient/Dashboard';
+import Dashboard from '../pages/patient/Dashboard2';
 import Checkin from '../pages/patient/Checkin';
 import SymptomsHistory from '../pages/patient/SymptomsHistory';
 import SymptomsHistory2 from '../pages/patient/SymptomsHistory2';

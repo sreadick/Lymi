@@ -17,7 +17,8 @@
 
 //The content within the collaspable area
 .Collapsible__contentInner {
-  padding: 10px;
+  // padding: 10px;
+  padding: .4rem;
   border: 1px solid white;
   border-top: 0;
 
@@ -40,7 +41,8 @@
   text-decoration: none;
   position: relative;
   border: 1px solid white;
-  padding: 10px;
+  // padding: 10px;
+  padding: .4rem;
   background: white;
   color: #444;
   border-top: 1px solid #cdcdcd;
@@ -67,7 +69,8 @@
   }
 
   &.is-open {
-    border-bottom: 1px solid #cdcdcd;
+    // border-bottom: 1px solid #cdcdcd;
+    border-bottom: 1px solid #777;
     &:after {
       transform: rotateZ(180deg);
     }

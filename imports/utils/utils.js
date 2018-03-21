@@ -215,11 +215,54 @@ export const getTasks = () => {
   }
 
   const newPosts = ForumPosts.find({topicAuthorId: Meteor.userId(), viewedByTopicAuthor: false}).fetch();
-  console.log(newPosts);
   return {
     dailyCheckinStatus,
     requests: Requests.find().fetch(),
     doctorIsLinked: Meteor.user().doctorId ? true : false,
     newPosts: ForumPosts.find({topicAuthorId: Meteor.userId(), viewedByTopicAuthor: false}).fetch()
   }
+}
+
+export const getExtendedTreatmentHistory = (treatments, checkins) => {
+  // const treatmentsHandle = Meteor.subscribe('userTreatments');
+  const newCheckinTreatments = checkins.map((checkin) => (
+    {
+      date: checkin.date,
+      treatments: checkin.treatments.slice()
+    }
+  ));
+  let initialDate = moment(checkins[0].date, 'MMMM Do YYYY');
+  treatments.forEach(treatment => {
+    if (moment(treatment.startDateValue).isBefore(moment(treatment.createdAt))) {
+      if (moment(treatment.startDateValue).isBefore(initialDate)) {
+        initialDate = moment(treatment.startDateValue);
+      }
+      const addedDays = moment(treatment.createdAt).diff(moment(treatment.startDateValue), 'days');
+      for (i = addedDays - 1; i >= 0; --i) {
+        const newDate = moment(treatment.startDateValue).add(i, 'days').format('MMMM Do YYYY');
+        const foundCheckin = newCheckinTreatments.find(checkin => checkin.date === newDate);
+        if (!foundCheckin) {
+          const prescribedToday = isTreatmentPrescribed(treatment, newDate);
+          newCheckinTreatments.unshift({
+            date: newDate,
+            treatments: [{
+              name: treatment.name,
+              prescribedToday,
+              compliance: prescribedToday ? 'Yes' : 'NPD',
+              commonTreatmentId: treatment.commonTreatmentId
+            }]
+          });
+        } else {
+          const prescribedToday = isTreatmentPrescribed(treatment, foundCheckin.date);
+          foundCheckin.treatments.push({
+            name: treatment.name,
+            prescribedToday,
+            compliance: prescribedToday ? 'Yes' : 'NPD',
+            commonTreatmentId: treatment.commonTreatmentId
+          });
+        }
+      }
+    }
+  });
+  return newCheckinTreatments;
 }
