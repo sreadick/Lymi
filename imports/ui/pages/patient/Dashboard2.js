@@ -15,6 +15,8 @@ import TasksBox2 from '../../components/patient/TasksBox2';
 import SymptomChart from '../../components/patient/SymptomChart';
 import TreatmentChart from '../../components/patient/TreatmentChart2';
 import NotableEvents from '../../components/patient/NotableEvents';
+import DoctorSearch from '../../components/patient/DoctorSearch';
+
 // import ProfileBackgroundModel from '../../components/patient/ProfileBackgroundModel';
 // import ProfileImageModel from '../../components/patient/ProfileImageModel';
 // import Pagination from '../../components/patient/Pagination';
@@ -29,7 +31,7 @@ const Dashboard2 = (props) => {
       // </div>
       <Loader />
     );
-  } else if (Meteor.user().account.status === 'initializing' || props.userSymptoms.length === 0 || (props.userTreatments.length === 0 && props.trackedItems.includes('treatments'))) {
+  } else if (props.userInfo.account.status === 'initializing' || props.userSymptoms.length === 0 || (props.userTreatments.length === 0 && props.trackedItems.includes('treatments'))) {
     return <Redirect to="/patient" />
   } else if (props.userTreatments.find((treatment) => Object.keys(treatment.errors).length > 0)) {
     return <Redirect to="/patient/selecttreatments" />
@@ -39,6 +41,7 @@ const Dashboard2 = (props) => {
   // console.log(props.activeSegmentSymptoms);
   return (
     <div className="dashboard__page">
+      { props.showDoctorSearch && <DoctorSearch /> }
       <div className="dashboard__flex-wrapper">
         <div className="dashboard__page__content">
 
@@ -228,7 +231,11 @@ const Dashboard2 = (props) => {
         </div>
 
         <div className="task-box__container z-depth-1">
-          <TasksBox2 userSymptoms={props.userSymptoms} userTreatments={props.userTreatments} />
+          <TasksBox2
+            userInfo={props.userInfo}
+            userSymptoms={props.userSymptoms}
+            userTreatments={props.userTreatments}
+            checkins={props.checkins}/>
         </div>
       </div>
 
@@ -245,6 +252,8 @@ export default createContainer(() => {
   const userTreatments = UserTreatments.find().fetch();
   const userSymptoms =  UserSymptoms.find().fetch();
 
+  const userInfo = Meteor.user();
+
   const checkins = checkinHandle.ready() ? checkinHistory.checkins : [];
 
   // const todayTreatments = userTreatments.filter((treatment) => (treatment.dateSelectMode === 'from now on' && treatment.daysOfWeek.includes(moment().format('dddd'))) || (treatment.dateSelectMode === 'date range' && (treatment.daysOfWeek.includes(moment().format('dddd')) && moment().isBetween(treatment.startDateValue, treatment.endDateValue)) || (treatment.dateSelectMode === 'individual select' && treatment.individualDateValues.map(dateValue => moment(dateValue).format('MM DD YYYY')).includes(moment().format('MM DD YYYY')))));
@@ -254,7 +263,7 @@ export default createContainer(() => {
   const currentDate = moment().format('MMMM Do YYYY');
   const todaysCheckin = (checkinHandle.ready() && checkinHistory) ? checkins.find((checkin) => checkin.date === currentDate) : undefined;
 
-  const trackedItems = Meteor.user().profile.settings.trackedItems;
+  const trackedItems = userInfo.profile.settings.trackedItems;
 
   const activeSegmentNumber = userSymptoms.length > 3 ? (Session.get('activeSegmentNumber_dashboard') || 1) : undefined;
 
@@ -269,22 +278,25 @@ export default createContainer(() => {
     const GroupBLength = userSymptoms.filter(symptom => symptom.system === symptomSystemB).length;
     return GroupALength - GroupBLength;
   })
+
   return {
     userSymptoms,
-    activeSymptomGroup: Session.get('activeSymptomGroup') || (symptomsHandle.ready() && userSymptoms[0].system),
+    activeSymptomGroup: Session.get('activeSymptomGroup') || (symptomsHandle.ready() && userSymptomGroups[0]),
     userTreatments,
     // checkinHistory,
     checkins,
     // displayedTreatments: currentSelectedTreatmentTab === 'today' ? todayTreatments : userTreatments,
-    isFetching: (!symptomsHandle.ready() || !treatmentsHandle.ready() || !checkinHandle.ready() || !Meteor.user()),
     // currentSelectedTreatmentTab,
     activeSegmentNumber,
     activeSegmentSymptoms: activeSegmentNumber ? userSymptoms.slice((activeSegmentNumber - 1) * 3, activeSegmentNumber * 3) : undefined,
-    userPhoto: (Meteor.user() && Meteor.user().profile.userPhoto) ? Meteor.user().profile.userPhoto : undefined,
+    userPhoto: (userInfo && userInfo.profile.userPhoto) ? userInfo.profile.userPhoto : undefined,
     todayTreatments,
     trackedItems,
     userSymptomGroups,
-    extendedTreatmentCheckins: (treatmentsHandle.ready() && checkinHandle.ready()) ? getExtendedTreatmentHistory(userTreatments, checkins) : [],
-    notableEventCheckins: checkins.filter(checkin => !!checkin.notableEvents)
+    extendedTreatmentCheckins: (treatmentsHandle.ready() && checkinHandle.ready() && checkins.length > 0) ? getExtendedTreatmentHistory(userTreatments, checkins) : [],
+    notableEventCheckins: checkins.filter(checkin => !!checkin.notableEvents),
+    showDoctorSearch: Session.get('showDoctorSearch') || false,
+    userInfo,
+    isFetching: (!symptomsHandle.ready() || !treatmentsHandle.ready() || !checkinHandle.ready() || !userInfo)
   };
 }, Dashboard2);

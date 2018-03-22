@@ -3,10 +3,9 @@ import { Link } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { createContainer } from 'meteor/react-meteor-data';
-import { capitalizePhrase } from '../../../utils/utils';
+import { capitalizePhrase, getCheckinComplianceData } from '../../../utils/utils';
 import moment from 'moment';
 import { Row, Input } from 'react-materialize';
-import { Pie } from 'react-chartjs-2';
 
 import { UserSymptoms } from '../../../api/user-symptoms';
 import { UserTreatments } from '../../../api/user-treatments';
@@ -20,23 +19,23 @@ import Loader from '/imports/ui/components/Loader';
 import CheckinPieChart from '../../components/patient/CheckinPieChart';
 
 class Profile extends React.Component {
-  checkinComplianceData() {
-    const startDate = moment(this.props.userInfo.account.createdAt).startOf('day');
-    const currentDate = moment().startOf('day');
-    const numDaysUsingApp = currentDate.diff(startDate, 'days') + 1;
-    let daysCheckedIn = 0;
-    this.props.checkinHistory.checkins.forEach(checkin => {
-      if (checkin.symptoms.some(checkinSymptom => checkinSymptom.severity > 0)) {
-        daysCheckedIn++
-      }
-    })
-    const checkinPercentage = (typeof (daysCheckedIn / numDaysUsingApp) !== 'number') ? 0 : (daysCheckedIn / numDaysUsingApp * 100);
-    return {
-      checkinPercentage,
-      daysCheckedIn,
-      daysNotCheckedIn: numDaysUsingApp - daysCheckedIn
-    }
-  }
+  // checkinComplianceData() {
+  //   const startDate = moment(this.props.userInfo.account.createdAt).startOf('day');
+  //   const currentDate = moment().startOf('day');
+  //   const numDaysUsingApp = currentDate.diff(startDate, 'days') + 1;
+  //   let daysCheckedIn = 0;
+  //   this.props.checkinHistory.checkins.forEach(checkin => {
+  //     if (checkin.symptoms.some(checkinSymptom => checkinSymptom.severity > 0)) {
+  //       daysCheckedIn++
+  //     }
+  //   })
+  //   const checkinPercentage = (typeof (daysCheckedIn / numDaysUsingApp) !== 'number') ? 0 : (daysCheckedIn / numDaysUsingApp * 100);
+  //   return {
+  //     checkinPercentage,
+  //     daysCheckedIn,
+  //     daysNotCheckedIn: numDaysUsingApp - daysCheckedIn
+  //   }
+  // }
 
   render() {
     if (this.props.isFetching) {
@@ -77,12 +76,21 @@ class Profile extends React.Component {
 
           {this.props.userInfo.account.createdAt &&
             <div className='section'>
-              Daily check-in completion {Math.round(this.checkinComplianceData().checkinPercentage * 100) / 100}%
+              {/* Daily check-in completion {Math.round(this.props.checkinComplianceData.checkinPercentage * 100) / 100}% */}
+              Daily check-in completion: {this.props.checkinComplianceData.roundedCheckinPercentage}%
+              <CheckinPieChart
+                daysCheckedIn={this.props.checkinComplianceData.daysCheckedIn}
+                daysNotCheckedIn={this.props.checkinComplianceData.daysNotCheckedIn}
+                animate={true}
+                showLegend={true}
+                height={70}
+               />
+              {/* Daily check-in completion {Math.round(this.checkinComplianceData().checkinPercentage * 100) / 100}%
               <CheckinPieChart
                 daysCheckedIn={this.checkinComplianceData().daysCheckedIn}
                 daysNotCheckedIn={this.checkinComplianceData().daysNotCheckedIn}
                 height={70}
-               />
+               /> */}
             </div>
           }
           <hr />
@@ -253,6 +261,7 @@ export default createContainer(props => {
     checkinHistory: CheckinHistories.findOne(),
     userTopics: Topics.find({authorId: Meteor.userId()}).fetch(),
     currentDoctor: Meteor.user() && Meteor.users.findOne({ 'account.type': 'doctor', _id: Meteor.user().doctorId }),
+    checkinComplianceData: (Meteor.user() && checkinHandle.ready()) ? getCheckinComplianceData(Meteor.user().account.createdAt, CheckinHistories.findOne().checkins) : {},
     isFetching: !Meteor.user() || !symptomsHandle.ready() || !treatmentsHandle.ready() || !checkinHandle.ready() || !currentdDoctorHandle.ready() || !topicsHandle.ready() || !forumPostsHandle.ready(),
   }
 }, Profile)

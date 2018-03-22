@@ -266,3 +266,24 @@ export const getExtendedTreatmentHistory = (treatments, checkins) => {
   });
   return newCheckinTreatments;
 }
+
+export const getCheckinComplianceData = (accountCreatedAt, checkins) => {
+  const startDate = moment(accountCreatedAt).startOf('day');
+  const currentDate = moment().startOf('day');
+  const numDaysUsingApp = currentDate.diff(startDate, 'days') + 1;
+  let daysCheckedIn = 0;
+  checkins.forEach(checkin => {
+    if (checkin.symptoms.some(checkinSymptom => checkinSymptom.severity > 0)) {
+      daysCheckedIn++
+    }
+  })
+
+  // const checkinPercentage = (typeof (daysCheckedIn / numDaysUsingApp) !== 'number') ? 0 : (daysCheckedIn / numDaysUsingApp * 100);
+  // console.log(checkinPercentage);
+  const roundedCheckinPercentage = (typeof (daysCheckedIn / numDaysUsingApp) !== 'number') ? 0 : (Math.round(daysCheckedIn / numDaysUsingApp * 10000) / 100);
+  return {
+    roundedCheckinPercentage,
+    daysCheckedIn,
+    daysNotCheckedIn: numDaysUsingApp - daysCheckedIn
+  }
+}

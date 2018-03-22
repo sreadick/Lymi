@@ -9,7 +9,14 @@ export default class CheckinPieChart extends React.Component {
     super(props);
     this.state = {
       chartData: {},
-      chartOptions: {}
+      chartOptions: {
+        animation: {
+          animateRotate: props.animate
+        },
+        legend: {
+          display: props.showLegend
+        }
+      }
     }
   }
 
