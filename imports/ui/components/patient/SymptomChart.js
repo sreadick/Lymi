@@ -14,7 +14,6 @@ export default class SymptomChart extends React.Component {
   }
 
   componentDidMount() {
-
     this.setState({
       chartData: {
         labels: this.getData().dateLabels,
@@ -54,13 +53,21 @@ export default class SymptomChart extends React.Component {
             }
 					}]
 				},
+        spanGaps: true,
         tooltips: {
           mode: 'point',
           titleFontSize: 20,
           callbacks: {
             title: ((tooltips, data) => this.props.checkins[tooltips[0].index] ? this.props.checkins[tooltips[0].index].date : '')
           }
-        }
+        },
+        animation: {
+            duration: 500,
+        },
+        // hover: {
+        //     animationDuration: 0,
+        // },
+        responsiveAnimationDuration: 0,
 			}
     });
   }

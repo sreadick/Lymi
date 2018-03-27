@@ -1,7 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import moment from 'moment';
-import { isTreatmentPrescribed, getColor} from '../../../utils/utils';
+import { capitalizePhrase, isTreatmentPrescribed, getColor} from '../../../utils/utils';
 
 // const colorsArray = ['#b39ddb', '#e57373', '#90caf9', '#ffab91', '#81C784', '#A1887F', '#F06292', '#7986CB', '#E0E0E0', '#4DB6AC', '#BA68C8', '#DCE775', '#90A4AE', '#FFB74D', '#AED581', '#4FC3F7', '#FFD54F'];
 
@@ -9,14 +9,46 @@ export default TreatmentChart2 = (props) => {
   return (
     <div className='treatment-chart'>
       <div className='treatment-chart__label__container'>
-        {props.treatments.map((treatment) =>
-          <div
-            key={treatment.name}
-            className={`grey-text text-darken-2 treatment-chart__label ${!props.currentTreatmentNames.includes(treatment.name) ? 'deleted' : ''} `}
-          >
-            {treatment.name.charAt(0).toUpperCase() + treatment.name.slice(1)}
-          </div>
-        )}
+        {props.treatments.map((treatment) => {
+          // let treatmentNameArr = treatment.name.split(' ');
+          // if (treatmentNameArr.length === 1)  {
+          //   if (treatment.name.length > 23) {
+          //     treatmentNameArr[0] = treatment.name.substr(0, 20) + '...';
+          //   } else {
+          //     treatmentNameArr[0] = treatment.name;
+          //   }
+          // } else if (treatmentNameArr.length > 1)  {
+          //   if (treatment.name.length < 22) {
+          //     treatmentNameArr = [treatment.name];
+          //   } else {
+          //     treatmentNameArr[0] = treatmentNameArr.shift();
+          //     treatmentNameArr[1] = treatmentNameArr.filter((name, index) => index !== 0).join(' ');
+          //     if (treatmentNameArr[0].length > 23)  {
+          //       treatmentNameArr = [treatment.name.substr(0, 20) + '...'];
+          //     } else if (treatmentNameArr[1].length > 23) {
+          //       treatmentNameArr[1] = treatmentNameArr[1].substr(0, 20) + '...';
+          //     }
+          //   }
+          // } else {
+          //   console.log('err', treatment.name);
+          // }
+
+          return (
+            <div
+              key={treatment.name}
+              className={`grey-text text-darken-2 treatment-chart__label ${!props.currentTreatmentNames.includes(treatment.name) ? 'deleted' : ''} `}
+            >
+              {capitalizePhrase(treatment.name)}
+              {/* {treatment.name.charAt(0).toUpperCase() + treatment.name.slice(1)} */}
+              {/* {treatment.name.substr(0, 20)} */}
+              {/* {treatmentNameArr.map((name, index) =>
+                <div key={index}>
+                  {name}
+                </div>
+              )} */}
+            </div>
+          );
+        })}
       </div>
       <div className='treatment-chart__container'>
         <div className='treatment-chart__item__container z-depth-3'>

@@ -2,6 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import Collapsible from 'react-collapsible';
 import ReactTooltip from 'react-tooltip'
+import { capitalizePhrase } from '/imports/utils/utils';
 
 export default class TreatmentCollapsible extends React.Component {
   constructor(props, state) {
@@ -12,8 +13,34 @@ export default class TreatmentCollapsible extends React.Component {
   }
   render() {
     const {treatment, takeTreatmentToday} = this.props;
+
+    let treatmentNameArr = treatment.name.split(' ');
+    console.log(treatmentNameArr);
+    if (treatmentNameArr.length === 1)  {
+      if (treatment.name.length > 17) {
+        treatmentNameArr[0] = treatment.name.substr(0, 16) + '...';
+      } else {
+        treatmentNameArr[0] = treatment.name;
+      }
+    } else if (treatmentNameArr.length > 1)  {
+      if (treatment.name.length < 17) {
+        treatmentNameArr = [treatment.name];
+      } else {
+        // treatmentNameArr[0] = treatmentNameArr.shift();
+        treatmentNameArr[1] = treatmentNameArr.filter((name, index) => index !== 0).join(' ');
+        if (treatmentNameArr[0].length > 17)  {
+          treatmentNameArr = [treatment.name.substr(0, 16) + '...'];
+        } else if (treatmentNameArr[1].length > 20) {
+          treatmentNameArr[1] = treatmentNameArr[1].substr(0, 18) + '...';
+          treatmentNameArr = treatmentNameArr.slice(0, 2);
+        }
+      }
+    } else {
+      console.log('err', treatment.name);
+    }
+
     return (
-      <li className="collection-item" key={treatment._id}>
+      <li className="collection-item treatment-collection-item__wrapper" key={treatment._id}>
         <Collapsible
           onOpen={() => this.setState({isOpen: true})}
           onClose={() => this.setState({isOpen: false})}
@@ -23,19 +50,29 @@ export default class TreatmentCollapsible extends React.Component {
                 <i className="material-icons">{this.state.isOpen ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}</i>
               </a>
               <div className='treatment-collection-item'>
-                {treatment.name.charAt(0).toUpperCase() + treatment.name.slice(1)}
-                {takeTreatmentToday &&
-                  <span>
-                    <i
-                      className="amber-text material-icons"
-                      data-tip data-for='takeRxToday'>
-                      today
-                    </i>
-                    <ReactTooltip id='takeRxToday' effect='solid'>
-                      Take Today
-                    </ReactTooltip>
-                  </span>
-                }
+                {/* <div className='treatment-collection-item__name'> */}
+                  {/* {treatment.name.charAt(0).toUpperCase() + treatment.name.slice(1)} */}
+
+
+                  {treatmentNameArr.map((name, index) =>
+                    <div className='treatment-collection-item__name' key={index}>
+                      {capitalizePhrase(name)}
+
+                      {(index === 0 && takeTreatmentToday) &&
+                        <span>
+                          <i
+                            className="material-icons"
+                            data-tip data-for='takeRxToday'>
+                            today
+                          </i>
+                          <ReactTooltip id='takeRxToday' effect='solid'>
+                            Take Today
+                          </ReactTooltip>
+                        </span>
+                      }
+                    </div>
+                  )}
+                {/* </div> */}
               </div>
 
 

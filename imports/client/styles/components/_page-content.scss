@@ -402,12 +402,25 @@
   padding: 0 .3rem;
 }
 
+.treatment-collection-item__wrapper {
+  padding: 10px 5px !important;
+}
 .treatment-collection-item {
-  font-weight: 500;
-  i {
-    margin-left: .3rem;
-    font-size: 1.7rem;
-    vertical-align: middle;
+  .treatment-collection-item__name {
+    // width: 50%;
+    // max-width: 70%;
+    font-weight: 500;
+    span {
+      position: relative;
+      bottom: 10px;
+      // right: 2px;
+      i {
+        // margin-left: .3rem;
+        font-size: 1.2rem;
+        // vertical-align: middle;
+        color: #9c9;
+      }
+    }
   }
 }
 

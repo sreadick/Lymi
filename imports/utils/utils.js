@@ -197,6 +197,7 @@ export const getTasks = () => {
   const userTreatments = UserTreatments.find().fetch();
   const userSymptoms =  UserSymptoms.find().fetch();
 
+  let numTasks = 0;
   const todayTreatments = filterCurrentDayTreatments(userTreatments);
 
   const currentDate = moment().format('MMMM Do YYYY');
@@ -210,16 +211,21 @@ export const getTasks = () => {
     dailyCheckinStatus = 'complete';
   } else if ((checkinHandle.ready() && todaysCheckin) && (userSymptoms.some(userSymptom => todaysCheckin.symptoms.find(checkinSymptom => (checkinSymptom.name === userSymptom.name && checkinSymptom.severity > 0))) || (todayTreatments.some(userTreatment => todaysCheckin.treatments.find(checkinTreatment => (checkinTreatment.name === userTreatment.name && checkinTreatment.compliance !== null))) || !trackedItems.includes('treatments')))) {
     dailyCheckinStatus = 'partially complete';
+    numTasks++;
   } else {
     dailyCheckinStatus = 'incomplete';
+    numTasks++;
   }
 
   const newPosts = ForumPosts.find({topicAuthorId: Meteor.userId(), viewedByTopicAuthor: false}).fetch();
+  const requests = Requests.find().fetch();
+  numTasks += newPosts.length + requests.length;
   return {
     dailyCheckinStatus,
-    requests: Requests.find().fetch(),
+    requests,
     doctorIsLinked: Meteor.user().doctorId ? true : false,
-    newPosts: ForumPosts.find({topicAuthorId: Meteor.userId(), viewedByTopicAuthor: false}).fetch()
+    newPosts: ForumPosts.find({topicAuthorId: Meteor.userId(), viewedByTopicAuthor: false}).fetch(),
+    numTasks
   }
 }
 

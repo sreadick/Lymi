@@ -7,8 +7,16 @@ import moment from 'moment';
 import { CheckinHistories } from '../../../api/checkin-histories';
 
 class NotableEventsCheckin extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      eventMessage: props.notableEventsMessage || ''
+    }
+  }
+
   eventMessageChange(e) {
-    Meteor.call('checkinHistories.notableEvents.update', e.target.value, this.props.targetDate);
+    this.setState({eventMessage: e.target.value});
   }
 
   render() {
@@ -34,13 +42,16 @@ class NotableEventsCheckin extends React.Component {
           <h5 className="black-text">Notable Events</h5>
           <div className="row">
             <div className="input-field col s12">
-              <textarea id="textarea1" className="materialize-textarea" value={this.props.notableEventsMessage} onChange={this.eventMessageChange.bind(this)}></textarea>
+              <textarea id="textarea1" className="materialize-textarea" value={this.state.eventMessage} onChange={this.eventMessageChange.bind(this)}></textarea>
               <label htmlFor="textarea1" className='active'>Anything unusual happen today?</label>
             </div>
           </div>
 
           <button className={`black btn disabled'}`}
-            onClick={() => this.props.navigateToComponent("dashboard")}>
+            onClick={() => {
+              Meteor.call('checkinHistories.notableEvents.update', this.state.eventMessage.trim(), this.props.targetDate);
+              this.props.navigateToComponent("dashboard");
+            }}>
             Finish!
           </button>
         </div>

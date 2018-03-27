@@ -79,7 +79,8 @@ const Dashboard2 = (props) => {
               {props.checkins.length > 0 &&
                 <div className="dashboard__chart__header">
                   <span className=''>
-                    Past {props.checkins.length > 13 ? 14 : props.checkins.length} {props.checkins.length === 1 ? 'Day' : 'Days'}
+                    {/* Past {props.checkins.length > 13 ? 14 : props.checkins.length} {props.checkins.length === 1 ? 'Day' : 'Days'} */}
+                    Past {props.modifiedSymptomCheckins.length} {props.modifiedSymptomCheckins.length === 1 ? 'Day' : 'Days'}
                   </span>
                   <Link
                     to="/patient/history/symptoms"
@@ -97,7 +98,8 @@ const Dashboard2 = (props) => {
                 {props.checkins.length > 0 &&
                   <SymptomChart
                     symptomNames={props.userSymptoms.filter(symptom => symptom.system === props.activeSymptomGroup).map(symptom => symptom.name)}
-                    checkins={props.checkins.length > 13 ? props.checkins.slice(-14) : props.checkins}
+                    // checkins={props.checkins.length > 13 ? props.checkins.slice(-14) : props.checkins}
+                    checkins={props.modifiedSymptomCheckins}
                     symptomColors={props.userSymptoms.filter(symptom => symptom.system === props.activeSymptomGroup).map((symptom, index) => getColor(index))}
                     height={100}
                     // padding={{top: 0, right: 15, bottom: 10, left: 0}}
@@ -230,13 +232,12 @@ const Dashboard2 = (props) => {
 
         </div>
 
-        <div className="task-box__container z-depth-1">
-          <TasksBox2
-            userInfo={props.userInfo}
-            userSymptoms={props.userSymptoms}
-            userTreatments={props.userTreatments}
-            checkins={props.checkins}/>
-        </div>
+        <TasksBox2
+          userInfo={props.userInfo}
+          userSymptoms={props.userSymptoms}
+          userTreatments={props.userTreatments}
+          checkins={props.checkins}
+        />
       </div>
 
     </div>
@@ -266,7 +267,6 @@ export default createContainer(() => {
   const trackedItems = userInfo.profile.settings.trackedItems;
 
   const activeSegmentNumber = userSymptoms.length > 3 ? (Session.get('activeSegmentNumber_dashboard') || 1) : undefined;
-
   let userSymptomGroups = [];
   userSymptoms.forEach((symptom) => {
     if (!userSymptomGroups.includes(symptom.system)) {
@@ -279,10 +279,24 @@ export default createContainer(() => {
     return GroupALength - GroupBLength;
   })
 
+  const dateArray = [...Array(14).keys()].map(index => moment().subtract(index, 'days').format("MMMM Do YYYY")).reverse();
+  let firstCheckinIndex;
+  let modifiedSymptomCheckins = dateArray.map((date, index) => {
+    const foundCheckin = checkins.find(checkin => checkin.date === date);
+    if (!firstCheckinIndex && foundCheckin) firstCheckinIndex = index;
+    return {
+      date,
+      symptoms: foundCheckin ? foundCheckin.symptoms : []
+    }
+  })
+  modifiedSymptomCheckins = modifiedSymptomCheckins.slice(firstCheckinIndex);
+  // console.log(firstCheckinIndex);
+  // const newExtendedSymptomCheckins = modifiedSymptomCheckins.reverse()
   return {
     userSymptoms,
     activeSymptomGroup: Session.get('activeSymptomGroup') || (symptomsHandle.ready() && userSymptomGroups[0]),
     userTreatments,
+    modifiedSymptomCheckins,
     // checkinHistory,
     checkins,
     // displayedTreatments: currentSelectedTreatmentTab === 'today' ? todayTreatments : userTreatments,

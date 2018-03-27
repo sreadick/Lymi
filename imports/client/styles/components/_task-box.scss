@@ -1,8 +1,9 @@
-.task-box__container {
+.task-box {
   background: #33333a;
   width: 20%;
   // height: 100%;
   // background: #f5f5f5;
+  background: #000;
 }
 
 .task-box {
@@ -25,29 +26,69 @@
   margin: 0;
   // padding: 1.2rem 0;
   // padding: .7rem 1rem;
-  padding: 1.1rem 1rem;
   // border-bottom: 1px solid #666;
+
+  color: #5a97b1;
+
+
+
+  // padding: 1.1rem 1rem;
+  .task-box__heading__numTasks {
+    background: #e57373;
+    // width: 7rem;
+    font-size: 1rem;
+    font-weight: 700;
+    text-align: center;
+    color: #fff;
+    border-radius: 50%;
+    // padding: 1rem;
+    // height: 4rem;
+    height: 1.3rem;
+    width: 1.3rem;
+    line-height: 1.3rem;
+    margin-left: .5rem;
+    margin-top: .1rem;
+    vertical-align: baseline;
+
+    display: inline-block;
+  }
 }
 
 .task-box__subheading {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   margin: 0;
-  padding: 0 1rem .7rem 1rem;
+  margin-top: .7rem;
+  // padding: 0 1rem .7rem 1rem;
   color: #001;
+  color: lightblue;
   font-weight: 700;
+  padding: 0 .5rem;
+  color: #555;
+
+  font-style: italic;
 
 }
 
-.task-box__task__list {
+.task-box__item__container {
   // background: #000;
   // background: #f5f5f5;
   // list-style-type: square !important;
   // list-style-position: inside !important;
   // list-style: square inside !important;
-  margin-bottom: 5rem;
+  // margin-bottom: 5rem;
+
 }
 
-.task-box__task {
+.task-box__section {
+  padding: 1rem;
+  border-bottom: 2px solid #aaa;
+
+  color: #bbb;
+
+
+}
+
+.task-box__item {
   // list-style-type: disc !important;
   // list-style-position: inside !important;
 
@@ -58,14 +99,21 @@
   // justify-content: center;
   border-bottom: 1px solid #999;
   border-bottom: 1px solid #444;
-  padding: 0 1rem;
+  // padding: 0 1rem;
 
 
   // padding: 0 .5rem;
-  color: #bbb;
+
+  padding: .5rem;
+  p {
+    margin: 0;
+  }
+  .row .col {
+    padding: 0;
+  }
 }
 
-.task-box__task:last-child {
+.task-box__item:last-child {
   border: none;
 }
 
@@ -73,8 +121,12 @@
   color: #5a97b1;
   // color: #22e;
   // font-size: 1.1rem;
-  // text-decoration: underline;
   height: 100%;
+
+
+  text-decoration: underline;
+  color: #bbb;
+
 }
 
 .task-box__link--topic {

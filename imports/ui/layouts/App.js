@@ -52,15 +52,11 @@ import Admin from './Admin';
 const App = appProps => {
   if (appProps.authenticated && !appProps.account) {
     return (
-      // <div className="progress">
-      //   <div className="indeterminate"></div>
-      // </div>
       <Loader />
-
     );
   }
   return (
-    <Router onUpdate={() => window.scrollTo(0, 0)} history={history}>
+    <Router history={history}>
       <Switch>
         <PublicRoute exact path="/" component={Landing4} {...appProps} />
         <PublicRoute exact path="/clinicians" component={ClinicianLanding} {...appProps} />

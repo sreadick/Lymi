@@ -9,68 +9,78 @@ import Footer from '../components/Footer';
 import ForumHeader from '../components/ForumHeader';
 import SidebarMenu from '../components/patient/SidebarMenu';
 
-const AuthPatientRoute = ({ loggingIn, authenticated, account, component, sidebarToggled, showProfileBackgroundModel, showProfileImageModel, isForumPage, ...rest }) => {
-  return (
-    <Route render={(props) => {
-      return (
-        !authenticated ?
-          // <Redirect to="/login" />
-          <Redirect to="/" />
-        : account.type === 'doctor' ?
-          <Redirect to="/doctor" />
-        : account.type === 'admin' ?
-          <Redirect to="/admin" />
-        :
-          <div className="page" onClick={(e) => {
-            const navHeaderProfileDropdown = document.getElementById('nav-header__dropdown--avatar');
-            const navHeaderAvatarButton = document.getElementById('nav-header__button--avatar');
-            const navHeaderNotificationsDropdown = document.getElementById('nav-header__dropdown--notifications');
-            const navHeaderNotificationsButton = document.getElementById('nav-header__button--notifications');
-            if (navHeaderProfileDropdown.classList.contains('active') && !e.target.classList.contains('nav-header__profile-item')) {
-              navHeaderAvatarButton.classList.remove('active')
-              navHeaderProfileDropdown.classList.remove('active')
-            } else if (navHeaderNotificationsDropdown && navHeaderNotificationsDropdown.classList.contains('active') && !e.target.classList.contains('nav-header__notifications-item')) {
-              navHeaderNotificationsButton.classList.remove('active')
-              navHeaderNotificationsDropdown.classList.remove('active')
-            }
-          }}>
-            <SidebarMenu currentPath={props.location.pathname} sidebarToggled={sidebarToggled}/>
-            {/* {isForumPage ?
-              <ForumHeader title="Lyme Share" accountType={account.type} {...rest} />
-              : */}
-            <PrivateHeader title={!isForumPage ? 'LymeLog' : "Lyme Share" } accountType={account.type} isForumPage={isForumPage} {...rest} />
-            {/* } */}
-            <div className='message__wrapper--dashboard'>
-              <div
-                className='message--dashboard--success'
-                id='message--dashboard--success'
-                onTransitionEnd={() => {
-                  this.setTimeout(() => {
-                    document.getElementById('message--dashboard--success').classList.remove('active');
-                  }, 5000);
-                }}>
-                <span>Thanks for checking in!</span>
-                <i className="material-icons right"
-                  onClick={(e) => document.getElementById('message--dashboard--success').classList.remove('active')}>
-                  close
-                </i>
+// const AuthPatientRoute = ({ loggingIn, authenticated, account, component, sidebarToggled, showProfileBackgroundModel, showProfileImageModel, isForumPage, ...rest }) => {
+class AuthPatientRoute extends React.Component {
+  componentDidUpdate(prevProps) {
+    if (prevProps.path !== this.props.path) {
+      window.scrollTo(0, 0)
+    }
+  }
+
+  render() {
+    const { loggingIn, authenticated, account, component, sidebarToggled, showProfileBackgroundModel, showProfileImageModel, isForumPage, ...rest } = this.props;
+    return (
+      <Route render={(props) => {
+        return (
+          !authenticated ?
+            // <Redirect to="/login" />
+            <Redirect to="/" />
+          : account.type === 'doctor' ?
+            <Redirect to="/doctor" />
+          : account.type === 'admin' ?
+            <Redirect to="/admin" />
+          :
+            <div className="page" onClick={(e) => {
+              const navHeaderProfileDropdown = document.getElementById('nav-header__dropdown--avatar');
+              const navHeaderAvatarButton = document.getElementById('nav-header__button--avatar');
+              const navHeaderNotificationsDropdown = document.getElementById('nav-header__dropdown--notifications');
+              const navHeaderNotificationsButton = document.getElementById('nav-header__button--notifications');
+              if (navHeaderProfileDropdown.classList.contains('active') && !e.target.classList.contains('nav-header__profile-item')) {
+                navHeaderAvatarButton.classList.remove('active')
+                navHeaderProfileDropdown.classList.remove('active')
+              } else if (navHeaderNotificationsDropdown && navHeaderNotificationsDropdown.classList.contains('active') && !e.target.classList.contains('nav-header__notifications-item')) {
+                navHeaderNotificationsButton.classList.remove('active')
+                navHeaderNotificationsDropdown.classList.remove('active')
+              }
+            }}>
+              <SidebarMenu currentPath={props.location.pathname} sidebarToggled={sidebarToggled}/>
+              {/* {isForumPage ?
+                <ForumHeader title="Lyme Share" accountType={account.type} {...rest} />
+                : */}
+              <PrivateHeader title={!isForumPage ? 'LymeLog' : "Lyme Share" } accountType={account.type} isForumPage={isForumPage} {...rest} />
+              {/* } */}
+              <div className='message__wrapper--dashboard'>
+                <div
+                  className='message--dashboard--success'
+                  id='message--dashboard--success'
+                  onTransitionEnd={() => {
+                    this.setTimeout(() => {
+                      document.getElementById('message--dashboard--success').classList.remove('active');
+                    }, 5000);
+                  }}>
+                  <span>Thanks for checking in!</span>
+                  <i className="material-icons right"
+                    onClick={(e) => document.getElementById('message--dashboard--success').classList.remove('active')}>
+                    close
+                  </i>
+                </div>
               </div>
+              {(sidebarToggled || showProfileBackgroundModel || showProfileImageModel) &&
+                <div className='page-content--overlay' onClick={() => {
+                  Session.set('sidebarToggled', false);
+                  Session.set('showProfileBackgroundModel', false);
+                  Session.set('showProfileImageModel', false);
+                }}></div>
+              }
+              <div>
+                {(React.createElement(component, {...props, ...rest}))}
+              </div>
+              <Footer />
             </div>
-            {(sidebarToggled || showProfileBackgroundModel || showProfileImageModel) &&
-              <div className='page-content--overlay' onClick={() => {
-                Session.set('sidebarToggled', false);
-                Session.set('showProfileBackgroundModel', false);
-                Session.set('showProfileImageModel', false);
-              }}></div>
-            }
-            <div>
-              {(React.createElement(component, {...props, ...rest}))}
-            </div>
-            <Footer />
-          </div>
-      );
-    }}/>
-  );
+        );
+      }}/>
+    );
+  }
 };
 
 AuthPatientRoute.propTypes = {

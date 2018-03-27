@@ -216,9 +216,9 @@ const PrivateHeader = (props) => {
                   <Link className="btn blue" to="/patient/profile">My Profile</Link>
                 </div>
               </div>
-              <div className='nav-header__dropdown--avatar__bottom-row'>
-                <Link className="" to="#" onClick={() => Accounts.logout()}>Logout</Link>
-              </div>
+              {/* <div className='nav-header__dropdown--avatar__bottom-row'> */}
+                <Link className="nav-header__dropdown--avatar__bottom-row" to="#" onClick={() => Accounts.logout()}>Logout</Link>
+              {/* </div> */}
             </div>
           </div>
         </div>

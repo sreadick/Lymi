@@ -21,3 +21,9 @@
   text-align: center;
   margin: 1rem 0;
 }
+
+.patients-box__table {
+  tbody tr:hover {
+    cursor: pointer;
+  }
+}

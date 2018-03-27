@@ -25,27 +25,27 @@
 
 
 
-background: #1D976C;  /* fallback for old browsers */
-background: -webkit-linear-gradient(to right, #93F9B9, #1D976C);  /* Chrome 10-25, Safari 5.1-6 */
-background: linear-gradient(to right, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+// background: #1D976C;  /* fallback for old browsers */
+// background: -webkit-linear-gradient(to right, #93F9B9, #1D976C);  /* Chrome 10-25, Safari 5.1-6 */
+// background: linear-gradient(to right, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
 
 // background: #76b852;  /* fallback for old browsers */
 // background: -webkit-linear-gradient(to right, #8DC26F, #76b852);  /* Chrome 10-25, Safari 5.1-6 */
 // background: linear-gradient(to right, #8DC26F, #76b852); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
-background: #b4ddb4; /* Old browsers */
-background: -moz-linear-gradient(-45deg, #b4ddb4 4%, #83c783 17%, #52b152 33%, #008a00 64%, #005700 99%); /* FF3.6-15 */
-background: -webkit-linear-gradient(-45deg, #b4ddb4 4%,#83c783 17%,#52b152 33%,#008a00 64%,#005700 99%); /* Chrome10-25,Safari5.1-6 */
-background: linear-gradient(135deg, #b4ddb4 4%,#83c783 17%,#52b152 33%,#008a00 64%,#005700 99%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+// background: #b4ddb4; /* Old browsers */
+// background: -moz-linear-gradient(-45deg, #b4ddb4 4%, #83c783 17%, #52b152 33%, #008a00 64%, #005700 99%); /* FF3.6-15 */
+// background: -webkit-linear-gradient(-45deg, #b4ddb4 4%,#83c783 17%,#52b152 33%,#008a00 64%,#005700 99%); /* Chrome10-25,Safari5.1-6 */
+// background: linear-gradient(135deg, #b4ddb4 4%,#83c783 17%,#52b152 33%,#008a00 64%,#005700 99%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 
 
-// background: #8ab66b; /* Old browsers */
-// background: -moz-linear-gradient(-45deg, #8ab66b 2%, #398235 100%); /* FF3.6-15 */
-// background: -webkit-linear-gradient(-45deg, #8ab66b 2%,#398235 100%); /* Chrome10-25,Safari5.1-6 */
-// background: linear-gradient(135deg, #8ab66b 2%,#398235 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+background: #8ab66b; /* Old browsers */
+background: -moz-linear-gradient(-45deg, #8ab66b 2%, #398235 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(-45deg, #8ab66b 2%,#398235 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(135deg, #8ab66b 2%,#398235 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 
-background: rgb(47, 63, 67);
+// background: rgb(47, 63, 67);
 }
 
 .dashboard__flex-wrapper {
@@ -128,6 +128,7 @@ background: rgb(47, 63, 67);
   // flex: 1;
   height: auto;
   width: 25%;
+  width: 33.33%;
   padding: .5rem .5rem .5rem 1rem !important;
 
   cursor: pointer;
