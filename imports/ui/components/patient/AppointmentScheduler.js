@@ -18,6 +18,20 @@ export default class AppointmentScheduler extends React.Component {
     };
   }
 
+  confirmAppointmentDate(day, time, method) {
+    let date;
+    if (time) {
+      date = moment(day).add(time.hours(), 'hours').add(time.minutes(), 'minutes');
+    } else {
+      date = day;
+    }
+    if (method === 'create') {
+      Meteor.call('users.appointments.create', date.valueOf())
+    } else if (method === 'update') {
+      Meteor.call('users.appointments.updateLast', date.valueOf())
+    }
+    Session.set('showAppointmentScheduler', false);
+  }
 
 
   render() {
@@ -53,7 +67,7 @@ export default class AppointmentScheduler extends React.Component {
           />
           <Button
             className={this.props.currentAppt ? 'blue' : 'white black-text'}
-            onClick={() => this.props.confirmAppointmentDate(this.state.appointmentDate, this.state.appointmentTime, this.props.currentAppt ? 'update' : 'create')}>
+            onClick={() => this.confirmAppointmentDate(this.state.appointmentDate, this.state.appointmentTime, this.props.currentAppt ? 'update' : 'create')}>
             {this.props.currentAppt ? 'Update Appointment' : 'Set Appointment'}
           </Button>
         </div>

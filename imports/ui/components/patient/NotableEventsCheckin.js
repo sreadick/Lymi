@@ -22,11 +22,11 @@ class NotableEventsCheckin extends React.Component {
   render() {
     // if (this.props.treatmentCheckinItems.length === 0) return <div></div>
     return (
-      <div className="page-content">
+      <div className="">
         <div className="checkin-item__container">
           {/* <h4 className="grey-text">Check in for {moment().format('MMMM Do YYYY')}</h4> */}
           {/* <Link className="blue btn" to="/home/checkin/symptoms">Back to symptoms</Link> */}
-          {this.props.trackedItems.includes('treatments') &&
+          {/* {this.props.trackedItems.includes('treatments') &&
             <button
               className='blue btn'
               onClick={() => this.props.navigateToComponent("treatments")}>
@@ -37,22 +37,22 @@ class NotableEventsCheckin extends React.Component {
             className='blue btn'
             onClick={() => this.props.navigateToComponent("symptoms")}>
             Back to symptoms
-          </button>
+          </button> */}
 
-          <h5 className="black-text">Notable Events</h5>
-          <div className="row">
+          <h5>Notable Events</h5>
+          <div className="checkin-item__textarea row">
             <div className="input-field col s12">
               <textarea id="textarea1" className="materialize-textarea" value={this.state.eventMessage} onChange={this.eventMessageChange.bind(this)}></textarea>
-              <label htmlFor="textarea1" className='active'>Anything unusual happen today?</label>
+              {/* <label htmlFor="textarea1" className='active'>Anything unusual happen today?</label> */}
             </div>
           </div>
 
-          <button className={`black btn disabled'}`}
+          <button className={`indigo darken-3 btn disabled'}`}
             onClick={() => {
               Meteor.call('checkinHistories.notableEvents.update', this.state.eventMessage.trim(), this.props.targetDate);
               this.props.navigateToComponent("dashboard");
             }}>
-            Finish!
+            Save Notes and Finish!
           </button>
         </div>
       </div>
@@ -61,7 +61,7 @@ class NotableEventsCheckin extends React.Component {
 };
 
 export default createContainer(props => {
-  const currentDate = moment().format('MMMM Do YYYY');
+  // const currentDate = moment().format('MMMM Do YYYY');
 
   return {
     // treatmentCheckinItems: checkinItems.treatments || [],

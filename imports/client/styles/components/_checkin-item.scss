@@ -40,9 +40,16 @@
 // }
 .checkin-item__container {
   max-width: 700px;
-  margin: $space auto 0 auto;
+  // margin: $space auto 0 auto;
   text-align: center;
   padding-bottom: 1rem;
+  margin: 2rem auto 0 auto;
+
+  h5 {
+    color: #000;
+    margin-bottom: 1rem;
+  }
+
 }
 
 .checkin-item__answer-group {
@@ -144,4 +151,17 @@
 .checkin-item__answer-square.highlighted.NPD {
   border: 1px solid $npd-checkin-answer-primary;
   background: lighten($npd-checkin-answer-primary, 7%);
+}
+
+.checkin-item__textarea {
+  background: #398235 !important;
+  margin-top: 5rem;
+  // height: 70rem;
+  textarea {
+    font-size: 1.3rem !important;
+    color: #222 !important;
+  }
+  textarea:focus {
+    border-bottom: 1px solid #5a67b1 !important;
+  }
 }

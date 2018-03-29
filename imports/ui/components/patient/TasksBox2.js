@@ -142,25 +142,69 @@ class TasksBox2 extends React.Component {
 
         <div className="task-box__section">
           <h3 className="task-box__heading">Practitioner</h3>
-          {/* <ul className='task-box__item__container'> */}
-            <div className='task-box__item'>
-              {this.props.currentDoctor ?
+          {this.props.currentDoctor ?
+            <div>
+              <div className='task-box__item'>
                 <p>{this.props.currentDoctor.profile.firstName} {this.props.currentDoctor.profile.lastName}</p>
-                :
-                <Link
-                  className='task-box__link'
-                  to=''
-                  onClick={() => Session.set('showDoctorSearch', true)}>
-                  Select Lyme Doctor
-                </Link>
-              }
+                <p>Address:<span className='grey-text text-darken-1'> { `${this.props.currentDoctor.profile.officeAddress}, ${this.props.currentDoctor.profile.city}, ${this.props.currentDoctor.profile.state} ${this.props.currentDoctor.profile.zip}`}</span></p>
+                <p>Phone #:<span className='grey-text text-darken-1'> {`  ${this.props.currentDoctor.profile.phone}`}</span></p>
+                <p>Email:<span className='grey-text text-darken-1'>{` ${this.props.currentDoctor.emails[0].address}`}</span></p>
+                {/* <p>Email: {this.props.currentDoctor.emails[0].address}</p> */}
+              </div>
+
+              <h5 className="task-box__subheading">Appointments</h5>
+              <div className='task-box__item'>
+                {this.props.userAppts.last &&
+                  <div>
+                    <p>Last Appointment:</p>
+                    <p className='grey-text text-darken-1'>{moment(this.props.userAppts.last).format('MM/DD/YY')}</p>
+                  </div>
+                }
+                <div>
+                  <p>Next Appointment:</p>
+                  {this.props.userAppts.next ?
+                    <div>
+                      <p className='grey-text text-darken-1'>{moment(this.props.userAppts.next).format('MM/DD/YY (h:mm a)')}</p>
+                      <div>
+                        <span className='blue-text button--link' onClick={() => Session.set('showAppointmentScheduler', true)}>update</span>
+                        <span className='red-text button--link' onClick={() => Meteor.call('users.appointments.removeLast')}> remove</span>
+                      </div>
+                    </div>
+                  :
+                    <p className='grey-text text-darken-1'>
+                      <span className='grey-text text-darken-1'>None </span>
+                      {/* <span className='green-text text-darken-1 button--link right' onClick={() => Session.set('showAppointmentScheduler', true)}> Set Appointment</span> */}
+                      <Link
+                        className='task-box__link task-box__link--edit right'
+                        to=''
+                        onClick={() => Session.set('showAppointmentScheduler', true)}>
+                        Set Appointment
+                      </Link>
+                    </p>
+                  }
+                </div>
+              </div>
             </div>
-          {/* </ul> */}
+            :
+            <Link
+              className='task-box__link'
+              to=''
+              onClick={() => Session.set('showDoctorSearch', true)}>
+              Select Lyme Doctor
+            </Link>
+          }
         </div>
 
         <div className="task-box__section">
           <h3 className="task-box__heading">Account</h3>
-          <h5 className="task-box__subheading">Tracking:</h5>
+          <h5 className="task-box__subheading">
+            Tracking:
+            <Link
+              className='task-box__link task-box__link--edit right'
+              to='/patient/account'>
+              Edit
+            </Link>
+          </h5>
           <div className='task-box__item'>
             <ul>
               {this.props.userInfo.profile.settings.trackedItems.map(item =>
@@ -194,6 +238,7 @@ class TasksBox2 extends React.Component {
               animate={false}
               showLegend={false}
               height={130}
+              padding={{top: 10}}
             />
           </div>
         </div>

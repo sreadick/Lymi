@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
 import moment from 'moment';
+import { getAppointments } from '/imports/utils/utils';
 import { Row, Col, Input, Button, Card } from 'react-materialize';
 
 import Loader from '/imports/ui/components/Loader';
@@ -30,7 +31,6 @@ class MedicalInfo extends React.Component {
     this.handleDiagnosisChange = this.handleDiagnosisChange.bind(this);
     this.toggleTickBorneDisease = this.toggleTickBorneDisease.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.confirmAppointmentDate = this.confirmAppointmentDate.bind(this);
   }
   handleChange(e) {
     this.setState({
@@ -90,23 +90,6 @@ class MedicalInfo extends React.Component {
       this.refs.formSubmitResponse.classList.remove('show')
     }, 2000);
   }
-  confirmAppointmentDate(day, time, method) {
-    // console.log(moment(day).add(4, 'hours'));
-    // console.log(moment(day).add(time.hours(), 'hours'));
-    // console.log(moment(day).add(time.hours(), 'hours').add(time.minutes(), 'minutes'));
-    let date;
-    if (time) {
-      date = moment(day).add(time.hours(), 'hours').add(time.minutes(), 'minutes');
-    } else {
-      date = day;
-    }
-    if (method === 'create') {
-      Meteor.call('users.appointments.create', date.valueOf())
-    } else if (method === 'update') {
-      Meteor.call('users.appointments.updateLast', date.valueOf())
-    }
-    Session.set('showAppointmentScheduler', false);
-  }
   render() {
     if (this.props.isFetching) {
       return <Loader />
@@ -114,7 +97,7 @@ class MedicalInfo extends React.Component {
     return (
       <div className='account-info'>
         { this.props.showDoctorSearch && <DoctorSearch /> }
-        { this.props.showAppointmentScheduler && <AppointmentScheduler currentAppt={this.props.nextAppt} confirmAppointmentDate={this.confirmAppointmentDate}/> }
+        { this.props.showAppointmentScheduler && <AppointmentScheduler currentAppt={this.props.userAppts.next} /> }
 
         <div className='account-info__heading'>Medical Info</div>
         <div className='account-info__subheading'>Lyme Practitioner</div>
@@ -133,15 +116,15 @@ class MedicalInfo extends React.Component {
             <p>Address: {this.props.currentDoctorInfo.address}</p>
             <p>Phone #: {this.props.currentDoctorInfo.phone}</p>
             <p>Email: {this.props.currentDoctorInfo.email}</p>
-            {this.props.prevAppt &&
-              <span>Last Appointment: {moment(this.props.prevAppt).format('MM/DD/YY')}</span>
+            {this.props.userAppts.last &&
+              <span>Last Appointment: {moment(this.props.userAppts.last).format('MM/DD/YY')}</span>
             }
             <div>
               <span>Next Appointment: </span>
-              {this.props.nextAppt
+              {this.props.userAppts.next
                 ?
                   <span>
-                    {moment(this.props.nextAppt).format('MM/DD/YY (h:mm a)')}
+                    {moment(this.props.userAppts.next).format('MM/DD/YY (h:mm a)')}
                     <div>
                       <span className='blue-text text-darken-1 button--link' onClick={() => Session.set('showAppointmentScheduler', true)}>Change Date </span>
                       <span className='red-text text-darken-1 button--link' onClick={() => Meteor.call('users.appointments.removeLast')}> Remove</span>
@@ -211,11 +194,12 @@ class MedicalInfo extends React.Component {
 };
 
 export default createContainer(props => {
-  let nextAppt;
-  let prevAppt;
-  const userAppts = Meteor.user() ? Meteor.user().profile.medical.appointments : undefined;
-  const currentdDoctorHandle = Meteor.subscribe('currentDoctor', Meteor.user() && Meteor.user().doctorId);
-  const currentDoctor = Meteor.user() && Meteor.users.findOne({ 'account.type': 'doctor', _id: Meteor.user().doctorId });
+  const userInfo = Meteor.user();
+  // let nextAppt;
+  // let prevAppt;
+  // const userAppts = userInfo ? userInfo.profile.medical.appointments : undefined;
+  const currentdDoctorHandle = Meteor.subscribe('currentDoctor', userInfo && userInfo.doctorId);
+  const currentDoctor = userInfo && Meteor.users.findOne({ 'account.type': 'doctor', _id: userInfo.doctorId });
   const currentDoctorInfo = {};
 
   if (currentDoctor && currentdDoctorHandle.ready()) {
@@ -224,28 +208,26 @@ export default createContainer(props => {
     currentDoctorInfo.phone = currentDoctor.profile.phone;
     currentDoctorInfo.email = currentDoctor.emails[0].address;
   }
-  if (userAppts) {
-    const lastApptInArray = userAppts[userAppts.length - 1];
-    if (lastApptInArray && moment(lastApptInArray).isAfter(moment())) {
-      console.log(1);
-      nextAppt = lastApptInArray;
-      if (userAppts.length > 1) {
-        console.log(2);
-        prevAppt = userAppts[userAppts.length - 2]
-      }
-    } else if (lastApptInArray && moment(lastApptInArray).isBefore(moment())) {
-      console.log(3);
-      prevAppt = lastApptInArray;
-    }
-  }
+  // if (userAppts) {
+  //   const lastApptInArray = userAppts[userAppts.length - 1];
+  //   if (lastApptInArray && moment(lastApptInArray).isAfter(moment())) {
+  //     nextAppt = lastApptInArray;
+  //     if (userAppts.length > 1) {
+  //       prevAppt = userAppts[userAppts.length - 2]
+  //     }
+  //   } else if (lastApptInArray && moment(lastApptInArray).isBefore(moment())) {
+  //     prevAppt = lastApptInArray;
+  //   }
+  // }
   return {
     currentDoctor,
     showDoctorSearch: Session.get('showDoctorSearch') || false,
     showAppointmentScheduler: Session.get('showAppointmentScheduler') || false,
     currentDoctorInfo,
-    nextAppt,
-    prevAppt,
-    isFetching: !Meteor.user() || !currentdDoctorHandle.ready(),
+    // nextAppt,
+    // prevAppt,
+    userAppts: userInfo ? getAppointments(userInfo.profile.medical.appointments) : {},
+    isFetching: !userInfo || !currentdDoctorHandle.ready(),
   }
 }, MedicalInfo)
 

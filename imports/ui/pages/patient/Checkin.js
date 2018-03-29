@@ -3,7 +3,8 @@ import { Meteor } from 'meteor/meteor';
 import { Route, Switch, Redirect, Link } from 'react-router-dom';
 import { createContainer } from 'meteor/react-meteor-data';
 import moment from 'moment';
-import { filterCurrentDayTreatments } from '../../../utils/utils';
+import ReactTooltip from 'react-tooltip'
+import { filterCurrentDayTreatments, capitalizePhrase } from '../../../utils/utils';
 
 // import { UserSymptoms } from '../../../api/user-symptoms';
 // import { UserTreatments } from '../../../api/user-treatments';
@@ -30,6 +31,7 @@ class Checkin extends React.Component {
   navigateToComponent(component) {
     if (component !== 'dashboard') {
       this.setState({checkinComponent: component})
+      window.scrollTo(0, 0);
     } else {
       document.getElementById('message--dashboard--success').classList.add('active');
       this.props.history.push('/patient/dashboard')
@@ -40,8 +42,83 @@ class Checkin extends React.Component {
       return <Loader />
     }
     return (
-      <div className='page-content'>
-        <h3 className='center-align'>Check in for {this.props.location.state.checkinDate}</h3>
+      <div className='page-content--checkin'>
+        {/* <h3 className='center-align'>Check in for {this.props.location.state.checkinDate}</h3> */}
+        <h3 className=''>{this.props.location.state.checkinDate}</h3>
+        {this.props.trackedItems.length > 1 &&
+          <nav className='breadcrumb__wrapper--check-in'>
+            <div className="nav-wrapper">
+              <div className="col s12">
+                {this.props.trackedItems.map(trackedItem => {
+                  const itemState = trackedItem === this.state.checkinComponent ? 'active'
+                    :
+                    (this.props.symptomCheckinCompleted && this.props.treatmentCheckinCompleted) ?
+                    'clickable'
+                    :
+                    trackedItem === 'symptoms' ?
+                    'clickable'
+                    :
+                    trackedItem === 'treatments' ?
+                      ((this.state.checkinComponent === 'symptoms' && this.props.symptomCheckinCompleted) || this.state.checkinComponent === 'notable events') ?
+                      'clickable'
+                      :
+                      'disabled'
+                    :
+                    trackedItem === 'notable events' ?
+                      ((this.state.checkinComponent === 'treatments' && this.props.treatmentCheckinCompleted)) ?
+                      'clickable'
+                      :
+                      'disabled'
+                    :
+                    'disabled';
+                  return (
+                    <Link
+                      key={trackedItem}
+                      to=""
+                      data-tip data-for={`${trackedItem}_tooltip`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (e.target.classList.contains('clickable')) {
+                          this.navigateToComponent(trackedItem);
+                        }
+                      }}
+                      className={'breadcrumb breadcrumb--check-in ' + itemState}>
+                      {capitalizePhrase(trackedItem)}
+                      {itemState === 'disabled' &&
+                        <ReactTooltip
+                          id={`${trackedItem}_tooltip`}
+                          type='error'
+                          place='right'
+                          effect='solid'>
+                          <div>{`Fill out all ${trackedItem === 'treatments' ? 'symptoms' : 'treatments'}.`}</div>
+                        </ReactTooltip>
+                      }
+                    </Link>
+                  )
+                })}
+                <div
+                  className={`breadcrumb--check-in--finish ${(!this.props.treatmentCheckinCompleted || !this.props.symptomCheckinCompleted) && 'disabled'}`}
+                  data-tip data-for='checkin_done'
+                  onClick={() => {
+                    if (this.props.treatmentCheckinCompleted && this.props.symptomCheckinCompleted) {
+                      this.navigateToComponent('dashboard')
+                    }
+                  }}>
+                  Done
+                </div>
+                {(!this.props.treatmentCheckinCompleted || !this.props.symptomCheckinCompleted) &&
+                  <ReactTooltip
+                    id='checkin_done'
+                    type='error'
+                    place='left'
+                    effect='solid'>
+                    <div>Fill out all symptoms and treatments.</div>
+                  </ReactTooltip>
+                }
+              </div>
+            </div>
+          </nav>
+        }
         {this.state.checkinComponent === 'symptoms' ?
           <SymptomsCheckin
             symptomCheckinItems={this.props.symptomCheckinItems}
@@ -51,6 +128,7 @@ class Checkin extends React.Component {
             targetDate={this.props.targetDate}
             yesterdaysCheckin={this.props.yesterdaysCheckin}
             trackedItems={this.props.trackedItems}
+            symptomCheckinCompleted={this.props.symptomCheckinCompleted}
            />
           : this.state.checkinComponent === 'treatments' ?
           <TreatmentsCheckin
@@ -60,6 +138,7 @@ class Checkin extends React.Component {
             yesterdaysCheckin={this.props.yesterdaysCheckin}
             nonPrescribedTreatmentNames={this.props.nonPrescribedTreatmentNames}
             trackedItems={this.props.trackedItems}
+            treatmentCheckinCompleted={this.props.treatmentCheckinCompleted}
           />
           :
           <NotableEventsCheckin
@@ -107,14 +186,25 @@ export default createContainer(props => {
       });
     }
   }
+
+  const symptomCheckinItems = foundCheckin ? foundCheckin.symptoms : [];
+  const treatmentCheckinItems = foundCheckin ? foundCheckin.treatments.filter(checkinTreatment => checkinTreatment.prescribedToday) : [];
+  const trackedItems = Meteor.user().profile.settings.trackedItems;
+
   return {
-    symptomCheckinItems: foundCheckin ? foundCheckin.symptoms : [],
-    treatmentCheckinItems: foundCheckin ? foundCheckin.treatments.filter(checkinTreatment => checkinTreatment.prescribedToday) : [],
+    // symptomCheckinItems: foundCheckin ? foundCheckin.symptoms : [],
+    // treatmentCheckinItems: foundCheckin ? foundCheckin.treatments.filter(checkinTreatment => checkinTreatment.prescribedToday) : [],
     notableEventsMessage: foundCheckin ? foundCheckin.notableEvents : '',
     nonPrescribedTreatmentNames: foundCheckin ? foundCheckin.treatments.filter(checkinTreatment => !checkinTreatment.prescribedToday).map(checkinTreatment => checkinTreatment.name) : [],
     isFetching: !checkinHistoryIsReady,
     targetDate,
     yesterdaysCheckin,
-    trackedItems: Meteor.user().profile.settings.trackedItems
+    // trackedItems: Meteor.user().profile.settings.trackedItems,
+    trackedItems,
+    symptomCheckinItems,
+    treatmentCheckinItems,
+    symptomCheckinCompleted: symptomCheckinItems.filter((symptom) => symptom.severity > 0).length === symptomCheckinItems.length,
+    treatmentCheckinCompleted: (!trackedItems.includes('treatments') || treatmentCheckinItems.filter((treatment) => treatment.compliance !== null).length === treatmentCheckinItems.length),
+
   }
 }, Checkin)

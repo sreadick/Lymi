@@ -18,7 +18,9 @@ class Settings extends React.Component {
     if (trackedItems.includes(e.target.value)) {
       trackedItems.splice(trackedItems.indexOf(e.target.value), 1)
     } else {
-      trackedItems.push(e.target.value)
+      // trackedItems.push(e.target.value)
+      const newPosition = (e.target.value === 'notable events' && trackedItems.includes('treatments')) ? 2 : 1;
+      trackedItems.splice(newPosition, 0, e.target.value);
     }
     Meteor.users.update(Meteor.userId(), {
       $set: {

@@ -31,40 +31,6 @@
 
   transition: height .3s ease;
 
-  // -webkit-animation: FadeIn 5s ease;
-  // -moz-animation: FadeIn 5s ease;
-  // -o-animation: FadeIn 5s ease;
-  // animation: FadeIn 5s ease;
-  //
-  // @-webkit-keyframes FadeIn {
-  //   0%{height: 0rem}
-  //   10%{height: 4rem}
-  //   90%{height: 4rem}
-  //   100%{height: 0rem}
-  // }
-  // @-moz-keyframes FadeIn {
-  //   0%{height: 0rem}
-  //   10%{height: 4rem}
-  //   90%{height: 4rem}
-  //   100%{height: 0rem}
-  //
-  // }
-  // @-o-keyframes FadeIn {
-  //   0%{height: 0rem}
-  //   10%{height: 4rem}
-  //   90%{height: 4rem}
-  //   100%{height: 0rem}
-  //
-  // }
-  // @keyframes FadeIn {
-  //   0%{height: 0rem}
-  //   10%{height: 4rem}
-  //   90%{height: 4rem}
-  //   100%{height: 0rem}
-  //
-  // }
-
-
   span {
     font-family: "Lato", sans-serif;
     font-size: 1rem;
@@ -80,4 +46,15 @@
       color: darken(#2c662d, 50%);
     }
   }
+}
+
+.message--treatment-date {
+  color: rgb(39, 111, 134);
+  background: rgb(248, 255, 255);
+  width: 45rem;
+  margin: 0 auto;
+  border-radius: 5px;
+  -webkit-box-shadow: 0 0 0 1px #a9d5de inset, 0 0 0 0 transparent;
+  box-shadow: 0 0 0 1px #a9d5de inset, 0 0 0 0 transparent;
+  padding: .5rem 1rem;
 }

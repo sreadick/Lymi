@@ -15,6 +15,9 @@ export default class CheckinPieChart extends React.Component {
         },
         legend: {
           display: props.showLegend
+        },
+        layout: {
+          padding: props.padding || 0
         }
       }
     }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import moment from 'moment';
-import { capitalizePhrase, isTreatmentPrescribed, getColor} from '../../../utils/utils';
+import { capitalizePhrase, isTreatmentPrescribed, getColor, shadeColor } from '../../../utils/utils';
 
 // const colorsArray = ['#b39ddb', '#e57373', '#90caf9', '#ffab91', '#81C784', '#A1887F', '#F06292', '#7986CB', '#E0E0E0', '#4DB6AC', '#BA68C8', '#DCE775', '#90A4AE', '#FFB74D', '#AED581', '#4FC3F7', '#FFD54F'];
 
@@ -63,25 +63,30 @@ export default TreatmentChart2 = (props) => {
                   <div
                     key={checkin.date}
                     className={`treatment-chart__block-segment ${!checkinTreatment ? 'null' : checkinTreatment.compliance}`}
-                    style={{background:
-                      (!isTreatmentPrescribed(treatment, checkin.date)) ?
-                        // treatment.color
-                        '#fff'
-                      :
-                      checkinTreatment ?
-                        (checkinTreatment.compliance === 'NPD' || !checkinTreatment.prescribedToday) ? '#fff'
+                    style={
+                      {background:
+                        (!isTreatmentPrescribed(treatment, checkin.date)) ?
+                          // treatment.color
+                          '#fff'
                         :
-                        // checkinTreatment.compliance === 'Some' ? `repeating-linear-gradient(-55deg, ${treatment.color}, ${treatment.color} 3px, #f5f5f5 6px, #f5f5f5 9px)`
-                        checkinTreatment.compliance === 'Some' ? `repeating-linear-gradient(-55deg, ${getColor(treatmentIndex)}, ${getColor(treatmentIndex)} 3px, #999 6px)`
-                        :
-                        getColor(treatmentIndex)
-                        // (checkinTreatment.compliance === 'Yes' || checkinTreatment.compliance === 'No' || checkinTreatment.compliance === 'NPD') ? treatment.color
+                        checkinTreatment ?
+                          (checkinTreatment.compliance === 'NPD' || !checkinTreatment.prescribedToday) ? '#fff'
+                          :
+                          // checkinTreatment.compliance === 'Some' ? `repeating-linear-gradient(-55deg, ${treatment.color}, ${treatment.color} 3px, #f5f5f5 6px, #f5f5f5 9px)`
+                          // checkinTreatment.compliance === 'Some' ? `repeating-linear-gradient(-55deg, ${getColor(treatmentIndex)}, ${getColor(treatmentIndex)} 3px, #999 6px)`
+                          checkinTreatment.compliance === 'Some' ? `repeating-linear-gradient(-55deg, ${getColor(treatmentIndex)}, ${shadeColor(getColor(treatmentIndex), 40)} 9px)`
+                          :
+                          getColor(treatmentIndex)
+                          // (checkinTreatment.compliance === 'Yes' || checkinTreatment.compliance === 'No' || checkinTreatment.compliance === 'NPD') ? treatment.color
 
-                        // checkinTreatment.compliance === 'No' ? 'red' :
-                      :
-                      getColor(treatmentIndex)
+                          // checkinTreatment.compliance === 'No' ? 'red' :
+                        :
+                        getColor(treatmentIndex),
+                        color: shadeColor(getColor(treatmentIndex), 70)
+
                       // treatment.color
                       // '#fff'
+
                     }} >
                     {
                       checkinTreatment && (!checkinTreatment.prescribedToday || checkinTreatment.compliance === "Yes" || checkinTreatment.compliance === "Some" || checkinTreatment.compliance === "NPD") ?

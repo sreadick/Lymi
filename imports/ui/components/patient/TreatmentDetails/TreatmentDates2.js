@@ -147,6 +147,20 @@ export default TreatmentDates2 = (props) => {
         </Col>
       </Row>
       }
+      {/* { props.createdAt && props.startDate.isBefore(moment(props.createdAt).startOf('day')) ? */}
+      { props.createdAt ?
+          <div className='message--treatment-date'>
+            Updating this treatment's prescribed dates may impact graphing and history data.
+          </div>
+        :
+        props.startDate.isBefore(moment().startOf('day')) ?
+          <div className='message--treatment-date'>
+            By selecting a start date before the current point in time, any relevent LyemLog graphs will reflect that you have taken this treatment as presribed until now.
+          </div>
+        :
+        undefined
+      }
+
     </div>
   );
 }

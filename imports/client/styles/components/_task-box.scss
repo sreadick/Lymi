@@ -62,10 +62,13 @@
   color: #001;
   color: lightblue;
   font-weight: 700;
-  padding: 0 .5rem;
+  // padding: 0 .5rem;
+  padding: 0 1rem 0 .2rem;
   color: #555;
 
-  font-style: italic;
+  color: #777;
+
+  // font-style: italic;
 
 }
 
@@ -124,9 +127,24 @@
   height: 100%;
 
 
-  text-decoration: underline;
   color: #bbb;
 
+  // color: #2e7d32;
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: #43A047;
+
+  color: #009688;
+  
+  &:hover {
+    text-decoration: underline;
+  }
+
+}
+
+.task-box__link--edit {
+  color: #039be5;
+  font-size: 1.05rem;
 }
 
 .task-box__link--topic {

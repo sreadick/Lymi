@@ -119,6 +119,8 @@ background: linear-gradient(135deg, #8ab66b 2%,#398235 100%); /* W3C, IE10+, FF1
   display: flex;
   // align-items: flex-start;
   justify-content: flex-start;
+  // justify-content: space-around;
+  // justify-content: center;
   flex-wrap: wrap;
 
 }
@@ -127,9 +129,11 @@ background: linear-gradient(135deg, #8ab66b 2%,#398235 100%); /* W3C, IE10+, FF1
   // display: inline-block;
   // flex: 1;
   height: auto;
-  width: 25%;
+  // width: 25%;
+  // min-width: 15%;
   width: 33.33%;
   padding: .5rem .5rem .5rem 1rem !important;
+  padding: .5rem 1rem .5rem 1rem !important;
 
   cursor: pointer;
   border: 1px solid transparent;
@@ -138,6 +142,10 @@ background: linear-gradient(135deg, #8ab66b 2%,#398235 100%); /* W3C, IE10+, FF1
   }
   &.active {
     border: 1px solid #888;
+  }
+  &.stretch {
+    min-width: 33.33%;
+    width: auto;
   }
 }
 

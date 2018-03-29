@@ -54,9 +54,11 @@ class AuthPatientRoute extends React.Component {
                   className='message--dashboard--success'
                   id='message--dashboard--success'
                   onTransitionEnd={() => {
-                    this.setTimeout(() => {
+                    console.log(1);
+                    setTimeout(() => {
+                      console.log(2);
                       document.getElementById('message--dashboard--success').classList.remove('active');
-                    }, 5000);
+                    }, 4000);
                   }}>
                   <span>Thanks for checking in!</span>
                   <i className="material-icons right"

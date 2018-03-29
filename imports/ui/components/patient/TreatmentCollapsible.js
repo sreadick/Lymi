@@ -15,7 +15,6 @@ export default class TreatmentCollapsible extends React.Component {
     const {treatment, takeTreatmentToday} = this.props;
 
     let treatmentNameArr = treatment.name.split(' ');
-    console.log(treatmentNameArr);
     if (treatmentNameArr.length === 1)  {
       if (treatment.name.length > 17) {
         treatmentNameArr[0] = treatment.name.substr(0, 16) + '...';

@@ -5,7 +5,7 @@ import { Redirect, Link } from 'react-router-dom';
 import moment from 'moment';
 import ReactTooltip from 'react-tooltip'
 import { Session } from 'meteor/session';
-import { capitalizePhrase, filterCurrentDayTreatments, getTasks, getColor, getExtendedTreatmentHistory } from '../../../utils/utils';
+import { capitalizePhrase, filterCurrentDayTreatments, getTasks, getColor, getExtendedTreatmentHistory, getAppointments } from '../../../utils/utils';
 
 import { UserSymptoms } from '../../../api/user-symptoms';
 import { UserTreatments } from '../../../api/user-treatments';
@@ -16,6 +16,7 @@ import SymptomChart from '../../components/patient/SymptomChart';
 import TreatmentChart from '../../components/patient/TreatmentChart2';
 import NotableEvents from '../../components/patient/NotableEvents';
 import DoctorSearch from '../../components/patient/DoctorSearch';
+import AppointmentScheduler from '../../components/patient/AppointmentScheduler';
 
 // import ProfileBackgroundModel from '../../components/patient/ProfileBackgroundModel';
 // import ProfileImageModel from '../../components/patient/ProfileImageModel';
@@ -42,6 +43,7 @@ const Dashboard2 = (props) => {
   return (
     <div className="dashboard__page">
       { props.showDoctorSearch && <DoctorSearch /> }
+      { props.showAppointmentScheduler && <AppointmentScheduler currentAppt={props.userAppts.next} /> }
       <div className="dashboard__flex-wrapper">
         <div className="dashboard__page__content">
 
@@ -100,7 +102,8 @@ const Dashboard2 = (props) => {
                     symptomNames={props.userSymptoms.filter(symptom => symptom.system === props.activeSymptomGroup).map(symptom => symptom.name)}
                     // checkins={props.checkins.length > 13 ? props.checkins.slice(-14) : props.checkins}
                     checkins={props.modifiedSymptomCheckins}
-                    symptomColors={props.userSymptoms.filter(symptom => symptom.system === props.activeSymptomGroup).map((symptom, index) => getColor(index))}
+                    // symptomColors={props.userSymptoms.filter(symptom => symptom.system === props.activeSymptomGroup).map((symptom, index) => getColor(index))}
+                    symptomColors={props.userSymptoms.filter(symptom => symptom.system === props.activeSymptomGroup).map(symptom => symptom.color)}
                     height={100}
                     // padding={{top: 0, right: 15, bottom: 10, left: 0}}
                     padding={{top: 0, right: 15, bottom: 10, left: 0}}
@@ -123,18 +126,20 @@ const Dashboard2 = (props) => {
                 }
               </div>
               <div className="dashboard__chart__symptom-group__list">
-                {props.userSymptomGroups.map((symptomGroup) => {
+                {props.userSymptomGroups.map((symptomGroup, index, array) => {
+                  console.log(symptomGroup, (index + 1) % 3);
                   return (
                     <ul
                       key={symptomGroup}
-                      className={`dashboard__chart__symptom-group ${props.activeSymptomGroup === symptomGroup && 'active'}`}
+                      className={`dashboard__chart__symptom-group ${(array.length - 1 === index && (index + 1) % 3 !== 1) && 'stretch'} ${props.activeSymptomGroup === symptomGroup && 'active'}`}
                       onClick={() => Session.set('activeSymptomGroup', symptomGroup)}>
                       <span className='dashboard__chart__symptom-group__title'>{symptomGroup}</span>
                       {props.userSymptoms.filter(symptom => symptom.system === symptomGroup).map((symptom, index) =>
                         <li
                           key={symptom._id}
                           className='dashboard__chart__symptom-group__symptom'
-                          style={{color: symptom.system === props.activeSymptomGroup ? getColor(index) : '#333'}}>
+                          // style={{color: symptom.system === props.activeSymptomGroup ? getColor(index) : '#333'}}>
+                          style={{color: symptom.system === props.activeSymptomGroup ? symptom.color : '#333'}}>
                           {capitalizePhrase(symptom.name)}
                         </li>
                       )}
@@ -237,6 +242,7 @@ const Dashboard2 = (props) => {
           userSymptoms={props.userSymptoms}
           userTreatments={props.userTreatments}
           checkins={props.checkins}
+          userAppts={props.userAppts}
         />
       </div>
 
@@ -292,8 +298,23 @@ export default createContainer(() => {
   modifiedSymptomCheckins = modifiedSymptomCheckins.slice(firstCheckinIndex);
   // console.log(firstCheckinIndex);
   // const newExtendedSymptomCheckins = modifiedSymptomCheckins.reverse()
+  userSymptoms.sort((symptomA, symptomB) => {
+    // console.log(symptomA.system, " ... ", symptomB.system);
+    if (symptomA.system < symptomB.system) {
+      return -1;
+    }
+    if (symptomA.system > symptomB.system) {
+      return 1;
+    }
+    return 0;
+  });
   return {
-    userSymptoms,
+    userSymptoms: userSymptoms.map((symptom, index) => (
+      {
+        ...symptom,
+        color: getColor(index)
+      }
+    )),
     activeSymptomGroup: Session.get('activeSymptomGroup') || (symptomsHandle.ready() && userSymptomGroups[0]),
     userTreatments,
     modifiedSymptomCheckins,
@@ -310,7 +331,9 @@ export default createContainer(() => {
     extendedTreatmentCheckins: (treatmentsHandle.ready() && checkinHandle.ready() && checkins.length > 0) ? getExtendedTreatmentHistory(userTreatments, checkins) : [],
     notableEventCheckins: checkins.filter(checkin => !!checkin.notableEvents),
     showDoctorSearch: Session.get('showDoctorSearch') || false,
+    showAppointmentScheduler: Session.get('showAppointmentScheduler') || false,
     userInfo,
+    userAppts: userInfo ? getAppointments(userInfo.profile.medical.appointments) : {},
     isFetching: (!symptomsHandle.ready() || !treatmentsHandle.ready() || !checkinHandle.ready() || !userInfo)
   };
 }, Dashboard2);

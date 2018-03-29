@@ -25,7 +25,6 @@ export class TreatmentEditor3 extends React.Component {
 
     // const { name, amount, dose, dose_type, frequency, daysOfWeek, startDate, endDate } = props.treatment;
     const { treatment } = props;
-
     // this.state = {
     //   name: treatment === null ? '' : treatment.name,
     //   amount: treatment === null ? 1 : treatment.amount,
@@ -876,6 +875,7 @@ export class TreatmentEditor3 extends React.Component {
                 handleIndividualDateSelection={this.handleIndividualDateSelection.bind(this)}
                 handleStartDateChange={this.handleStartDateChange.bind(this)}
                 changeModalView={this.changeModalView.bind(this)}
+                createdAt={this.props.treatment ? this.props.treatment.createdAt : null}
               />
             : this.state.selectedTab === 'dosing' ?
               <TreatmentDosing2
