@@ -2,6 +2,7 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+import { Button } from 'react-materialize';
 import { createContainer } from 'meteor/react-meteor-data';
 
 import Loader from '/imports/ui/components/Loader';
@@ -18,9 +19,9 @@ const Home = (props) => {
         <div className='patients-box__title'>
           My Patients
           {/* <Link className='btn-floating waves-effect waves-light green' to='/doctor/addpatients'> */}
-          <Link to='/doctor/addpatients'>
+          {/* <Link to='/doctor/addpatients'>
             <i className="material-icons button--icon green-text">add</i>
-          </Link>
+          </Link> */}
         </div>
         <div className='patients-box'>
           { props.currentPatients.length > 0
@@ -63,6 +64,12 @@ const Home = (props) => {
         </div>
         {/* <div className='right grey-text'>My Key: {props.sixCharKey}</div> */}
       </div>
+
+      <Link to='/doctor/addpatients'>
+        {/* <i className="material-icons button--icon green-text">add</i> */}
+        <Button floating fab='vertical' icon='add' className='green' large style={{bottom: '45px', right: '24px'}} />
+      </Link>
+
     </div>
   );
 };

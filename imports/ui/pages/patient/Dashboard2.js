@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Redirect, Link } from 'react-router-dom';
 import moment from 'moment';
-import ReactTooltip from 'react-tooltip'
+import ReactTooltip from 'react-tooltip';
 import { Session } from 'meteor/session';
 import { capitalizePhrase, filterCurrentDayTreatments, getTasks, getColor, getExtendedTreatmentHistory, getAppointments } from '../../../utils/utils';
 
