@@ -5,6 +5,7 @@ import { UserTreatments } from '/imports/api/user-treatments';
 import { CheckinHistories } from '/imports/api/checkin-histories';
 import { Requests } from '/imports/api/requests';
 import { ForumPosts } from '/imports/api/forum';
+import { Messages } from '/imports/api/messages';
 
 
 export const getNextColor = (lastSymptomIndex) => {
@@ -218,10 +219,12 @@ export const getTasks = () => {
   const checkinHandle = Meteor.subscribe('checkinHistories');
   const requestsHandle = Meteor.subscribe('requestsToUser');
   const forumPostsHandle = Meteor.subscribe('forumPosts');
+  const messagesHandle = Meteor.subscribe('messages');
 
   const checkinHistory =  CheckinHistories.findOne();
   const userTreatments = UserTreatments.find().fetch();
   const userSymptoms =  UserSymptoms.find().fetch();
+  const newMessages = Messages.find({viewed: false}).fetch();
 
   let numTasks = 0;
   const todayTreatments = filterCurrentDayTreatments(userTreatments);
@@ -243,14 +246,17 @@ export const getTasks = () => {
     numTasks++;
   }
 
+
+
   const newPosts = ForumPosts.find({topicAuthorId: Meteor.userId(), viewedByTopicAuthor: false}).fetch();
   const requests = Requests.find().fetch();
-  numTasks += newPosts.length + requests.length;
+  numTasks += newPosts.length + requests.length + newMessages.length;
   return {
     dailyCheckinStatus,
     requests,
     doctorIsLinked: Meteor.user().doctorId ? true : false,
-    newPosts: ForumPosts.find({topicAuthorId: Meteor.userId(), viewedByTopicAuthor: false}).fetch(),
+    newPosts,
+    newMessages,
     numTasks
   }
 }

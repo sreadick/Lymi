@@ -56,7 +56,7 @@ class PatientSummary2 extends React.Component {
   // }
   componentDidMount() {
     // const subsectionSelectFive = document.querySelector('#pt-summary__subsection--select-five');
-    
+
     // const symptomAnchorTopPosition = document.querySelector('.pt-summary__heading--symptoms').getBoundingClientRect().top;
     // const treatmentAnchorTopPosition = document.querySelector('.pt-summary__heading--treatments').getBoundingClientRect().top;
     // const infoAnchorTopPosition = document.querySelector('.pt-summary__heading--info').getBoundingClientRect().top;

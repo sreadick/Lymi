@@ -5,6 +5,8 @@ import { Session } from 'meteor/session';
 import PropTypes from 'prop-types';
 
 import PrivateHeader from '../components/PrivateHeader';
+import Footer from '../components/Footer';
+
 // import SidebarMenu from '../components/patient/SidebarMenu';
 
 const AuthDoctorRoute = ({ loggingIn, authenticated, account, component, sidebarToggled, ...rest }) => {
@@ -25,9 +27,27 @@ const AuthDoctorRoute = ({ loggingIn, authenticated, account, component, sidebar
           }}>
             {/* <SidebarMenu currentPath={props.location.pathname} sidebarToggled={sidebarToggled}/> */}
             <PrivateHeader title="LymeLog-MD" accountType={account.type} />
+            {/* Todo: Change className and refactor */}
+            <div className='message__wrapper--dashboard'>
+              <div
+                className='message--dashboard--success'
+                id='message--dr-message--success'
+                onTransitionEnd={() => {
+                  setTimeout(() => {
+                    document.getElementById('message--dr-message--success').classList.remove('active');
+                  }, 4000);
+                }}>
+                <span>Message successfully sent.</span>
+                <i className="material-icons right"
+                  onClick={(e) => document.getElementById('message--dr-message--success').classList.remove('active')}>
+                  close
+                </i>
+              </div>
+            </div>
             <div>
               {(React.createElement(component, {...props, ...rest}))}
             </div>
+            <Footer />
           </div>
         : account.type === 'admin' ?
           <Redirect to="/admin" />

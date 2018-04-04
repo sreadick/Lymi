@@ -46,15 +46,20 @@
   // top: 4rem;
   // margin-bottom: 4rem;
   height: 4rem;
+  z-index: 1;
+
 }
 
 .pt-summary__header {
   // font-size: 1.8rem;
   // font-weight: 300;
   padding: 0 5rem;
+  padding: 0 2rem;
+  padding: 0 4rem 0 2rem;
   border-bottom: 1px solid #ddd;
   // color: #111;
   height: 100%;
+
   // line-height: 4rem;
   background: #fff;
 
@@ -69,7 +74,18 @@
   color: #111;
   // line-height: 4rem;
   // margin-right: 4rem;
+  i {
+    font-size: 2rem !important;
+    vertical-align: middle;
+    color: #039be5 !important;
+    cursor: pointer;
+    // vertical-align: middle !important;
+    // line-height: 4rem;
 
+    // line-height: 4rem !important;
+    margin-right: 1rem;
+    margin-bottom: .2rem;
+  }
 }
 
 .pt-summary__header__link {

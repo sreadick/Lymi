@@ -11,6 +11,7 @@ import '../imports/api/common-treatments';
 import '../imports/api/images';
 // import '../imports/api/forum-posts';
 import '../imports/api/forum';
+import '../imports/api/messages';
 
 import { seedDbWithCommonSymptoms, seedDbWithCommonTreatments, seedDbWithSubforums } from '../imports/utils/dbSeeds';
 

@@ -45,7 +45,7 @@ class TasksBox2 extends React.Component {
             }
           </h3>
           {/* {(this.props.userTasks.dailyCheckinStatus === 'complete' && this.props.userTasks.requests.length === 0 && this.props.userTasks.newPosts.length === 0) */}
-          {!this.props.hasTasks
+          {!this.props.userTasks.numTasks === 0
             ?
               <p>No new notifications.</p>
             :
@@ -97,9 +97,44 @@ class TasksBox2 extends React.Component {
                   </div>
                 </li>
               )}
+
+              {this.props.userTasks.newMessages.map((message) => {
+                // const topic = Topics.findOne(post.topicId);
+                return (
+                  <li className='task-box__item' key={message._id}>
+                    <div className='row'>
+                      <div className='col s10'>
+                        <span>{`New message from ${message.doctorName}:`}</span>
+                      </div>
+                      <div className='col s1 offset-s1'>
+                        <i
+                          className="material-icons indigo-text button--icon"
+                          data-tip data-for='dismissNotification'
+                          onClick={() => Meteor.call('messages.update',
+                            {messageId: message._id, updateProp: 'viewed', newValue: true}
+                          )}>
+                          not_interested
+                        </i>
+                        <ReactTooltip id='dismissNotification' place='bottom' effect='solid'>
+                          Dismiss
+                        </ReactTooltip>
+                      </div>
+                      <div className='col s12 grey-text text-darken-1'>
+                        {/* -{moment(post.createdAt).fromNow()} */}
+                        <span>"{message.body}"</span>
+                      </div>
+                    </div>
+                    {/* <div className='row'>
+                      <div className='col s10'>
+                        <span>{message.body}</span>
+                      </div>
+                    </div> */}
+                  </li>
+                );
+              })}
+
               {this.props.userTasks.newPosts.map((post) => {
                 const topic = Topics.findOne(post.topicId);
-
                 return (
                   <li className='task-box__item' key={post._id}>
                     <div className='row'>
@@ -292,7 +327,7 @@ export default createContainer((props) => {
     // requests: Requests.find().fetch(),
     // userInfo,
     userTasks,
-    hasTasks: (userTasks.dailyCheckinStatus !== 'complete' || userTasks.requests.length > 0 || userTasks.newPosts.length > 0) ? true : false,
+    // hasTasks: (userTasks.dailyCheckinStatus !== 'complete' || userTasks.requests.length > 0 || userTasks.newPosts.length > 0) ? true : false,
     checkinComplianceData: getCheckinComplianceData(props.userInfo.account.createdAt, props.checkins),
     currentDoctor,
     userTopics: Topics.find({authorId: props.userInfo._id}, {sort: {createdAt: -1}}).fetch(),
