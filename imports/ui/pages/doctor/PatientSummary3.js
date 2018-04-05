@@ -82,19 +82,14 @@ class PatientSummary2 extends React.Component {
         }
         <div className='pt-summary__header__wrapper'>
           <div className='pt-summary__header'>
-            {/* <div> */}
-              {/* <Link className='' to='/doctor/home'> */}
-
-              {/* </Link> */}
-              <div className='pt-summary__header__pt-name'>
-                <i
-                  className='material-icons'
-                  onClick={() => props.history.push('/doctor/home')}>
-                  keyboard_arrow_left
-                </i>
-                {props.patient.profile.firstName} {props.patient.profile.lastName}
-              </div>
-            {/* </div> */}
+            <div className='pt-summary__header__pt-name'>
+              <i
+                className='material-icons'
+                onClick={() => props.history.push('/doctor/home')}>
+                keyboard_arrow_left
+              </i>
+              {props.patient.profile.firstName} {props.patient.profile.lastName}
+            </div>
             <div>
               <span
                 className={`pt-summary__header__link ${this.state.activeTab === 'symptoms' && 'active'}`}
@@ -173,6 +168,7 @@ class PatientSummary2 extends React.Component {
               />
             :
               <GeneralInfo
+                patientInfo={props.patient}
                 headerHeights={this.state.headerHeights}
               />
             }

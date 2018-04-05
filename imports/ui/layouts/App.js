@@ -38,7 +38,7 @@ import ForumTopic from '../pages/patient/forum/ForumTopic';
 
 import Doctor from './Doctor';
 import DoctorHomepage from '../pages/doctor/Home';
-import AddPatients from '../pages/doctor/AddPatients';
+import AddPatients from '../pages/doctor/AddPatients2';
 import PatientSummary from '../pages/doctor/PatientSummary3';
 import PendingPage from '../pages/doctor/PendingPage';
 

@@ -54,16 +54,10 @@ class AddPatients extends React.Component {
     return (
       <div className='page-content doctor'>
         <div className='grey darken-2 patients-box__wrapper z-depth-2'>
-          {/* <Row> */}
-            {/* <Col s={1} className='valign-wrapper'> */}
-            {/* </Col> */}
-            {/* <Col s={4} offset='s3'> */}
-              <div className='patients-box__title'>
-                <Link className='left' to='/doctor/home'><Icon small>keyboard_arrow_left</Icon></Link>
-                Add Patients
-              </div>
-            {/* </Col> */}
-          {/* </Row> */}
+          <div className='patients-box__title'>
+            <Link className='left' to='/doctor/home'><Icon small>keyboard_arrow_left</Icon></Link>
+            Add Patients
+          </div>
           <Row>
             <Col s={4} offset='s4'>
               <Input className='white-text' s={12} placeholder='Patient Name' onChange={this.handlePatientNameChange}/>
