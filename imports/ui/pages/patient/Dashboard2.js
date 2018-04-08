@@ -30,7 +30,9 @@ const Dashboard2 = (props) => {
       // <div className="progress">
       //   <div className="indeterminate"></div>
       // </div>
-      <Loader />
+      <div className="page-content--loading">
+        <Loader />
+      </div>
     );
   } else if (props.userInfo.account.status === 'initializing' || props.userSymptoms.length === 0 || (props.userTreatments.length === 0 && props.trackedItems.includes('treatments'))) {
     return <Redirect to="/patient" />
@@ -127,7 +129,7 @@ const Dashboard2 = (props) => {
               </div>
               <div className="dashboard__chart__symptom-group__list">
                 {props.userSymptomGroups.map((symptomGroup, index, array) => {
-                  console.log(symptomGroup, (index + 1) % 3);
+                  // console.log(symptomGroup, (index + 1) % 3);
                   return (
                     <ul
                       key={symptomGroup}
@@ -286,16 +288,27 @@ export default createContainer(() => {
   })
 
   const dateArray = [...Array(14).keys()].map(index => moment().subtract(index, 'days').format("MMMM Do YYYY")).reverse();
-  let firstCheckinIndex;
+  // let firstCheckinIndex;
+  // let modifiedSymptomCheckins = dateArray.map((date, index) => {
+  //   const foundCheckin = checkins.find(checkin => checkin.date === date);
+  //   // if (!firstCheckinIndex && foundCheckin) firstCheckinIndex = index;
+  //   if (!firstCheckinIndex && foundCheckin) firstCheckinIndex = index;
+  //   return {
+  //     date,
+  //     symptoms: foundCheckin ? foundCheckin.symptoms : []
+  //   }
+  // })
   let modifiedSymptomCheckins = dateArray.map((date, index) => {
     const foundCheckin = checkins.find(checkin => checkin.date === date);
-    if (!firstCheckinIndex && foundCheckin) firstCheckinIndex = index;
+    // if (!firstCheckinIndex && foundCheckin) firstCheckinIndex = index;
     return {
       date,
-      symptoms: foundCheckin ? foundCheckin.symptoms : []
+      symptoms: foundCheckin ? foundCheckin.symptoms : null
     }
   })
-  modifiedSymptomCheckins = modifiedSymptomCheckins.slice(firstCheckinIndex);
+  modifiedSymptomCheckins = modifiedSymptomCheckins.filter(checkin => checkin.symptoms);
+  console.log(modifiedSymptomCheckins);
+  // modifiedSymptomCheckins = modifiedSymptomCheckins.slice(firstCheckinIndex);
   // console.log(firstCheckinIndex);
   // const newExtendedSymptomCheckins = modifiedSymptomCheckins.reverse()
   userSymptoms.sort((symptomA, symptomB) => {

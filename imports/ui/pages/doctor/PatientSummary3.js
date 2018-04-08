@@ -1,7 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Link } from 'react-router-dom';
-import {capitalizePhrase, sortSymptoms, getExtendedTreatmentHistory} from '/imports/utils/utils';
+import {capitalizePhrase, sortSymptoms, getExtendedTreatmentHistory, getCheckinComplianceData} from '/imports/utils/utils';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Row, Col, Input } from 'react-materialize';
 import ScrollableAnchor, {configureAnchors} from 'react-scrollable-anchor';
@@ -10,6 +10,7 @@ import ReactTooltip from 'react-tooltip';
 import { CheckinHistories } from '../../../api/checkin-histories';
 import { UserSymptoms } from '../../../api/user-symptoms';
 import { UserTreatments } from '../../../api/user-treatments';
+import { Topics } from '../../../api/forum';
 
 import Loader from '/imports/ui/components/Loader';
 
@@ -33,8 +34,9 @@ class PatientSummary2 extends React.Component {
 
     this.state = {
       // activeLink: 'symptoms',
-      activeTab: 'symptoms',
-      headerHeights: 0
+      activeTab: 'user info',
+      headerHeights: 0,
+      rangeValue: 'all_dates'
     };
   }
   componentDidMount() {
@@ -92,6 +94,11 @@ class PatientSummary2 extends React.Component {
             </div>
             <div>
               <span
+                className={`pt-summary__header__link ${this.state.activeTab === 'user info' && 'active'}`}
+                onClick={() => this.setState({activeTab: 'user info'})}>
+                User Data
+              </span>
+              <span
                 className={`pt-summary__header__link ${this.state.activeTab === 'symptoms' && 'active'}`}
                 onClick={() => this.setState({activeTab: 'symptoms'})}>
                 Symptoms
@@ -128,12 +135,50 @@ class PatientSummary2 extends React.Component {
                   </ReactTooltip>
                 }
               </span>
-              <span
-                className={`pt-summary__header__link ${this.state.activeTab === 'user info' && 'active'}`}
-                onClick={() => this.setState({activeTab: 'user info'})}>
-                User Info
-              </span>
             </div>
+
+
+
+            {/* <Row>
+              <div className='symptom-history__title col s5'>Select up to 5 symptoms to graph:</div>
+              <Input s={2} type='select' label='Date Range' value={this.props.dateRangeOption} onChange={(e) => this.props.handleDateRangeChange(undefined, e.target.value)}>
+                <option value='all_dates'>All Dates</option>
+                <option value='seven_days'>Last 7 Days</option>
+                <option value='thirty_days'>Last 30 Days</option>
+                <option value='twelve_months'>Last 12 Months</option>
+                <option value='year_to_current'>Year to Date</option>
+                {Meteor.user().profile.medical.appointments &&
+                  <option value='prev_appt_to_current'>Since Last Appointment</option>
+                }
+                <option value='custom'>Custom Range</option>
+              </Input>
+              {this.props.dateRangeOption === 'custom' &&
+                <div>
+                  <Input s={2} type='select' label='Start Date' value={this.props.startDate || ''} onChange={(e) => this.props.handleDateRangeChange('graphStartDate', e.target.value)}>
+                    {this.props.checkinDates.map(date =>
+                      <option
+                        key={date}
+                        value={date}
+                        disabled={moment(date, 'MMMM Do YYYY').isAfter(moment(this.props.endDate, "MMMM Do YYYY"), 'day')}>
+                        {date}
+                      </option>
+                    )}
+                  </Input>
+                  <Input s={2} type='select' label='End Date' value={this.props.endDate || ''} onChange={(e) => this.props.handleDateRangeChange('graphEndDate', e.target.value)}>
+                    {this.props.checkinDates.map(date =>
+                      <option
+                        key={date}
+                        value={date}
+                        disabled={moment(date, 'MMMM Do YYYY').isBefore(moment(this.props.startDate, "MMMM Do YYYY"), 'day')}>
+                        {date}
+                      </option>
+                    )}
+                  </Input>
+                </div>
+              }
+            </Row> */}
+
+
             <button
               className='btn right red darken-4'
               onClick={() => Session.set('showMessageBox', true)}>
@@ -169,6 +214,9 @@ class PatientSummary2 extends React.Component {
             :
               <GeneralInfo
                 patientInfo={props.patient}
+                patientForumTopics={props.patientForumTopics}
+                checkinHistory={props.patientCheckinHistory}
+                checkinComplianceData={getCheckinComplianceData(props.patient.account.createdAt, props.patientCheckinHistory.checkins)}
                 headerHeights={this.state.headerHeights}
               />
             }
@@ -192,6 +240,7 @@ export default createContainer(props => {
   const patientSymptomsHandle = Meteor.subscribe('patientSymptoms', patientId);
   const patientTreatmentsHandle = Meteor.subscribe('patientTreatments', patientId);
   const patientCheckinHistoriesHandle = Meteor.subscribe('patientCheckinHistories', patientId);
+  const topicsHandle = Meteor.subscribe('topics');
 
   const patientSymptoms = UserSymptoms.find().fetch();
   const patientTreatments = UserTreatments.find().fetch();
@@ -219,9 +268,10 @@ export default createContainer(props => {
     patientTreatments,
     patientCheckinHistory,
     patientSxSystems,
+    patientForumTopics: Topics.find({authorId: patientId}).fetch(),
     highestSeveritySymptoms: symptomsSeveritySorted.slice(0, 5),
     biggestChangeSymptoms: symptomsChangeSorted.slice(0, 5),
     showMessageBox: Session.get('showMessageBox') || false,
-    isFetching: !currentPatientsHandle.ready() || !patientCheckinHistoriesHandle.ready() || !patientSymptomsHandle.ready() || !patientTreatmentsHandle.ready()
+    isFetching: !currentPatientsHandle.ready() || !patientCheckinHistoriesHandle.ready() || !patientSymptomsHandle.ready() || !patientTreatmentsHandle.ready() || !topicsHandle.ready()
   };
 }, PatientSummary2);

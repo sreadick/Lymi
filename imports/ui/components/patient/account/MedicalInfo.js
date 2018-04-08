@@ -11,6 +11,8 @@ import Loader from '/imports/ui/components/Loader';
 import DoctorSearch from '../DoctorSearch';
 import AppointmentScheduler from '../AppointmentScheduler';
 
+// Todo: don't save medical errors state in db
+
 class MedicalInfo extends React.Component {
   constructor(props) {
     super(props);

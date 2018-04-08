@@ -1,7 +1,7 @@
 .loader__overlay {
   height: 100vh !important;
   width: 100vw !important;
-  background: transparentize(black, .6) !important;
+  background: transparentize(black, .8) !important;
   opacity: .8;
   display: flex;
   justify-content: center;
@@ -11,5 +11,5 @@
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 5;
+  // z-index: 5;
 }

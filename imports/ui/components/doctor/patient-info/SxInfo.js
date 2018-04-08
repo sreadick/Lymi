@@ -2,13 +2,16 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Row, Col, Input } from 'react-materialize';
-import {capitalizePhrase, sortSymptoms} from '/imports/utils/utils';
+import {capitalizePhrase, sortSymptoms, getColor } from '/imports/utils/utils';
 import ScrollableAnchor, {configureAnchors} from 'react-scrollable-anchor';
 
 import SymptomChart from '../../patient/SymptomChart';
 import PtInfoSideNav from '../PtInfoSideNav';
 
 configureAnchors({offset: -120, scrollDuration: 800});
+
+// const randomNum = Math.floor(Math.random() * Math.floor(15));
+const randomNum = Math.floor(Math.random() * (5 - 10)) + 5;
 
 export default class SxInfo extends React.Component {
   constructor() {
@@ -93,30 +96,38 @@ export default class SxInfo extends React.Component {
                 <div className='pt-summary__subheading'>Select up to Five Symptoms</div>
               </ScrollableAnchor>
               <div className='card'>
-                {props.patientSymptoms.map(symptom =>
-                  <Input
-                    key={symptom.name}
-                    type='checkbox'
-                    name='graphedSymptoms'
-                    value={symptom.name}
-                    label={symptom.name}
-                    defaultChecked={this.state.graphedSymptoms.includes(symptom.name)}
-                    disabled={this.state.graphedSymptoms.map(graphedSymptom => graphedSymptom.name).includes(symptom.name) === false && this.state.graphedSymptoms.length >= 5}
-                    onChange={() => {
-                      const graphedSymptoms = this.state.graphedSymptoms.slice();
-                      if (graphedSymptoms.map(graphedSymptom => graphedSymptom.name).includes(symptom.name)) {
-                        const symptomIndex = graphedSymptoms.indexOf(symptom)
-                        graphedSymptoms.splice(symptomIndex, 1);
-                      } else {
-                        graphedSymptoms.push(symptom)
+                {props.patientSymptoms.map(symptom => {
+                  const graphedSymptoms = this.state.graphedSymptoms.slice();
+                  const isChecked = graphedSymptoms.includes(symptom);
+                  return (
+                    <Input
+                      key={symptom.name}
+                      type='checkbox'
+                      name='graphedSymptoms'
+                      value={symptom.name}
+                      label={
+                        <span style={{color: isChecked ? getColor(graphedSymptoms.indexOf(symptom)) : 'grey'}}>
+                          {capitalizePhrase(symptom.name)}
+                        </span>
                       }
-                      this.setState({graphedSymptoms})
-                    }}
-                  />
-                )}
+                      defaultChecked={isChecked}
+                      disabled={graphedSymptoms.map(graphedSymptom => graphedSymptom.name).includes(symptom.name) === false && this.state.graphedSymptoms.length >= 5}
+                      onChange={() => {
+                        // const graphedSymptoms = this.state.graphedSymptoms.slice();
+                        if (graphedSymptoms.map(graphedSymptom => graphedSymptom.name).includes(symptom.name)) {
+                          const symptomIndex = graphedSymptoms.indexOf(symptom)
+                          graphedSymptoms.splice(symptomIndex, 1);
+                        } else {
+                          graphedSymptoms.push(symptom)
+                        }
+                        this.setState({graphedSymptoms})
+                      }}
+                    />
+                  );
+                })}
                 <SymptomChart
                   symptomNames={this.state.graphedSymptoms.map(symptom => symptom.name)}
-                  symptomColors={this.state.graphedSymptoms.map(symptom => symptom.color)}
+                  symptomColors={this.state.graphedSymptoms.map((symptom, index) => getColor(index))}
                   checkins={props.checkins}
                   // currentSymptomNames={this.props.currentSymptomNames}
                   // startDate={this.props.startDate}
@@ -131,32 +142,37 @@ export default class SxInfo extends React.Component {
               <ScrollableAnchor id={'heading--systems'}>
                 <div className='pt-summary__subheading'>Ordered by System</div>
               </ScrollableAnchor>
-              {props.patientSxSystems.map((system, index) =>
-                <div key={index} className='card'>
-                  <h3 className='symptom-history__title--system'>{system}</h3>
+              <div className='card'>
+                {props.patientSxSystems.map((system, systemIndex) => {
+                  return (
+                    <div key={system} className=''>
+                      <h3 className='symptom-history__title--system'>{system}</h3>
 
-                  {props.patientSymptoms.filter(symptom => symptom.system === system).map(symptom => (
-                    <div key={symptom._id}>
-                      <span
-                        // className={`checkin-symptom-item ${!this.props.currentSymptomNames.find(userSymptomName => userSymptomName === symptom.name) ? 'deleted' : ''}`}
-                        className={`checkin-symptom-item}`}
-                        style={{
-                          color: symptom.color,
-                        }}>
-                        {capitalizePhrase(symptom.name)}
-                      </span>
+                      {props.patientSymptoms.filter(symptom => symptom.system === system).map((symptom, symptomIndex) => (
+                        <div key={symptom._id}>
+                          <span
+                            // className={`checkin-symptom-item ${!this.props.currentSymptomNames.find(userSymptomName => userSymptomName === symptom.name) ? 'deleted' : ''}`}
+                            className={`checkin-symptom-item}`}
+                            style={{
+                              color: getColor(symptomIndex + (systemIndex * randomNum)),
+                            }}>
+                            {capitalizePhrase(symptom.name)}
+                          </span>
+                        </div>
+                      ))}
+                      <SymptomChart
+                        // maxSymptomsPerSegment={this.props.maxSymptomsPerSegment}
+                        symptomNames={props.patientSymptoms.filter(symptom => symptom.system === system).map(symptom => symptom.name)}
+                        symptomColors={props.patientSymptoms.filter(symptom => symptom.system === system).map((symptom, symptomIndex) => getColor(symptomIndex + (systemIndex * randomNum)))}
+                        // symptomColors={props.patientSymptoms.filter(symptom => symptom.system === system).map(symptom => symptom.color)}
+                        checkins={props.checkins}
+                        // currentSymptomNames={props.currentSymptomNames}
+                        padding={{top: 30, right: 30, bottom: 10, left: 0}}
+                      />
                     </div>
-                  ))}
-                  <SymptomChart
-                    // maxSymptomsPerSegment={this.props.maxSymptomsPerSegment}
-                    symptomNames={props.patientSymptoms.filter(symptom => symptom.system === system).map(symptom => symptom.name)}
-                    symptomColors={props.patientSymptoms.filter(symptom => symptom.system === system).map(symptom => symptom.color)}
-                    checkins={props.checkins}
-                    // currentSymptomNames={props.currentSymptomNames}
-                    padding={{top: 30, right: 30, bottom: 10, left: 0}}
-                  />
-                </div>
-              )}
+                  );
+                })}
+              </div>
             </div>
 
             <div className='pt-summary__subsection' id='pt-summary__subsection--symptoms--worst'>
@@ -169,7 +185,7 @@ export default class SxInfo extends React.Component {
                     <span
                       className={`checkin-symptom-item`}
                       style={{
-                        color: symptom.color,
+                        color: getColor(index),
                       }}>
                       {capitalizePhrase(symptom.name)}
                     </span>
@@ -177,7 +193,7 @@ export default class SxInfo extends React.Component {
                 ))}
                 <SymptomChart
                   symptomNames={props.highestSeveritySymptoms.map(symptom => symptom.name)}
-                  symptomColors={props.highestSeveritySymptoms.map(symptom => symptom.color)}
+                  symptomColors={props.highestSeveritySymptoms.map((symptom, index) => getColor(index))}
                   checkins={props.checkins}
                   padding={{top: 30, right: 30, bottom: 10, left: 0}}
                   // currentSymptomNames={this.props.currentSymptomNames}
@@ -197,7 +213,7 @@ export default class SxInfo extends React.Component {
                     <span
                       className={`checkin-symptom-item`}
                       style={{
-                        color: symptom.color,
+                        color: getColor(index + randomNum),
                       }}>
                       {capitalizePhrase(symptom.name)}
                     </span>
@@ -205,7 +221,7 @@ export default class SxInfo extends React.Component {
                 ))}
                 <SymptomChart
                   symptomNames={props.biggestChangeSymptoms.map(symptom => symptom.name)}
-                  symptomColors={props.biggestChangeSymptoms.map(symptom => symptom.color)}
+                  symptomColors={props.biggestChangeSymptoms.map((symptom, index) => getColor(index + randomNum))}
                   checkins={props.checkins}
                   padding={{top: 30, right: 30, bottom: 10, left: 0}}
                   // currentSymptomNames={this.props.currentSymptomNames}
@@ -276,6 +292,32 @@ export default class SxInfo extends React.Component {
     );
   }
 }
+
+// {props.patientSymptoms.map(symptom =>
+//   <p key={symptom.name}>
+//     <label htmlFor={symptom.name}>
+//       <input
+//         type="checkbox"
+//         name='graphedSymptoms'
+//         id={symptom.name}
+//         value={symptom.name}
+//         checked={this.state.graphedSymptoms.includes(symptom.name)}
+//         disabled={this.state.graphedSymptoms.map(graphedSymptom => graphedSymptom.name).includes(symptom.name) === false && this.state.graphedSymptoms.length >= 5}
+//         onChange={() => {
+//           const graphedSymptoms = this.state.graphedSymptoms.slice();
+//           if (graphedSymptoms.map(graphedSymptom => graphedSymptom.name).includes(symptom.name)) {
+//             const symptomIndex = graphedSymptoms.indexOf(symptom)
+//             graphedSymptoms.splice(symptomIndex, 1);
+//           } else {
+//             graphedSymptoms.push(symptom)
+//           }
+//           this.setState({graphedSymptoms})
+//         }}
+//        />
+//       <span>{symptom.name}</span>
+//     </label>
+//   </p>
+// )}
 
 // export default createContainer((props) => {
 //   console.log(sortSymptoms(props.patientSymptoms, props.checkins, props.checkins[0].date, props.checkins[props.checkins.length - 1].date));

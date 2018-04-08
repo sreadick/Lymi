@@ -139,7 +139,7 @@ class Profile extends React.Component {
             <p className='profile__heading'>Lyme Share Topics:</p>
             <ul className='profile__topics'>
               {this.props.userTopics.map(topic => {
-                const posts =  ForumPosts.find({topicId: topic._id}).fetch();
+                const posts = ForumPosts.find({topicId: topic._id}).fetch();
                 let lastPost;
                 if (posts.length > 0) {
                   lastPost = posts.pop()

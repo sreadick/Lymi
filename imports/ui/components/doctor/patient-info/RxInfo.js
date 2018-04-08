@@ -81,7 +81,7 @@ export default class RxInfo extends React.Component {
                   <li>Med2</li>
                   <li>Med3</li>
                 </ul> */}
-                <table>
+                <table className='striped white'>
                   <thead>
                     <tr>
                       <th>Nmae</th>
@@ -99,7 +99,7 @@ export default class RxInfo extends React.Component {
                           {/* <div> */}
                             {(treatment.dateSelectMode === 'daily' || (treatment.dateSelectMode === 'from now on' && treatment.daysOfWeek.length === 7)) ?
                               <div>
-                                Every Day
+                                <div>Every Day</div>
                                 <div
                                   className='grey-text text-darken-3'> (from {moment(treatment.startDateValue).format('MMM Do YYYY')})
                                 </div>
@@ -116,7 +116,10 @@ export default class RxInfo extends React.Component {
                                 </div>
                               :
                               (treatment.dateSelectMode === 'date range' && treatment.daysOfWeek.length === 7) ?
-                              <div>Every day <span className='grey-text text-darken-3'>(from {moment(treatment.startDateValue).format('MMM Do YY')} to {moment(treatment.endDateValue).format('MMM Do YY')})</span></div>
+                              <div>
+                                <div>Every Day</div>
+                                <div className='grey-text text-darken-3'>(from {moment(treatment.startDateValue).format('MMM Do YY')} to {moment(treatment.endDateValue).format('MMM Do YY')})</div>
+                              </div>
                               :
                               (treatment.dateSelectMode === 'date range' && treatment.daysOfWeek.length !== 7) ?
                               <div>
@@ -183,19 +186,19 @@ export default class RxInfo extends React.Component {
                               if (instructionCategory === 'meals' && instructionValue !== 'None') {
                                 return (
                                   <div key={instructionCategory}>{instructionCategory.charAt(0).toUpperCase() + instructionCategory.slice(1)}:
-                                    <pre>  {instructionValue}</pre>
+                                    <span>  {instructionValue}</span>
                                   </div>
                                 );
                               } if (instructionCategory === 'contraindications' && instructionValue !== 'None') {
                                 return (
                                   <div key={instructionCategory}>{instructionCategory.charAt(0).toUpperCase() + instructionCategory.slice(1)}:
-                                    <pre>  {`Don't take within 3 hours of ${instructionValue}`}</pre>
+                                    <span>  {`Don't take within 3 hours of ${instructionValue}`}</span>
                                   </div>
                                 );
                               } else if (instructionCategory === 'userDefined' && instructionValue.trim()) {
                                 return (
                                   <div key={instructionCategory}>Other:
-                                    <pre>  {instructionValue}</pre>
+                                    <span>  {instructionValue}</span>
                                   </div>
                                 );
                               }
@@ -212,20 +215,20 @@ export default class RxInfo extends React.Component {
                                 if (infoValue === 'Other') {
                                   return (
                                     <div key={infoCategory}>{infoCategory.charAt(0).toUpperCase() + infoCategory.slice(1)}:
-                                      <pre>  {treatment.info.typeOtherValue.trim() ? treatment.info.typeOtherValue.charAt(0).toUpperCase() + treatment.info.typeOtherValue.slice(1) : 'Other'}</pre>
+                                      <span>  {treatment.info.typeOtherValue.trim() ? treatment.info.typeOtherValue.charAt(0).toUpperCase() + treatment.info.typeOtherValue.slice(1) : 'Other'}</span>
                                     </div>
                                   );
                                 } else {
                                   return (
                                     <div key={infoCategory}>{infoCategory.charAt(0).toUpperCase() + infoCategory.slice(1)}:
-                                      <pre>  {infoValue.trim() ? infoValue : infoCategory}</pre>
+                                      <span>  {infoValue.trim() ? infoValue : infoCategory}</span>
                                     </div>
                                   );
                                 }
                               } else if (infoCategory !== 'typeOtherValue' && infoValue !== 'N/A' && infoValue.trim()) {
                                 return (
                                   <div key={infoCategory}>{infoCategory === 'usedToTreat' ? 'Used to treat' : 'Category'}:
-                                    <pre>  {infoValue.trim() ? infoValue : infoCategory}</pre>
+                                    <span>  {infoValue.trim() ? infoValue : infoCategory}</span>
                                   </div>
                                 );
                               }

@@ -11,7 +11,11 @@ import { Meteor } from 'meteor/meteor';
 
 const Patient = (props) => {
   if (props.isFetching) {
-    return <Loader />;
+    return (
+      <div className="page-content--loading">
+        <Loader />
+      </div>
+    )
   } else if (props.accountStatus === 'initializing') {
     return <Redirect to="/patient/welcomepage" />
   } else if (props.userSymptoms.length > 0 && (props.userTreatments.length > 0 || !props.trackedItems.includes('treatments'))) {

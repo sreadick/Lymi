@@ -51,14 +51,12 @@ export default class CheckinPieChart extends React.Component {
 
   render() {
     return (
-      <div className="">
-        <Pie
-          data={this.state.chartData}
-          options={this.state.chartOptions}
-          height={this.props.height || 50}
-          // width='100'
-        />
-      </div>
+      <Pie
+        data={this.state.chartData}
+        options={this.state.chartOptions}
+        height={this.props.height || 50}
+        // width='100'
+      />
     );
   }
 };
