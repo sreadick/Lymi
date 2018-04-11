@@ -92,13 +92,27 @@
     margin-right: 1rem;
     margin-bottom: .2rem;
   }
+
+  padding-right: 1.3rem;
+  border-right: 1px solid #aaa;
+}
+
+.pt-summary__header__date-container {
+  margin-bottom: 0 !important;
+  margin-right: 1.3rem !important;
+  // background: pink;
+  width: 30%;
+  // .col:last-child {
+  .col {
+    float: right !important;
+  }
 }
 
 .pt-summary__header__link {
   font-size: 1.1rem;
   color: #777;
   font-style: italic;
-  padding: 0 2rem;
+  // padding: 0 2rem;
   line-height: 4rem;
   cursor: pointer;
 
@@ -114,6 +128,9 @@
     cursor: default;
     color: #aaa;
   }
+
+  padding: 0 1.3rem;
+  // padding: 0 1.5rem 0 1rem;
 }
 
 .pt-summary__section {

@@ -11,12 +11,12 @@ import Loader from '/imports/ui/components/Loader';
 import DoctorSearch from '../DoctorSearch';
 import AppointmentScheduler from '../AppointmentScheduler';
 
-// Todo: don't save medical errors state in db
+// Todo: don't save medical errors state in db, refactor methods
 
 class MedicalInfo extends React.Component {
   constructor(props) {
     super(props);
-    const { tickBorneDiseases, initialInfectionDate, appointments } = props.medicalInfo;
+    const { tickBorneDiseases, initialInfectionDate, appointments, height, weight, sex, otherComplications, otherTreatments, otherDoctors } = props.medicalInfo;
 
     this.state = {
       tickBorneDiseases,
@@ -26,10 +26,34 @@ class MedicalInfo extends React.Component {
         day: initialInfectionDate.day || 0,
         year: initialInfectionDate.year || 0
       },
+      height: {
+        feet: (height && height.feet) || 0,
+        inches: (height && height.inches) || 0
+      },
+      weight: {
+        amount: (weight && weight.amount) || 0,
+        measurement: (weight && weight.measurement) || 'pounds'
+      },
+      sex: sex || '',
+      otherComplications: otherComplications || [''],
+      otherTreatments: otherTreatments || [{
+        name: '',
+        dose: ''
+      }],
+      otherDoctors: otherDoctors || [{
+        name: '',
+        address: '',
+        phone: ''
+      }],
       errors: {}
     };
 
     this.handleChange = this.handleChange.bind(this);
+    this.handleHeightChange = this.handleHeightChange.bind(this);
+    this.handleWeightChange = this.handleWeightChange.bind(this);
+    this.handleComplicationChange = this.handleComplicationChange.bind(this);
+    this.handleOtherRxChange = this.handleOtherRxChange.bind(this);
+    this.handleOtherDoctorChange = this.handleOtherDoctorChange.bind(this);
     this.handleDiagnosisChange = this.handleDiagnosisChange.bind(this);
     this.toggleTickBorneDisease = this.toggleTickBorneDisease.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -38,6 +62,37 @@ class MedicalInfo extends React.Component {
     this.setState({
       [e.target.name]: e.target.value
     });
+  }
+  handleHeightChange(newValue, field) {
+    if (field === 'feet' && (parseInt(newValue) < 0 || parseInt(newValue) > 9)) {
+      return;
+    } else if (field === 'inches' && (parseInt(newValue) < 0 || parseInt(newValue) > 12)) {
+      return;
+    } else {
+      const height = Object.assign({}, this.state.height);
+      height[field] = newValue;
+      this.setState({height});
+    }
+  }
+  handleWeightChange(newValue, field) {
+    const weight = Object.assign({}, this.state.weight);
+    weight[field] = newValue;
+    this.setState({weight});
+  }
+  handleComplicationChange(newValue, index) {
+    const otherComplications = this.state.otherComplications.slice();
+    otherComplications[index] = newValue;
+    this.setState({otherComplications});
+  }
+  handleOtherRxChange(newValue, field, index) {
+    const otherTreatments = this.state.otherTreatments.slice();
+    otherTreatments[index][field] = newValue;
+    this.setState({otherTreatments});
+  }
+  handleOtherDoctorChange(newValue, field, index) {
+    const otherDoctors = this.state.otherDoctors.slice();
+    otherDoctors[index][field] = newValue;
+    this.setState({otherDoctors});
   }
   handleDiagnosisChange(newValue, field) {
     const initialInfectionDate = Object.assign({}, this.state.initialInfectionDate);
@@ -142,6 +197,137 @@ class MedicalInfo extends React.Component {
           </div>
         }
         <form className='' noValidate onSubmit={this.handleSubmit}>
+          {/* <div className='account-info__subheading'>Height</div> */}
+          <Row>
+            <div className='col s4'>
+              <Input s={12} type='select' name='sex' label='Sex' value={this.state.sex} onChange={this.handleChange}>
+                <option value='' disabled></option>
+                <option value='male'>Male</option>
+                <option value='female'>Female</option>
+                <option value='transgender'>Transgender</option>
+                <option value='notSpecified'>Rather Not Say</option>
+              </Input>
+              {/* {this.state.errors.initialInfectionMonth && <p className='red-text'>{this.state.errors.initialInfectionMonth}</p>} */}
+            </div>
+          </Row>
+          <p>Height:</p>
+          <Row>
+            <div className='col s2 input-field'>
+              <input type='number' id='height--feet' value={this.state.height.feet}  onChange={(e) => this.handleHeightChange(e.target.value, 'feet')}/>
+              <label className='active' htmlFor='height--feet'>Feet</label>
+              {/* {this.state.errors.initialInfectionDay && <p className='red-text'>{this.state.errors.initialInfectionDay}</p>} */}
+            </div>
+            <div className='col s2 input-field'>
+              <input type='number' id='height--inches' value={this.state.height.inches}  onChange={(e) => this.handleHeightChange(e.target.value, 'inches')}/>
+              <label className='active' htmlFor='height--inches'>Inches</label>
+              {/* {this.state.errors.initialInfectionDay && <p className='red-text'>{this.state.errors.initialInfectionDay}</p>} */}
+            </div>
+          </Row>
+          <p>Weight:</p>
+          <Row>
+            <div className='col s2 input-field'>
+              <input type='number' id='weight--amount' value={this.state.weight.amount}  onChange={(e) => this.handleWeightChange(e.target.value, 'amount')}/>
+              {/* <label className='active' htmlFor='weight--amount'>Inches</label> */}
+              {/* {this.state.errors.initialInfectionDay && <p className='red-text'>{this.state.errors.initialInfectionDay}</p>} */}
+            </div>
+            <div className='col s4'>
+              <Input s={12} type='select' value={this.state.weight.measurement} onChange={(e) => this.handleWeightChange(e.target.value, 'measurement')}>
+                <option value='pounds'>pounds</option>
+                <option value='kilograms'>kilograms</option>
+              </Input>
+              {/* {this.state.errors.initialInfectionMonth && <p className='red-text'>{this.state.errors.initialInfectionMonth}</p>} */}
+            </div>
+          </Row>
+
+          <p className=''>Non-Lyme Complications/Symptoms</p>
+          {this.state.otherComplications.map((complication, index, array) =>
+            <Row key={index}>
+              <input className='col s8' value={complication} placeholder='symptom/complication' onChange={(e) => this.handleComplicationChange(e.target.value, index)} />
+              {index === array.length - 1 &&
+                <i
+                  className='right material-icons green-text'
+                  onClick={() => {
+                    const otherComplications = this.state.otherComplications.slice();
+                    otherComplications.push('');
+                    this.setState({otherComplications});
+                  }}>
+                  add
+                </i>
+              }
+              {array.length > 1 &&
+                <i
+                  className='right material-icons red-text'
+                  onClick={() => {
+                    const otherComplications = this.state.otherComplications.slice();
+                    otherComplications.splice(index, 1);
+                    this.setState({otherComplications});
+                  }}>
+                  remove
+                </i>
+              }
+            </Row>
+          )}
+          <p className=''>Non-Lyme Treatments</p>
+          {this.state.otherTreatments.map((treatment, index, array) =>
+            <Row key={index}>
+              <input className='col s4' value={treatment.name} placeholder='name' onChange={(e) => this.handleOtherRxChange(e.target.value, 'name', index)} />
+              <input className='col s2 offset-s1' value={treatment.dose} placeholder='dose' onChange={(e) => this.handleOtherRxChange(e.target.value, 'dose', index)} />
+              {index === array.length - 1 &&
+                <i
+                  className='right material-icons green-text'
+                  onClick={() => {
+                    const otherTreatments = this.state.otherTreatments.slice();
+                    otherTreatments.push({name: '', dose: ''});
+                    this.setState({otherTreatments});
+                  }}>
+                  add
+                </i>
+              }
+              {array.length > 1 &&
+                <i
+                  className='right material-icons red-text'
+                  onClick={() => {
+                    const otherTreatments = this.state.otherTreatments.slice();
+                    otherTreatments.splice(index, 1);
+                    this.setState({otherTreatments});
+                  }}>
+                  remove
+                </i>
+              }
+            </Row>
+          )}
+
+          <p className=''>Other Physicians</p>
+          {this.state.otherDoctors.map((doctor, index, array) =>
+            <Row key={index}>
+              <input className='col s3' value={doctor.name} placeholder='name' onChange={(e) => this.handleOtherDoctorChange(e.target.value, 'name', index)} />
+              <input className='col s3 offset-s1' value={doctor.address} placeholder='address' onChange={(e) => this.handleOtherDoctorChange(e.target.value, 'address', index)} />
+              <input className='col s2 offset-s1' value={doctor.phone} placeholder='phone' onChange={(e) => this.handleOtherDoctorChange(e.target.value, 'phone', index)} />
+              {index === array.length - 1 &&
+                <i
+                  className='right material-icons green-text'
+                  onClick={() => {
+                    const otherDoctors = this.state.otherDoctors.slice();
+                    otherDoctors.push({name: '', address: '', phone: ''});
+                    this.setState({otherDoctors});
+                  }}>
+                  add
+                </i>
+              }
+              {array.length > 1 &&
+                <i
+                  className='right material-icons red-text'
+                  onClick={() => {
+                    const otherDoctors = this.state.otherDoctors.slice();
+                    otherDoctors.splice(index, 1);
+                    this.setState({otherDoctors});
+                  }}>
+                  remove
+                </i>
+              }
+            </Row>
+          )}
+
           <div className='account-info__subheading'>Tick-Borne Diseases</div>
           <Row>
             <div className='section'></div>

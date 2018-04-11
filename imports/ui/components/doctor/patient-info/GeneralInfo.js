@@ -77,7 +77,7 @@ export default class GeneralInfo extends React.Component {
   render() {
     const {profile, account} = this.props.patientInfo;
     const { medical } = profile;
-    console.log(this.props.patientInfo);
+    // console.log(this.props.patientInfo);
     return (
       <div className='pt-summary__flex-wrapper'>
         <div className='pt-summary__content'>
@@ -158,28 +158,54 @@ export default class GeneralInfo extends React.Component {
               </div>
               <div className='pt-summary__item'>
                 <span className='pt-summary__item__label'>Height: </span>
-                <span className='pt-summary__item__response'>5'10"</span>
+                {/* <span className='pt-summary__item__response'>5'10"</span> */}
+                <span className='pt-summary__item__response'>{(medical.height && !!medical.height.feet && !!medical.height.inches) ? `${medical.height.feet}'${medical.height.inches}"` : "N/A"}</span>
               </div>
               <div className='pt-summary__item'>
                 <span className='pt-summary__item__label'>Weight: </span>
-                <span className='pt-summary__item__response'>185lbs</span>
+                {/* <span className='pt-summary__item__response'>185lbs</span> */}
+                <span className='pt-summary__item__response'>{(medical.weight && medical.weight.amount > 0) ? medical.weight.amount + " " + medical.weight.measurement : "N/A"}</span>
               </div>
               <div className='pt-summary__item'>
                 <span className='pt-summary__item__label'>Sex: </span>
-                <span className='pt-summary__item__response'>M</span>
+                {/* <span className='pt-summary__item__response'>M</span> */}
+                <span className='pt-summary__item__response'>{(medical.sex && medical.sex !== 'notSpecified') ? capitalizePhrase(medical.sex) : 'N/A'}</span>
               </div>
               <div className='pt-summary__item'>
-                <span className='pt-summary__item__label'>Non-Lyme Complications: </span>
-                <ul className='pt-summary__item__list'>
-                  <li>Diabetes (Type 1)</li>
-                  <li>Hypertension</li>
-                </ul>
+                <span className='pt-summary__item__label'>Non-Lyme Complications/Symptoms: </span>
+                {(medical.otherComplications && medical.otherComplications.filter(complication => complication.trim().length > 0).length > 0) ?
+                  <ul className='pt-summary__item__list'>
+                    {medical.otherComplications.filter(complication => complication.trim().length > 0).map((complication, index) =>
+                      <li key={index}>{complication}</li>
+                    )}
+                  </ul>
+                  :
+                  <span className='pt-summary__item__response'>None</span>
+                }
+              </div>
+              <div className='pt-summary__item'>
+                <span className='pt-summary__item__label'>Non-Lyme Treatments: </span>
+                {(medical.otherTreatments && medical.otherTreatments.filter(treatment => treatment.name && treatment.name.trim().length > 0).length > 0) ?
+                  <ul className='pt-summary__item__list'>
+                    {medical.otherTreatments.filter(treatment => treatment.name && treatment.name.trim().length > 0).map((treatment, index) =>
+                      <li key={index}>{`${treatment.name} ${(treatment.dose && treatment.dose.trim()) ? 'dose: ' + treatment.dose : '' }`}</li>
+                    )}
+                  </ul>
+                  :
+                  <span className='pt-summary__item__response'>None</span>
+                }
               </div>
               <div className='pt-summary__item'>
                 <span className='pt-summary__item__label'>Other Physicians: </span>
-                <ul className='pt-summary__item__list'>
-                  <li>Oliver Katz (PCP) - phone: (555)-444-3333</li>
-                </ul>
+                {(medical.otherDoctors && medical.otherDoctors.filter(doctor => doctor.name && doctor.name.trim().length > 0).length > 0) ?
+                  <ul className='pt-summary__item__list'>
+                    {medical.otherDoctors.filter(doctor => doctor.name && doctor.name.trim().length > 0).map((doctor, index) =>
+                      <li key={index}>{`${doctor.name} ${(doctor.address && doctor.address.trim()) ? ' - address: ' + doctor.address : '' } ${(doctor.phone && doctor.phone.trim()) ? ' - phone: ' + doctor.phone : '' }`}</li>
+                    )}
+                  </ul>
+                  :
+                  <span className='pt-summary__item__response'>None</span>
+                }
               </div>
             </div>
 
@@ -268,7 +294,7 @@ export default class GeneralInfo extends React.Component {
               </div>
               <div className='pt-summary__item'>
                 <span className='pt-summary__item__label'>Last Check-in: </span>
-                <span className='pt-summary__item__response'>{this.props.checkinHistory ? moment(this.props.checkinHistory.lastCheckin).format('MMMM Do YYYY') : 'N/A'}</span>
+                <span className='pt-summary__item__response'>{this.props.lastCheckin ? moment(this.props.lastCheckin).format('MMMM Do YYYY') : 'N/A'}</span>
               </div>
             </div>
 
@@ -277,7 +303,7 @@ export default class GeneralInfo extends React.Component {
                 <div className='pt-summary__subheading'>History</div>
               </ScrollableAnchor>
 
-              {this.props.checkinHistory.checkins.slice().reverse().map(checkin =>
+              {this.props.checkins.slice().reverse().map(checkin =>
                 <div className="section" key={checkin.date}>
                   <h4>{checkin.date}</h4>
                   {/* <h5>Symptoms</h5> */}

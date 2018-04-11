@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { Link } from 'react-router-dom';
 import {capitalizePhrase, sortSymptoms, getExtendedTreatmentHistory, getCheckinComplianceData} from '/imports/utils/utils';
 import { createContainer } from 'meteor/react-meteor-data';
+import moment from 'moment';
 import { Row, Col, Input } from 'react-materialize';
 import ScrollableAnchor, {configureAnchors} from 'react-scrollable-anchor';
 import ReactTooltip from 'react-tooltip';
@@ -29,15 +30,26 @@ import EventsInfo from '../../components/doctor/patient-info/EventsInfo';
 configureAnchors({offset: -120, scrollDuration: 800});
 
 class PatientSummary2 extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       // activeLink: 'symptoms',
       activeTab: 'user info',
       headerHeights: 0,
-      rangeValue: 'all_dates'
+      dateRangeOption: 'all_dates',
+      graphStartDate: '',
+      graphEndDate: ''
     };
+    this.handleDateRangeChange = this.handleDateRangeChange.bind(this);
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (!prevProps.patientCheckinHistory && !!this.props.patientCheckinHistory) {
+      this.setState({
+        graphStartDate: this.props.patientCheckinHistory.checkins.length > 0 ? this.props.patientCheckinHistory.checkins[0].date : undefined,
+        graphEndDate: this.props.patientCheckinHistory.checkins.length > 0 ? this.props.patientCheckinHistory.checkins[this.props.patientCheckinHistory.checkins.length - 1].date : undefined
+      })
+    }
   }
   componentDidMount() {
   //   const symptomAnchorTopPosition = document.querySelector('.pt-summary__heading--symptoms').getBoundingClientRect().top;
@@ -58,6 +70,54 @@ class PatientSummary2 extends React.Component {
   //       this.setState({activeLink: 'symptoms'})
   //     }
   //   })
+  }
+
+  handleDateRangeChange(customRangeControl, rangeValue) {
+    const currentDate = moment().format('MMMM Do YYYY');
+    const initialCheckinDate = (this.props.patientCheckinHistory && this.props.patientCheckinHistory.checkins.length > 0 ) ? this.props.patientCheckinHistory.checkins[0].date : undefined;
+    if (customRangeControl === undefined) {
+      if (rangeValue === 'all_dates') {
+        this.setState({
+          'graphStartDate': initialCheckinDate,
+          'graphEndDate': currentDate
+        });
+      } else if (rangeValue === 'seven_days') {
+        this.setState({
+          'graphStartDate': moment(currentDate, 'MMMM Do YYYY').subtract(6, 'days').format('MMMM Do YYYY'),
+          'graphEndDate': currentDate
+        });
+      } else if (rangeValue === 'thirty_days') {
+        this.setState({
+          'graphStartDate': moment(currentDate, 'MMMM Do YYYY').subtract(29, 'days').format('MMMM Do YYYY'),
+          'graphEndDate': currentDate
+        });
+      } else if (rangeValue === 'twelve_months') {
+        this.setState({
+          'graphStartDate': moment(currentDate, 'MMMM Do YYYY').subtract(1, 'year').format('MMMM Do YYYY'),
+          'graphEndDate': currentDate
+        });
+      } else if (rangeValue === 'year_to_current') {
+        this.setState({
+          'graphStartDate': moment(currentDate, 'MMMM Do YYYY').startOf('year').format('MMMM Do YYYY'),
+          'graphEndDate': currentDate
+        });
+      } else if (rangeValue === 'prev_appt_to_current') {
+        const appts = Meteor.user().profile.medical.appointments.slice().reverse();
+        const lastAppt = appts.find(date => moment(date).isBefore(moment()));
+        this.setState({
+          'graphStartDate': moment(lastAppt).format('MMMM Do YYYY'),
+          'graphEndDate': currentDate
+        });
+      } else if (rangeValue === 'custom' && this.state.dateRangeOption !== 'custom') {
+        this.setState({
+          'graphStartDate': initialCheckinDate,
+          'graphEndDate': currentDate
+        });
+      }
+      this.setState({'dateRangeOption': rangeValue});
+    } else {
+      this.setState({[customRangeControl]: rangeValue});
+    }
   }
 
   render() {
@@ -91,7 +151,9 @@ class PatientSummary2 extends React.Component {
                 keyboard_arrow_left
               </i>
               {props.patient.profile.firstName} {props.patient.profile.lastName}
+              {/* <div></div> */}
             </div>
+
             <div>
               <span
                 className={`pt-summary__header__link ${this.state.activeTab === 'user info' && 'active'}`}
@@ -104,8 +166,6 @@ class PatientSummary2 extends React.Component {
                 Symptoms
               </span>
               <span
-                // className={`pt-summary__header__link ${this.state.activeTab === 'treatments' && 'active'}`}
-                // onClick={() => this.setState({activeTab: 'treatments'})}>
                 className={`pt-summary__header__link ${this.state.activeTab === 'treatments' ? 'active' : !props.patient.profile.settings.trackedItems.includes("treatments") ? 'disabled' : ''}`}
                 onClick={() => {
                   if (props.patient.profile.settings.trackedItems.includes('treatments')) {
@@ -139,44 +199,63 @@ class PatientSummary2 extends React.Component {
 
 
 
-            {/* <Row>
-              <div className='symptom-history__title col s5'>Select up to 5 symptoms to graph:</div>
-              <Input s={2} type='select' label='Date Range' value={this.props.dateRangeOption} onChange={(e) => this.props.handleDateRangeChange(undefined, e.target.value)}>
+            <div className='row pt-summary__header__date-container'>
+              <Input
+                s={5}
+                type='select'
+                // label='Date Range'
+                value={this.state.dateRangeOption}
+                onChange={(e) => this.handleDateRangeChange(undefined, e.target.value)}>
                 <option value='all_dates'>All Dates</option>
                 <option value='seven_days'>Last 7 Days</option>
                 <option value='thirty_days'>Last 30 Days</option>
                 <option value='twelve_months'>Last 12 Months</option>
                 <option value='year_to_current'>Year to Date</option>
-                {Meteor.user().profile.medical.appointments &&
+                {props.patient.profile.medical.appointments &&
                   <option value='prev_appt_to_current'>Since Last Appointment</option>
                 }
                 <option value='custom'>Custom Range</option>
               </Input>
-              {this.props.dateRangeOption === 'custom' &&
-                <div>
-                  <Input s={2} type='select' label='Start Date' value={this.props.startDate || ''} onChange={(e) => this.props.handleDateRangeChange('graphStartDate', e.target.value)}>
-                    {this.props.checkinDates.map(date =>
-                      <option
-                        key={date}
-                        value={date}
-                        disabled={moment(date, 'MMMM Do YYYY').isAfter(moment(this.props.endDate, "MMMM Do YYYY"), 'day')}>
-                        {date}
-                      </option>
-                    )}
-                  </Input>
-                  <Input s={2} type='select' label='End Date' value={this.props.endDate || ''} onChange={(e) => this.props.handleDateRangeChange('graphEndDate', e.target.value)}>
-                    {this.props.checkinDates.map(date =>
-                      <option
-                        key={date}
-                        value={date}
-                        disabled={moment(date, 'MMMM Do YYYY').isBefore(moment(this.props.startDate, "MMMM Do YYYY"), 'day')}>
-                        {date}
-                      </option>
-                    )}
-                  </Input>
-                </div>
+              {this.state.dateRangeOption === 'custom' &&
+                <Input
+                  s={3}
+                  type='select'
+                  // label='End Date'
+                  disabled={this.state.dateRangeOption !== 'custom'}
+                  value={this.state.graphEndDate || ''}
+                  onChange={(e) => this.handleDateRangeChange('graphEndDate', e.target.value)}>
+                  {props.patientCheckinHistory.checkins.map(checkin => checkin.date).map(date =>
+                    <option
+                      key={date}
+                      value={date}
+                      disabled={moment(date, 'MMMM Do YYYY').isBefore(moment(this.state.graphStartDate, "MMMM Do YYYY"), 'day')}>
+                      {/* {date} */}
+                      {moment(date, 'MMMM Do YYYY').format('MM/DD/YY')}
+                    </option>
+                  )}
+                </Input>
               }
-            </Row> */}
+              {this.state.dateRangeOption === 'custom' &&
+                <Input
+                  s={3}
+                  type='select'
+                  // label='Start Date'
+                  disabled={this.state.dateRangeOption !== 'custom'}
+                  value={this.state.graphStartDate || ''}
+                  onChange={(e) => this.handleDateRangeChange('graphStartDate', e.target.value)}>
+                  {props.patientCheckinHistory.checkins.map(checkin => checkin.date).map(date =>
+                    <option
+                      key={date}
+                      value={date}
+                      disabled={moment(date, 'MMMM Do YYYY').isAfter(moment(this.state.graphEndDate, "MMMM Do YYYY"), 'day')}>
+                      {/* {date} */}
+                      {moment(date, 'MMMM Do YYYY').format('MM/DD/YY')}
+                    </option>
+                  )}
+                </Input>
+              }
+
+            </div>
 
 
             <button
@@ -195,7 +274,9 @@ class PatientSummary2 extends React.Component {
                 patientSymptoms={props.patientSymptoms}
                 highestSeveritySymptoms={props.highestSeveritySymptoms}
                 biggestChangeSymptoms={props.biggestChangeSymptoms}
-                checkins={props.patientCheckinHistory.checkins}
+                // checkins={props.patientCheckinHistory.checkins}
+                checkins={ props.patientCheckinHistory.checkins.filter(checkin => moment(checkin.date, 'MMMM Do YYYY').isBetween(moment(this.state.graphStartDate, 'MMMM Do YYYY'), moment(this.state.graphEndDate, 'MMMM Do YYYY'), 'days', [])) }
+
                 patientSxSystems={props.patientSxSystems}
                 headerHeights={this.state.headerHeights}
               />
@@ -215,7 +296,15 @@ class PatientSummary2 extends React.Component {
               <GeneralInfo
                 patientInfo={props.patient}
                 patientForumTopics={props.patientForumTopics}
-                checkinHistory={props.patientCheckinHistory}
+                checkins={ props.patientCheckinHistory.checkins.filter(checkin => moment(checkin.date, 'MMMM Do YYYY').isBetween(moment(this.state.graphStartDate, 'MMMM Do YYYY'), moment(this.state.graphEndDate, 'MMMM Do YYYY'), 'days', [])) }
+                // checkins={props.patientCheckinHistory.checkins.filter(checkin => {
+                //   if (moment(checkin.date, 'MMMM Do YYYY').isBetween(moment(this.state.graphStartDate, 'MMMM Do YYYY'), moment(this.state.graphEndDate, 'MMMM Do YYYY'), 'days', [])) {
+                //     return true;
+                //   } else {
+                //     return false;
+                //   }
+                // })}
+                lastCheckin={props.patientCheckinHistory.lastCheckin}
                 checkinComplianceData={getCheckinComplianceData(props.patient.account.createdAt, props.patientCheckinHistory.checkins)}
                 headerHeights={this.state.headerHeights}
               />
@@ -235,6 +324,8 @@ class PatientSummary2 extends React.Component {
 }
 
 export default createContainer(props => {
+  // Todo: update checkin array to include dates before initial checkins (for meds) and past last checkin (i.e. missed checkins).
+
   const patientId = props.computedMatch.params.patientId;
   const currentPatientsHandle = Meteor.subscribe('currentPatients');
   const patientSymptomsHandle = Meteor.subscribe('patientSymptoms', patientId);

@@ -86,6 +86,7 @@ export default class SxInfo extends React.Component {
 
   render() {
     const {props} = this;
+    console.log(props.checkins);
 
     return (
       <div className='pt-summary__flex-wrapper'>
