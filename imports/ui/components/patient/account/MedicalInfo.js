@@ -35,16 +35,9 @@ class MedicalInfo extends React.Component {
         measurement: (weight && weight.measurement) || 'pounds'
       },
       sex: sex || '',
-      otherComplications: otherComplications || [''],
-      otherTreatments: otherTreatments || [{
-        name: '',
-        dose: ''
-      }],
-      otherDoctors: otherDoctors || [{
-        name: '',
-        address: '',
-        phone: ''
-      }],
+      otherComplications: otherComplications || [],
+      otherTreatments: otherTreatments || [],
+      otherDoctors: otherDoctors || [],
       errors: {}
     };
 
@@ -148,115 +141,75 @@ class MedicalInfo extends React.Component {
     }, 2000);
   }
   render() {
-    if (this.props.isFetching) {
-      return <Loader />
-    }
+    // if (this.props.isFetching) {
+    //   return <Loader />
+    // }
     return (
       <div className='account-info'>
-        { this.props.showDoctorSearch && <DoctorSearch /> }
-        { this.props.showAppointmentScheduler && <AppointmentScheduler currentAppt={this.props.userAppts.next} /> }
-
         <div className='account-info__heading'>Medical Info</div>
-        <div className='account-info__subheading'>Lyme Practitioner</div>
-        {!this.props.currentDoctor ?
-          <div className='section'>
-            <p>Your doctor is not currently linked</p>
-            <span className='purple-text text-lighten-1 button--link' onClick={() => Session.set('showDoctorSearch', true)}>Search for your Doctor</span>
-          </div>
-        :
-          <div className='section'>
-            <div className='right'>
-              <div className='right blue-text text-lighten-1 button--link' onClick={() => Session.set('showDoctorSearch', true)}>Change Doctors</div>
-              <div className='red-text text-lighten-1 button--link' onClick={() => Meteor.call('users.updateLymeDoctor', undefined)}>Remove Current Doctor</div>
-            </div>
-            <p>{this.props.currentDoctorInfo.name}</p>
-            <p>Address: {this.props.currentDoctorInfo.address}</p>
-            <p>Phone #: {this.props.currentDoctorInfo.phone}</p>
-            <p>Email: {this.props.currentDoctorInfo.email}</p>
-            {this.props.userAppts.last &&
-              <span>Last Appointment: {moment(this.props.userAppts.last).format('MM/DD/YY')}</span>
-            }
-            <div>
-              <span>Next Appointment: </span>
-              {this.props.userAppts.next
-                ?
-                  <span>
-                    {moment(this.props.userAppts.next).format('MM/DD/YY (h:mm a)')}
-                    <div>
-                      <span className='blue-text text-darken-1 button--link' onClick={() => Session.set('showAppointmentScheduler', true)}>Change Date </span>
-                      <span className='red-text text-darken-1 button--link' onClick={() => Meteor.call('users.appointments.removeLast')}> Remove</span>
-                    </div>
-                  </span>
-                :
-                  <span>
-                    N/A
-                    <div className='green-text text-darken-1 button--link' onClick={() => Session.set('showAppointmentScheduler', true)}>Set Appointment</div>
-                  </span>
-              }
-            </div>
-          </div>
-        }
         <form className='' noValidate onSubmit={this.handleSubmit}>
           {/* <div className='account-info__subheading'>Height</div> */}
-          <Row>
-            <div className='col s4'>
-              <Input s={12} type='select' name='sex' label='Sex' value={this.state.sex} onChange={this.handleChange}>
-                <option value='' disabled></option>
-                <option value='male'>Male</option>
-                <option value='female'>Female</option>
-                <option value='transgender'>Transgender</option>
-                <option value='notSpecified'>Rather Not Say</option>
-              </Input>
-              {/* {this.state.errors.initialInfectionMonth && <p className='red-text'>{this.state.errors.initialInfectionMonth}</p>} */}
-            </div>
-          </Row>
-          <p>Height:</p>
-          <Row>
-            <div className='col s2 input-field'>
-              <input type='number' id='height--feet' value={this.state.height.feet}  onChange={(e) => this.handleHeightChange(e.target.value, 'feet')}/>
-              <label className='active' htmlFor='height--feet'>Feet</label>
-              {/* {this.state.errors.initialInfectionDay && <p className='red-text'>{this.state.errors.initialInfectionDay}</p>} */}
-            </div>
-            <div className='col s2 input-field'>
-              <input type='number' id='height--inches' value={this.state.height.inches}  onChange={(e) => this.handleHeightChange(e.target.value, 'inches')}/>
-              <label className='active' htmlFor='height--inches'>Inches</label>
-              {/* {this.state.errors.initialInfectionDay && <p className='red-text'>{this.state.errors.initialInfectionDay}</p>} */}
-            </div>
-          </Row>
-          <p>Weight:</p>
-          <Row>
-            <div className='col s2 input-field'>
-              <input type='number' id='weight--amount' value={this.state.weight.amount}  onChange={(e) => this.handleWeightChange(e.target.value, 'amount')}/>
-              {/* <label className='active' htmlFor='weight--amount'>Inches</label> */}
-              {/* {this.state.errors.initialInfectionDay && <p className='red-text'>{this.state.errors.initialInfectionDay}</p>} */}
-            </div>
-            <div className='col s4'>
-              <Input s={12} type='select' value={this.state.weight.measurement} onChange={(e) => this.handleWeightChange(e.target.value, 'measurement')}>
-                <option value='pounds'>pounds</option>
-                <option value='kilograms'>kilograms</option>
-              </Input>
-              {/* {this.state.errors.initialInfectionMonth && <p className='red-text'>{this.state.errors.initialInfectionMonth}</p>} */}
-            </div>
-          </Row>
+          <div className='account-info__section'>
+            <h5>Gender</h5>
+            <Row>
+              {/* <div className='col s3'> */}
+                <Input s={3} type='select' name='sex' value={this.state.sex} onChange={this.handleChange}>
+                  <option value='' disabled></option>
+                  <option value='male'>Male</option>
+                  <option value='female'>Female</option>
+                  <option value='transgender'>Transgender</option>
+                  <option value='notSpecified'>Rather Not Say</option>
+                </Input>
+                {/* {this.state.errors.initialInfectionMonth && <p className='red-text'>{this.state.errors.initialInfectionMonth}</p>} */}
+              {/* </div> */}
+            </Row>
+          </div>
 
-          <p className=''>Non-Lyme Complications/Symptoms</p>
-          {this.state.otherComplications.map((complication, index, array) =>
-            <Row key={index}>
-              <input className='col s8' value={complication} placeholder='symptom/complication' onChange={(e) => this.handleComplicationChange(e.target.value, index)} />
-              {index === array.length - 1 &&
+          <div className='account-info__section'>
+            <h5>Height</h5>
+            <Row>
+              <div className='col s2 input-field'>
+                <input type='number' id='height--feet' value={this.state.height.feet}  onChange={(e) => this.handleHeightChange(e.target.value, 'feet')}/>
+                <label className='active' htmlFor='height--feet'>Feet</label>
+                {/* {this.state.errors.initialInfectionDay && <p className='red-text'>{this.state.errors.initialInfectionDay}</p>} */}
+              </div>
+              <div className='col s2 input-field'>
+                <input type='number' id='height--inches' value={this.state.height.inches}  onChange={(e) => this.handleHeightChange(e.target.value, 'inches')}/>
+                <label className='active' htmlFor='height--inches'>Inches</label>
+                {/* {this.state.errors.initialInfectionDay && <p className='red-text'>{this.state.errors.initialInfectionDay}</p>} */}
+              </div>
+            </Row>
+          </div>
+
+          <div className='account-info__section'>
+            <h5>Weight</h5>
+            <Row>
+              <div className='col s2 input-field'>
+                <input type='number' id='weight--amount' value={this.state.weight.amount}  onChange={(e) => this.handleWeightChange(e.target.value, 'amount')}/>
+                {/* <label className='active' htmlFor='weight--amount'>Inches</label> */}
+                {/* {this.state.errors.initialInfectionDay && <p className='red-text'>{this.state.errors.initialInfectionDay}</p>} */}
+              </div>
+              <div className='col s3'>
+                <Input s={12} type='select' value={this.state.weight.measurement} onChange={(e) => this.handleWeightChange(e.target.value, 'measurement')}>
+                  <option value='pounds'>pounds</option>
+                  <option value='kilograms'>kilograms</option>
+                </Input>
+                {/* {this.state.errors.initialInfectionMonth && <p className='red-text'>{this.state.errors.initialInfectionMonth}</p>} */}
+              </div>
+            </Row>
+          </div>
+
+          <div className='account-info__section account-info__section--list'>
+            <h5 className=''>Non-Lyme Complications/Symptoms</h5>
+            {this.state.otherComplications.map((complication, index, array) =>
+              <Row key={index}>
+                <div className='col s5 input-field'>
+                  <input id={'complication' + index} value={complication} placeholder='e.g. Diabetes' onChange={(e) => this.handleComplicationChange(e.target.value, index)} />
+                  {/* <label className='active' htmlFor={'complication' + index}>Dose</label> */}
+                </div>
+                {/* <input className='col s5' value={complication} placeholder='symptom/complication' onChange={(e) => this.handleComplicationChange(e.target.value, index)} /> */}
                 <i
-                  className='right material-icons green-text'
-                  onClick={() => {
-                    const otherComplications = this.state.otherComplications.slice();
-                    otherComplications.push('');
-                    this.setState({otherComplications});
-                  }}>
-                  add
-                </i>
-              }
-              {array.length > 1 &&
-                <i
-                  className='right material-icons red-text'
+                  className='material-icons red-text'
                   onClick={() => {
                     const otherComplications = this.state.otherComplications.slice();
                     otherComplications.splice(index, 1);
@@ -264,28 +217,35 @@ class MedicalInfo extends React.Component {
                   }}>
                   remove
                 </i>
-              }
-            </Row>
-          )}
-          <p className=''>Non-Lyme Treatments</p>
-          {this.state.otherTreatments.map((treatment, index, array) =>
-            <Row key={index}>
-              <input className='col s4' value={treatment.name} placeholder='name' onChange={(e) => this.handleOtherRxChange(e.target.value, 'name', index)} />
-              <input className='col s2 offset-s1' value={treatment.dose} placeholder='dose' onChange={(e) => this.handleOtherRxChange(e.target.value, 'dose', index)} />
-              {index === array.length - 1 &&
+              </Row>
+            )}
+            <i
+              className='material-icons green-text'
+              onClick={() => {
+                const otherComplications = this.state.otherComplications.slice();
+                otherComplications.push('');
+                this.setState({otherComplications});
+              }}>
+              add
+            </i>
+          </div>
+
+          <div className='account-info__section account-info__section--list'>
+            <h5 className=''>Non-Lyme Treatments</h5>
+            {this.state.otherTreatments.map((treatment, index, array) =>
+              <Row key={index}>
+                <div className='col s4 input-field'>
+                  <input id={'treatment_name' + index} value={treatment.name} onChange={(e) => this.handleOtherRxChange(e.target.value, 'name', index)} />
+                  <label className='active' htmlFor={'treatment_name' + index}>Name</label>
+                </div>
+                <div className='col s2 input-field'>
+                  <input id={'treatment_dose' + index} value={treatment.dose} placeholder='e.g. 200mg' onChange={(e) => this.handleOtherRxChange(e.target.value, 'dose', index)} />
+                  <label className='active' htmlFor={'treatment_dose' + index}>Dose</label>
+                </div>
+                {/* <input className='col s4' value={treatment.name} placeholder='name' onChange={(e) => this.handleOtherRxChange(e.target.value, 'name', index)} />
+                <input className='col s2 offset-s1' value={treatment.dose} placeholder='dose' onChange={(e) => this.handleOtherRxChange(e.target.value, 'dose', index)} /> */}
                 <i
-                  className='right material-icons green-text'
-                  onClick={() => {
-                    const otherTreatments = this.state.otherTreatments.slice();
-                    otherTreatments.push({name: '', dose: ''});
-                    this.setState({otherTreatments});
-                  }}>
-                  add
-                </i>
-              }
-              {array.length > 1 &&
-                <i
-                  className='right material-icons red-text'
+                  className='material-icons red-text'
                   onClick={() => {
                     const otherTreatments = this.state.otherTreatments.slice();
                     otherTreatments.splice(index, 1);
@@ -293,30 +253,45 @@ class MedicalInfo extends React.Component {
                   }}>
                   remove
                 </i>
-              }
-            </Row>
-          )}
+              </Row>
+            )}
+            <i
+              className='material-icons green-text'
+              onClick={() => {
+                const otherTreatments = this.state.otherTreatments.slice();
+                otherTreatments.push({name: '', dose: ''});
+                this.setState({otherTreatments});
+              }}>
+              add
+            </i>
+          </div>
 
-          <p className=''>Other Physicians</p>
-          {this.state.otherDoctors.map((doctor, index, array) =>
-            <Row key={index}>
-              <input className='col s3' value={doctor.name} placeholder='name' onChange={(e) => this.handleOtherDoctorChange(e.target.value, 'name', index)} />
-              <input className='col s3 offset-s1' value={doctor.address} placeholder='address' onChange={(e) => this.handleOtherDoctorChange(e.target.value, 'address', index)} />
-              <input className='col s2 offset-s1' value={doctor.phone} placeholder='phone' onChange={(e) => this.handleOtherDoctorChange(e.target.value, 'phone', index)} />
-              {index === array.length - 1 &&
+          <div className='account-info__section account-info__section--list'>
+            <h5 className=''>Other Physicians</h5>
+            {this.state.otherDoctors.map((doctor, index, array) =>
+              <Row key={index}>
+                <div className='col s3 input-field'>
+                  <input id={'doctor_name' + index} value={doctor.name} onChange={(e) => this.handleOtherDoctorChange(e.target.value, 'name', index)} />
+                  <label className='active' htmlFor={'doctor_name' + index}>Name</label>
+                </div>
+                <div className='col s2 input-field'>
+                  <input id={'doctor_type' + index} value={doctor.type} placeholder='e.g. PCP' onChange={(e) => this.handleOtherDoctorChange(e.target.value, 'type', index)} />
+                  <label className='active' htmlFor={'doctor_type' + index}>Type/Specialization</label>
+                </div>
+                <div className='col s3 input-field'>
+                  <input id={'doctor_address' + index} value={doctor.address} onChange={(e) => this.handleOtherDoctorChange(e.target.value, 'address', index)} />
+                  <label className='active' htmlFor={'doctor_address' + index}>Address</label>
+                </div>
+                <div className='col s2 input-field'>
+                  <input id={'doctor_phone' + index} value={doctor.phone} placeholder='555-123-4567' onChange={(e) => this.handleOtherDoctorChange(e.target.value, 'phone', index)} />
+                  <label className='active' htmlFor={'doctor_phone' + index}>Phone</label>
+                </div>
+                {/* <input className='col s2' value={doctor.name} placeholder='name' onChange={(e) => this.handleOtherDoctorChange(e.target.value, 'name', index)} />
+                <input className='col s2' value={doctor.type} placeholder='type/specialization' onChange={(e) => this.handleOtherDoctorChange(e.target.value, 'type', index)} />
+                <input className='col s2' value={doctor.address} placeholder='address' onChange={(e) => this.handleOtherDoctorChange(e.target.value, 'address', index)} />
+                <input className='col s2' value={doctor.phone} placeholder='phone' onChange={(e) => this.handleOtherDoctorChange(e.target.value, 'phone', index)} /> */}
                 <i
-                  className='right material-icons green-text'
-                  onClick={() => {
-                    const otherDoctors = this.state.otherDoctors.slice();
-                    otherDoctors.push({name: '', address: '', phone: ''});
-                    this.setState({otherDoctors});
-                  }}>
-                  add
-                </i>
-              }
-              {array.length > 1 &&
-                <i
-                  className='right material-icons red-text'
+                  className='material-icons red-text'
                   onClick={() => {
                     const otherDoctors = this.state.otherDoctors.slice();
                     otherDoctors.splice(index, 1);
@@ -324,53 +299,68 @@ class MedicalInfo extends React.Component {
                   }}>
                   remove
                 </i>
-              }
-            </Row>
-          )}
-
-          <div className='account-info__subheading'>Tick-Borne Diseases</div>
-          <Row>
-            <div className='section'></div>
-            <div className='account-info__form-category left-align'>Diseases:</div>
-            {['Lyme Disease', 'Bartonella', 'Babesia'].map(disease =>
-              <Input key={disease} name='tickBorneDiseases' type='checkbox' label={disease} value={disease} defaultChecked={this.state.tickBorneDiseases.includes(disease)} onChange={this.toggleTickBorneDisease} />
+              </Row>
             )}
-          </Row>
-          <div className='account-info__subheading'>Date of initial infection</div>
-          <Row>
-            {/* <Input s={4} name='initialInfectionDate' label='Date of initial infection' defaultValue={this.state.initialInfectionDate} placeholder='MM/YY' labelClassName='active' onChange={this.handleChange} /> */}
-            {/* <Input s={2} label='Month' defaultValue={this.state.initialInfectionDate.month} labelClassName='active' onChange={(e) => this.handleDiagnosisChange(e.target.value, 'month')} /> */}
-            <div className='col s4'>
-              <Input s={12} type='select' label='Month' value={this.state.initialInfectionDate.month} onChange={(e) => this.handleDiagnosisChange(e.target.value, 'month')}>
-                <option value=''></option>
-                <option value='January'>January</option>
-                <option value='February'>February</option>
-                <option value='March'>March</option>
-                <option value='April'>April</option>
-                <option value='May'>May</option>
-                <option value='June'>June</option>
-                <option value='July'>July</option>
-                <option value='August'>August</option>
-                <option value='September'>September</option>
-                <option value='October'>October</option>
-                <option value='November'>November</option>
-                <option value='December'>December</option>
-              </Input>
-              {this.state.errors.initialInfectionMonth && <p className='red-text'>{this.state.errors.initialInfectionMonth}</p>}
-            </div>
-            <div className='col s2 input-field'>
-              <input type='number' id='initialInfectionDay' label='Day' value={this.state.initialInfectionDate.day} placeholder='DD' onChange={(e) => this.handleDiagnosisChange(e.target.value, 'day')} />
-              <label className='active' htmlFor='initialInfectionDay'>Day</label>
-              {this.state.errors.initialInfectionDay && <p className='red-text'>{this.state.errors.initialInfectionDay}</p>}
-            </div>
-            <div className='col s2 input-field'>
-              <input type='number' id='initialInfectionYear' label='Year' value={this.state.initialInfectionDate.year} placeholder='YYYY' onChange={(e) => this.handleDiagnosisChange(e.target.value, 'year')} />
-              <label className='active' htmlFor='initialInfectionYear'>Year</label>
-              {this.state.errors.initialInfectionYear && <p className='red-text'>{this.state.errors.initialInfectionYear}</p>}
-            </div>
-            {/* <Input s={2} type='number' label='Day' value={this.state.initialInfectionDate.day} placeholder='DD' labelClassName='active' onChange={(e) => this.handleDiagnosisChange(e.target.value, 'day')} /> */}
-            {/* <Input s={2} type='number' label='Year' value={this.state.initialInfectionDate.year} placeholder='YYYY' labelClassName='active' onChange={(e) => this.handleDiagnosisChange(e.target.value, 'year')} /> */}
-          </Row>
+            <i
+              className='material-icons green-text'
+              onClick={() => {
+                const otherDoctors = this.state.otherDoctors.slice();
+                otherDoctors.push({name: '', type: '', address: '', phone: ''});
+                this.setState({otherDoctors});
+              }}>
+              add
+            </i>
+          </div>
+
+          <div className='account-info__section'>
+            <h5>Tick-Borne Diseases</h5>
+            <Row>
+              {/* <div className='section'></div> */}
+              {/* <div className='account-info__form-category left-align'>Diseases:</div> */}
+              {['Lyme Disease', 'Bartonella', 'Babesia'].map(disease =>
+                <Input key={disease} name='tickBorneDiseases' type='checkbox' label={disease} value={disease} defaultChecked={this.state.tickBorneDiseases.includes(disease)} onChange={this.toggleTickBorneDisease} />
+              )}
+            </Row>
+          </div>
+
+          <div className='account-info__section'>
+            <h5>Date of initial infection</h5>
+            <Row>
+              {/* <Input s={4} name='initialInfectionDate' label='Date of initial infection' defaultValue={this.state.initialInfectionDate} placeholder='MM/YY' labelClassName='active' onChange={this.handleChange} /> */}
+              {/* <Input s={2} label='Month' defaultValue={this.state.initialInfectionDate.month} labelClassName='active' onChange={(e) => this.handleDiagnosisChange(e.target.value, 'month')} /> */}
+              {/* <div className='col s4'> */}
+                <Input s={3} type='select' label='Month' value={this.state.initialInfectionDate.month} onChange={(e) => this.handleDiagnosisChange(e.target.value, 'month')}>
+                  <option value='' disabled></option>
+                  <option value='January'>January</option>
+                  <option value='February'>February</option>
+                  <option value='March'>March</option>
+                  <option value='April'>April</option>
+                  <option value='May'>May</option>
+                  <option value='June'>June</option>
+                  <option value='July'>July</option>
+                  <option value='August'>August</option>
+                  <option value='September'>September</option>
+                  <option value='October'>October</option>
+                  <option value='November'>November</option>
+                  <option value='December'>December</option>
+                </Input>
+                {this.state.errors.initialInfectionMonth && <p className='red-text'>{this.state.errors.initialInfectionMonth}</p>}
+              {/* </div> */}
+              <div className='col s2 input-field'>
+                <input type='number' id='initialInfectionDay' label='Day' value={this.state.initialInfectionDate.day} placeholder='DD' onChange={(e) => this.handleDiagnosisChange(e.target.value, 'day')} />
+                <label className='active' htmlFor='initialInfectionDay'>Day</label>
+                {this.state.errors.initialInfectionDay && <p className='red-text'>{this.state.errors.initialInfectionDay}</p>}
+              </div>
+              <div className='col s2 input-field'>
+                <input type='number' id='initialInfectionYear' label='Year' value={this.state.initialInfectionDate.year} placeholder='YYYY' onChange={(e) => this.handleDiagnosisChange(e.target.value, 'year')} />
+                <label className='active' htmlFor='initialInfectionYear'>Year</label>
+                {this.state.errors.initialInfectionYear && <p className='red-text'>{this.state.errors.initialInfectionYear}</p>}
+              </div>
+              {/* <Input s={2} type='number' label='Day' value={this.state.initialInfectionDate.day} placeholder='DD' labelClassName='active' onChange={(e) => this.handleDiagnosisChange(e.target.value, 'day')} /> */}
+              {/* <Input s={2} type='number' label='Year' value={this.state.initialInfectionDate.year} placeholder='YYYY' labelClassName='active' onChange={(e) => this.handleDiagnosisChange(e.target.value, 'year')} /> */}
+            </Row>
+          </div>
+
           <div className='center-align'>
             <Button className='black' waves='light'>Save</Button>
             <p ref='formSubmitResponse' className='account-info__form-submit-response'>Saved</p>
@@ -382,20 +372,23 @@ class MedicalInfo extends React.Component {
 };
 
 export default createContainer(props => {
-  const userInfo = Meteor.user();
+  // const userInfo = Meteor.user();
+  // const currentdDoctorHandle = Meteor.subscribe('currentDoctor', userInfo && userInfo.doctorId);
+  // const currentDoctor = userInfo && Meteor.users.findOne({ 'account.type': 'doctor', _id: userInfo.doctorId });
+  // const currentDoctorInfo = {};
+  //
+  // if (currentDoctor && currentdDoctorHandle.ready()) {
+  //   currentDoctorInfo.name = `${currentDoctor.profile.firstName} ${currentDoctor.profile.lastName}`;
+  //   currentDoctorInfo.address = `${currentDoctor.profile.officeAddress}, ${currentDoctor.profile.city}, ${currentDoctor.profile.state} ${currentDoctor.profile.zip}`;
+  //   currentDoctorInfo.phone = currentDoctor.profile.phone;
+  //   currentDoctorInfo.email = currentDoctor.emails[0].address;
+  // }
+
+
+
   // let nextAppt;
   // let prevAppt;
   // const userAppts = userInfo ? userInfo.profile.medical.appointments : undefined;
-  const currentdDoctorHandle = Meteor.subscribe('currentDoctor', userInfo && userInfo.doctorId);
-  const currentDoctor = userInfo && Meteor.users.findOne({ 'account.type': 'doctor', _id: userInfo.doctorId });
-  const currentDoctorInfo = {};
-
-  if (currentDoctor && currentdDoctorHandle.ready()) {
-    currentDoctorInfo.name = `${currentDoctor.profile.firstName} ${currentDoctor.profile.lastName}`;
-    currentDoctorInfo.address = `${currentDoctor.profile.officeAddress}, ${currentDoctor.profile.city}, ${currentDoctor.profile.state} ${currentDoctor.profile.zip}`;
-    currentDoctorInfo.phone = currentDoctor.profile.phone;
-    currentDoctorInfo.email = currentDoctor.emails[0].address;
-  }
   // if (userAppts) {
   //   const lastApptInArray = userAppts[userAppts.length - 1];
   //   if (lastApptInArray && moment(lastApptInArray).isAfter(moment())) {
@@ -408,14 +401,12 @@ export default createContainer(props => {
   //   }
   // }
   return {
-    currentDoctor,
-    showDoctorSearch: Session.get('showDoctorSearch') || false,
-    showAppointmentScheduler: Session.get('showAppointmentScheduler') || false,
-    currentDoctorInfo,
-    // nextAppt,
-    // prevAppt,
-    userAppts: userInfo ? getAppointments(userInfo.profile.medical.appointments) : {},
-    isFetching: !userInfo || !currentdDoctorHandle.ready(),
+    // currentDoctor,
+    // showDoctorSearch: Session.get('showDoctorSearch') || false,
+    // showAppointmentScheduler: Session.get('showAppointmentScheduler') || false,
+    // currentDoctorInfo,
+    // userAppts: userInfo ? getAppointments(userInfo.profile.medical.appointments) : {},
+    // isFetching: !userInfo || !currentdDoctorHandle.ready(),
   }
 }, MedicalInfo)
 

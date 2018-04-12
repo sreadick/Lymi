@@ -200,7 +200,7 @@ export default class GeneralInfo extends React.Component {
                 {(medical.otherDoctors && medical.otherDoctors.filter(doctor => doctor.name && doctor.name.trim().length > 0).length > 0) ?
                   <ul className='pt-summary__item__list'>
                     {medical.otherDoctors.filter(doctor => doctor.name && doctor.name.trim().length > 0).map((doctor, index) =>
-                      <li key={index}>{`${doctor.name} ${(doctor.address && doctor.address.trim()) ? ' - address: ' + doctor.address : '' } ${(doctor.phone && doctor.phone.trim()) ? ' - phone: ' + doctor.phone : '' }`}</li>
+                      <li key={index}>{`${doctor.name} ${(doctor.type && doctor.type.trim()) ? '(' + doctor.type + ')': '' } ${(doctor.address && doctor.address.trim()) ? ' - address: ' + doctor.address : '' } ${(doctor.phone && doctor.phone.trim()) ? ' - phone: ' + doctor.phone : '' }`}</li>
                     )}
                   </ul>
                   :

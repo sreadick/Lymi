@@ -39,3 +39,21 @@
 .account-info__form-submit-response.show {
   visibility: visible;
 }
+
+.account-info__section {
+  margin: 2rem 0;
+  h5 {
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+}
+
+.account-info__section--list {
+
+  .row:last-of-type {
+    margin-bottom: 0;
+  }
+  i {
+    cursor: pointer;
+  }
+}

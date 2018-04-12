@@ -8,7 +8,8 @@ import { Tabs, Tab } from 'react-materialize';
 import Loader from '/imports/ui/components/Loader';
 
 import Settings from '../../components/patient/account/Settings';
-import Preferences from '../../components/patient/account/Preferences';
+// import Preferences from '../../components/patient/account/Preferences';
+import Practitioner from '../../components/patient/account/Practitioner';
 import PersonalInfo from '../../components/patient/account/PersonalInfo';
 import MedicalInfo from '../../components/patient/account/MedicalInfo';
 
@@ -32,9 +33,12 @@ class Account extends React.Component {
           <Tab className='col s3' title="Settings" active={!this.props.location.state || !this.props.location.state.activeTab}>
             <Settings settingsInfo={this.props.userInfo.profile.settings}/>
           </Tab>
-          <Tab className='col s3' title="Preferences" active={this.props.location.state && this.props.location.state.activeTab === 'preferences'}>
-            <Preferences userInfo={this.props.userInfo}/>
+          <Tab className='col s3' title="Lyme Practitioner" active={this.props.location.state && this.props.location.state.activeTab === 'practitioner'}>
+            <Practitioner userInfo={this.props.userInfo}/>
           </Tab>
+          {/* <Tab className='col s3' title="Preferences" active={this.props.location.state && this.props.location.state.activeTab === 'preferences'}>
+            <Preferences userInfo={this.props.userInfo}/>
+          </Tab> */}
       		<Tab className='col s3' title="Personal Info" active={this.props.location.state && this.props.location.state.activeTab === 'personalInfo'}>
             <PersonalInfo userInfo={this.props.userInfo}/>
           </Tab>

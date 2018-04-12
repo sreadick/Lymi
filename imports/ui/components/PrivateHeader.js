@@ -36,9 +36,12 @@ const PrivateHeader = (props) => {
             {props.title}
           </Link>
           {props.isForumPage && <div className='nav-header__vl'></div>}
-          {props.isForumPage &&
+          {(props.isForumPage || (props.accountType === 'patient' && props.path !== '/patient/dashboard' && props.path !== '/patient/welcomepage' && props.path !== '/patient/selectsymptoms' && props.path !== '/patient/selecttreatments' && props.path !== '/patient/checkin')) &&
             <Link className={`nav-header__link--dashboard`} to='/patient/dashboard'>Dashboard</Link>
           }
+          {/* {props.isForumPage &&
+            <Link className={`nav-header__link--dashboard`} to='/patient/dashboard'>Dashboard</Link>
+          } */}
 
         </div>
         <div className="nav-header__content--right">

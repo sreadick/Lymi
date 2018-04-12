@@ -70,7 +70,8 @@ class Profile extends React.Component {
               }
             </div>
           </div>
-          <Link className='' to={{pathname: '/patient/account', state: {activeTab: 'preferences'}}}>Change Avatar Pic</Link>
+          {/* <Link className='' to={{pathname: '/patient/account', state: {activeTab: 'preferences'}}}>Change Avatar Pic</Link> */}
+          <Link className='' to='/patient/account'>Change Avatar Pic</Link>
           {/* </div> */}
           <hr />
 

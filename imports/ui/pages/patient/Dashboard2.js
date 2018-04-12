@@ -287,7 +287,7 @@ export default createContainer(() => {
     return GroupALength - GroupBLength;
   })
 
-  const dateArray = [...Array(14).keys()].map(index => moment().subtract(index, 'days').format("MMMM Do YYYY")).reverse();
+  let dateArray = [...Array(14).keys()].map(index => moment().subtract(index, 'days').format("MMMM Do YYYY")).reverse();
   // let firstCheckinIndex;
   // let modifiedSymptomCheckins = dateArray.map((date, index) => {
   //   const foundCheckin = checkins.find(checkin => checkin.date === date);
@@ -298,16 +298,19 @@ export default createContainer(() => {
   //     symptoms: foundCheckin ? foundCheckin.symptoms : []
   //   }
   // })
+  if (dateArray.find(date => date === moment(userInfo.account.createdAt).format('MMMM Do YYYY'))) {
+    dateArray = dateArray.slice(dateArray.indexOf(moment(userInfo.account.createdAt).format('MMMM Do YYYY')))
+  }
   let modifiedSymptomCheckins = dateArray.map((date, index) => {
     const foundCheckin = checkins.find(checkin => checkin.date === date);
     // if (!firstCheckinIndex && foundCheckin) firstCheckinIndex = index;
     return {
       date,
-      symptoms: foundCheckin ? foundCheckin.symptoms : null
+      symptoms: foundCheckin ? foundCheckin.symptoms : []
     }
   })
-  modifiedSymptomCheckins = modifiedSymptomCheckins.filter(checkin => checkin.symptoms);
-  console.log(modifiedSymptomCheckins);
+  // modifiedSymptomCheckins = modifiedSymptomCheckins.filter(checkin => checkin.symptoms);
+
   // modifiedSymptomCheckins = modifiedSymptomCheckins.slice(firstCheckinIndex);
   // console.log(firstCheckinIndex);
   // const newExtendedSymptomCheckins = modifiedSymptomCheckins.reverse()
