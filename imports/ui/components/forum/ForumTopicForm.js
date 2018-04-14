@@ -74,7 +74,7 @@ class ForumTopicForm extends React.Component {
     if (this.props.isFetching) {
       return <div></div>
     } else if (this.state.submitSuccess) {
-      return <Redirect to={`/patient/forum/subforum/${this.state.subforumId}/topic/${Session.get('newTopicId')}`} />
+      return <Redirect to={`/forum/subforum/${this.state.subforumId}/topic/${Session.get('newTopicId')}`} />
     }
     return (
       <div className="forum-topic__form__overlay">

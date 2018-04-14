@@ -7,7 +7,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
 
 import Loader from '/imports/ui/components/Loader';
-import ForumPostForm from '/imports/ui/components/patient/forum/ForumPostForm';
+import ForumPostForm from '/imports/ui/components/forum/ForumPostForm';
 
 // import { ForumPosts } from '../../../api/forum-posts';
 import { ForumPosts } from '/imports/api/forum';
@@ -72,8 +72,8 @@ class ForumTopic extends React.Component {
         <nav className='forum-breadcrumb__wrapper'>
           <div className="nav-wrapper">
             <div className="col s12">
-              <Link to="/patient/forum" className="breadcrumb forum-nav-box__breadcrumb">Lyme Share</Link>
-              <Link to={`/patient/forum/subforum/${this.props.subforumId}`} className="breadcrumb forum-nav-box__breadcrumb">{this.props.subforumTitle}</Link>
+              <Link to="/forum" className="breadcrumb forum-nav-box__breadcrumb">Lyme Share</Link>
+              <Link to={`/forum/subforum/${this.props.subforumId}`} className="breadcrumb forum-nav-box__breadcrumb">{this.props.subforumTitle}</Link>
               <a href="#" className="breadcrumb forum-nav-box__breadcrumb active">{this.props.topic.title}</a>
             </div>
           </div>

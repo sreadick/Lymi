@@ -134,7 +134,7 @@ export default createContainer(() => {
       // },
       {
         name: "Lyme Share",
-        path: "/patient/forum",
+        path: "/forum",
       }
     ]
   }

@@ -7,8 +7,8 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
 
 import Loader from '/imports/ui/components/Loader';
-import ForumTopicForm from '/imports/ui/components/patient/forum/ForumTopicForm';
-import { TopicPagination } from '/imports/ui/components/patient/forum/TopicPagination';
+import ForumTopicForm from '/imports/ui/components/forum/ForumTopicForm';
+import { TopicPagination } from '/imports/ui/components/forum/TopicPagination';
 
 import { SubForums } from '/imports/api/forum';
 import { Topics } from '/imports/api/forum';
@@ -27,16 +27,12 @@ class Subforum extends React.Component {
   componentDidMount() {
     const numTopics = this.props.topics.length;
     const topicListGroup = Math.ceil(numTopics / 3);
-    console.log(numTopics);
-    console.log(topicListGroup);
     // this.setState({topicListGroup})
   }
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.topics.length !== this.props.topics.length) {
       const numTopics = this.props.topics.length;
       const topicListGroup = Math.ceil(numTopics / 3);
-      console.log(numTopics);
-      console.log(topicListGroup);
       // this.setState({topicListGroup})
     }
   }
@@ -68,7 +64,7 @@ class Subforum extends React.Component {
             <nav className='forum-breadcrumb__wrapper forum-breadcrumb__wrapper--subforum'>
               <div className="nav-wrapper">
                 <div className="col s12">
-                  <Link to="/patient/forum" className="breadcrumb forum-nav-box__breadcrumb">Lyme Share</Link>
+                  <Link to="/forum" className="breadcrumb forum-nav-box__breadcrumb">Lyme Share</Link>
                   <a href="#" className="breadcrumb forum-nav-box__breadcrumb active">{this.props.subforum.name}</a>
                 </div>
               </div>
@@ -148,7 +144,7 @@ class Subforum extends React.Component {
                       <div className='forum-topic__list__item__main-content'>
                         <Link
                           className='forum-topic__list__item__title'
-                          to={`/patient/forum/subforum/${this.props.subforum._id}/topic/${topic._id}`}>
+                          to={`/forum/subforum/${this.props.subforum._id}/topic/${topic._id}`}>
                           {topic.title}
                         </Link>
                         <p>By <span>{topic.authorUsername || topic.authorFirstName}</span> on {moment(topic.createdAt).format('MM-DD-YY')}</p>
@@ -165,7 +161,7 @@ class Subforum extends React.Component {
                 // {/* <li key={topic._id} className="collection-item avatar">
                 //   <img src={Meteor.user().profile.userPhoto} alt="" className="circle" />
                 //   <span className="title">
-                //     <Link to={`/patient/forum/subforum/${this.props.subforum._id}/topic/${topic._id}`}>
+                //     <Link to={`/forum/subforum/${this.props.subforum._id}/topic/${topic._id}`}>
                 //       {topic.title}
                 //     </Link>
                 //   </span>
@@ -175,13 +171,15 @@ class Subforum extends React.Component {
               )}
             </ul>
 
-            {this.props.topics.length > 10 &&
+            {this.props.topics.length > 10 ?
               <TopicPagination
                 topicListGroup={this.state.topicListGroup}
                 totalTopicListGroups={this.props.totalTopicListGroups}
                 changeTopicListGroup={this.changeTopicListGroup}
                 position='bottom'
               />
+              :
+              <div className='section'></div>
             }
           {/* </div> */}
         </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
+import { Link } from 'react-router-dom';
 import { createContainer } from 'meteor/react-meteor-data';
 import moment from 'moment';
 import { Row, Col, Input } from 'react-materialize';
@@ -274,7 +275,10 @@ export default class GeneralInfo extends React.Component {
                 <span className='pt-summary__item__label'>Lyme Share Topics: </span>
                 <ul className='pt-summary__item__list'>
                   {this.props.patientForumTopics.map(topic =>
-                    <li key={topic._id}>{topic.title}</li>
+                    <li key={topic._id}>
+                      <Link to={`/forum/subforum/${topic.subforumId}/topic/${topic._id}`}>{topic.title}</Link>
+                    </li>
+                    // {/* <li key={topic._id}>{topic.title}</li> */}
                   )}
                 </ul>
               </div>

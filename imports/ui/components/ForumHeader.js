@@ -26,7 +26,7 @@ const ForumHeader = (props) => {
               onClick={() => Session.set('sidebarToggled', !Session.get('sidebarToggled')) }>
               {Session.get('sidebarToggled') === true ? "clear" : "menu"}
             </i> */}
-            <Link className={`nav-header__link--title ${props.isTopicPage && 'topic-page'}`} to="/patient/forum">{props.title}</Link>
+            <Link className={`nav-header__link--title ${props.isTopicPage && 'topic-page'}`} to="/forum">{props.title}</Link>
             {/* <div className='nav-header__button--forum' onClick={() => Session.set('showForumTopicForm', true)}>New Topic</div> */}
             {/* <Button className='nav-header__button--forum' onClick={() => Session.set('showForumTopicForm', true)}>New Topic</Button> */}
           </div>
@@ -118,7 +118,7 @@ export default createContainer(props => {
   return {
     showProfileDropdown: Session.get('showProfileDropdown') || false,
     showAccountDropdown: Session.get('showAccountDropdown') || false,
-    isTopicPage: props.path === '/patient/forum/subforum/:subforumId/topic/:topicId',
+    isTopicPage: props.path === '/forum/subforum/:subforumId/topic/:topicId',
     isfetching: !Meteor.user()
   }
 }, ForumHeader)

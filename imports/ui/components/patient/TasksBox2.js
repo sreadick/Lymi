@@ -146,7 +146,7 @@ class TasksBox2 extends React.Component {
                           onClick={() => Meteor.call('forumPosts.update',
                             {postId: post._id, updateProp: 'viewedByTopicAuthor', newValue: true}
                           )}
-                          to={`/patient/forum/subforum/${post.subforumId}/topic/${post.topicId}`}>
+                          to={`/forum/subforum/${post.subforumId}/topic/${post.topicId}`}>
                           {topic.title}
                         </Link>
                       </div>
@@ -290,7 +290,7 @@ class TasksBox2 extends React.Component {
                     <div className='col s7'>
                       <Link
                         className='task-box__link'
-                        to={`/patient/forum/subforum/${topic.subforumId}/topic/${topic._id}`}>
+                        to={`/forum/subforum/${topic.subforumId}/topic/${topic._id}`}>
                         {topic.title}
                       </Link>
                     </div>

@@ -20,7 +20,7 @@ const PrivateHeader = (props) => {
     <div></div>
   }
   return (
-    <div className={`nav-header ${props.isForumPage ? 'nav-header--forum' : props.accountType === 'doctor' ? 'private doctor z-depth-1' : 'private patient z-depth-1'}`} >
+    <div className={`nav-header ${props.isForumPage ? 'nav-header--forum' : props.accountType === 'doctor' ? 'private doctor z-depth-3' : 'private patient z-depth-1'}`} >
       <div className="nav-header__content--private">
         <div className="nav-header__content--left">
           {!props.isForumPage &&
@@ -32,12 +32,18 @@ const PrivateHeader = (props) => {
           }
           <Link
             className={`nav-header__link--title ${props.accountType === 'doctor' ? 'doctor' : 'patient'}`}
-            to={props.isForumPage ? "/patient/forum" : '/'}>
+            to={props.isForumPage ? "/forum" : '/'}>
             {props.title}
+            {(props.accountType === 'doctor' && !props.isForumPage) && <sup>MD</sup>}
           </Link>
           {props.isForumPage && <div className='nav-header__vl'></div>}
           {(props.isForumPage || (props.accountType === 'patient' && props.path !== '/patient/dashboard' && props.path !== '/patient/welcomepage' && props.path !== '/patient/selectsymptoms' && props.path !== '/patient/selecttreatments' && props.path !== '/patient/checkin')) &&
-            <Link className={`nav-header__link--dashboard`} to='/patient/dashboard'>Dashboard</Link>
+            <Link
+              className={`nav-header__link--dashboard`}
+              // to='/patient/dashboard'>
+              to='/'>
+              {props.accountType === 'patient' ? 'Dashboard' : 'Home'}
+            </Link>
           }
           {/* {props.isForumPage &&
             <Link className={`nav-header__link--dashboard`} to='/patient/dashboard'>Dashboard</Link>
@@ -152,7 +158,7 @@ const PrivateHeader = (props) => {
                                 onClick={() => Meteor.call('forumPosts.update',
                                   {postId: post._id, updateProp: 'viewedByTopicAuthor', newValue: true}
                                 )}
-                                to={`/patient/forum/subforum/${topic.subforumId}/topic/${topic._id}`}>
+                                to={`/forum/subforum/${topic.subforumId}/topic/${topic._id}`}>
                                 {topic.title}
                               </Link>
                             </div>
@@ -181,42 +187,46 @@ const PrivateHeader = (props) => {
             const navHeaderProfileDropdown = document.getElementById('nav-header__dropdown--avatar');
             navHeaderProfileDropdown.classList.add('active');
           }}>
-            {Meteor.user().profile.userPhoto ?
-              <img src={Meteor.user().profile.userPhoto} className='nav-header__avatar nav-header__profile-item' onClick={() => document.getElementById('nav-header__button--avatar').classList.add('active')} />
+            {props.userInfo.profile.userPhoto ?
+              <img src={props.userInfo.profile.userPhoto} className='nav-header__avatar nav-header__profile-item' onClick={() => document.getElementById('nav-header__button--avatar').classList.add('active')} />
             :
               <div className='nav-header__avatar--initial nav-header__profile-item' onClick={() => document.getElementById('nav-header__button--avatar').classList.add('active')}>
-                {Meteor.user().username ?
-                  Meteor.user().username.charAt(0)
+                {props.userInfo.username ?
+                  props.userInfo.username.charAt(0)
                   :
-                   Meteor.user().profile.firstName.charAt(0)
+                   props.userInfo.profile.firstName.charAt(0)
                  }
               </div>
             }
             <div className='nav-header__dropdown--avatar nav-header__profile-item z-depth-4' id='nav-header__dropdown--avatar'>
               <div className='nav-header__dropdown--avatar__top-row'>
                 <div className='nav-header__dropdown--avatar__top-row__left'>
-                  {Meteor.user().profile.userPhoto ?
-                    <img src={Meteor.user().profile.userPhoto} className='nav-header__avatar' />
+                  {props.userInfo.profile.userPhoto ?
+                    <img src={props.userInfo.profile.userPhoto} className='nav-header__avatar' />
                     :
                     <div className='nav-header__avatar--initial'>
-                      {Meteor.user().username ?
-                        Meteor.user().username.charAt(0)
+                      {props.userInfo.username ?
+                        props.userInfo.username.charAt(0)
                         :
-                         Meteor.user().profile.firstName.charAt(0)
+                         props.userInfo.profile.firstName.charAt(0)
                        }
                     </div>
                   }
                 </div>
                 <div className='nav-header__dropdown--avatar__top-row__right'>
                   <div className='nav-header__dropdown--avatar__text'>
-                    {Meteor.user().username ?
-                      Meteor.user().username
+                    {props.userInfo.username ?
+                      props.userInfo.username
                       :
-                      Meteor.user().profile.firstName + ' ' + Meteor.user().profile.lastName
+                      props.userInfo.profile.firstName + ' ' + props.userInfo.profile.lastName
                     }
                   </div>
-                  <div className='nav-header__dropdown--avatar__text--email'>{Meteor.user().emails[0].address}</div>
-                  <Link className="btn blue" to="/patient/profile">My Profile</Link>
+                  <div className='nav-header__dropdown--avatar__text--email'>{props.userInfo.emails[0].address}</div>
+                  <Link
+                    className="btn blue"
+                    to={`/${props.userInfo.account.type}/profile`}>
+                    My Profile
+                  </Link>
                 </div>
               </div>
               {/* <div className='nav-header__dropdown--avatar__bottom-row'> */}
@@ -236,6 +246,7 @@ PrivateHeader.propTypes = {
 
 
 export default createContainer(props => {
+  const userInfo = Meteor.user();
   const currentTasks = props.accountType === 'patient' ? getTasks() : {};
 
   const symptomsHandle = Meteor.subscribe('userSymptoms');
@@ -248,8 +259,8 @@ export default createContainer(props => {
   // const userTopics = Topics.find({authorId: Meteor.userId()}).fetch();
   // const newPosts = ForumPosts.find({topicAuthorId: Meteor.userId(), viewedByTopicAuthor: false}).fetch();
   // console.log(newPosts);
-
   return {
+    userInfo,
     sidebarToggled: Session.get('sidebarToggled') || false,
     showProfileDropdown: Session.get('showProfileDropdown') || false,
     showNotificationsDropdown: Session.get('showNotificationsDropdown') || false,
@@ -257,8 +268,8 @@ export default createContainer(props => {
     userSymptoms,
     userTreatments,
     currentTasks,
-    isTopicPage: props.path === '/patient/forum/subforum/:subforumId/topic/:topicId',
-    isfetching: !symptomsHandle.ready() || !treatmentsHandle.ready() || !topicsHandle.ready() || !Meteor.user(),
+    isTopicPage: props.path === '/forum/subforum/:subforumId/topic/:topicId',
+    isfetching: !symptomsHandle.ready() || !treatmentsHandle.ready() || !topicsHandle.ready() || !userInfo,
   }
 }, PrivateHeader)
 // export default PrivateHeader;

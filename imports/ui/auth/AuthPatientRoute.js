@@ -18,7 +18,7 @@ class AuthPatientRoute extends React.Component {
   }
 
   render() {
-    const { loggingIn, authenticated, account, component, sidebarToggled, showProfileBackgroundModel, showProfileImageModel, isForumPage, ...rest } = this.props;
+    const { loggingIn, authenticated, account, component, sidebarToggled, showProfileBackgroundModel, showProfileImageModel, ...rest } = this.props;
     return (
       <Route render={(props) => {
         return (
@@ -47,16 +47,15 @@ class AuthPatientRoute extends React.Component {
               {/* {isForumPage ?
                 <ForumHeader title="Lyme Share" accountType={account.type} {...rest} />
                 : */}
-              <PrivateHeader title={!isForumPage ? 'LymeLog' : "Lyme Share" } accountType={account.type} isForumPage={isForumPage} {...rest} />
+              {/* <PrivateHeader title={!isForumPage ? 'LymeLog' : "Lyme Share" } accountType={account.type} isForumPage={isForumPage} {...rest} /> */}
+              <PrivateHeader title='LymeLog' accountType={account.type} isForumPage={false} {...rest} />
               {/* } */}
               <div className='message__wrapper--dashboard'>
                 <div
                   className='message--dashboard--success'
                   id='message--dashboard--success'
                   onTransitionEnd={() => {
-                    console.log(1);
                     setTimeout(() => {
-                      console.log(2);
                       document.getElementById('message--dashboard--success').classList.remove('active');
                     }, 4000);
                   }}>
@@ -100,6 +99,6 @@ export default createContainer((props) => {
     sidebarToggled,
     showProfileBackgroundModel,
     showProfileImageModel,
-    isForumPage: props.path.substring(0, 14) === '/patient/forum'
+    // isForumPage: props.path.substring(0, 14) === '/patient/forum'
   }
 }, AuthPatientRoute);

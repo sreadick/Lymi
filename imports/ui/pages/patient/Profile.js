@@ -147,7 +147,7 @@ class Profile extends React.Component {
                 }
                 return (
                   <li key={topic._id}>
-                    <Link to={`/patient/forum/subforum/${topic.subforumId}/topic/${topic._id}`}>{topic.title}</Link>
+                    <Link to={`/forum/subforum/${topic.subforumId}/topic/${topic._id}`}>{topic.title}</Link>
                     <p>Replies: {posts.length}</p>
                     <p>{lastPost ? `Last Post: ${moment(lastPost.createdAt).fromNow()} by ${lastPost.authorUsername || lastPost.authorFirstName}` : ''}</p>
                   </li>
@@ -198,7 +198,7 @@ class Profile extends React.Component {
           <div className='section profile__section'>
             <div className='profile__heading__wrapper'>
               <p className='profile__heading'>My Personal Info:</p>
-              <Link className='profile__link' to={'/patient/account'}>edit</Link>
+              <Link className='profile__link' to={{pathname: '/patient/account', state: {activeTab: 'personalInfo'}}}>edit</Link>
             </div>
             <div>
               <p>Date of Birth:

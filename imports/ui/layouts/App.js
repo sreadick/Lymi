@@ -8,6 +8,7 @@ import Loader from '/imports/ui/components/Loader';
 import AuthAdminRoute from '../auth/AuthAdminRoute';
 import AuthPatientRoute from '../auth/AuthPatientRoute';
 import AuthDoctorRoute from '../auth/AuthDoctorRoute';
+import AuthForumRoute from '../auth/AuthForumRoute';
 import PublicRoute from '../auth/PublicRoute';
 
 // import Landing from '../pages/Landing';
@@ -30,17 +31,18 @@ import SymptomsHistory from '../pages/patient/SymptomsHistory';
 import SymptomsHistory2 from '../pages/patient/SymptomsHistory2';
 import TreatmentsHistory from '../pages/patient/TreatmentsHistory';
 import Account from '../pages/patient/Account';
-import Profile from '../pages/patient/Profile';
+import PtProfile from '../pages/patient/Profile';
 
-import ForumHome from '../pages/patient/forum/ForumHome';
-import Subforum from '../pages/patient/forum/Subforum';
-import ForumTopic from '../pages/patient/forum/ForumTopic';
+import ForumHome from '../pages/forum/ForumHome';
+import Subforum from '../pages/forum/Subforum';
+import ForumTopic from '../pages/forum/ForumTopic';
 
 import Doctor from './Doctor';
 import DoctorHomepage from '../pages/doctor/Home';
 import AddPatients from '../pages/doctor/AddPatients2';
 import PatientSummary from '../pages/doctor/PatientSummary3';
 import PendingPage from '../pages/doctor/PendingPage';
+import DrProfile from '../pages/doctor/Profile';
 
 import Admin from './Admin';
 
@@ -76,17 +78,20 @@ const App = appProps => {
         <AuthPatientRoute exact path="/patient/history/symptoms" component={SymptomsHistory2} {...appProps} />
         <AuthPatientRoute exact path="/patient/history/treatments" component={TreatmentsHistory} {...appProps} />
         <AuthPatientRoute exact path="/patient/account" component={Account} {...appProps} />
-        <AuthPatientRoute exact path="/patient/profile" component={Profile} {...appProps} />
-        <AuthPatientRoute exact path="/patient/forum" component={ForumHome} {...appProps} />
+        <AuthPatientRoute exact path="/patient/profile" component={PtProfile} {...appProps} />
+        {/* <AuthPatientRoute exact path="/patient/forum" component={ForumHome} {...appProps} />
         <AuthPatientRoute path="/patient/forum/subforum/:subforumId/topic/:topicId" component={ForumTopic} {...appProps} />
-        <AuthPatientRoute path="/patient/forum/subforum/:subforumId" component={Subforum} {...appProps} />
-        {/* <AuthPatientRoute path="/patient/forum/topic/:postId" component={ForumTopic} {...appProps} /> */}
+        <AuthPatientRoute path="/patient/forum/subforum/:subforumId" component={Subforum} {...appProps} /> */}
+        <AuthForumRoute exact path="/forum" component={ForumHome} {...appProps} />
+        <AuthForumRoute path="/forum/subforum/:subforumId/topic/:topicId" component={ForumTopic} {...appProps} />
+        <AuthForumRoute path="/forum/subforum/:subforumId" component={Subforum} {...appProps} />
 
         <AuthDoctorRoute exact path="/doctor" component={Doctor} {...appProps} />
         <AuthDoctorRoute exact path="/doctor/home" component={DoctorHomepage} {...appProps} />
         <AuthDoctorRoute exact path="/doctor/addpatients" component={AddPatients} {...appProps} />
         <AuthDoctorRoute path="/doctor/patientsummary/:patientId" component={PatientSummary} {...appProps} />
         <AuthDoctorRoute exact path="/doctor/pending" component={PendingPage} {...appProps} />
+        <AuthDoctorRoute exact path="/doctor/profile" component={DrProfile} {...appProps} />
 
         <AuthAdminRoute exact path="/admin" component={Admin} {...appProps}/>
         <Route path="*" component={NotFound}/>

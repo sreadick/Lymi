@@ -10,7 +10,7 @@ import { Session } from 'meteor/session';
 import { Topics } from '/imports/api/forum';
 import { SubForums } from '/imports/api/forum';
 
-import ForumTopicForm from '/imports/ui/components/patient/forum/ForumTopicForm';
+import ForumTopicForm from '/imports/ui/components/forum/ForumTopicForm';
 import Loader from '/imports/ui/components/Loader';
 
 class ForumHome extends React.Component {
@@ -96,7 +96,7 @@ class ForumHome extends React.Component {
                         <td>
                           <Link
                             className='forum-table__item__title'
-                            to={`/patient/forum/subforum/${subforum._id}`}>
+                            to={`/forum/subforum/${subforum._id}`}>
                             {subforum.name}
                           </Link>
                         </td>
@@ -115,7 +115,7 @@ class ForumHome extends React.Component {
               {this.props.latestTopics.map(topic => {
                 return (
                   <li key={topic._id}>
-                    <Link to={`/patient/forum/subforum/${topic.subforumId}/topic/${topic._id}`}>
+                    <Link to={`/forum/subforum/${topic.subforumId}/topic/${topic._id}`}>
                       {topic.title.length > 43 ? topic.title.substring(1, 40) + '...' : topic.title}
                     </Link>
                     <p>By {topic.authorUsername || topic.authorFirstName}</p>

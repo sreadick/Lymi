@@ -45,6 +45,10 @@ export default class WelcomePage extends React.Component {
           <Input className='filled-in' name='trackedItems' type='checkbox' label='Notable Events' value='notable events' defaultChecked={this.state.trackedItems.includes('notable events')} labelClassName={this.state.trackedItems.includes('notable events') ? 'black-text' : ''} onChange={this.toggleTrackedItem.bind(this)}/>
         </div>
         <div className='section'></div>
+        <div className='message--treatment-date'>
+          LymeLog is all about tracking your progress so we ask that you take the time to briefly "check-in" every day with your Lyme related symptoms and treatments. If you have other conditions or treatments that you don't with to track daily, for you and your doctor's benefit we urge you to add them to your medical profile via your "account" page.
+        </div>
+        <div className='section'></div>
         <div className='section'>
           <Button
             className='waves-effect waves-light btn-large black'

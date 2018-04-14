@@ -150,6 +150,18 @@
 
     .nav-header__link--title {
       color: $deep-purple-lighten-1;
+
+      color: $green-lighten-1;
+      sup {
+        color: #3173b4;
+      }
+      &:hover {
+        color: $green-darken-1 !important;
+        sup {
+          color: #224d77;
+        }
+      }
+
     }
 
     .nav-header__link, {

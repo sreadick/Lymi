@@ -7,6 +7,8 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 import Loader from '/imports/ui/components/Loader';
 
+// Todo: organize by name, email, createdAt + add user avatar 
+
 const Home = (props) => {
   if (props.isFetching) {
     return (
@@ -42,7 +44,8 @@ const Home = (props) => {
                         props.history.push(`/doctor/patientsummary/${patient._id}`);
                       }}>
                       <td>
-                        {patient.profile.firstName} {patient.profile.lastName}
+                        {/* {patient.profile.firstName} {patient.profile.lastName} */}
+                        {patient.profile.lastName}, {patient.profile.firstName}
                       </td>
                       <td>
                         {patient.emails[0].address}
@@ -78,7 +81,6 @@ export default createContainer((props) => {
   const currentPatientsHandle = Meteor.subscribe('currentPatients');
   // const currentPatients = Meteor.users.find({'account.type': 'patient'}, {sort: {createdAt: -1}}).fetch();
   const currentPatients = Meteor.users.find({'account.type': 'patient'}, {sort: {'profile.lastName': 1}}).fetch();
-  console.log(props);
   return {
     currentPatients,
     sixCharKey: Meteor.user() ? Meteor.user().sixCharKey : '',
