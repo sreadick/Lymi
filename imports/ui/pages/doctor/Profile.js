@@ -7,8 +7,10 @@ import { capitalizePhrase } from '/imports/utils/utils';
 import moment from 'moment';
 import { Row, Input } from 'react-materialize';
 
-// import { ForumPosts } from '../../../api/forum';
-// import { Topics } from '../../../api/forum';
+import ProfileImageModel from '../../components/ProfileImageModel';
+
+import { ForumPosts } from '../../../api/forum';
+import { Topics } from '../../../api/forum';
 // import { SubForums } from '../../../api/forum';
 
 import Loader from '/imports/ui/components/Loader';
@@ -20,6 +22,7 @@ class Profile extends React.Component {
     }
     return (
       <div className="profile__page">
+        {this.props.showProfileImageModel && <ProfileImageModel />}
         <div className='profile z-depth-2'>
           {/* <div className='section profile__section'> */}
           <div className='profile__header'>
@@ -47,31 +50,17 @@ class Profile extends React.Component {
               }
             </div>
           </div>
-          {/* <Link className='' to={{pathname: '/patient/account', state: {activeTab: 'preferences'}}}>Change Avatar Pic</Link> */}
-          <Link className='' to='/patient/account'>Change Avatar Pic</Link>
+          <Link
+            className=''
+            to=''
+            onClick={(e) => {
+              e.preventDefault();
+              Session.set('showProfileImageModel', true)
+            }}>
+            Change Avatar Pic
+          </Link>
           {/* </div> */}
           <hr />
-
-          {/* <div className='section profile__section'>
-            <p className='profile__heading'>Lyme Share Topics:</p>
-            <ul className='profile__topics'>
-              {this.props.userTopics.map(topic => {
-                const posts = ForumPosts.find({topicId: topic._id}).fetch();
-                let lastPost;
-                if (posts.length > 0) {
-                  lastPost = posts.pop()
-                }
-                return (
-                  <li key={topic._id}>
-                    <Link to={`/forum/subforum/${topic.subforumId}/topic/${topic._id}`}>{topic.title}</Link>
-                    <p>Replies: {posts.length}</p>
-                    <p>{lastPost ? `Last Post: ${moment(lastPost.createdAt).fromNow()} by ${lastPost.authorUsername || lastPost.authorFirstName}` : ''}</p>
-                  </li>
-                )
-              })}
-            </ul>
-          </div>
-          <hr /> */}
 
           <div className='section profile__section'>
             <div className='profile__heading__wrapper'>
@@ -117,6 +106,27 @@ class Profile extends React.Component {
               </div>
             </div>
           </div>
+          <div className='section profile__section'>
+            <p className='profile__heading'>Lyme Share Topics:</p>
+            <ul className='profile__topics'>
+              {this.props.userTopics.map(topic => {
+                const posts = ForumPosts.find({topicId: topic._id}).fetch();
+                let lastPost;
+                if (posts.length > 0) {
+                  lastPost = posts.pop()
+                }
+                return (
+                  <li key={topic._id}>
+                    <p><Link to={`/forum/subforum/${topic.subforumId}/topic/${topic._id}`}>{topic.title}</Link></p>
+                    <p>Replies: {posts.length}</p>
+                    <p>{lastPost ? `Last Post: ${moment(lastPost.createdAt).fromNow()} by ${lastPost.authorUsername || lastPost.authorFirstName}` : ''}</p>
+                    <p>{`Viewed: ${topic.views || 0} ${topic.views === 1 ? 'time' : 'times'}`}</p>
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+          <hr />
         </div>
       </div>
     );
@@ -132,7 +142,9 @@ export default createContainer(props => {
   // const userAppts = Meteor.user() ? Meteor.user().profile.medical.appointments : undefined;
   return {
     userInfo,
-    // userTopics: Topics.find({authorId: Meteor.userId()}).fetch(),
+    userTopics: Topics.find({authorId: Meteor.userId()}).fetch(),
+    showProfileImageModel: Session.get('showProfileImageModel') || false,
+    // userPhoto: (userInfo && userInfo.profile.userPhoto) ? userInfo.profile.userPhoto : undefined,
     isFetching: !userInfo || !topicsHandle.ready() || !forumPostsHandle.ready(),
   }
 }, Profile)

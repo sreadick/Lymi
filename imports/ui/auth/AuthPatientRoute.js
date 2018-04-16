@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 import PrivateHeader from '../components/PrivateHeader';
 import Footer from '../components/Footer';
-import ForumHeader from '../components/ForumHeader';
+// import ForumHeader from '../components/ForumHeader';
 import SidebarMenu from '../components/patient/SidebarMenu';
 
 // const AuthPatientRoute = ({ loggingIn, authenticated, account, component, sidebarToggled, showProfileBackgroundModel, showProfileImageModel, isForumPage, ...rest }) => {
@@ -67,11 +67,14 @@ class AuthPatientRoute extends React.Component {
                 </div>
               </div>
               {(sidebarToggled || showProfileBackgroundModel || showProfileImageModel) &&
-                <div className='page-content--overlay' onClick={() => {
-                  Session.set('sidebarToggled', false);
-                  Session.set('showProfileBackgroundModel', false);
-                  Session.set('showProfileImageModel', false);
-                }}></div>
+                <div
+                  className='page-content--overlay'
+                  onClick={() => {
+                    Session.set('sidebarToggled', false);
+                    Session.set('showProfileBackgroundModel', false);
+                    Session.set('showProfileImageModel', false);
+                  }}>
+                </div>
               }
               <div>
                 {(React.createElement(component, {...props, ...rest}))}

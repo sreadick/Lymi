@@ -10,7 +10,8 @@ export default Footer = (props) => (
         <div className="col l6 s12">
           {/* <h5 className="white-text">©2018 LymeLog</h5> */}
           <h5 className="white-text">Have a Question?</h5>
-          <p className="grey-text text-lighten-4">See our <a href='#'>FAQ Page</a> or call our support staff at (555)-555-5555.</p>
+          {/* <p className="grey-text text-lighten-4">See our <a href='/faq'>FAQ Page</a> or call our support staff at (555)-555-5555.</p> */}
+          <p className="grey-text text-lighten-4">See our <Link className='blue-text' to='/faq'>FAQ Page</Link> or call our support staff at (555)-555-5555.</p>
         </div>
         <div className="col l4 offset-l2 s12">
           {/* <h5 className="white-text">Links</h5> */}

@@ -14,13 +14,20 @@ const PublicHeader = (props) => (
             <span>LymeLog<sup>MD</sup></span> : props.title
           }
         </Link>
-        {props.currentPath === '/clinicians' ?
+        {props.currentPath === '/faq' ?
+          undefined
+        :
+          props.currentPath === '/clinicians' ?
           <Link className="nav-header__link public" to="/">Patients</Link>
         :
           <Link className="nav-header__link public" to="/clinicians">Clinicians</Link>
         }
-        <Link className="nav-header__link public" to="#">About Us</Link>
-        <Link className="nav-header__link public" to="#">FAQs</Link>
+        {props.currentPath !== '/faq' &&
+          <Link className="nav-header__link public" to="#">About Us</Link>
+        }
+        {props.currentPath !== '/faq' &&
+          <Link className="nav-header__link public" to="/faq">FAQs</Link>
+        }
       </div>
 
       {/* <Link className="nav-header__link public" to="/login">Login</Link> */}

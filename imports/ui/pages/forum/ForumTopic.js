@@ -17,11 +17,35 @@ import { SubForums } from '/imports/api/forum';
 class ForumTopic extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
 
     };
   }
+
+  componentDidMount() {
+    if (this.props.topic) {
+      if (this.props.topic.authorId !== Meteor.userId()) {
+        Meteor.call('topics.update', {
+          topicId: this.props.topic._id,
+          updateProp: 'views',
+          newValue: this.props.topic.views ? this.props.topic.views + 1 : 1
+        });
+      }
+    }
+  }
+  // componentDidUpdate(prevProps) {
+  //   if ((!prevProps.topic && this.props.topic) && Meteor.userId()) {
+  //     if (this.props.topic.authorId !== Meteor.userId()) {
+  //       Meteor.call('topics.update', {
+  //         topicId: this.props.topic._id,
+  //         updateProp: 'views',
+  //         newValue: this.props.topic.views ? this.props.topic.views + 1 : 1
+  //       });
+  //       console.log(this.props.topic.views);
+  //       console.log('views updated');
+  //     }
+  //   }
+  // }
 
   renderPosts() {
     return this.props.posts.map((post, index) => {
@@ -131,7 +155,7 @@ class ForumTopic extends React.Component {
                   </span>
                 }
               </p>
-              <p>Viewed: 10 times</p>
+              <p>{`Viewed: ${this.props.topic.views || 0} ${this.props.topic.views === 1 ? 'time' : 'times'}`}</p>
               {/* <div className='forum-topic__info'>
                 {this.props.post.authorAlias ?
                   <img className='forum-post__alias' src={this.props.post.authorAlias} />

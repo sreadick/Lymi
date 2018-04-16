@@ -16,6 +16,7 @@ import PublicRoute from '../auth/PublicRoute';
 import Landing4 from '../pages/Landing4';
 import ClinicianLanding from '../pages/ClinicianLanding';
 import Signup from '../pages/Signup';
+import Faq from '../pages/FAQ';
 // import Login from '../pages/Login';
 import NotFound from '../pages/NotFound';
 
@@ -62,6 +63,7 @@ const App = appProps => {
       <Switch>
         <PublicRoute exact path="/" component={Landing4} {...appProps} />
         <PublicRoute exact path="/clinicians" component={ClinicianLanding} {...appProps} />
+        <PublicRoute exact path="/faq" component={Faq} {...appProps} />
         {/* <PublicRoute path="/login" component={Login} {...appProps} /> */}
         <PublicRoute path="/signup" component={Signup} {...appProps} />
 
@@ -94,6 +96,7 @@ const App = appProps => {
         <AuthDoctorRoute exact path="/doctor/profile" component={DrProfile} {...appProps} />
 
         <AuthAdminRoute exact path="/admin" component={Admin} {...appProps}/>
+        {/* <Route exact path="/faq" component={Faq}/> */}
         <Route path="*" component={NotFound}/>
       </Switch>
     </Router>

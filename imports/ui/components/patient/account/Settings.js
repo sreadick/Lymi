@@ -2,7 +2,8 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Row, Input, Button } from 'react-materialize';
-import ProfileImageModel from '../ProfileImageModel';
+
+import ProfileImageModel from '../../ProfileImageModel';
 
 class Settings extends React.Component {
   constructor(props) {

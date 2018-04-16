@@ -302,6 +302,7 @@ export const getExtendedTreatmentHistory = (treatments, checkins) => {
       }
     }
   });
+  console.log(newCheckinTreatments);
   return newCheckinTreatments;
 }
 

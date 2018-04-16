@@ -83,7 +83,28 @@ Meteor.methods({
       subforumId,
       title,
       body,
+      views: 0,
       createdAt: moment().valueOf(),
+    });
+  },
+  'topics.update'({topicId, updateProp, newValue}) {
+    if (!this.userId) {
+      throw new Meteor.Error('not-authorized');
+    }
+
+    new SimpleSchema({
+      topicId: {
+        type: String,
+        min: 1
+      }
+    }).validate({
+      topicId
+    });
+
+    Topics.update({_id: topicId}, {
+      $set: {
+        [updateProp]: newValue
+      }
     });
   },
   'forumPosts.insert'({topicId, subforumId, body}) {

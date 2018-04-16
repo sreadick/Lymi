@@ -22,7 +22,9 @@ class ForumHome extends React.Component {
       searchBoard: 'all'
     };
   }
-
+  componentDidMount() {
+    document.body.style.overflow = 'auto';
+  }
   render() {
     if (this.props.isFetching) {
       return <Loader />

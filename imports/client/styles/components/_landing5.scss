@@ -369,6 +369,7 @@
 .landing__section--l-com {
   background-image: linear-gradient(to top right, rgba(113,199,122,1) 0%, #186c52 100%);
   height: 110vh;
+  height: 80vh;
   text-align: center;
     h4 {
       font-size: 2.3rem;
@@ -453,6 +454,7 @@
   background: #fff;
   background: #333;
   background: #111;
+  background: #1f2b54;
   // background: rgb(31, 43, 84);
   display: flex;
   align-items: center;
@@ -474,6 +476,58 @@
   font-size: 2.7rem !important;
   color: $green-darken-2;
 }
+
+.landing__section--feature-item__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  // height: 10vh;
+  margin-left: 1rem;
+
+
+  h5 {
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: $green-darken-2;
+    color: #aaa;
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0;
+    flex: 3;
+  }
+  span {
+    font-size: 0rem;
+
+    color: lightblue;
+    transition: font-size .2s ease;
+  }
+  i {
+    font-size: 0rem;
+    color: #777;
+    transition: all .2s ease;
+  }
+  &:hover {
+    span {
+      font-size: 1rem;
+    }
+    i {
+      font-size: 1.9rem;
+      line-height: 1rem;
+
+    }
+  }
+}
+
+// .landing__section--feature-item:hover .landing__section--feature-item__content  {
+//   span {
+//     font-size: 1rem;
+//
+//   }
+//   i {
+//     font-size: 1.2rem;
+//   }
+// }
 
 .landing__section--feature-item__caption {
   // font-size: 1.3rem;
@@ -573,4 +627,51 @@
   margin: auto;
   height: 80%;
   padding: 1% 0 2% 0;
+}
+
+
+// FAQ //
+.landing__section--faq--top {
+  height: 70vh;
+  background-image: linear-gradient(to left top, rgba(113,199,122,1) 0%, #186c52 100%);
+}
+.landing__section--faq--bottom {
+  // height: auto;
+  background: #eee;
+}
+
+.landing__faq {
+  width: 60%;
+  // height: 40rem;
+  background: #f9f9f9;
+  background: #fff;
+  margin: auto;
+  position: relative;
+  bottom: 30rem;
+
+  .Collapsible__trigger {
+    padding: 0 !important;
+  }
+}
+
+.landing__faq__header {
+  height: 4rem;
+  border-bottom: 1px solid #ddd;
+  padding: 0 2rem;
+  h3 {
+    font-size: 1.5rem;
+    line-height: 4rem;
+    margin: 0;
+  }
+}
+
+.landing__faq__question {
+  background: #f9f9f9;
+  font-size: 1.3rem;
+  font-weight: 600;
+  padding: .4rem 2rem;;
+}
+.landing__faq__answer {
+  font-size: 1.3rem;
+  padding: .4rem 2rem;
 }

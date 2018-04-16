@@ -147,9 +147,10 @@ class Profile extends React.Component {
                 }
                 return (
                   <li key={topic._id}>
-                    <Link to={`/forum/subforum/${topic.subforumId}/topic/${topic._id}`}>{topic.title}</Link>
+                    <p><Link to={`/forum/subforum/${topic.subforumId}/topic/${topic._id}`}>{topic.title}</Link></p>
                     <p>Replies: {posts.length}</p>
                     <p>{lastPost ? `Last Post: ${moment(lastPost.createdAt).fromNow()} by ${lastPost.authorUsername || lastPost.authorFirstName}` : ''}</p>
+                    <p>{`Viewed: ${topic.views || 0} ${topic.views === 1 ? 'time' : 'times'}`}</p>
                   </li>
                 )
               })}

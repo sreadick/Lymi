@@ -52,7 +52,6 @@ AuthForumRoute.propTypes = {
 
 export default createContainer(() => {
   // const sidebarToggled = Session.get('sidebarToggled') || false
-  // document.body.style.overflow = (sidebarToggled || showProfileBackgroundModel || showProfileImageModel) ? 'hidden' : 'auto';
 
   return {
     // sidebarToggled: false,

@@ -90,25 +90,32 @@
 .profile__topics {
   li {
     display: flex;
-    justify-content: space-between;
+    // justify-content: space-between;
+    align-items: center;
     // align-items: center;
-    padding: .3rem 0;
-
-
-    a {
-      color: #777;
-      font-size: 1.1rem;
-      font-weight: 600;
-      width: 60%;
-
-      // width: 70%;
-      text-decoration: underline;
-      &:hover {
-        color: #333;
-      }
+    padding: .3rem 1rem;
+    border-bottom: 1px solid #ddd;
+    &:last-child {
+      border-bottom: none;
     }
     p {
       width: 20%;
+      margin-bottom: 0;
+      &:nth-child(2n + 1) {
+        width: 30%;
+      }
+      a {
+        color: #555;
+        font-size: 1.2rem;
+        font-weight: 400;
+        // width: 60%;
+
+        // width: 70%;
+        text-decoration: underline;
+        &:hover {
+          color: #333;
+        }
+      }
     }
   }
 }

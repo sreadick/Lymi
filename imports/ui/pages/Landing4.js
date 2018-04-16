@@ -8,6 +8,8 @@ import Slider from 'react-slick'
 import ScrollableAnchor, {configureAnchors} from 'react-scrollable-anchor';
 import { Accounts } from 'meteor/accounts-base';
 import PropTypes from 'prop-types';
+import Footer from '../components/Footer';
+
 import Login from '../components/Login';
 
 configureAnchors({scrollDuration: 800});
@@ -58,28 +60,56 @@ class Landing extends React.Component {
           <div className='landing__section--feature-item__row'>
             <div className="landing__section--feature-item">
               <i className="landing__section--feature-item__icon material-icons">schedule</i>
+              <a className="landing__section--feature-item__content" href='#landing__section--3'>
+                <h5>Select Symptoms and Treatments</h5>
+                <span>Learn More</span>
+                <i className="material-icons">keyboard_arrow_down</i>
+              </a>
+            </div>
+            <div className="landing__section--feature-item">
+              <i className="landing__section--feature-item__icon material-icons">timeline</i>
+              <a className="landing__section--feature-item__content" href='#landing__section--2'>
+                <h5>Check in and Track Your Progress</h5>
+                <span>Learn More</span>
+                <i className="material-icons">keyboard_arrow_down</i>
+              </a>
+            </div>
+            <div className="landing__section--feature-item">
+              <i className="landing__section--feature-item__icon material-icons">person_add</i>
+              <a className="landing__section--feature-item__content" href='#landing__section--5'>
+                <h5>Link Accounts with Your Doctor</h5>
+                <span>Learn More</span>
+                <i className="material-icons">keyboard_arrow_down</i>
+              </a>
+            </div>
+            <div className="landing__section--feature-item">
+              <i className="landing__section--feature-item__icon material-icons">people_outline</i>
+              <a className="landing__section--feature-item__content" href='#landing__section--l-com'>
+                <h5>Join the Community</h5>
+                <span>Learn More</span>
+                <i className="material-icons">keyboard_arrow_down</i>
+              </a>
+            </div>
+            {/* <div className="landing__section--feature-item">
+              <i className="landing__section--feature-item__icon material-icons">schedule</i>
               <h5 className='landing__section--feature-item__caption'>Select Symptoms and Treatments</h5>
-              {/* <p className='landing__section--feature-item__description'>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt.</p> */}
               <a href='#landing__section--3' className='landing__section--feature-item__scroll-link'> Learn More <i className="large material-icons">keyboard_arrow_down</i> </a>
             </div>
             <div className="landing__section--feature-item">
               <i className="landing__section--feature-item__icon material-icons">timeline</i>
               <h5 className='landing__section--feature-item__caption'>Check in and Track Your Progress</h5>
-              {/* <p className='landing__section--feature-item__description'>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt.</p> */}
               <a href='#landing__section--4' className='landing__section--feature-item__scroll-link'> Learn More <i className="large material-icons">keyboard_arrow_down</i> </a>
             </div>
             <div className="landing__section--feature-item">
               <i className="landing__section--feature-item__icon material-icons">person_add</i>
               <h5 className='landing__section--feature-item__caption'>Link Accounts with Your Doctor</h5>
-              {/* <p className='landing__section--feature-item__description'>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt.</p> */}
               <a href='#landing__section--5' className='landing__section--feature-item__scroll-link'> Learn More <i className="large material-icons">keyboard_arrow_down</i> </a>
             </div>
             <div className="landing__section--feature-item">
               <i className="landing__section--feature-item__icon material-icons">people_outline</i>
               <h5 className='landing__section--feature-item__caption'>Be Part of the Community</h5>
-              {/* <p className='landing__section--feature-item__description'>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt.</p> */}
               <a href='#landing__section--l-com' className='landing__section--feature-item__scroll-link'> Learn More <i className="large material-icons">keyboard_arrow_down</i> </a>
-            </div>
+            </div> */}
           </div>
           {/* <div className="landing__section landing__section--feature-summary">
             <div className="landing__section--feature-summary__flex-wrapper">
@@ -132,6 +162,28 @@ class Landing extends React.Component {
               </div>
             </div> */}
         {/* </ScrollableAnchor> */}
+        <ScrollableAnchor id={'landing__section--3'}>
+          <div className="landing__section landing__section--3">
+            <div className='landing__section__subsection--preview'>
+              <div className='landing__section__preview-image__wrapper'>
+                <Slider dots={true} arrows={false} autoplay={true}>
+                  <div><img className='landing__section__preview-image' src='/images/preview/treatment-name.png' /></div>
+                  <div><img className='landing__section__preview-image' src='/images/preview/treatment-schedule.png' /></div>
+                  <div><img className='landing__section__preview-image' src='/images/preview/treatment-dosing.png' /></div>
+                  <div><img className='landing__section__preview-image' src='/images/preview/treatment-instructions.png' /></div>
+                  <div><img className='landing__section__preview-image' src='/images/preview/treatment-info.png' /></div>
+                  {/* <div><img src='/images/preview/treatment-schedule.png' /></div> */}
+                </Slider>
+              </div>
+            </div>
+            <div className='landing__section__subsection--content'>
+              <div className='landing__section__title'>Enter your treatments with ease</div>
+              <div className='landing__section__description'>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate.
+              </div>
+            </div>
+          </div>
+        </ScrollableAnchor>
         <ScrollableAnchor id={'landing__section--2'}>
           <div className="landing__section landing__section--2">
             <div className='landing__section__subsection--content'>
@@ -154,29 +206,6 @@ class Landing extends React.Component {
             {/* <div className='landing__section__scroll-button__wrapper landing__section__scroll-button__wrapper--2'>
               <a href='#3' className="down_icon landing__section__scroll-button"><i className="large material-icons">keyboard_arrow_down</i></a>
             </div> */}
-          </div>
-        </ScrollableAnchor>
-
-        <ScrollableAnchor id={'landing__section--3'}>
-          <div className="landing__section landing__section--3">
-            <div className='landing__section__subsection--preview'>
-              <div className='landing__section__preview-image__wrapper'>
-                <Slider dots={true} arrows={false} autoplay={true}>
-                  <div><img className='landing__section__preview-image' src='/images/preview/treatment-name.png' /></div>
-                  <div><img className='landing__section__preview-image' src='/images/preview/treatment-schedule.png' /></div>
-                  <div><img className='landing__section__preview-image' src='/images/preview/treatment-dosing.png' /></div>
-                  <div><img className='landing__section__preview-image' src='/images/preview/treatment-instructions.png' /></div>
-                  <div><img className='landing__section__preview-image' src='/images/preview/treatment-info.png' /></div>
-                  {/* <div><img src='/images/preview/treatment-schedule.png' /></div> */}
-                </Slider>
-              </div>
-            </div>
-            <div className='landing__section__subsection--content'>
-              <div className='landing__section__title'>Enter your treatments with ease</div>
-              <div className='landing__section__description'>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate.
-              </div>
-            </div>
           </div>
         </ScrollableAnchor>
 
@@ -229,31 +258,7 @@ class Landing extends React.Component {
           </div>
         </ScrollableAnchor>
 
-        <footer className="black lighten-4 page-footer">
-          <div className="container">
-            <div className="row">
-              <div className="col l6 s12">
-                <h5 className="white-text">Have a Question?</h5>
-                <p className="grey-text text-lighten-4">See our <a href='#'>FAQ Page</a> or call our support staff at (555)-555-5555.</p>
-              </div>
-              <div className="col l4 offset-l2 s12">
-                {/* <h5 className="white-text">Links</h5> */}
-                <ul>
-                  <li><a className="grey-text text-lighten-3" href="#!">Learn More</a></li>
-                  <li><a className="grey-text text-lighten-3" href="#!">L-Com</a></li>
-                  <li><a className="grey-text text-lighten-3" href="#!">Terms of Service</a></li>
-                  {/* <li><a className="grey-text text-lighten-3" href="#!">Link 4</a></li> */}
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div className="black lighten-2 footer-copyright">
-            <div className="container center-align">
-            ©2018 LymeLog
-            {/* <a className="grey-text text-lighten-4 right" href="#!">More Links</a> */}
-            </div>
-          </div>
-        </footer>
+        <Footer />
 
       </div>
     );
