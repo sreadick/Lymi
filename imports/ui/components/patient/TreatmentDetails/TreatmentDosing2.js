@@ -93,11 +93,11 @@ const RxDoseTypeDropdown = ({props, col, offset = 's0'}) => (
 export default TreatmentDosing2 = (props) => {
   return (
     <div className='treatment-editor2__section treatment-editor2__section--dosing row'>
-      <h1 className='treatment-editor2__section__header dosing'>
+      <h3 className='treatment-editor2__section__header dosing'>
         <i className='medium left material-icons button--icon grey-text text-lighten-2' onClick={() => props.changeModalView('dates')}>keyboard_arrow_left</i>
           How is {props.treatment.name} prescribed?
         <i className='medium right material-icons button--icon grey-text text-lighten-2' onClick={() => props.changeModalView('instructions')}>keyboard_arrow_right</i>
-      </h1>
+      </h3>
 
       <Row className='rx-detail-form--dosing__wrapper'>
         <Col className='treatment-editor2__section--dosing__dosing-format-container' s={2}>

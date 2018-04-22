@@ -1,9 +1,15 @@
 .breadcrumb__wrapper--check-in {
   background: #444 !important;
-  width: 70%;
   margin: 0 auto;
-  padding: 0 2rem;
-  // text-align: center;
+
+  // edit for mobile
+  width: 100%;
+  padding: 0 .3rem;
+  @media screen and (min-width: $tablet-breakpoint) {
+    width: 70%;
+    padding: 0 2rem;
+
+  }
 }
 
 .breadcrumb--check-in {

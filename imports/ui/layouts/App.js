@@ -26,7 +26,8 @@ import SelectSymptomsPage from '../pages/patient/SelectSymptomsPage';
 import SelectTreatmentsPage from '../pages/patient/SelectTreatmentsPage';
 import SelectTreatmentsPage2 from '../pages/patient/SelectTreatmentsPage2';
 import SelectTreatmentsPage3 from '../pages/patient/SelectTreatmentsPage3';
-import Dashboard from '../pages/patient/Dashboard2';
+import Dashboard from '../pages/patient/Dashboard3';
+import DashboardMobile from '../pages/patient/DashboardMobile';
 import Checkin from '../pages/patient/Checkin';
 import SymptomsHistory from '../pages/patient/SymptomsHistory';
 import SymptomsHistory2 from '../pages/patient/SymptomsHistory2';
@@ -63,7 +64,7 @@ const App = appProps => {
       <Switch>
         <PublicRoute exact path="/" component={Landing4} {...appProps} />
         <PublicRoute exact path="/clinicians" component={ClinicianLanding} {...appProps} />
-        <PublicRoute exact path="/faq" component={Faq} {...appProps} />
+        {/* <PublicRoute exact path="/faq" component={Faq} {...appProps} /> */}
         {/* <PublicRoute path="/login" component={Login} {...appProps} /> */}
         <PublicRoute path="/signup" component={Signup} {...appProps} />
 
@@ -81,6 +82,7 @@ const App = appProps => {
         <AuthPatientRoute exact path="/patient/history/treatments" component={TreatmentsHistory} {...appProps} />
         <AuthPatientRoute exact path="/patient/account" component={Account} {...appProps} />
         <AuthPatientRoute exact path="/patient/profile" component={PtProfile} {...appProps} />
+        <AuthPatientRoute exact path="/patient/dashboardmobile" component={DashboardMobile} {...appProps} />
         {/* <AuthPatientRoute exact path="/patient/forum" component={ForumHome} {...appProps} />
         <AuthPatientRoute path="/patient/forum/subforum/:subforumId/topic/:topicId" component={ForumTopic} {...appProps} />
         <AuthPatientRoute path="/patient/forum/subforum/:subforumId" component={Subforum} {...appProps} /> */}
@@ -96,7 +98,8 @@ const App = appProps => {
         <AuthDoctorRoute exact path="/doctor/profile" component={DrProfile} {...appProps} />
 
         <AuthAdminRoute exact path="/admin" component={Admin} {...appProps}/>
-        {/* <Route exact path="/faq" component={Faq}/> */}
+
+        <Route exact path="/faq" component={Faq} {...appProps} />
         <Route path="*" component={NotFound}/>
       </Switch>
     </Router>

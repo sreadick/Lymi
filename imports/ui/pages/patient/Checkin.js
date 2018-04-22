@@ -45,7 +45,7 @@ class Checkin extends React.Component {
       <div className='page-content--checkin'>
         {/* <h3 className='center-align'>Check in for {this.props.location.state.checkinDate}</h3> */}
         <h3 className=''>{this.props.location.state.checkinDate}</h3>
-        {this.props.trackedItems.length > 1 &&
+        {(this.props.trackedItems.length > 1 && this.props.viewportWidth >= 768) &&
           <nav className='breadcrumb__wrapper--check-in'>
             <div className="nav-wrapper">
               <div className="col s12">
@@ -205,6 +205,7 @@ export default createContainer(props => {
     treatmentCheckinItems,
     symptomCheckinCompleted: symptomCheckinItems.filter((symptom) => symptom.severity > 0).length === symptomCheckinItems.length,
     treatmentCheckinCompleted: (!trackedItems.includes('treatments') || treatmentCheckinItems.filter((treatment) => treatment.compliance !== null).length === treatmentCheckinItems.length),
+    viewportWidth: document.documentElement.clientWidth,
 
   }
 }, Checkin)

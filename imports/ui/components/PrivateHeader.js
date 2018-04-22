@@ -15,7 +15,6 @@ import { UserTreatments } from '/imports/api/user-treatments';
 import { Topics } from '/imports/api/forum';
 
 const PrivateHeader = (props) => {
-  // if (window.innerWidth > 768) {
   if (props.isfetching) {
     <div></div>
   }
@@ -31,13 +30,13 @@ const PrivateHeader = (props) => {
             </i>
           }
           <Link
-            className={`nav-header__link--title ${props.accountType === 'doctor' ? 'doctor' : 'patient'}`}
+            className={`nav-header__link--title ${props.accountType === 'doctor' ? 'doctor' : 'patient'} ${props.isMobileDevice && 'mobile'}`}
             to={props.isForumPage ? "/forum" : '/'}>
             {props.title}
             {(props.accountType === 'doctor' && !props.isForumPage) && <sup>MD</sup>}
           </Link>
           {props.isForumPage && <div className='nav-header__vl'></div>}
-          {(props.isForumPage || (props.accountType === 'patient' && props.path !== '/patient/dashboard' && props.path !== '/patient/welcomepage' && props.path !== '/patient/selectsymptoms' && props.path !== '/patient/selecttreatments' && props.path !== '/patient/checkin')) &&
+          {(!props.isMobileDevice && (props.isForumPage || (props.accountType === 'patient' && props.path !== '/patient/dashboard' && props.path !== '/patient/welcomepage' && props.path !== '/patient/selectsymptoms' && props.path !== '/patient/selecttreatments' && props.path !== '/patient/checkin'))) &&
             <Link
               className={`nav-header__link--dashboard`}
               // to='/patient/dashboard'>

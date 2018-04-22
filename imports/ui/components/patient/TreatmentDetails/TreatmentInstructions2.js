@@ -5,12 +5,12 @@ import { Row, Col, Input, Button, Card } from 'react-materialize';
 export default TreatmentInstructions2 = (props) => {
   return (
     <div className='treatment-editor2__section treatment-editor2__section--instructions row'>
-      <h1 className='treatment-editor2__section__header instructions'>
+      <h3 className='treatment-editor2__section__header instructions'>
         <i className='medium left material-icons button--icon grey-text text-lighten-2' onClick={() => props.changeModalView('dosing')}>keyboard_arrow_left</i>
         {/* Instructions */}
         Any Special Instructions?
         <i className='medium right material-icons button--icon grey-text text-lighten-2' onClick={() => props.changeModalView('info')}>keyboard_arrow_right</i>
-      </h1>
+      </h3>
       {/* <p className='treatment-editor2__section__subheader center-align'>Any Special Instructions?</p> */}
 
       <Row className='treatment-editor__column-group__flex-wrapper'>

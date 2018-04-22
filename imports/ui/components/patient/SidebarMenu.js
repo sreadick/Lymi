@@ -43,7 +43,7 @@ class SidebarMenu extends React.Component {
             <i className="large grey remove icon"></i>
           </span> */}
           <div className="sidebar-menu__link__container">
-            {this.props.links.map((link) => (
+            {this.props.links.filter(link => (this.props.viewportWidth > 768 || link.showOnMobile)).map((link) => (
               <div className="sidebar-menu__link__item" key={link.name}
                 onMouseOver={() => {
                   if (link.errorMessage) {
@@ -87,10 +87,12 @@ export default createContainer(() => {
     userSymptoms,
     userTreatments,
     checkinHistory,
+    viewportWidth: document.documentElement.clientWidth,
     links: [
       {
         name: "Dashboard",
         path: "/patient/dashboard",
+        showOnMobile: true,
         errorMessage: (collectionsAreReady && (userSymptoms.length === 0 && (userTreatments.length === 0 && trackedItems.includes('treatments')))) ?
           <span>You need to have at least 1 <SidebarLink to="/patient/selectsymptoms">symptom</SidebarLink> and <SidebarLink to="/patient/selecttreatments">treatment</SidebarLink></span>
         : (collectionsAreReady && (userSymptoms.length === 0)) ? <span>You need to have at least 1 <SidebarLink to="/patient/selectsymptoms">symptom</SidebarLink></span>
@@ -100,6 +102,7 @@ export default createContainer(() => {
       {
         name: "Check in",
         path: "/patient/checkin",
+        showOnMobile: true,
         errorMessage: (collectionsAreReady && (userSymptoms.length === 0 && (userTreatments.length === 0 && trackedItems.includes('treatments')))) ?
           <span>You need to have at least 1 <SidebarLink to="/patient/selectsymptoms">symptom</SidebarLink> and <SidebarLink to="/patient/selecttreatments">treatment</SidebarLink></span>
         : (collectionsAreReady && (userSymptoms.length === 0)) ? <span>You need to have at least 1 <SidebarLink to="/patient/selectsymptoms">symptom</SidebarLink></span>
@@ -109,11 +112,13 @@ export default createContainer(() => {
       },
       {
         name: "Symptoms",
-        path: "/patient/selectsymptoms"
+        path: "/patient/selectsymptoms",
+        showOnMobile: true,
       },
       {
         name: "Treatments",
         path: "/patient/selecttreatments",
+        showOnMobile: true,
         errorMessage: !Meteor.user().profile.settings.trackedItems.includes('treatments') ?
           <span>Treatment tracking is turned off. Go to <SidebarLink to="/patient/account">settings</SidebarLink> to enable</span>
           : undefined
@@ -121,11 +126,13 @@ export default createContainer(() => {
       {
         name: "Symptom History",
         path: "/patient/history/symptoms",
+        showOnMobile: false,
         errorMessage: (CheckinHistories.findOne() && checkinHistory.checkins.length === 0) ? "No history to report" : undefined
       },
       {
         name: "Treatment History",
         path: "/patient/history/treatments",
+        showOnMobile: false,
         errorMessage: (CheckinHistories.findOne() && checkinHistory.checkins.length === 0) ? "No history to report" : undefined
       },
       // {
@@ -135,6 +142,7 @@ export default createContainer(() => {
       {
         name: "Lyme Share",
         path: "/forum",
+        showOnMobile: false
       }
     ]
   }

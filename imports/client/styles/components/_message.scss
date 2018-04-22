@@ -57,6 +57,19 @@
   padding: .5rem 1rem;
 }
 
+.message--mobile-dashboard-warning {
+  color: rgb(39, 111, 134);
+  background: rgb(248, 255, 255);
+  // width: 45rem;
+  margin: 0 auto;
+  border-radius: 5px;
+  -webkit-box-shadow: 0 0 0 1px #a9d5de inset, 0 0 0 0 transparent;
+  box-shadow: 0 0 0 1px #a9d5de inset, 0 0 0 0 transparent;
+  padding: .5rem 1rem;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
 .message--dr-message-box {
   text-align: left;
   color: rgb(39, 111, 134);

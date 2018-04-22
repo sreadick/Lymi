@@ -8,11 +8,11 @@ export default TreatmentName2 = (props) => {
   const { name, errors } = props.treatment;
   return (
     <div className='treatment-editor2__section treatment-editor2__section--name row'>
-      <h1 className='treatment-editor2__section__header name'>
+      <h3 className='treatment-editor2__section__header name'>
         <i className='small left material-icons button--icon black-text'>keyboard_arrow_left</i>
         Enter your treatment's name
         <i className='small right material-icons button--icon grey-text text-lighten-2' onClick={() => props.changeModalView('dates')}>keyboard_arrow_right</i>
-      </h1>
+      </h3>
       <Row>
         <div className="input-field col l4 offset-l4">
           <Autosuggest

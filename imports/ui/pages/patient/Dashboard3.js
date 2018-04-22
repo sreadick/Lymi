@@ -17,6 +17,7 @@ import TreatmentChart from '../../components/patient/TreatmentChart2';
 import NotableEvents from '../../components/patient/NotableEvents';
 import DoctorSearch from '../../components/patient/DoctorSearch';
 import AppointmentScheduler from '../../components/patient/AppointmentScheduler';
+import SxRxDisplay from '../../components/patient/SxRxDisplay';
 
 // import ProfileBackgroundModel from '../../components/patient/ProfileBackgroundModel';
 // import ProfileImageModel from '../../components/patient/ProfileImageModel';
@@ -24,12 +25,9 @@ import AppointmentScheduler from '../../components/patient/AppointmentScheduler'
 import TreatmentCollapsible from '../../components/patient/TreatmentCollapsible';
 import Loader from '/imports/ui/components/Loader';
 
-const Dashboard2 = (props) => {
+const Dashboard3 = (props) => {
   if (props.isFetching) {
     return (
-      // <div className="progress">
-      //   <div className="indeterminate"></div>
-      // </div>
       <div className="page-content--loading">
         <Loader />
       </div>
@@ -51,42 +49,37 @@ const Dashboard2 = (props) => {
       <div className="dashboard__flex-wrapper">
         <div className="dashboard__page__content">
 
-          <div className='dashboard__section z-depth-2'>
-
-            <div className="dashboard__list__container">
-              <div className='dashboard__list__header'>
-                <h5>My Symptoms:</h5>
-                <Link
-                  className=""
-                  to="/patient/selectsymptoms"
-                  data-tip data-for='editSymptoms'>
-                  <i className='blue-text material-icons'>
-                    edit
-                  </i>
-                </Link>
-                <ReactTooltip id='editSymptoms' effect='solid'>
-                  Edit Symptoms
-                </ReactTooltip>
-              </div>
-              <ul className='dashboard__list'>
-                {props.userSymptoms.map((symptom) => {
-                  return (
-                    <li className="dashboard__list__item" key={symptom._id}>
-                      <span className="">
+          <SxRxDisplay />
+          {/* <div className='dashboard__section z-depth-2'>
+            <div className="dashboard__chart__symptom-group__list">
+              {props.userSymptomGroups.map((symptomGroup, index, array) => {
+                return (
+                  <ul
+                    key={symptomGroup}
+                    className={`dashboard__chart__symptom-group ${(array.length - 1 === index && (index + 1) % 3 !== 1) && 'stretch'} ${props.activeSymptomGroup === symptomGroup && 'active'}`}
+                    onClick={() => Session.set('activeSymptomGroup', symptomGroup)}>
+                    <span className='dashboard__chart__symptom-group__title'>{symptomGroup}</span>
+                    {props.userSymptoms.filter(symptom => symptom.system === symptomGroup).map((symptom, index) =>
+                      <li
+                        key={symptom._id}
+                        className='dashboard__chart__symptom-group__symptom'
+                        style={{color: symptom.system === props.activeSymptomGroup ? symptom.color : '#333'}}>
                         {capitalizePhrase(symptom.name)}
-                      </span>
-                    </li>
-                  );
-                })}
-              </ul>
+                      </li>
+                    )}
+                  </ul>
+                );
+              })}
             </div>
 
             <div className="dashboard__chart__container">
               {props.checkins.length > 0 &&
                 <div className="dashboard__chart__header">
                   <span className=''>
-                    {/* Past {props.checkins.length > 13 ? 14 : props.checkins.length} {props.checkins.length === 1 ? 'Day' : 'Days'} */}
-                    Past {props.modifiedSymptomCheckins.length} {props.modifiedSymptomCheckins.length === 1 ? 'Day' : 'Days'}
+                    { props.modifiedSymptomCheckins.length >= 14 ? 'Past 2 Weeks'
+                      :
+                      `Past ${props.modifiedSymptomCheckins.length} ${props.modifiedSymptomCheckins.length === 1 ? 'Day' : 'Days'}`
+                    }
                   </span>
                   <Link
                     to="/patient/history/symptoms"
@@ -104,76 +97,20 @@ const Dashboard2 = (props) => {
                 {props.checkins.length > 0 &&
                   <SymptomChart
                     symptomNames={props.userSymptoms.filter(symptom => symptom.system === props.activeSymptomGroup).map(symptom => symptom.name)}
-                    // checkins={props.checkins.length > 13 ? props.checkins.slice(-14) : props.checkins}
                     checkins={props.modifiedSymptomCheckins}
-                    // symptomColors={props.userSymptoms.filter(symptom => symptom.system === props.activeSymptomGroup).map((symptom, index) => getColor(index))}
                     symptomColors={props.userSymptoms.filter(symptom => symptom.system === props.activeSymptomGroup).map(symptom => symptom.color)}
-                    height={100}
-                    // padding={{top: 0, right: 15, bottom: 10, left: 0}}
-                    padding={{top: 0, right: 15, bottom: 10, left: 0}}
+                    height={125}
+                    padding={{top: 0, right: 0, bottom: 10, left: 0}}
                   />
-                  // {/* <SymptomChart
-                  //   symptomNames={props.activeSegmentSymptoms ?
-                  //     props.activeSegmentSymptoms.map(symptom => symptom.name)
-                  //     :
-                  //     props.userSymptoms.map(symptom => symptom.name)
-                  //   }
-                  //   checkins={props.checkins}
-                  //   symptomColors={props.activeSegmentSymptoms ?
-                  //     props.activeSegmentSymptoms.map(symptom => symptom.color)
-                  //     :
-                  //     props.userSymptoms.map(symptom => symptom.color)
-                  //   }
-                  //   height={100}
-                  //   padding={{top: 20, right: 15, bottom: 10, left: 0}}
-                  // /> */}
                 }
               </div>
-              <div className="dashboard__chart__symptom-group__list">
-                {props.userSymptomGroups.map((symptomGroup, index, array) => {
-                  // console.log(symptomGroup, (index + 1) % 3);
-                  return (
-                    <ul
-                      key={symptomGroup}
-                      className={`dashboard__chart__symptom-group ${(array.length - 1 === index && (index + 1) % 3 !== 1) && 'stretch'} ${props.activeSymptomGroup === symptomGroup && 'active'}`}
-                      onClick={() => Session.set('activeSymptomGroup', symptomGroup)}>
-                      <span className='dashboard__chart__symptom-group__title'>{symptomGroup}</span>
-                      {props.userSymptoms.filter(symptom => symptom.system === symptomGroup).map((symptom, index) =>
-                        <li
-                          key={symptom._id}
-                          className='dashboard__chart__symptom-group__symptom'
-                          // style={{color: symptom.system === props.activeSymptomGroup ? getColor(index) : '#333'}}>
-                          style={{color: symptom.system === props.activeSymptomGroup ? symptom.color : '#333'}}>
-                          {capitalizePhrase(symptom.name)}
-                        </li>
-                      )}
-                    </ul>
-                  );
-                })}
-              </div>
             </div>
-
           </div>
 
 
           {props.trackedItems.includes('treatments') &&
             <div className='dashboard__section z-depth-2'>
               <div className="dashboard__list__container">
-                <div className='dashboard__list__header'>
-                  <h5>My Treatments:</h5>
-                  <Link
-                    className=""
-                    to="/patient/selecttreatments"
-                    data-tip data-for='editTreatments'>
-                    <i className='blue-text material-icons'>
-                      edit
-                    </i>
-                  </Link>
-                  <ReactTooltip id='editTreatments' effect='solid'>
-                    Edit Treatments
-                  </ReactTooltip>
-                </div>
-
                 <ul className='collection dashboard__list'>
                   {props.userTreatments.map((treatment) =>
                     <TreatmentCollapsible
@@ -185,34 +122,16 @@ const Dashboard2 = (props) => {
                 </ul>
               </div>
               <div className='dashboard__chart__container'>
-                {props.checkins.length > 0 &&
-                  <div className="dashboard__chart__header dashboard__chart__header--treatments">
-                    <span className=''>
-                      Past {props.extendedTreatmentCheckins.length > 13 ? 14 : props.extendedTreatmentCheckins.length} {props.extendedTreatmentCheckins.length === 1 ? 'Day' : 'Days'}
-                    </span>
-                    <Link
-                      to="/patient/history/treatments"
-                      data-tip data-for='fullTreatmentHistory'>
-                      <i className='black-text material-icons'>
-                        insert_chart
-                      </i>
-                    </Link>
-                    <ReactTooltip id='fullTreatmentHistory' effect='solid'>
-                      Full Treatment History
-                    </ReactTooltip>
-                  </div>
-                }
                 {props.extendedTreatmentCheckins.length > 0 &&
                   <TreatmentChart
                     treatments={props.userTreatments}
                     currentTreatmentNames={props.userTreatments.map(treatment => treatment.name)}
                     checkins={props.extendedTreatmentCheckins.length > 13 ? props.extendedTreatmentCheckins.slice(-14) : props.extendedTreatmentCheckins}
-                    // checkins={props.extendedTreatmentCheckins}
                   />
                 }
               </div>
             </div>
-          }
+          } */}
 
           {props.trackedItems.includes('notable events') &&
             <div className='dashboard__section z-depth-2'>
@@ -355,4 +274,4 @@ export default createContainer(() => {
     viewportWidth: document.documentElement.clientWidth,
     isFetching: (!symptomsHandle.ready() || !treatmentsHandle.ready() || !checkinHandle.ready() || !userInfo)
   };
-}, Dashboard2);
+}, Dashboard3);

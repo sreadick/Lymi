@@ -18,7 +18,7 @@ class AuthPatientRoute extends React.Component {
   }
 
   render() {
-    const { loggingIn, authenticated, account, component, sidebarToggled, showProfileBackgroundModel, showProfileImageModel, ...rest } = this.props;
+    const { loggingIn, authenticated, account, component, sidebarToggled, showProfileBackgroundModel, showProfileImageModel, viewportWidth, ...rest } = this.props;
     return (
       <Route render={(props) => {
         return (
@@ -48,7 +48,7 @@ class AuthPatientRoute extends React.Component {
                 <ForumHeader title="Lyme Share" accountType={account.type} {...rest} />
                 : */}
               {/* <PrivateHeader title={!isForumPage ? 'LymeLog' : "Lyme Share" } accountType={account.type} isForumPage={isForumPage} {...rest} /> */}
-              <PrivateHeader title='LymeLog' accountType={account.type} isForumPage={false} {...rest} />
+              <PrivateHeader title='LymeLog' accountType={account.type} isForumPage={false} isMobileDevice={viewportWidth < 768} {...rest} />
               {/* } */}
               <div className='message__wrapper--dashboard'>
                 <div
@@ -102,6 +102,7 @@ export default createContainer((props) => {
     sidebarToggled,
     showProfileBackgroundModel,
     showProfileImageModel,
+    viewportWidth: document.documentElement.clientWidth,
     // isForumPage: props.path.substring(0, 14) === '/patient/forum'
   }
 }, AuthPatientRoute);

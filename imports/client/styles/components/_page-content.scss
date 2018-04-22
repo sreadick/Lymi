@@ -324,6 +324,11 @@
   border-radius: 10px;
   padding: 0 1rem;
 
+  // edit for mobile
+  min-width: inherit;
+  border: 1px solid $green;
+  width: 100%;
+
   p {
     font-size: 1.2rem;
   }
@@ -370,6 +375,11 @@
   //   padding-top: .4rem !important;
   //   padding-bottom: .4rem !important;
   // }
+
+
+  // edit for mobile
+  height: 100%;
+  width: 100%;
 }
 
 .dashboard-chart-section__chart__wrapper {
@@ -432,10 +442,15 @@
 // edit
 .page-content--select-treatment-page2 {
   background: #f5f5f5;
-  padding: $header-height + $space 4rem $space 4rem;
+  // padding: $header-height + $space 4rem $space 4rem;
+  padding: $header-height + $space 2rem $space 2rem;
   margin: 0;
+  // max-width: 23rem;
   width: 100%;
   height: calc(100vh - 4rem);
+  @media screen and (min-width: $tablet-breakpoint) {
+    padding: $header-height + $space 4rem $space 4rem;
+  }
   // height: 100vh;
 }
 

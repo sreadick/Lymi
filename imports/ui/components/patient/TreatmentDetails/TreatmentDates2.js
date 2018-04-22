@@ -14,12 +14,12 @@ export default TreatmentDates2 = (props) => {
   // }
   return (
     <div className='treatment-editor2__section treatment-editor2__section--dates row'>
-      <h1 className='treatment-editor2__section__header dates'>
+      <h3 className='treatment-editor2__section__header dates'>
         <i className='medium left material-icons button--icon grey-text text-lighten-2' onClick={() => props.changeModalView('name')}>keyboard_arrow_left</i>
         {/* Schedule */}
         When do you plan to take {props.treatment.name}?
         <i className='medium right material-icons button--icon grey-text text-lighten-2' onClick={() => props.changeModalView('dosing')}>keyboard_arrow_right</i>
-      </h1>
+      </h3>
       {/* <p className='treatment-editor2__section__subheader center-align'>When do you plan to take {props.treatment.name}?</p> */}
       <Row>
         <Col l={4} offset='l4'>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
 import PropTypes from 'prop-types';
 
@@ -14,7 +15,7 @@ const PublicHeader = (props) => (
             <span>LymeLog<sup>MD</sup></span> : props.title
           }
         </Link>
-        {props.currentPath === '/faq' ?
+        {(props.currentPath === '/faq' || props.isMobileDevice) ?
           undefined
         :
           props.currentPath === '/clinicians' ?
@@ -22,10 +23,10 @@ const PublicHeader = (props) => (
         :
           <Link className="nav-header__link public" to="/clinicians">Clinicians</Link>
         }
-        {props.currentPath !== '/faq' &&
+        {(props.currentPath !== '/faq' && !props.isMobileDevice) &&
           <Link className="nav-header__link public" to="#">About Us</Link>
         }
-        {props.currentPath !== '/faq' &&
+        {(props.currentPath !== '/faq' && !props.isMobileDevice) &&
           <Link className="nav-header__link public" to="/faq">FAQs</Link>
         }
       </div>
@@ -47,4 +48,9 @@ PublicHeader.defaultProps = {
   title: 'LymeLog'
 };
 
-export default PublicHeader;
+// export default PublicHeader;
+export default createContainer(props => {
+  return {
+    isMobileDevice: document.documentElement.clientWidth < 768
+  }
+}, PublicHeader);

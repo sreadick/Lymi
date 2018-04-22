@@ -4,12 +4,20 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session';
 import Login from '../components/Login';
 import Footer from '../components/Footer';
+import PublicHeader from '../components/PublicHeader';
+import PrivateHeader from '../components/PrivateHeader';
 import Collapsible from 'react-collapsible';
 
 import PropTypes from 'prop-types';
 
 const FAQ = (props) => (
   <div>
+    {props.userInfo ?
+      <PrivateHeader title='LymeLog' accountType={props.userInfo.account.type} isForumPage={false} />
+      :
+      <PublicHeader currentPath={props.location.pathname} />
+    }
+
     {props.showLogin && <Login />}
 
     <div className='landing__section--faq--top'>
@@ -117,8 +125,10 @@ const FAQ = (props) => (
   </div>
 )
 
-export default createContainer(() => {
+export default createContainer((props) => {
+  // console.log(props);
   return {
-    showLogin: Session.get('showLogin') || false
+    showLogin: Session.get('showLogin') || false,
+    userInfo: Meteor.user()
   }
 }, FAQ);
