@@ -124,21 +124,27 @@ export default createContainer(() => {
           : undefined
       },
       {
-        name: "Symptom History",
-        path: "/patient/history/symptoms",
-        showOnMobile: false,
-        errorMessage: (CheckinHistories.findOne() && checkinHistory.checkins.length === 0) ? "No history to report" : undefined
-      },
-      {
-        name: "Treatment History",
-        path: "/patient/history/treatments",
+        name: "My History",
+        path: "/patient/history",
         showOnMobile: false,
         errorMessage: (CheckinHistories.findOne() && checkinHistory.checkins.length === 0) ? "No history to report" : undefined
       },
       // {
-      //   name: "Account",
-      //   path: "/patient/account",
+      //   name: "Symptom History",
+      //   path: "/patient/history/symptoms",
+      //   showOnMobile: false,
+      //   errorMessage: (CheckinHistories.findOne() && checkinHistory.checkins.length === 0) ? "No history to report" : undefined
       // },
+      // {
+      //   name: "Treatment History",
+      //   path: "/patient/history/treatments",
+      //   showOnMobile: false,
+      //   errorMessage: (CheckinHistories.findOne() && checkinHistory.checkins.length === 0) ? "No history to report" : undefined
+      // },
+      {
+        name: "Account",
+        path: "/patient/account",
+      },
       {
         name: "Lyme Share",
         path: "/forum",

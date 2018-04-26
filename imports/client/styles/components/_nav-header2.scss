@@ -11,7 +11,7 @@
     // mix-blend-mode: difference;
     &.scrolled {
       background: #f5f5f5;
-
+      border-bottom: 1px solid #777;
       .nav-header__link {
         color: $dark-blue;
         // color: $dark-blue;

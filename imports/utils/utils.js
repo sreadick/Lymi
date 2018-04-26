@@ -247,7 +247,6 @@ export const getTasks = () => {
   }
 
 
-
   const newPosts = ForumPosts.find({topicAuthorId: Meteor.userId(), viewedByTopicAuthor: false}).fetch();
   const requests = Requests.find().fetch();
   numTasks += newPosts.length + requests.length + newMessages.length;
@@ -258,6 +257,49 @@ export const getTasks = () => {
     newPosts,
     newMessages,
     numTasks
+  }
+}
+
+export const getCheckinComplianceData = (accountCreatedAt, checkins) => {
+  const startDate = moment(accountCreatedAt).startOf('day');
+  const currentDate = moment().startOf('day');
+  const numDaysUsingApp = currentDate.diff(startDate, 'days') + 1;
+  let daysCheckedIn = 0;
+  checkins.forEach(checkin => {
+    if (checkin.symptoms.some(checkinSymptom => checkinSymptom.severity > 0)) {
+      daysCheckedIn++
+    }
+  })
+
+  // const checkinPercentage = (typeof (daysCheckedIn / numDaysUsingApp) !== 'number') ? 0 : (daysCheckedIn / numDaysUsingApp * 100);
+  // console.log(checkinPercentage);
+  const roundedCheckinPercentage = (typeof (daysCheckedIn / numDaysUsingApp) !== 'number') ? 0 : (Math.round(daysCheckedIn / numDaysUsingApp * 10000) / 100);
+  return {
+    roundedCheckinPercentage,
+    daysCheckedIn,
+    daysNotCheckedIn: numDaysUsingApp - daysCheckedIn
+  }
+}
+
+export const getAppointments = (userAppts) => {
+  let nextAppt;
+  let prevAppt;
+
+  if (userAppts) {
+    const lastApptInArray = userAppts[userAppts.length - 1];
+    if (lastApptInArray && moment(lastApptInArray).isAfter(moment())) {
+      nextAppt = lastApptInArray;
+      if (userAppts.length > 1) {
+        prevAppt = userAppts[userAppts.length - 2]
+      }
+    } else if (lastApptInArray && moment(lastApptInArray).isBefore(moment())) {
+      prevAppt = lastApptInArray;
+    }
+  }
+
+  return {
+    next: nextAppt,
+    last: prevAppt
   }
 }
 
@@ -302,49 +344,50 @@ export const getExtendedTreatmentHistory = (treatments, checkins) => {
       }
     }
   });
-  console.log(newCheckinTreatments);
   return newCheckinTreatments;
 }
 
-export const getCheckinComplianceData = (accountCreatedAt, checkins) => {
-  const startDate = moment(accountCreatedAt).startOf('day');
-  const currentDate = moment().startOf('day');
-  const numDaysUsingApp = currentDate.diff(startDate, 'days') + 1;
-  let daysCheckedIn = 0;
-  checkins.forEach(checkin => {
-    if (checkin.symptoms.some(checkinSymptom => checkinSymptom.severity > 0)) {
-      daysCheckedIn++
-    }
-  })
+export const getExtendedSymptomHistory = (symptoms, checkins) => {
 
-  // const checkinPercentage = (typeof (daysCheckedIn / numDaysUsingApp) !== 'number') ? 0 : (daysCheckedIn / numDaysUsingApp * 100);
-  // console.log(checkinPercentage);
-  const roundedCheckinPercentage = (typeof (daysCheckedIn / numDaysUsingApp) !== 'number') ? 0 : (Math.round(daysCheckedIn / numDaysUsingApp * 10000) / 100);
-  return {
-    roundedCheckinPercentage,
-    daysCheckedIn,
-    daysNotCheckedIn: numDaysUsingApp - daysCheckedIn
+  let dateArray = [...Array(14).keys()].map(index => moment().subtract(index, 'days').format("MMMM Do YYYY")).reverse();
+
+  if (dateArray.find(date => date === moment(Meteor.user().account.createdAt).format('MMMM Do YYYY'))) {
+    dateArray = dateArray.slice(dateArray.indexOf(moment(Meteor.user().account.createdAt).format('MMMM Do YYYY')))
   }
+  let modifiedSymptomCheckins = dateArray.map((date, index) => {
+    const foundCheckin = checkins.find(checkin => checkin.date === date);
+    return {
+      date,
+      symptoms: foundCheckin ? foundCheckin.symptoms : []
+    }
+  });
+
+  return modifiedSymptomCheckins;
 }
 
-export const getAppointments = (userAppts) => {
-  let nextAppt;
-  let prevAppt;
-
-  if (userAppts) {
-    const lastApptInArray = userAppts[userAppts.length - 1];
-    if (lastApptInArray && moment(lastApptInArray).isAfter(moment())) {
-      nextAppt = lastApptInArray;
-      if (userAppts.length > 1) {
-        prevAppt = userAppts[userAppts.length - 2]
-      }
-    } else if (lastApptInArray && moment(lastApptInArray).isBefore(moment())) {
-      prevAppt = lastApptInArray;
+export const getExtendedHistory = (symptoms, treatments, checkins) => {
+  let dateArray = [...Array(14).keys()].map(index => moment().subtract(index, 'days').format("MMMM Do YYYY")).reverse();
+  if (dateArray.find(date => date === moment(Meteor.user().account.createdAt).format('MMMM Do YYYY'))) {
+    dateArray = dateArray.slice(dateArray.indexOf(moment(Meteor.user().account.createdAt).format('MMMM Do YYYY')))
+  }
+  let extendedCheckins = dateArray.map((date, index) => {
+    const foundCheckin = checkins.find(checkin => checkin.date === date);
+    return {
+      date,
+      symptoms: foundCheckin ? foundCheckin.symptoms : [],
+      treatments: foundCheckin ?
+        foundCheckin.treatments
+        :
+        treatments.map(treatment => {
+          return {
+            name: treatment.name,
+            prescribedToday: isTreatmentPrescribed(treatment, date),
+            compliance: null,
+            commonTreatmentId: treatment.commonTreatmentId
+          }
+        }),
+      notableEvents: foundCheckin ? foundCheckin.notableEvents : ''
     }
-  }
-
-  return {
-    next: nextAppt,
-    last: prevAppt
-  }
+  });
+  return extendedCheckins;
 }

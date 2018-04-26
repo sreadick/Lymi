@@ -4,7 +4,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Redirect, Link } from 'react-router-dom';
 import { Session } from 'meteor/session';
 import moment from 'moment';
-import { capitalizePhrase, getNextColor, sortSymptoms } from '../../../utils/utils';
+import { capitalizePhrase, getNextColor, sortSymptoms, getExtendedTreatmentHistory } from '../../../utils/utils';
 import { Input, Col, Row } from 'react-materialize'
 
 import { UserSymptoms } from '../../../api/user-symptoms';
@@ -23,8 +23,16 @@ import SymptomWorstGraph from '../../components/patient/history_views/SymptomWor
 import SymptomChangesGraph from '../../components/patient/history_views/SymptomChangesGraph';
 import SymptomHistoryTable from '../../components/patient/history_views/SymptomHistoryTable';
 
+import FullHistoryChart from '../../components/patient/history_views/FullHistoryChart';
+import FullHistoryTable from '../../components/patient/history_views/FullHistoryTable';
 
-class SymptomsHistory2 extends React.Component {
+import TreatmentChart from '../../components/patient/history_views/TreatmentChart';
+import TreatmentTable from '../../components/patient/history_views/TreatmentTable';
+
+import NotableEventsSelect from '../../components/patient/history_views/NotableEventsSelect';
+import NotableEventsTable from '../../components/patient/history_views/NotableEventsTable';
+
+class History extends React.Component {
   constructor(props) {
     super(props);
 
@@ -32,11 +40,12 @@ class SymptomsHistory2 extends React.Component {
       // groupSymptoms: false,
       // includeDeletedSymptoms: false,
       // displayedSymptoms: []
-      graphedSymptoms: [],
+      // graphedSymptoms: [],
       // graphStartDate: null,
       // graphEndDate: null,
       // checkinDates: [],
-      selectedTab: 'symptomSelectGraph',
+      selectedGroup: 'fullHistory',
+      selectedTab: 'fullHistorySummary',
     }
   }
   //
@@ -73,8 +82,8 @@ class SymptomsHistory2 extends React.Component {
   //   Session.set(target, !Session.get(target))
   //   this.setState({[target]: Session.get(target)})
   // }
-  handleTabChange(tabName) {
-    this.setState({'selectedTab': tabName})
+  handleTabChange(field, value) {
+    this.setState({[field]: value})
   }
 
   handleDateRangeChange(customRangeControl, rangeValue) {
@@ -135,11 +144,34 @@ class SymptomsHistory2 extends React.Component {
         <div className='symptom-history__flex-wrapper'>
 
           <div className='symptom-history__navbar__container'>
-            <SideBarNav selectedTab={this.state.selectedTab} handleTabChange={this.handleTabChange.bind(this)}/>
+            <SideBarNav
+              selectedTab={this.state.selectedTab}
+              selectedGroup={this.state.selectedGroup}
+              handleTabChange={this.handleTabChange.bind(this)}
+            />
           </div>
 
           <div className='symptom-history__graph-view__container'>
-            {this.state.selectedTab === 'symptomSelectGraph' ?
+            { this.state.selectedTab === 'fullHistorySummary' ?
+              <FullHistoryChart
+                startDate={this.props.graphStartDate}
+                endDate={this.props.graphEndDate}
+                checkinDates={this.props.checkinHistory.checkins.map(checkin => checkin.date)}
+                handleDateRangeChange={this.handleDateRangeChange.bind(this)}
+                dateRangeOption={this.props.dateRangeOption}
+              />
+            : this.state.selectedTab === 'fullHistoryTable' ?
+              <FullHistoryTable
+                checkins={this.props.displayedCheckinTableItems}
+                currentSymptoms={this.props.currentSymptoms}
+                currentTreatments={this.props.userTreatments}
+                startDate={this.props.graphStartDate}
+                endDate={this.props.graphEndDate}
+                checkinDates={this.props.checkinHistory.checkins.map(checkin => checkin.date)}
+                handleDateRangeChange={this.handleDateRangeChange.bind(this)}
+                dateRangeOption={this.props.dateRangeOption}
+              />
+            : this.state.selectedTab === 'symptomSelectGraph' ?
               <SymptomSelectGraph
                 symptoms={this.props.displayedSymptoms}
                 checkins={this.props.checkinHistory.checkins}
@@ -150,7 +182,7 @@ class SymptomsHistory2 extends React.Component {
                 handleDateRangeChange={this.handleDateRangeChange.bind(this)}
                 dateRangeOption={this.props.dateRangeOption}
               />
-              : this.state.selectedTab === 'symptomSystemGraph' ?
+            : this.state.selectedTab === 'symptomSystemGraph' ?
               <SymptomSystemGraph
                 systems={this.props.symptomSystems}
                 symptoms={this.props.displayedSymptoms}
@@ -162,7 +194,7 @@ class SymptomsHistory2 extends React.Component {
                 handleDateRangeChange={this.handleDateRangeChange.bind(this)}
                 dateRangeOption={this.props.dateRangeOption}
               />
-              : this.state.selectedTab === 'symptomWorstGraph' ?
+            : this.state.selectedTab === 'symptomWorstGraph' ?
               <SymptomWorstGraph
                 symptoms={this.props.worstSymptoms}
                 checkins={this.props.checkinHistory.checkins}
@@ -173,7 +205,7 @@ class SymptomsHistory2 extends React.Component {
                 handleDateRangeChange={this.handleDateRangeChange.bind(this)}
                 dateRangeOption={this.props.dateRangeOption}
               />
-              : this.state.selectedTab === 'symptomChangesGraph' ?
+            : this.state.selectedTab === 'symptomChangesGraph' ?
               <SymptomChangesGraph
                 symptoms={this.props.symptomsByChanges}
                 checkins={this.props.checkinHistory.checkins}
@@ -184,13 +216,57 @@ class SymptomsHistory2 extends React.Component {
                 handleDateRangeChange={this.handleDateRangeChange.bind(this)}
                 dateRangeOption={this.props.dateRangeOption}
               />
-              : this.state.selectedTab === 'symptomHistoryTable' ?
+            : this.state.selectedTab === 'symptomHistoryTable' ?
               <SymptomHistoryTable
                 checkins={this.props.displayedCheckinTableItems}
                 currentSymptoms={this.props.currentSymptoms}
                 currentTreatments={this.props.userTreatments}
+                startDate={this.props.graphStartDate}
+                endDate={this.props.graphEndDate}
+                checkinDates={this.props.checkinHistory.checkins.map(checkin => checkin.date)}
+                handleDateRangeChange={this.handleDateRangeChange.bind(this)}
+                dateRangeOption={this.props.dateRangeOption}
               />
-              :
+            : this.state.selectedTab === 'treatmentChart' ?
+              <TreatmentChart
+                extendedTreatmentCheckins={this.props.extendedTreatmentCheckins}
+                userTreatments={this.props.userTreatments}
+                startDate={this.props.graphStartDate}
+                endDate={this.props.graphEndDate}
+                checkinDates={this.props.checkinHistory.checkins.map(checkin => checkin.date)}
+                handleDateRangeChange={this.handleDateRangeChange.bind(this)}
+                dateRangeOption={this.props.dateRangeOption}
+              />
+            : this.state.selectedTab === 'treatmentTable' ?
+              <TreatmentTable
+                checkins={this.props.displayedCheckinTableItems}
+                currentSymptoms={this.props.currentSymptoms}
+                currentTreatments={this.props.userTreatments}
+                startDate={this.props.graphStartDate}
+                endDate={this.props.graphEndDate}
+                checkinDates={this.props.checkinHistory.checkins.map(checkin => checkin.date)}
+                handleDateRangeChange={this.handleDateRangeChange.bind(this)}
+                dateRangeOption={this.props.dateRangeOption}
+              />
+            : this.state.selectedTab === 'notableEventsSelect' ?
+              <NotableEventsSelect
+                checkins={this.props.checkinHistory.checkins}
+                startDate={this.props.graphStartDate}
+                endDate={this.props.graphEndDate}
+                checkinDates={this.props.checkinHistory.checkins.map(checkin => checkin.date)}
+                handleDateRangeChange={this.handleDateRangeChange.bind(this)}
+                dateRangeOption={this.props.dateRangeOption}
+              />
+            : this.state.selectedTab === 'notableEventsTable' ?
+              <NotableEventsTable
+                checkins={this.props.checkinHistory.checkins.filter(checkin => !!checkin.notableEvents).slice().reverse()}
+                startDate={this.props.graphStartDate}
+                endDate={this.props.graphEndDate}
+                checkinDates={this.props.checkinHistory.checkins.map(checkin => checkin.date)}
+                handleDateRangeChange={this.handleDateRangeChange.bind(this)}
+                dateRangeOption={this.props.dateRangeOption}
+              />
+            :
               <div></div>
             }
           </div>
@@ -290,6 +366,10 @@ export default createContainer((props) => {
   const symptomsHandle = Meteor.subscribe('userSymptoms');
   const treatmentsHandle = Meteor.subscribe('userTreatments');
   const checkinHandle = Meteor.subscribe('checkinHistories');
+
+  const userTreatments = UserTreatments.find().fetch();
+  const checkinHistory = CheckinHistories.findOne();
+
   const checkinHistoryIsReady = checkinHandle.ready() && !!CheckinHistories.findOne();
   const currentSymptoms = UserSymptoms.find().fetch();
   const currentAndDeletedSymptoms = currentSymptoms.slice();
@@ -308,7 +388,7 @@ export default createContainer((props) => {
     });
     lastThreeDays.forEach((day, index) => {
       if (!CheckinHistories.findOne().checkins.map(checkin => checkin.date).includes(day) && moment(day, 'MMMM Do YYYY').isAfter(moment(CheckinHistories.findOne().checkins[0].date, 'MMMM Do YYYY'))) {
-        displayedCheckinTableItems.splice(index, 0, {date: day, symptoms: undefined, treatments: undefined, index})
+        displayedCheckinTableItems.splice(index, 0, {date: day, symptoms: undefined, treatments: undefined, notableEvents: '', index})
       }
     })
   }
@@ -385,7 +465,7 @@ export default createContainer((props) => {
   return {
     displayedSymptoms: displayedSymptomsExtended,
     currentSymptoms,
-    userTreatments: UserTreatments.find().fetch(),
+    userTreatments,
     displayedCheckinTableItems,
     checkinHistory: CheckinHistories.findOne(),
     isFetching: (!checkinHistoryIsReady || !displayedCheckinTableItems || !symptomsHandle.ready() || !treatmentsHandle.ready()),
@@ -405,6 +485,7 @@ export default createContainer((props) => {
     dateRangeOption: Session.get('dateRangeOption') || 'all_dates',
     graphStartDate,
     graphEndDate,
+    extendedTreatmentCheckins: (treatmentsHandle.ready() && checkinHandle.ready()) ? getExtendedTreatmentHistory(userTreatments, checkinHistory.checkins) : []
   };
 
-}, SymptomsHistory2);
+}, History);

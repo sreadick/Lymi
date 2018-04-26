@@ -29,9 +29,10 @@ import SelectTreatmentsPage3 from '../pages/patient/SelectTreatmentsPage3';
 import Dashboard from '../pages/patient/Dashboard3';
 import DashboardMobile from '../pages/patient/DashboardMobile';
 import Checkin from '../pages/patient/Checkin';
-import SymptomsHistory from '../pages/patient/SymptomsHistory';
-import SymptomsHistory2 from '../pages/patient/SymptomsHistory2';
-import TreatmentsHistory from '../pages/patient/TreatmentsHistory';
+// import SymptomsHistory from '../pages/patient/SymptomsHistory';
+// import SymptomsHistory2 from '../pages/patient/SymptomsHistory2';
+// import TreatmentsHistory from '../pages/patient/TreatmentsHistory';
+import History from '../pages/patient/History';
 import Account from '../pages/patient/Account';
 import PtProfile from '../pages/patient/Profile';
 
@@ -78,8 +79,9 @@ const App = appProps => {
         <AuthPatientRoute exact path="/patient/dashboard" component={Dashboard} {...appProps} />
         <AuthPatientRoute exact path="/patient/checkin" component={Checkin} {...appProps} />
         {/* <AuthPatientRoute exact path="/patient/history/symptoms" component={SymptomsHistory} {...appProps} /> */}
-        <AuthPatientRoute exact path="/patient/history/symptoms" component={SymptomsHistory2} {...appProps} />
-        <AuthPatientRoute exact path="/patient/history/treatments" component={TreatmentsHistory} {...appProps} />
+        {/* <AuthPatientRoute exact path="/patient/history/symptoms" component={SymptomsHistory2} {...appProps} />
+        <AuthPatientRoute exact path="/patient/history/treatments" component={TreatmentsHistory} {...appProps} /> */}
+        <AuthPatientRoute exact path="/patient/history" component={History} {...appProps} />
         <AuthPatientRoute exact path="/patient/account" component={Account} {...appProps} />
         <AuthPatientRoute exact path="/patient/profile" component={PtProfile} {...appProps} />
         <AuthPatientRoute exact path="/patient/dashboardmobile" component={DashboardMobile} {...appProps} />

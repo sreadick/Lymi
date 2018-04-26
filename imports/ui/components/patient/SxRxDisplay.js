@@ -5,14 +5,16 @@ import { Redirect, Link } from 'react-router-dom';
 import moment from 'moment';
 import ReactTooltip from 'react-tooltip';
 import { Session } from 'meteor/session';
-import { capitalizePhrase, filterCurrentDayTreatments, getColor, getExtendedTreatmentHistory } from '../../../utils/utils';
+import { capitalizePhrase, filterCurrentDayTreatments, getColor, getExtendedSymptomHistory, getExtendedTreatmentHistory, getExtendedHistory } from '../../../utils/utils';
 
 import { UserSymptoms } from '/imports/api/user-symptoms';
 import { UserTreatments } from '/imports/api/user-treatments';
 import { CheckinHistories } from '/imports/api/checkin-histories';
 
 import SymptomChart from './SymptomChart';
-import TreatmentChart from './TreatmentChart2';
+import SymptomChart2 from './charts/SymptomChart2';
+import TreatmentChart2 from './TreatmentChart2';
+import TreatmentChart3 from './charts/TreatmentChart3';
 import TreatmentCollapsible from './TreatmentCollapsible';
 import Loader from '../Loader';
 
@@ -58,7 +60,7 @@ const SxRxDisplay = (props) => {
                 }
               </span>
               <Link
-                to="/patient/history/symptoms"
+                to="/patient/history"
                 data-tip data-for='fullSymptomHistory'>
                 <i className='black-text material-icons'>
                   insert_chart
@@ -76,8 +78,16 @@ const SxRxDisplay = (props) => {
                 checkins={props.modifiedSymptomCheckins}
                 symptomColors={props.userSymptoms.filter(symptom => symptom.system === props.activeSymptomGroup).map(symptom => symptom.color)}
                 height={125}
-                padding={{top: 0, right: 0, bottom: 10, left: 0}}
+                // padding={{top: 0, right: 0, bottom: 10, left: 0}}
               />
+              // <div className='jklsz'>
+              //   <SymptomChart2
+              //     checkins={props.modifiedSymptomCheckins}
+              //       symptomNames={props.userSymptoms.filter(symptom => symptom.system === props.activeSymptomGroup).map(symptom => symptom.name)}
+              //
+              //     symptomColors={props.userSymptoms.filter(symptom => symptom.system === props.activeSymptomGroup).map(symptom => symptom.color)}
+              //   />
+              // </div>
             }
           </div>
         </div>
@@ -98,13 +108,20 @@ const SxRxDisplay = (props) => {
             </ul>
           </div>
           <div className='dashboard__chart__container'>
-            {props.extendedTreatmentCheckins.length > 0 &&
-              <TreatmentChart
+            {props.extendedCheckins.length > 0 &&
+              <TreatmentChart2
                 treatments={props.userTreatments}
                 currentTreatmentNames={props.userTreatments.map(treatment => treatment.name)}
-                checkins={props.extendedTreatmentCheckins.length > 13 ? props.extendedTreatmentCheckins.slice(-14) : props.extendedTreatmentCheckins}
+                checkins={props.extendedCheckins.length > 13 ? props.extendedCheckins.slice(-14) : props.extendedCheckins}
                 showLabels={false}
               />
+              // <div className='bhgjs'>
+              //   <TreatmentChart3
+              //     treatments={props.userTreatments}
+              //     treatmentNames={props.userTreatments.map(treatment => treatment.name)}
+              //     checkins={props.extendedTreatmentCheckins.length > 13 ? props.extendedTreatmentCheckins.slice(-14) : props.extendedTreatmentCheckins}
+              //   />
+              // </div>
             }
           </div>
         </div>
@@ -134,6 +151,16 @@ export default createContainer(() => {
   const trackedItems = userInfo.profile.settings.trackedItems;
 
   // const activeSegmentNumber = userSymptoms.length > 3 ? (Session.get('activeSegmentNumber_dashboard') || 1) : undefined;
+  userSymptoms.sort((symptomA, symptomB) => {
+    if (symptomA.system < symptomB.system) {
+      return -1;
+    }
+    if (symptomA.system > symptomB.system) {
+      return 1;
+    }
+    return 0;
+  });
+
   let userSymptomGroups = [];
   userSymptoms.forEach((symptom) => {
     if (!userSymptomGroups.includes(symptom.system)) {
@@ -146,26 +173,6 @@ export default createContainer(() => {
     return GroupALength - GroupBLength;
   })
 
-  let dateArray = [...Array(14).keys()].map(index => moment().subtract(index, 'days').format("MMMM Do YYYY")).reverse();
-  if (dateArray.find(date => date === moment(userInfo.account.createdAt).format('MMMM Do YYYY'))) {
-    dateArray = dateArray.slice(dateArray.indexOf(moment(userInfo.account.createdAt).format('MMMM Do YYYY')))
-  }
-  let modifiedSymptomCheckins = dateArray.map((date, index) => {
-    const foundCheckin = checkins.find(checkin => checkin.date === date);
-    return {
-      date,
-      symptoms: foundCheckin ? foundCheckin.symptoms : []
-    }
-  })
-  userSymptoms.sort((symptomA, symptomB) => {
-    if (symptomA.system < symptomB.system) {
-      return -1;
-    }
-    if (symptomA.system > symptomB.system) {
-      return 1;
-    }
-    return 0;
-  });
   return {
     userSymptoms: userSymptoms.map((symptom, index) => (
       {
@@ -175,14 +182,17 @@ export default createContainer(() => {
     )),
     activeSymptomGroup: Session.get('activeSymptomGroup') || (symptomsHandle.ready() && userSymptomGroups[0]),
     userTreatments,
-    modifiedSymptomCheckins,
     checkins,
     // activeSegmentNumber,
     // activeSegmentSymptoms: activeSegmentNumber ? userSymptoms.slice((activeSegmentNumber - 1) * 3, activeSegmentNumber * 3) : undefined,
     todayTreatments,
     trackedItems,
     userSymptomGroups,
-    extendedTreatmentCheckins: (treatmentsHandle.ready() && checkinHandle.ready() && checkins.length > 0) ? getExtendedTreatmentHistory(userTreatments, checkins) : [],
+    // extendedTreatmentCheckins: (treatmentsHandle.ready() && checkinHandle.ready() && checkins.length > 0) ? getExtendedTreatmentHistory(userTreatments, checkins) : [],
+    modifiedSymptomCheckins: (symptomsHandle.ready() && checkinHandle.ready() && checkins.length > 0) ? getExtendedSymptomHistory(userSymptoms, checkins) : [],
+
+    // extendedCheckins: (treatmentsHandle.ready() && checkinHandle.ready() && checkins.length > 0) ? getExtendedHistory(userTreatments, checkins) : [],
+    extendedCheckins: (symptomsHandle.ready() && treatmentsHandle.ready() && checkinHandle.ready() && checkins.length > 0) ? getExtendedHistory(userSymptoms, userTreatments, checkins) : [],
     userInfo,
     isFetching: (!symptomsHandle.ready() || !treatmentsHandle.ready() || !checkinHandle.ready() || !userInfo)
   };

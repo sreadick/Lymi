@@ -5,7 +5,7 @@ import moment from 'moment';
 import { Row, Input, Button } from 'react-materialize';
 import {capitalizePhrase} from '/imports/utils/utils';
 
-export default class SymptomHistoryTable extends React.Component {
+export default class FullHistoryTable extends React.Component {
   // constructor(props) {
   //   super(props);
   //
@@ -19,7 +19,7 @@ export default class SymptomHistoryTable extends React.Component {
     return (
       <div className='symptom-history__graph-view'>
         <Row>
-          <div className='symptom-history__title col s5'>Symptom Table</div>
+          <div className='symptom-history__title col s5'>History Table</div>
           <Input s={2} type='select' label='Date Range' value={this.props.dateRangeOption} onChange={(e) => this.props.handleDateRangeChange(undefined, e.target.value)}>
             <option value='all_dates'>All Dates</option>
             <option value='seven_days'>Last 7 Days</option>
@@ -102,29 +102,74 @@ export default class SymptomHistoryTable extends React.Component {
                       Edit check-in
                     </Link>
                   }
-                  <table className='striped'>
-                    <thead>
-                      <tr>
-                        <th>Symptom</th>
-                        <th>Severity</th>
-                      </tr>
-                    </thead>
-
-                    <tbody>
-                      {checkin.symptoms.map(checkinSymptom =>
-                        <tr key={checkinSymptom.name}>
-                          <td>{capitalizePhrase(checkinSymptom.name)}</td>
-                          <td>{checkinSymptom.severity === 0 ? 'N/A' : checkinSymptom.severity}</td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
                 </div>
+              }
+              {checkin.symptoms &&
+                <table className='striped'>
+                  <thead>
+                    <tr>
+                      <th>Symptoms</th>
+                      <th>Severity</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {checkin.symptoms.map(checkinSymptom =>
+                      <tr key={checkinSymptom.name}>
+                        <td>{capitalizePhrase(checkinSymptom.name)}</td>
+                        <td>{checkinSymptom.severity === 0 ? 'N/A' : checkinSymptom.severity}</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              }
+              {(checkin.treatments && checkin.treatments.length > 0) &&
+                <table className='striped'>
+                  {/* <h5>Treatments</h5> */}
+                  <thead>
+                    <tr>
+                      <th>Treatments</th>
+                      <th>Compliance</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    { checkin.treatments.length === 0 ?
+                      <tr>
+                        <td className="grey-text">No Treatments This Day</td>
+                      </tr>
+                    :
+                      checkin.treatments.map(checkinTreatment =>
+                        <tr key={checkinTreatment.name}>
+                          <td>{checkinTreatment.name}</td>
+                          <td>
+                            { (checkinTreatment.prescribedToday === false || checkinTreatment.compliance === 'NPD') ? "Not Prescribed Today"
+                              : checkinTreatment.compliance === null ? 'Not Specified'
+                              : checkinTreatment.compliance
+                            }
+                          </td>
+                        </tr>
+                      )
+                    }
+                  </tbody>
+                </table>
+              }
+              {checkin.notableEvents &&
+                <table className=''>
+                  <thead>
+                    <tr>
+                      <th>Notable Events</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{checkin.notableEvents}</td>
+                    </tr>
+                  </tbody>
+                </table>
               }
             </div>
           )}
-
         </div>
+
       </div>
     );
   }

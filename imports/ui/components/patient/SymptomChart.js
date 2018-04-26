@@ -157,7 +157,7 @@ export default class SymptomChart extends React.Component {
         <Line
           data={this.state.chartData}
           options={this.state.chartOptions}
-          height={this.props.height || 100}
+          // height={this.props.height || 100}
           // width='100'
         />
       </div>

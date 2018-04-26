@@ -1,6 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import Toggle from 'react-toggle';
+import ReactTooltip from 'react-tooltip';
 import {capitalizePhrase} from '../../../utils/utils';
 
 export default class SymptomCheckbox extends React.Component {
@@ -54,7 +55,15 @@ export default class SymptomCheckbox extends React.Component {
       //   </label>
       //   {/* <label onClick={this.handleChange.bind(this)}><input type='checkbox' checked={this.props.isChecked}/>{this.props.symptom}</label> */}
       // </div>
-      <div className="switch">
+      <div className="switch" data-tip data-for={this.props.symptom._id}>
+        {this.props.symptom.description &&
+          <ReactTooltip
+            id={this.props.symptom._id}
+            type='info'
+            effect='float'>
+            {this.props.symptom.description}
+          </ReactTooltip>
+        }
         <label className={this.state.isChecked ? 'green-text text-darken-2' : 'black-text'}>
           {capitalizePhrase(this.props.symptom.name)}
           {/* {this.props.symptom.description && <div className='pink-text'>({this.props.symptom.description})</div>} */}

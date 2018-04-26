@@ -45,7 +45,7 @@ class TasksBox2 extends React.Component {
             }
           </h3>
           {/* {(this.props.userTasks.dailyCheckinStatus === 'complete' && this.props.userTasks.requests.length === 0 && this.props.userTasks.newPosts.length === 0) */}
-          {!this.props.userTasks.numTasks === 0
+          {this.props.userTasks.numTasks === 0
             ?
               <p>No new notifications.</p>
             :

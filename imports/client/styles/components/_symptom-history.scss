@@ -16,20 +16,57 @@
   position: fixed;
   border-right: 1px solid lightblue;
   height: calc(100vh - 4rem);
-  padding: 2rem $space 0 $space;
+  // padding: 2rem $space 0 $space;
   width: 15%;
+
+  .Collapsible__trigger, .symptom-history__navbar__link, .symptom-history__navbar__tab  {
+    border: none;
+    margin: 0;
+    // padding: 0;
+    padding: .8rem $space;
+    font-size: .9rem;
+    color: #555;
+    font-weight: 600;
+    // background: green;
+    background: #fff;
+    transition: background .4s ease;
+    cursor: pointer;
+    &:hover {
+      background: #eee;
+    }
+    &.active {
+      background: #66bb6a;
+      color: #fff;
+    }
+  }
+
+  .Collapsible__trigger.is-open {
+    background: #eee;
+  }
+
+  .Collapsible__contentInner {
+    padding: 0;
+    border: none;
+  }
 }
 
-.symptom-history__navbar__link {
-  color: grey;
-  cursor: pointer;
-  margin-bottom: .4rem;
+// .symptom-history__navbar .Collapsible__trigger.is-open {
+//   background: #d5d5d5 !important;
+// }
 
+.symptom-history__navbar__tab {
+  // color: grey;
+  // cursor: pointer;
+  // margin-bottom: .4rem;
+  padding: .8rem $space * 2 !important;
+  font-weight: 400 !important;
+  color: #222 !important;
   &.active {
-    color: black;
-    font-size: 1.1rem;
-    // border-bottom: 2px solid black;
-    text-decoration: underline;
+    color: #fff !important;
+    // color: black;
+    // font-size: 1.1rem;
+    // text-decoration: underline;
+    // background: #66bb6a;
   }
 }
 

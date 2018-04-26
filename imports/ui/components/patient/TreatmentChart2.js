@@ -1,6 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import moment from 'moment';
+import ReactTooltip from 'react-tooltip';
 import { capitalizePhrase, isTreatmentPrescribed, getColor, shadeColor } from '../../../utils/utils';
 
 // const colorsArray = ['#b39ddb', '#e57373', '#90caf9', '#ffab91', '#81C784', '#A1887F', '#F06292', '#7986CB', '#E0E0E0', '#4DB6AC', '#BA68C8', '#DCE775', '#90A4AE', '#FFB74D', '#AED581', '#4FC3F7', '#FFD54F'];
@@ -65,6 +66,7 @@ export default TreatmentChart2 = (props) => {
                   <div
                     key={checkin.date}
                     className={`treatment-chart__block-segment ${!checkinTreatment ? 'null' : checkinTreatment.compliance}`}
+                    data-tip data-for={`${checkin.date}_${treatment.name}`}
                     style={
                       {background:
                         (!isTreatmentPrescribed(treatment, checkin.date)) ?
@@ -90,6 +92,19 @@ export default TreatmentChart2 = (props) => {
                       // '#fff'
 
                     }} >
+                    {(checkinTreatment && checkinTreatment.compliance !== 'NPD' && isTreatmentPrescribed(treatment, checkin.date)) &&
+                      <ReactTooltip id={`${checkin.date}_${treatment.name}`} effect='float'>
+                        <div
+                          style={{
+                            textAlign: 'left',
+                            color: '#FFF'
+                          }}>
+                          <h6>{capitalizePhrase(treatment.name)}</h6>
+                          <h6>{checkin.date}</h6>
+                          <h6>Dose Taken: {(checkinTreatment && checkinTreatment.compliance) ? checkinTreatment.compliance : 'Not Specified'}</h6>
+                        </div>
+                      </ReactTooltip>
+                    }
                     {
                       checkinTreatment && (!checkinTreatment.prescribedToday || checkinTreatment.compliance === "Yes" || checkinTreatment.compliance === "Some" || checkinTreatment.compliance === "NPD") ?
                         <span></span>
@@ -111,7 +126,31 @@ export default TreatmentChart2 = (props) => {
         </div>
         <div className='treatment-chart__date__container'>
           {props.checkins.map((checkin) =>
-            <div className={`treatment-chart__date ${checkin.treatments === null ? 'missing' : ''}`} key={checkin.date}>{moment(checkin.date, "MMMM Do YYYY").format('M/D/YY')} </div>
+            <div
+              className={`treatment-chart__date ${checkin.treatments === null ? 'missing' : ''}`}
+              key={checkin.date}
+              data-tip data-for={checkin.date}>
+              <span>
+                {moment(checkin.date, "MMMM Do YYYY").format('M/D/YY')}
+                {checkin.notableEvents &&
+                  <sup>!</sup>
+                }
+              </span>
+              {checkin.notableEvents &&
+                <ReactTooltip
+                  id={checkin.date}
+                  type='info'
+                  place='bottom'
+                  effect='solid'>
+                  <div style={{maxWidth: '30rem'}}>
+                    <h6>Notable Events:</h6>
+                    <p>
+                      {checkin.notableEvents}
+                    </p>
+                  </div>
+                </ReactTooltip>
+              }
+            </div>
           )}
         </div>
       </div>

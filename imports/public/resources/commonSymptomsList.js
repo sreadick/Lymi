@@ -293,705 +293,7 @@
 // ]
 
 
-export const commonSymptomsList = [
-  // Jane List 2
-
-  // Musculoskeletal //
-  {
-    name: 'Joint Pain',
-    system: 'Musculoskeletal',
-    description: '',
-    dx: ['Lyme', 'Bartonella', 'Mycoplasma']
-  },
-  {
-    name: 'Spine Pain',
-    system: 'Musculoskeletal',
-    description: 'Neck or back pain',
-    dx: ['Lyme', 'Bartonella']
-  },
-  {
-    name: 'Neck Creaks',
-    system: 'Musculoskeletal',
-    description: 'Neck creaks and cracks',
-    dx: ['Lyme']
-  },
-  {
-    name: 'Hip Pain',
-    system: 'Musculoskeletal',
-    description: 'Hip pain when walking or standing',
-    dx: ['Lyme', 'Bartonella', 'Mycoplasma']
-  },
-  {
-    name: 'Swollen Joints',
-    system: 'Musculoskeletal',
-    description: '',
-    dx: ['Lyme', 'Bartonella', 'Mycoplasma']
-  },
-  {
-    name: 'TMJ Pain',
-    system: 'Musculoskeletal',
-    description: 'Jaw or TMJ pain',
-    dx: ['Lyme', 'Bartonella', 'Mycoplasma']
-  },
-  {
-    name: 'Stiffness',
-    system: 'Musculoskeletal',
-    description: 'Stiffness in spine or other joints',
-    dx: ['Lyme', 'Bartonella', 'Mycoplasma']
-  },
-  {
-    name: 'Muscle Cramps',
-    system: 'Musculoskeletal',
-    description: '',
-    dx: ['Lyme', 'Bartonella', 'Mycoplasma']
-  },
-  {
-    name: 'Muscle Weakness',
-    system: 'Musculoskeletal',
-    description: '',
-    dx: ['Lyme', 'Bartonella', 'Mycoplasma']},
-  {
-    name: 'Muscle Twitches',
-    system: 'Musculoskeletal',
-    description: '',
-    dx: ['Lyme', 'Bartonella', 'Mycoplasma']
-  },
-
-  // Neurological //
-  {
-    name: 'Balance or Gait Problems',
-    system: 'Neurological',
-    description: 'Balance problems, "tippiness", or need to walk with wide gait',
-    dx: ['Lyme', 'Bartonella']
-  },
-  {
-    name: 'Vertigo',
-    system: 'Neurological',
-    description: 'A sense that things are spinning',
-    dx: ['Lyme', 'Bartonella']
-  },
-  {
-    name: 'Postural Dizziness',
-    system: 'Neurological',
-    description: 'Dizziness when rising up',
-    dx: ['Lyme', 'Bartonella', 'Babesia']
-  },
-  {
-    name: 'POTS',
-    system: 'Neurological',
-    description: 'Very rapid pulse when standing up from sitting',
-    dx: ['Lyme', 'Bartonella', 'Babesia']
-  },
-  {
-    name: 'Shooting Pains',
-    system: 'Neurological',
-    description: 'Shooting pain in limbs',
-    dx: ['Lyme', 'Bartonella']
-  },
-  {
-    name: 'Numbness in Hands or Feet',
-    system: 'Neurological',
-    description: '',
-    dx: ['Lyme', 'Bartonella']
-  },
-  {
-    name: 'Tingling of Fingers or Toes',
-    system: 'Neurological',
-    description: '',
-    dx: ['Lyme', 'Bartonella']
-  },
-  {
-    name: 'Vibratory Feelings',
-    system: 'Neurological',
-    description: '',
-    dx: ['Lyme', 'Bartonella', 'Babesia']
-  },
-  {
-    name: 'Foot Pain',
-    system: 'Neurological',
-    description: 'Pain in soles of feet especially in morning',
-    dx: ['Bartonella']
-  },
-
-  // Cognitive //
-  {
-    name: 'Slow Processing',
-    system: 'Cognitive',
-    description: 'Slowed thinking and responding',
-    dx: ['Lyme', 'Bartonella', 'Babesia']
-  },
-  {
-    name: 'Problems concentration/distractible',
-    system: 'Cognitive',
-    description: '',
-    dx: ['Lyme', 'Bartonella', 'Babesia']
-  },
-  {
-    name: 'Problem Learning New Information',
-    system: 'Cognitive',
-    description: '',
-    dx: ['Lyme', 'Bartonella', 'Babesia']
-  },
-  {
-    name: 'Poor Short Term Memory',
-    system: 'Cognitive',
-    description: '',
-    dx: ['Lyme', 'Bartonella', 'Babesia']
-  },
-  {
-    name: 'Mispeaking/Word Errors',
-    system: 'Cognitive',
-    description: 'Problems finding words/mispeaking  ',
-    dx: ['Lyme', 'Bartonella', 'Babesia']
-  },
-  {
-    name: 'Easily Overwhelmed',
-    system: 'Cognitive',
-    description: 'Overwhelmed by cognitive tasks/decisions',
-    dx: ['Lyme', 'Bartonella', 'Babesia']
-  },
-  {
-    name: 'Difficulty in Planning and Organizing',
-    system: 'Cognitive',
-    description: '',
-    dx: ['Lyme', 'Bartonella', 'Babesia']
-  },
-  {
-    name: 'Difficulty with Judgment/Impulsively',
-    system: 'Cognitive',
-    description: '',
-    dx: ['Lyme', 'Bartonella', 'Babesia']
-  },
-  {
-    name: 'Difficulty Starting or Completing a Project',
-    system: 'Cognitive',
-    description: '',
-    dx: ['Lyme', 'Bartonella', 'Babesia']
-  },
-
-  // Psychiatric
-  {
-    name: 'Emotionally Labile',
-    system: 'Psychiatric',
-    description: 'Overly-reactive emotionally (lability)',
-    dx: ['Lyme', 'Bartonella', 'Babesia']
-  },
-  {
-    name: 'Irritable',
-    system: 'Psychiatric',
-    description: 'Irritable, agitated or euphoric mood',
-    dx: ['Lyme', 'Bartonella', 'Babesia']
-  },
-  {
-    name: 'Depressed Mood',
-    system: 'Psychiatric',
-    description: '',
-    dx: ['Lyme', 'Bartonella', 'Babesia']
-  },
-  {
-    name: 'Suicidal Thoughts',
-    system: 'Psychiatric',
-    description: '',
-    dx: ['Lyme', 'Bartonella', 'Babesia']
-  },
-  {
-    name: 'Rages',
-    system: 'Psychiatric',
-    description: '',
-    dx: ['Lyme', 'Bartonella', 'Babesia']
-  },
-  {
-    name: 'Anxious',
-    system: 'Psychiatric',
-    description: '',
-    dx: ['Lyme', 'Bartonella', 'Babesia']
-  },
-  {
-    name: 'Panic attacks',
-    system: 'Psychiatric',
-    description: '',
-    dx: ['Lyme', 'Bartonella', 'Babesia']
-  },
-  {
-    name: 'Depersonalization',
-    system: 'Psychiatric',
-    description: 'Feeling unreal or distant from the world',
-    dx: ['Lyme', 'Bartonella', 'Babesia']
-  },
-  {
-    name: 'Intrusive/Obsessional Thoughts',
-    system: 'Psychiatric',
-    description: 'Unwanted thoughts, words,nonsense, or music',
-    dx: ['Lyme', 'Bartonella', 'Babesia']
-  },
-  {
-    name: 'Hallucinations',
-    system: 'Psychiatric',
-    description: 'Hearing voices in your head',
-    dx: ['Lyme', 'Bartonella', 'Babesia']
-  },
-  {
-    name: 'Violent Urges',
-    system: 'Psychiatric',
-    description: '',
-    dx: ['Lyme', 'Bartonella', 'Babesia']
-  },
-  {
-    name: 'Fear of Germs/Need to Wash',
-    system: 'Psychiatric',
-    description: '',
-    dx: ['Lyme', 'Bartonella', 'Babesia']
-  },
-  {
-    name: 'Checking OCD',
-    system: 'Psychiatric',
-    description: 'Need to check and recheck',
-    dx: ['Lyme', 'Bartonella', 'Babesia']
-  },
-
-  // ENT/Senses //
-  {
-    name: 'Vision Problems',
-    system: 'ENT/Senses',
-    description: 'Double or blurred vision',
-    dx: ['Bartonella', 'Babesia']
-  },
-  {
-    name: 'Eye Pain',
-    system: 'ENT/Senses',
-    description: '',
-    dx: ['Bartonella', 'Babesia', 'Mycoplasma']
-  },
-  {
-    name: 'Sore throat',
-    system: 'ENT/Senses',
-    description: '',
-    dx: ['Lyme', 'Bartonella', 'Anaplasma/Ehrlichia']
-  },
-  {
-    name: 'Burning or Sore Tongue',
-    system: 'ENT/Senses',
-    description: '',
-    dx: ['Lyme', 'MCAS', 'Anaplasma/Ehrlichia']
-  },
-  {
-    name: 'Mouth or Tongue Ulcers',
-    system: 'ENT/Senses',
-    description: '',
-    dx: ['Lyme', 'MCAS', 'Anaplasma/Ehrlichia']
-  },
-  {
-    name: 'Decreased Hearing',
-    system: 'ENT/Senses',
-    description: '',
-    dx: ['Lyme']
-  },
-  {
-    name: 'Sensitivity to Lights, Sounds or Smells',
-    system: 'ENT/Senses',
-    description: '',
-    dx: ['Lyme', 'Bartonella', 'MCAS']
-  },
-  {
-    name: 'Vertigo',
-    system: 'ENT/Senses',
-    description: 'Dizziness with spinning sensation (vertigo)',
-    dx: ['Lyme', 'Bartonella']
-  },
-  {
-    name: 'Tinnitus',
-    system: 'ENT/Senses',
-    description: 'Buzzing, ringing, whooshing or other sounds (tinnitis)',
-    dx: ['Lyme', 'Bartonella']
-  },
-  {
-    name: 'Bell\'s Palsy',
-    system: 'ENT/Senses',
-    description: 'Weakness of one side of face (Bell\'s Palsy)',
-    dx: ['Lyme']
-  },
-  {
-    name: 'Headaches Behind Eyes/Forehead',
-    system: 'ENT/Senses',
-    description: '',
-    dx: ['Babesia']
-  },
-  {
-    name: 'Headache at Back of Head',
-    system: 'ENT/Senses',
-    description: '',
-    dx: ['Lyme']
-  },
-
-  // Sleep //
-  {
-    name: 'Difficulty Falling Asleep',
-    system: 'Sleep',
-    description: '',
-    dx: ['Lyme', 'Bartonella', 'Babesia']
-  },
-  {
-    name: 'Difficulty Staying Asleep',
-    system: 'Sleep',
-    description: '',
-    dx: ['Lyme', 'Bartonella', 'Babesia']
-  },
-  {
-    name: 'Excessive Night Time Sleep',
-    system: 'Sleep',
-    description: '',
-    dx: ['Lyme', 'Bartonella', 'Babesia']
-  },
-  {
-    name: 'Napping During the Day',
-    system: 'Sleep',
-    description: '',
-    dx: ['Lyme', 'Bartonella', 'Babesia']
-  },
-  {
-    name: 'Hypnagogic Hallucinations',
-    system: 'Sleep',
-    description: 'Having hallucinations when trying to fall asleep or wake up (hypnagogic hallucinations)',
-    dx: ['Lyme', 'Bartonella', 'Babesia']
-  },
-  {
-    name: 'Sleep Paralysis',
-    system: 'Sleep',
-    description: 'Sense of paralysis when falling asleep or awakening (sleep paralysis)',
-    dx: ['Lyme', 'Bartonella', 'Babesia']
-  },
-
-  // Heart/Lung //
-  {
-    name: 'Feeling of Skipped Beats',
-    system: 'Heart/Lung',
-    description: '',
-    dx: ['Lyme', 'Babesia', 'Mycoplasma']
-  },
-  {
-    name: 'Feeling a Very Rapid Pulse or Heart Beat',
-    system: 'Heart/Lung',
-    description: '',
-    dx: ['Lyme', 'Babesia', 'Mycoplasma']
-  },
-  {
-    name: 'Pressing Chest Pain',
-    system: 'Heart/Lung',
-    description: '',
-    dx: ['Lyme', 'Mycoplasma']
-  },
-  {
-    name: 'Chest Wall Pain or Ribs Soreness',
-    system: 'Heart/Lung',
-    description: '',
-    dx: ['Lyme', 'Mycoplasma']
-  },
-  {
-    name: 'Unexplained Cough',
-    system: 'Heart/Lung',
-    description: '',
-    dx: ['Lyme', 'Mycoplasma']
-  },
-  {
-    name: 'Wheezing',
-    system: 'Heart/Lung',
-    description: '',
-    dx: ['Lyme', 'Mycoplasma']
-  },
-  {
-    name: 'Breathlessness, “air hunger” for no reason',
-    system: 'Heart/Lung',
-    description: '',
-    dx: ['Lyme', 'Babesia', 'Mycoplasma']
-  },
-  {
-    name: 'Shortness of breath with exertion',
-    system: 'Heart/Lung',
-    description: '',
-    dx: ['Lyme', 'Mycoplasma']
-  },
-  {
-    name: 'Rib pain',
-    system: 'Heart/Lung',
-    description: '',
-    dx: ['Lyme', 'Mycoplasma']
-  },
-
-  // Urogenital //
-  {
-    name: 'Erectile dysfunction',
-    system: 'Urogenital',
-    description: '',
-    dx: ['Lyme', 'Bartonella']
-  },
-  {
-    name: 'Loss of libido',
-    system: 'Urogenital',
-    description: '',
-    dx: ['Lyme', 'Bartonella']
-  },
-  {
-    name: 'Pain with intercourse',
-    system: 'Urogenital',
-    description: '',
-    dx: ['Lyme', 'Bartonella']
-  },
-  {
-    name: 'Change in genital sensation',
-    system: 'Urogenital',
-    description: '',
-    dx: ['Lyme', 'Bartonella']
-  },
-  {
-    name: 'Loss of orgasm',
-    system: 'Urogenital',
-    description: '',
-    dx: ['Lyme', 'Bartonella']
-  },
-  {
-    name: 'Genital Pain',
-    system: 'Urogenital',
-    description: '',
-    dx: ['Lyme', 'Bartonella']
-  },
-  {
-    name: 'Unexplained menstrual irregularity',
-    system: 'Urogenital',
-    description: '',
-    dx: ['Lyme', 'Bartonella']
-  },
-  {
-    name: 'Unexplained milk production',
-    system: 'Urogenital',
-    description: '',
-    dx: ['Lyme', 'Bartonella']
-  },
-  {
-    name: 'Urge Incontinence',
-    system: 'Urogenital',
-    description: 'Unstoppable need to void (urge incontinence)',
-    dx: ['Lyme', 'Bartonella']
-  },
-  {
-    name: 'Interstitial Cystitis',
-    system: 'Urogenital',
-    description: 'Bladder pain or spasm',
-    dx: ['Lyme', 'Bartonella']
-  },
-  {
-    name: 'Vaginal discharge',
-    system: 'Urogenital',
-    description: '',
-    dx: ['Lyme', 'Bartonella', 'Babesia']
-  },
-
-  // Digestive //
-  {
-    name: 'Queasiness',
-    system: 'Digestive',
-    description: 'Queasy or upset stomach',
-    dx: ['Lyme', 'Bartonella', 'MCAS']
-  },
-  {
-    name: 'Upper abdominal pain',
-    system: 'Digestive',
-    description: '',
-    dx: ['Lyme', 'Bartonella', 'MCAS']
-  },
-  {
-    name: 'Lower abdominal pain',
-    system: 'Digestive',
-    description: '',
-    dx: ['Lyme', 'Bartonella', 'MCAS']
-  },
-  {
-    name: 'Heartburn or reflux',
-    system: 'Digestive',
-    description: '',
-    dx: ['Lyme', 'MCAS']
-  },
-  {
-    name: 'Bloating',
-    system: 'Digestive',
-    description: '',
-    dx: ['Lyme', 'MCAS']
-  },
-  {
-    name: 'Constipation',
-    system: 'Digestive',
-    description: '',
-    dx: ['Lyme', 'MCAS']
-  },
-  {
-    name: 'Diarrhea',
-    system: 'Digestive',
-    description: '',
-    dx: ['Lyme', 'MCAS']
-  },
-  {
-    name: 'Evidence of parasites',
-    system: 'Digestive',
-    description: '',
-    dx: ['Lyme']
-  },
-  {
-    name: 'nausea/vomiting',
-    system: 'Digestive',
-    description: '',
-    dx: ['Lyme', 'MCAS']
-  },
-
-  // Body as a Whole //
-  {
-    name: 'Problems regulating body temperature',
-    system: 'Body as a Whole',
-    description: '',
-    dx: ['Babesia']
-  },
-  {
-    name: 'Night sweats or day chills',
-    system: 'Body as a Whole',
-    description: '',
-    dx: ['Babesia']
-  },
-  {
-    name: 'Hot flashes',
-    system: 'Body as a Whole',
-    description: 'Hot flashes without menopause',
-    dx: ['Babesia']
-  },
-  {
-    name: 'Recurring fevers',
-    system: 'Body as a Whole',
-    description: '',
-    dx: ['Lyme', 'Bartonella', 'Babesia']
-  },
-  {
-    name: 'Weight loss',
-    system: 'Body as a Whole',
-    description: '',
-    dx: ['Lyme', 'Bartonella']
-  },
-  {
-    name: 'Using walker or cane',
-    system: 'Body as a Whole',
-    description: 'Need assistive device to walk',
-    dx: ['Lyme', 'Bartonella']
-  },
-  {
-    name: 'Poor stamina or easily fatigue',
-    system: 'Body as a Whole',
-    description: '',
-    dx: ['Lyme', 'Bartonella']
-  },
-  {
-    name: 'Poor appetite',
-    system: 'Body as a Whole',
-    description: '',
-    dx: ['Lyme', 'Bartonella']
-  },
-  {
-    name: 'Fatigue',
-    system: 'Body as a Whole',
-    description: '',
-    dx: ['Lyme', 'Bartonella', 'Babesia']
-  },
-
-  // Skin //
-  {
-    name: 'Straie',
-    system: 'Skin',
-    description: 'Stretch-mark type rash (straie)',
-    dx: ['Bartonella']
-  },
-  {
-    name: 'E-M Rash',
-    system: 'Skin',
-    description: 'Bull’s eye rash (erythema migrans, "E-M Rash")',
-    dx: ['Lyme']
-  },
-  {
-    name: 'Rashes',
-    system: 'Skin',
-    description: 'Other rash',
-    dx: ['Lyme', 'Bartonella', 'MCAS', 'Mycoplasma']
-  },
-  {
-    name: 'Flushing',
-    system: 'Skin',
-    description: '',
-    dx: ['MCAS']
-  },
-  {
-    name: 'Rash or flushing after eating',
-    system: 'Skin',
-    description: '',
-    dx: ['MCAS']
-  },
-  {
-    name: 'Itching',
-    system: 'Skin',
-    description: '',
-    dx: ['MCAS']
-  },
-  {
-    name: 'Hives',
-    system: 'Skin',
-    description: '',
-    dx: ['Lyme', 'MCAS']
-  },
-  {
-    name: 'Patches of cold skin',
-    system: 'Skin',
-    description: '',
-    dx: ['Lyme', 'Bartonella']
-  },
-  {
-    name: 'Skin lumps or tumors',
-    system: 'Skin',
-    description: '',
-    dx: ['Bartonella']
-  },
-  {
-    name: 'Strange skin sensatins',
-    system: 'Skin',
-    description: 'crawling, pinpricks',
-    dx: ['Lyme']
-  },
-
-  // Immunity //
-  {
-    name: 'Sinus infections',
-    system: 'Immunity',
-    description: '',
-    dx: ['Lyme', 'Anaplasma/Ehrlichia']
-  },
-  {
-    name: 'Other infections',
-    system: 'Immunity',
-    description: '',
-    dx: ['Lyme', 'Anaplasma/Ehrlichia']
-  },
-  {
-    name: 'Swollen Glands  (can we specify where?)',
-    system: 'Immunity',
-    description: '',
-    dx: ['Lyme', 'Bartonella']
-  },
-  {
-    name: 'Multiple allergies',
-    system: 'Immunity',
-    description: 'Multiple allergic reactions',
-    dx: ['MCAS']
-  },
-  {
-    name: 'Chemical Sensitivity',
-    system: 'Immunity',
-    description: '',
-    dx: ['MCAS']
-  },
-
-  // Jane List 1
+  // v1 //
   // {
   //   name: 'Joint Pain',
   //   system: 'Musculoskeletal',
@@ -1685,4 +987,1428 @@ export const commonSymptomsList = [
   //   description: '',
   //   dx: ['MCAS']
   // },
-]
+// ]
+
+
+
+
+// // v2 //
+// export const commonSymptomsList = [
+//
+//   // Musculoskeletal //
+//   {
+//     name: 'Joint Pain',
+//     system: 'Musculoskeletal',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella', 'Mycoplasma']
+//   },
+//   {
+//     name: 'Spine Pain',
+//     system: 'Musculoskeletal',
+//     description: 'Neck or back pain',
+//     dx: ['Lyme', 'Bartonella']
+//   },
+//   {
+//     name: 'Neck Creaks',
+//     system: 'Musculoskeletal',
+//     description: 'Neck creaks and cracks',
+//     dx: ['Lyme']
+//   },
+//   {
+//     name: 'Hip Pain',
+//     system: 'Musculoskeletal',
+//     description: 'Hip pain when walking or standing',
+//     dx: ['Lyme', 'Bartonella', 'Mycoplasma']
+//   },
+//   {
+//     name: 'Swollen Joints',
+//     system: 'Musculoskeletal',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella', 'Mycoplasma']
+//   },
+//   {
+//     name: 'TMJ Pain',
+//     system: 'Musculoskeletal',
+//     description: 'Jaw or TMJ pain',
+//     dx: ['Lyme', 'Bartonella', 'Mycoplasma']
+//   },
+//   {
+//     name: 'Stiffness',
+//     system: 'Musculoskeletal',
+//     description: 'Stiffness in spine or other joints',
+//     dx: ['Lyme', 'Bartonella', 'Mycoplasma']
+//   },
+//   {
+//     name: 'Muscle Cramps',
+//     system: 'Musculoskeletal',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella', 'Mycoplasma']
+//   },
+//   {
+//     name: 'Muscle Weakness',
+//     system: 'Musculoskeletal',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella', 'Mycoplasma']},
+//   {
+//     name: 'Muscle Twitches',
+//     system: 'Musculoskeletal',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella', 'Mycoplasma']
+//   },
+//
+//   // Neurological //
+//   {
+//     name: 'Balance or Gait Problems',
+//     system: 'Neurological',
+//     description: 'Balance problems, "tippiness", or need to walk with wide gait',
+//     dx: ['Lyme', 'Bartonella']
+//   },
+//   {
+//     name: 'Vertigo',
+//     system: 'Neurological',
+//     description: 'A sense that things are spinning',
+//     dx: ['Lyme', 'Bartonella']
+//   },
+//   {
+//     name: 'Postural Dizziness',
+//     system: 'Neurological',
+//     description: 'Dizziness when rising up',
+//     dx: ['Lyme', 'Bartonella', 'Babesia']
+//   },
+//   {
+//     name: 'POTS',
+//     system: 'Neurological',
+//     description: 'Very rapid pulse when standing up from sitting',
+//     dx: ['Lyme', 'Bartonella', 'Babesia']
+//   },
+//   {
+//     name: 'Shooting Pains',
+//     system: 'Neurological',
+//     description: 'Shooting pain in limbs',
+//     dx: ['Lyme', 'Bartonella']
+//   },
+//   {
+//     name: 'Numbness in Hands or Feet',
+//     system: 'Neurological',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella']
+//   },
+//   {
+//     name: 'Tingling of Fingers or Toes',
+//     system: 'Neurological',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella']
+//   },
+//   {
+//     name: 'Vibratory Feelings',
+//     system: 'Neurological',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella', 'Babesia']
+//   },
+//   {
+//     name: 'Foot Pain',
+//     system: 'Neurological',
+//     description: 'Pain in soles of feet especially in morning',
+//     dx: ['Bartonella']
+//   },
+//
+//   // Cognitive //
+//   {
+//     name: 'Slow Processing',
+//     system: 'Cognitive',
+//     description: 'Slowed thinking and responding',
+//     dx: ['Lyme', 'Bartonella', 'Babesia']
+//   },
+//   {
+//     name: 'Problems concentration/distractible',
+//     system: 'Cognitive',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella', 'Babesia']
+//   },
+//   {
+//     name: 'Problem Learning New Information',
+//     system: 'Cognitive',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella', 'Babesia']
+//   },
+//   {
+//     name: 'Poor Short Term Memory',
+//     system: 'Cognitive',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella', 'Babesia']
+//   },
+//   {
+//     name: 'Mispeaking/Word Errors',
+//     system: 'Cognitive',
+//     description: 'Problems finding words/mispeaking  ',
+//     dx: ['Lyme', 'Bartonella', 'Babesia']
+//   },
+//   {
+//     name: 'Easily Overwhelmed',
+//     system: 'Cognitive',
+//     description: 'Overwhelmed by cognitive tasks/decisions',
+//     dx: ['Lyme', 'Bartonella', 'Babesia']
+//   },
+//   {
+//     name: 'Difficulty in Planning and Organizing',
+//     system: 'Cognitive',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella', 'Babesia']
+//   },
+//   {
+//     name: 'Difficulty with Judgment/Impulsively',
+//     system: 'Cognitive',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella', 'Babesia']
+//   },
+//   {
+//     name: 'Difficulty Starting or Completing a Project',
+//     system: 'Cognitive',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella', 'Babesia']
+//   },
+//
+//   // Psychiatric
+//   {
+//     name: 'Emotionally Labile',
+//     system: 'Psychiatric',
+//     description: 'Overly-reactive emotionally (lability)',
+//     dx: ['Lyme', 'Bartonella', 'Babesia']
+//   },
+//   {
+//     name: 'Irritable',
+//     system: 'Psychiatric',
+//     description: 'Irritable, agitated or euphoric mood',
+//     dx: ['Lyme', 'Bartonella', 'Babesia']
+//   },
+//   {
+//     name: 'Depressed Mood',
+//     system: 'Psychiatric',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella', 'Babesia']
+//   },
+//   {
+//     name: 'Suicidal Thoughts',
+//     system: 'Psychiatric',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella', 'Babesia']
+//   },
+//   {
+//     name: 'Rages',
+//     system: 'Psychiatric',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella', 'Babesia']
+//   },
+//   {
+//     name: 'Anxious',
+//     system: 'Psychiatric',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella', 'Babesia']
+//   },
+//   {
+//     name: 'Panic attacks',
+//     system: 'Psychiatric',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella', 'Babesia']
+//   },
+//   {
+//     name: 'Depersonalization',
+//     system: 'Psychiatric',
+//     description: 'Feeling unreal or distant from the world',
+//     dx: ['Lyme', 'Bartonella', 'Babesia']
+//   },
+//   {
+//     name: 'Intrusive/Obsessional Thoughts',
+//     system: 'Psychiatric',
+//     description: 'Unwanted thoughts, words,nonsense, or music',
+//     dx: ['Lyme', 'Bartonella', 'Babesia']
+//   },
+//   {
+//     name: 'Hallucinations',
+//     system: 'Psychiatric',
+//     description: 'Hearing voices in your head',
+//     dx: ['Lyme', 'Bartonella', 'Babesia']
+//   },
+//   {
+//     name: 'Violent Urges',
+//     system: 'Psychiatric',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella', 'Babesia']
+//   },
+//   {
+//     name: 'Fear of Germs/Need to Wash',
+//     system: 'Psychiatric',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella', 'Babesia']
+//   },
+//   {
+//     name: 'Checking OCD',
+//     system: 'Psychiatric',
+//     description: 'Need to check and recheck',
+//     dx: ['Lyme', 'Bartonella', 'Babesia']
+//   },
+//
+//   // ENT/Senses //
+//   {
+//     name: 'Vision Problems',
+//     system: 'ENT/Senses',
+//     description: 'Double or blurred vision',
+//     dx: ['Bartonella', 'Babesia']
+//   },
+//   {
+//     name: 'Eye Pain',
+//     system: 'ENT/Senses',
+//     description: '',
+//     dx: ['Bartonella', 'Babesia', 'Mycoplasma']
+//   },
+//   {
+//     name: 'Sore throat',
+//     system: 'ENT/Senses',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella', 'Anaplasma/Ehrlichia']
+//   },
+//   {
+//     name: 'Burning or Sore Tongue',
+//     system: 'ENT/Senses',
+//     description: '',
+//     dx: ['Lyme', 'MCAS', 'Anaplasma/Ehrlichia']
+//   },
+//   {
+//     name: 'Mouth or Tongue Ulcers',
+//     system: 'ENT/Senses',
+//     description: '',
+//     dx: ['Lyme', 'MCAS', 'Anaplasma/Ehrlichia']
+//   },
+//   {
+//     name: 'Decreased Hearing',
+//     system: 'ENT/Senses',
+//     description: '',
+//     dx: ['Lyme']
+//   },
+//   {
+//     name: 'Sensitivity to Lights, Sounds or Smells',
+//     system: 'ENT/Senses',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella', 'MCAS']
+//   },
+//   {
+//     name: 'Vertigo',
+//     system: 'ENT/Senses',
+//     description: 'Dizziness with spinning sensation (vertigo)',
+//     dx: ['Lyme', 'Bartonella']
+//   },
+//   {
+//     name: 'Tinnitus',
+//     system: 'ENT/Senses',
+//     description: 'Buzzing, ringing, whooshing or other sounds (tinnitis)',
+//     dx: ['Lyme', 'Bartonella']
+//   },
+//   {
+//     name: 'Bell\'s Palsy',
+//     system: 'ENT/Senses',
+//     description: 'Weakness of one side of face (Bell\'s Palsy)',
+//     dx: ['Lyme']
+//   },
+//   {
+//     name: 'Headaches Behind Eyes/Forehead',
+//     system: 'ENT/Senses',
+//     description: '',
+//     dx: ['Babesia']
+//   },
+//   {
+//     name: 'Headache at Back of Head',
+//     system: 'ENT/Senses',
+//     description: '',
+//     dx: ['Lyme']
+//   },
+//
+//   // Sleep //
+//   {
+//     name: 'Difficulty Falling Asleep',
+//     system: 'Sleep',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella', 'Babesia']
+//   },
+//   {
+//     name: 'Difficulty Staying Asleep',
+//     system: 'Sleep',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella', 'Babesia']
+//   },
+//   {
+//     name: 'Excessive Night Time Sleep',
+//     system: 'Sleep',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella', 'Babesia']
+//   },
+//   {
+//     name: 'Napping During the Day',
+//     system: 'Sleep',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella', 'Babesia']
+//   },
+//   {
+//     name: 'Hypnagogic Hallucinations',
+//     system: 'Sleep',
+//     description: 'Having hallucinations when trying to fall asleep or wake up (hypnagogic hallucinations)',
+//     dx: ['Lyme', 'Bartonella', 'Babesia']
+//   },
+//   {
+//     name: 'Sleep Paralysis',
+//     system: 'Sleep',
+//     description: 'Sense of paralysis when falling asleep or awakening (sleep paralysis)',
+//     dx: ['Lyme', 'Bartonella', 'Babesia']
+//   },
+//
+//   // Heart/Lung //
+//   {
+//     name: 'Feeling of Skipped Beats',
+//     system: 'Heart/Lung',
+//     description: '',
+//     dx: ['Lyme', 'Babesia', 'Mycoplasma']
+//   },
+//   {
+//     name: 'Feeling a Very Rapid Pulse or Heart Beat',
+//     system: 'Heart/Lung',
+//     description: '',
+//     dx: ['Lyme', 'Babesia', 'Mycoplasma']
+//   },
+//   {
+//     name: 'Pressing Chest Pain',
+//     system: 'Heart/Lung',
+//     description: '',
+//     dx: ['Lyme', 'Mycoplasma']
+//   },
+//   {
+//     name: 'Chest Wall Pain or Ribs Soreness',
+//     system: 'Heart/Lung',
+//     description: '',
+//     dx: ['Lyme', 'Mycoplasma']
+//   },
+//   {
+//     name: 'Unexplained Cough',
+//     system: 'Heart/Lung',
+//     description: '',
+//     dx: ['Lyme', 'Mycoplasma']
+//   },
+//   {
+//     name: 'Wheezing',
+//     system: 'Heart/Lung',
+//     description: '',
+//     dx: ['Lyme', 'Mycoplasma']
+//   },
+//   {
+//     name: 'Breathlessness, “air hunger” for no reason',
+//     system: 'Heart/Lung',
+//     description: '',
+//     dx: ['Lyme', 'Babesia', 'Mycoplasma']
+//   },
+//   {
+//     name: 'Shortness of breath with exertion',
+//     system: 'Heart/Lung',
+//     description: '',
+//     dx: ['Lyme', 'Mycoplasma']
+//   },
+//   {
+//     name: 'Rib pain',
+//     system: 'Heart/Lung',
+//     description: '',
+//     dx: ['Lyme', 'Mycoplasma']
+//   },
+//
+//   // Urogenital //
+//   {
+//     name: 'Erectile dysfunction',
+//     system: 'Urogenital',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella']
+//   },
+//   {
+//     name: 'Loss of libido',
+//     system: 'Urogenital',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella']
+//   },
+//   {
+//     name: 'Pain with intercourse',
+//     system: 'Urogenital',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella']
+//   },
+//   {
+//     name: 'Change in genital sensation',
+//     system: 'Urogenital',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella']
+//   },
+//   {
+//     name: 'Loss of orgasm',
+//     system: 'Urogenital',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella']
+//   },
+//   {
+//     name: 'Genital Pain',
+//     system: 'Urogenital',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella']
+//   },
+//   {
+//     name: 'Unexplained menstrual irregularity',
+//     system: 'Urogenital',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella']
+//   },
+//   {
+//     name: 'Unexplained milk production',
+//     system: 'Urogenital',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella']
+//   },
+//   {
+//     name: 'Urge Incontinence',
+//     system: 'Urogenital',
+//     description: 'Unstoppable need to void (urge incontinence)',
+//     dx: ['Lyme', 'Bartonella']
+//   },
+//   {
+//     name: 'Interstitial Cystitis',
+//     system: 'Urogenital',
+//     description: 'Bladder pain or spasm',
+//     dx: ['Lyme', 'Bartonella']
+//   },
+//   {
+//     name: 'Vaginal discharge',
+//     system: 'Urogenital',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella', 'Babesia']
+//   },
+//
+//   // Digestive //
+//   {
+//     name: 'Queasiness',
+//     system: 'Digestive',
+//     description: 'Queasy or upset stomach',
+//     dx: ['Lyme', 'Bartonella', 'MCAS']
+//   },
+//   {
+//     name: 'Upper abdominal pain',
+//     system: 'Digestive',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella', 'MCAS']
+//   },
+//   {
+//     name: 'Lower abdominal pain',
+//     system: 'Digestive',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella', 'MCAS']
+//   },
+//   {
+//     name: 'Heartburn or reflux',
+//     system: 'Digestive',
+//     description: '',
+//     dx: ['Lyme', 'MCAS']
+//   },
+//   {
+//     name: 'Bloating',
+//     system: 'Digestive',
+//     description: '',
+//     dx: ['Lyme', 'MCAS']
+//   },
+//   {
+//     name: 'Constipation',
+//     system: 'Digestive',
+//     description: '',
+//     dx: ['Lyme', 'MCAS']
+//   },
+//   {
+//     name: 'Diarrhea',
+//     system: 'Digestive',
+//     description: '',
+//     dx: ['Lyme', 'MCAS']
+//   },
+//   {
+//     name: 'Evidence of parasites',
+//     system: 'Digestive',
+//     description: '',
+//     dx: ['Lyme']
+//   },
+//   {
+//     name: 'nausea/vomiting',
+//     system: 'Digestive',
+//     description: '',
+//     dx: ['Lyme', 'MCAS']
+//   },
+//
+//   // Body as a Whole //
+//   {
+//     name: 'Problems regulating body temperature',
+//     system: 'Body as a Whole',
+//     description: '',
+//     dx: ['Babesia']
+//   },
+//   {
+//     name: 'Night sweats or day chills',
+//     system: 'Body as a Whole',
+//     description: '',
+//     dx: ['Babesia']
+//   },
+//   {
+//     name: 'Hot flashes',
+//     system: 'Body as a Whole',
+//     description: 'Hot flashes without menopause',
+//     dx: ['Babesia']
+//   },
+//   {
+//     name: 'Recurring fevers',
+//     system: 'Body as a Whole',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella', 'Babesia']
+//   },
+//   {
+//     name: 'Weight loss',
+//     system: 'Body as a Whole',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella']
+//   },
+//   {
+//     name: 'Using walker or cane',
+//     system: 'Body as a Whole',
+//     description: 'Need assistive device to walk',
+//     dx: ['Lyme', 'Bartonella']
+//   },
+//   {
+//     name: 'Poor stamina or easily fatigue',
+//     system: 'Body as a Whole',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella']
+//   },
+//   {
+//     name: 'Poor appetite',
+//     system: 'Body as a Whole',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella']
+//   },
+//   {
+//     name: 'Fatigue',
+//     system: 'Body as a Whole',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella', 'Babesia']
+//   },
+//
+//   // Skin //
+//   {
+//     name: 'Straie',
+//     system: 'Skin',
+//     description: 'Stretch-mark type rash (straie)',
+//     dx: ['Bartonella']
+//   },
+//   {
+//     name: 'E-M Rash',
+//     system: 'Skin',
+//     description: 'Bull’s eye rash (erythema migrans, "E-M Rash")',
+//     dx: ['Lyme']
+//   },
+//   {
+//     name: 'Rashes',
+//     system: 'Skin',
+//     description: 'Other rash',
+//     dx: ['Lyme', 'Bartonella', 'MCAS', 'Mycoplasma']
+//   },
+//   {
+//     name: 'Flushing',
+//     system: 'Skin',
+//     description: '',
+//     dx: ['MCAS']
+//   },
+//   {
+//     name: 'Rash or flushing after eating',
+//     system: 'Skin',
+//     description: '',
+//     dx: ['MCAS']
+//   },
+//   {
+//     name: 'Itching',
+//     system: 'Skin',
+//     description: '',
+//     dx: ['MCAS']
+//   },
+//   {
+//     name: 'Hives',
+//     system: 'Skin',
+//     description: '',
+//     dx: ['Lyme', 'MCAS']
+//   },
+//   {
+//     name: 'Patches of cold skin',
+//     system: 'Skin',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella']
+//   },
+//   {
+//     name: 'Skin lumps or tumors',
+//     system: 'Skin',
+//     description: '',
+//     dx: ['Bartonella']
+//   },
+//   {
+//     name: 'Strange skin sensatins',
+//     system: 'Skin',
+//     description: 'crawling, pinpricks',
+//     dx: ['Lyme']
+//   },
+//
+//   // Immunity //
+//   {
+//     name: 'Sinus infections',
+//     system: 'Immunity',
+//     description: '',
+//     dx: ['Lyme', 'Anaplasma/Ehrlichia']
+//   },
+//   {
+//     name: 'Other infections',
+//     system: 'Immunity',
+//     description: '',
+//     dx: ['Lyme', 'Anaplasma/Ehrlichia']
+//   },
+//   {
+//     name: 'Swollen Glands  (can we specify where?)',
+//     system: 'Immunity',
+//     description: '',
+//     dx: ['Lyme', 'Bartonella']
+//   },
+//   {
+//     name: 'Multiple allergies',
+//     system: 'Immunity',
+//     description: 'Multiple allergic reactions',
+//     dx: ['MCAS']
+//   },
+//   {
+//     name: 'Chemical Sensitivity',
+//     system: 'Immunity',
+//     description: '',
+//     dx: ['MCAS']
+//   },
+// ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// v3 //
+export const commonSymptomsList = [
+
+  // Musculoskeletal //
+  {
+    name: 'Joint Pain',
+    system: 'Musculoskeletal',
+    group: 'Joints and Muscles',
+    description: '',
+    dx: ['Lyme', 'Bartonella', 'Mycoplasma']
+  },
+  {
+    name: 'Back Pain',
+    system: 'Musculoskeletal',
+    group: 'Joints and Muscles',
+    description: 'Neck or Back Pain',
+    dx: ['Lyme', 'Bartonella']
+  },
+  {
+    name: 'Neck Creaks',
+    system: 'Musculoskeletal',
+    group: 'Joints and Muscles',
+    description: 'Neck creaks and cracks',
+    dx: ['Lyme']
+  },
+  {
+    name: 'Hip Pain',
+    system: 'Musculoskeletal',
+    group: 'Joints and Muscles',
+    description: 'Hip pain when walking or standing',
+    dx: ['Lyme', 'Bartonella', 'Mycoplasma']
+  },
+  {
+    name: 'Swollen Joints',
+    system: 'Musculoskeletal',
+    group: 'Joints and Muscles',
+    description: '',
+    dx: ['Lyme', 'Bartonella', 'Mycoplasma']
+  },
+  {
+    name: 'TMJ Pain',
+    system: 'Musculoskeletal',
+    group: 'Joints and Muscles',
+    description: 'Jaw or TMJ pain',
+    dx: ['Lyme', 'Bartonella', 'Mycoplasma']
+  },
+  {
+    name: 'Stiffness',
+    system: 'Musculoskeletal',
+    group: 'Joints and Muscles',
+    description: 'Stiffness in spine or other joints',
+    dx: ['Lyme', 'Bartonella', 'Mycoplasma']
+  },
+  {
+    name: 'Muscle Cramps',
+    system: 'Musculoskeletal',
+    group: 'Joints and Muscles',
+    description: '',
+    dx: ['Lyme', 'Bartonella', 'Mycoplasma']
+  },
+  {
+    name: 'Muscle Weakness',
+    system: 'Musculoskeletal',
+    group: 'Joints and Muscles',
+    description: '',
+    dx: ['Lyme', 'Bartonella', 'Mycoplasma']},
+  {
+    name: 'Muscle Twitches',
+    system: 'Musculoskeletal',
+    group: 'Joints and Muscles',
+    description: '',
+    dx: ['Lyme', 'Bartonella', 'Mycoplasma']
+  },
+
+  // Neuromuscular //
+  {
+    name: 'Balance or Gait Problems',
+    system: 'Neurological',
+    description: 'Balance problems, "tippiness", or need to walk with wide gait',
+    dx: ['Lyme', 'Bartonella']
+  },
+  {
+    name: 'Vertigo',
+    system: 'Neurological',
+    description: 'A sense that things are spinning',
+    dx: ['Lyme', 'Bartonella']
+  },
+  {
+    name: 'Postural Dizziness',
+    system: 'Neurological',
+    description: 'Dizziness when rising up',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+  {
+    name: 'POTS',
+    system: 'Neurological',
+    description: 'Very rapid pulse when standing up from sitting',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+  {
+    name: 'Shooting Pains',
+    system: 'Neurological',
+    description: 'Shooting pain in limbs',
+    dx: ['Lyme', 'Bartonella']
+  },
+  {
+    name: 'Numbness in Hands or Feet',
+    system: 'Neurological',
+    description: '',
+    dx: ['Lyme', 'Bartonella']
+  },
+  {
+    name: 'Tingling of Fingers or Toes',
+    system: 'Neurological',
+    description: '',
+    dx: ['Lyme', 'Bartonella']
+  },
+  {
+    name: 'Vibratory Feelings',
+    system: 'Neurological',
+    description: '',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+  {
+    name: 'Foot Pain',
+    system: 'Neurological',
+    description: 'Pain in soles of feet especially in morning',
+    dx: ['Bartonella']
+  },
+
+  // Cognitive //
+  {
+    name: 'Slow Processing',
+    system: 'Cognitive',
+    description: 'Slowed thinking and responding',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+  {
+    name: 'Problems concentration/distractible',
+    system: 'Cognitive',
+    description: '',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+  {
+    name: 'Problem Learning New Information',
+    system: 'Cognitive',
+    description: '',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+  {
+    name: 'Poor Short Term Memory',
+    system: 'Cognitive',
+    description: '',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+  {
+    name: 'Mispeaking/Word Errors',
+    system: 'Cognitive',
+    description: 'Problems finding words/mispeaking  ',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+  {
+    name: 'Easily Overwhelmed',
+    system: 'Cognitive',
+    description: 'Overwhelmed by cognitive tasks/decisions',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+  {
+    name: 'Difficulty in Planning and Organizing',
+    system: 'Cognitive',
+    description: '',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+  {
+    name: 'Difficulty with Judgment/Impulsively',
+    system: 'Cognitive',
+    description: '',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+  {
+    name: 'Difficulty Starting or Completing a Project',
+    system: 'Cognitive',
+    description: '',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+
+  // Psychiatric
+  {
+    name: 'Emotionally Labile',
+    system: 'Psychiatric',
+    description: 'Overly-reactive emotionally (lability)',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+  {
+    name: 'Irritable',
+    system: 'Psychiatric',
+    description: 'Irritable, agitated or euphoric mood',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+  {
+    name: 'Depressed Mood',
+    system: 'Psychiatric',
+    description: '',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+  {
+    name: 'Suicidal Thoughts',
+    system: 'Psychiatric',
+    description: '',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+  {
+    name: 'Rages',
+    system: 'Psychiatric',
+    description: '',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+  {
+    name: 'Anxious',
+    system: 'Psychiatric',
+    description: '',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+  {
+    name: 'Panic attacks',
+    system: 'Psychiatric',
+    description: '',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+  {
+    name: 'Depersonalization',
+    system: 'Psychiatric',
+    description: 'Feeling unreal or distant from the world',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+  {
+    name: 'Intrusive/Obsessional Thoughts',
+    system: 'Psychiatric',
+    description: 'Unwanted thoughts, words,nonsense, or music',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+  {
+    name: 'Hallucinations',
+    system: 'Psychiatric',
+    description: 'Hearing voices in your head',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+  {
+    name: 'Violent Urges',
+    system: 'Psychiatric',
+    description: '',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+  {
+    name: 'Fear of Germs/Need to Wash',
+    system: 'Psychiatric',
+    description: '',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+  {
+    name: 'Checking OCD',
+    system: 'Psychiatric',
+    description: 'Need to check and recheck',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+
+  // ENT/Senses //
+  {
+    name: 'Vision Problems',
+    system: 'ENT/Senses',
+    description: 'Double or blurred vision',
+    dx: ['Bartonella', 'Babesia']
+  },
+  {
+    name: 'Eye Pain',
+    system: 'ENT/Senses',
+    description: '',
+    dx: ['Bartonella', 'Babesia', 'Mycoplasma']
+  },
+  {
+    name: 'Sore throat',
+    system: 'ENT/Senses',
+    description: '',
+    dx: ['Lyme', 'Bartonella', 'Anaplasma/Ehrlichia']
+  },
+  {
+    name: 'Burning or Sore Tongue',
+    system: 'ENT/Senses',
+    description: '',
+    dx: ['Lyme', 'MCAS', 'Anaplasma/Ehrlichia']
+  },
+  {
+    name: 'Mouth or Tongue Ulcers',
+    system: 'ENT/Senses',
+    description: '',
+    dx: ['Lyme', 'MCAS', 'Anaplasma/Ehrlichia']
+  },
+  {
+    name: 'Decreased Hearing',
+    system: 'ENT/Senses',
+    description: '',
+    dx: ['Lyme']
+  },
+  {
+    name: 'Sensitivity to Lights, Sounds or Smells',
+    system: 'ENT/Senses',
+    description: '',
+    dx: ['Lyme', 'Bartonella', 'MCAS']
+  },
+  {
+    name: 'Vertigo',
+    system: 'ENT/Senses',
+    description: 'Dizziness with spinning sensation (vertigo)',
+    dx: ['Lyme', 'Bartonella']
+  },
+  {
+    name: 'Tinnitus',
+    system: 'ENT/Senses',
+    description: 'Buzzing, ringing, whooshing or other sounds (tinnitis)',
+    dx: ['Lyme', 'Bartonella']
+  },
+  {
+    name: 'Bell\'s Palsy',
+    system: 'ENT/Senses',
+    description: 'Weakness of one side of face (Bell\'s Palsy)',
+    dx: ['Lyme']
+  },
+  {
+    name: 'Headaches Behind Eyes/Forehead',
+    system: 'ENT/Senses',
+    description: '',
+    dx: ['Babesia']
+  },
+  {
+    name: 'Headache at Back of Head',
+    system: 'ENT/Senses',
+    description: '',
+    dx: ['Lyme']
+  },
+
+  // Sleep //
+  {
+    name: 'Difficulty Falling Asleep',
+    system: 'Sleep',
+    description: '',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+  {
+    name: 'Difficulty Staying Asleep',
+    system: 'Sleep',
+    description: '',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+  {
+    name: 'Excessive Night Time Sleep',
+    system: 'Sleep',
+    description: '',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+  {
+    name: 'Napping During the Day',
+    system: 'Sleep',
+    description: '',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+  {
+    name: 'Hypnagogic Hallucinations',
+    system: 'Sleep',
+    description: 'Having hallucinations when trying to fall asleep or wake up (hypnagogic hallucinations)',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+  {
+    name: 'Sleep Paralysis',
+    system: 'Sleep',
+    description: 'Sense of paralysis when falling asleep or awakening (sleep paralysis)',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+
+  // Heart/Lung //
+  {
+    name: 'Feeling of Skipped Beats',
+    system: 'Heart/Lung',
+    description: '',
+    dx: ['Lyme', 'Babesia', 'Mycoplasma']
+  },
+  {
+    name: 'Feeling a Very Rapid Pulse or Heart Beat',
+    system: 'Heart/Lung',
+    description: '',
+    dx: ['Lyme', 'Babesia', 'Mycoplasma']
+  },
+  {
+    name: 'Pressing Chest Pain',
+    system: 'Heart/Lung',
+    description: '',
+    dx: ['Lyme', 'Mycoplasma']
+  },
+  {
+    name: 'Chest Wall Pain or Ribs Soreness',
+    system: 'Heart/Lung',
+    description: '',
+    dx: ['Lyme', 'Mycoplasma']
+  },
+  {
+    name: 'Unexplained Cough',
+    system: 'Heart/Lung',
+    description: '',
+    dx: ['Lyme', 'Mycoplasma']
+  },
+  {
+    name: 'Wheezing',
+    system: 'Heart/Lung',
+    description: '',
+    dx: ['Lyme', 'Mycoplasma']
+  },
+  {
+    name: 'Breathlessness, “air hunger” for no reason',
+    system: 'Heart/Lung',
+    description: '',
+    dx: ['Lyme', 'Babesia', 'Mycoplasma']
+  },
+  {
+    name: 'Shortness of breath with exertion',
+    system: 'Heart/Lung',
+    description: '',
+    dx: ['Lyme', 'Mycoplasma']
+  },
+  {
+    name: 'Rib pain',
+    system: 'Heart/Lung',
+    description: '',
+    dx: ['Lyme', 'Mycoplasma']
+  },
+
+  // Urogenital //
+  {
+    name: 'Erectile dysfunction',
+    system: 'Urogenital',
+    description: '',
+    dx: ['Lyme', 'Bartonella']
+  },
+  {
+    name: 'Loss of libido',
+    system: 'Urogenital',
+    description: '',
+    dx: ['Lyme', 'Bartonella']
+  },
+  {
+    name: 'Pain with intercourse',
+    system: 'Urogenital',
+    description: '',
+    dx: ['Lyme', 'Bartonella']
+  },
+  {
+    name: 'Change in genital sensation',
+    system: 'Urogenital',
+    description: '',
+    dx: ['Lyme', 'Bartonella']
+  },
+  {
+    name: 'Loss of orgasm',
+    system: 'Urogenital',
+    description: '',
+    dx: ['Lyme', 'Bartonella']
+  },
+  {
+    name: 'Genital Pain',
+    system: 'Urogenital',
+    description: '',
+    dx: ['Lyme', 'Bartonella']
+  },
+  {
+    name: 'Unexplained menstrual irregularity',
+    system: 'Urogenital',
+    description: '',
+    dx: ['Lyme', 'Bartonella']
+  },
+  {
+    name: 'Unexplained milk production',
+    system: 'Urogenital',
+    description: '',
+    dx: ['Lyme', 'Bartonella']
+  },
+  {
+    name: 'Urge Incontinence',
+    system: 'Urogenital',
+    description: 'Unstoppable need to void (urge incontinence)',
+    dx: ['Lyme', 'Bartonella']
+  },
+  {
+    name: 'Interstitial Cystitis',
+    system: 'Urogenital',
+    description: 'Bladder pain or spasm',
+    dx: ['Lyme', 'Bartonella']
+  },
+  {
+    name: 'Vaginal discharge',
+    system: 'Urogenital',
+    description: '',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+
+  // Digestive //
+  {
+    name: 'Queasiness',
+    system: 'Digestive',
+    description: 'Queasy or upset stomach',
+    dx: ['Lyme', 'Bartonella', 'MCAS']
+  },
+  {
+    name: 'Upper abdominal pain',
+    system: 'Digestive',
+    description: '',
+    dx: ['Lyme', 'Bartonella', 'MCAS']
+  },
+  {
+    name: 'Lower abdominal pain',
+    system: 'Digestive',
+    description: '',
+    dx: ['Lyme', 'Bartonella', 'MCAS']
+  },
+  {
+    name: 'Heartburn or reflux',
+    system: 'Digestive',
+    description: '',
+    dx: ['Lyme', 'MCAS']
+  },
+  {
+    name: 'Bloating',
+    system: 'Digestive',
+    description: '',
+    dx: ['Lyme', 'MCAS']
+  },
+  {
+    name: 'Constipation',
+    system: 'Digestive',
+    description: '',
+    dx: ['Lyme', 'MCAS']
+  },
+  {
+    name: 'Diarrhea',
+    system: 'Digestive',
+    description: '',
+    dx: ['Lyme', 'MCAS']
+  },
+  {
+    name: 'Evidence of parasites',
+    system: 'Digestive',
+    description: '',
+    dx: ['Lyme']
+  },
+  {
+    name: 'nausea/vomiting',
+    system: 'Digestive',
+    description: '',
+    dx: ['Lyme', 'MCAS']
+  },
+
+  // Body as a Whole //
+  {
+    name: 'Problems regulating body temperature',
+    system: 'Body as a Whole',
+    description: '',
+    dx: ['Babesia']
+  },
+  {
+    name: 'Night sweats or day chills',
+    system: 'Body as a Whole',
+    description: '',
+    dx: ['Babesia']
+  },
+  {
+    name: 'Hot flashes',
+    system: 'Body as a Whole',
+    description: 'Hot flashes without menopause',
+    dx: ['Babesia']
+  },
+  {
+    name: 'Recurring fevers',
+    system: 'Body as a Whole',
+    description: '',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+  {
+    name: 'Weight loss',
+    system: 'Body as a Whole',
+    description: '',
+    dx: ['Lyme', 'Bartonella']
+  },
+  {
+    name: 'Using walker or cane',
+    system: 'Body as a Whole',
+    description: 'Need assistive device to walk',
+    dx: ['Lyme', 'Bartonella']
+  },
+  {
+    name: 'Poor stamina or easily fatigue',
+    system: 'Body as a Whole',
+    description: '',
+    dx: ['Lyme', 'Bartonella']
+  },
+  {
+    name: 'Poor appetite',
+    system: 'Body as a Whole',
+    description: '',
+    dx: ['Lyme', 'Bartonella']
+  },
+  {
+    name: 'Fatigue',
+    system: 'Body as a Whole',
+    description: '',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+
+  // Skin //
+  {
+    name: 'Straie',
+    system: 'Skin',
+    description: 'Stretch-mark type rash (straie)',
+    dx: ['Bartonella']
+  },
+  {
+    name: 'E-M Rash',
+    system: 'Skin',
+    description: 'Bull’s eye rash (erythema migrans, "E-M Rash")',
+    dx: ['Lyme']
+  },
+  {
+    name: 'Rashes',
+    system: 'Skin',
+    description: 'Other rash',
+    dx: ['Lyme', 'Bartonella', 'MCAS', 'Mycoplasma']
+  },
+  {
+    name: 'Flushing',
+    system: 'Skin',
+    description: '',
+    dx: ['MCAS']
+  },
+  {
+    name: 'Rash or flushing after eating',
+    system: 'Skin',
+    description: '',
+    dx: ['MCAS']
+  },
+  {
+    name: 'Itching',
+    system: 'Skin',
+    description: '',
+    dx: ['MCAS']
+  },
+  {
+    name: 'Hives',
+    system: 'Skin',
+    description: '',
+    dx: ['Lyme', 'MCAS']
+  },
+  {
+    name: 'Patches of cold skin',
+    system: 'Skin',
+    description: '',
+    dx: ['Lyme', 'Bartonella']
+  },
+  {
+    name: 'Skin lumps or tumors',
+    system: 'Skin',
+    description: '',
+    dx: ['Bartonella']
+  },
+  {
+    name: 'Strange skin sensatins',
+    system: 'Skin',
+    description: 'crawling, pinpricks',
+    dx: ['Lyme']
+  },
+
+  // Immunity //
+  {
+    name: 'Sinus infections',
+    system: 'Immunity',
+    description: '',
+    dx: ['Lyme', 'Anaplasma/Ehrlichia']
+  },
+  {
+    name: 'Other infections',
+    system: 'Immunity',
+    description: '',
+    dx: ['Lyme', 'Anaplasma/Ehrlichia']
+  },
+  {
+    name: 'Swollen Glands  (can we specify where?)',
+    system: 'Immunity',
+    description: '',
+    dx: ['Lyme', 'Bartonella']
+  },
+  {
+    name: 'Multiple allergies',
+    system: 'Immunity',
+    description: 'Multiple allergic reactions',
+    dx: ['MCAS']
+  },
+  {
+    name: 'Chemical Sensitivity',
+    system: 'Immunity',
+    description: '',
+    dx: ['MCAS']
+  }
+];

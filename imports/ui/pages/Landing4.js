@@ -28,7 +28,7 @@ class Landing extends React.Component {
     const navAnchorTopPosition = navAnchorOne.getBoundingClientRect().top;
     if (window.scrollY >= Math.floor(navAnchorTopPosition)) {
       navHeader.classList.add('scrolled');
-    } else if (navHeader.classList.contains('scrolled')) {
+    } else {
       navHeader.classList.remove('scrolled');
     }
     document.addEventListener('scroll', () => {
@@ -44,6 +44,9 @@ class Landing extends React.Component {
     return (
       <div>
         {this.props.showLogin && <Login />}
+        <ScrollableAnchor id='landing__anchor--top'>
+          <div></div>
+        </ScrollableAnchor>
         <div className="landing__section landing__section--main">
           <div className="landing__section--main__flex-wrapper">
             <h1 className="landing__section--main__heading">Lyme Management, Made <span>Easy</span>.</h1>
@@ -66,7 +69,7 @@ class Landing extends React.Component {
             <div className='landing__section--feature-item__row'>
               <div className="landing__section--feature-item">
                 <i className="landing__section--feature-item__icon material-icons">schedule</i>
-                <a className="landing__section--feature-item__content" href='#landing__section--3'>
+                <a className="landing__section--feature-item__content" href='#landing__anchor1'>
                   <h5>Select Symptoms and Treatments</h5>
                   <span>Learn More</span>
                   <i className="material-icons">keyboard_arrow_down</i>
@@ -74,7 +77,8 @@ class Landing extends React.Component {
               </div>
               <div className="landing__section--feature-item">
                 <i className="landing__section--feature-item__icon material-icons">timeline</i>
-                <a className="landing__section--feature-item__content" href='#landing__section--2'>
+                {/* <a className="landing__section--feature-item__content" href='#landing__section--2'> */}
+                <a className="landing__section--feature-item__content" href='#landing__anchor2'>
                   <h5>Check in and Track Your Progress</h5>
                   <span>Learn More</span>
                   <i className="material-icons">keyboard_arrow_down</i>
@@ -82,7 +86,7 @@ class Landing extends React.Component {
               </div>
               <div className="landing__section--feature-item">
                 <i className="landing__section--feature-item__icon material-icons">person_add</i>
-                <a className="landing__section--feature-item__content" href='#landing__section--5'>
+                <a className="landing__section--feature-item__content" href='#landing__anchor3'>
                   <h5>Link Accounts with Your Doctor</h5>
                   <span>Learn More</span>
                   <i className="material-icons">keyboard_arrow_down</i>
@@ -90,15 +94,19 @@ class Landing extends React.Component {
               </div>
               <div className="landing__section--feature-item">
                 <i className="landing__section--feature-item__icon material-icons">people_outline</i>
-                <a className="landing__section--feature-item__content" href='#landing__section--l-com'>
+                <a className="landing__section--feature-item__content" href='#landing__anchor5'>
                   <h5>Join the Community</h5>
                   <span>Learn More</span>
                   <i className="material-icons">keyboard_arrow_down</i>
                 </a>
               </div>
             </div>
-            <ScrollableAnchor id={'landing__section--3'}>
-              <div className="landing__section landing__section--3">
+
+            <ScrollableAnchor id={'landing__anchor1'}>
+              <div className='landing__anchor1'></div>
+            </ScrollableAnchor>
+            <div className="landing__section landing__section--3">
+              <div className='landing__section__subsection--top'>
                 <div className='landing__section__subsection--preview'>
                   <div className='landing__section__preview-image__wrapper'>
                     <Slider dots={true} arrows={false} autoplay={true}>
@@ -117,9 +125,16 @@ class Landing extends React.Component {
                   </div>
                 </div>
               </div>
+              <div className='landing__section__subsection--bottom'>
+                <a className='' href='#landing__anchor2'><i className='large black-text material-icons'>keyboard_arrow_down</i></a>
+              </div>
+            </div>
+
+            <ScrollableAnchor id={'landing__anchor2'}>
+              <div className='landing__anchor2'></div>
             </ScrollableAnchor>
-            <ScrollableAnchor id={'landing__section--2'}>
-              <div className="landing__section landing__section--2">
+            <div className="landing__section landing__section--2">
+              <div className='landing__section__subsection--top'>
                 <div className='landing__section__subsection--content'>
                   <div className='landing__section__title'>30 second check ins</div>
                   <div className='landing__section__description'>
@@ -136,10 +151,16 @@ class Landing extends React.Component {
                   </div>
                 </div>
               </div>
-            </ScrollableAnchor>
+              <div className='landing__section__subsection--bottom'>
+                <a className='' href='#landing__anchor3'><i className='large black-text material-icons'>keyboard_arrow_down</i></a>
+              </div>
+            </div>
 
-            <ScrollableAnchor id={'landing__section--4'}>
-              <div className="landing__section landing__section--4">
+            <ScrollableAnchor id={'landing__anchor3'}>
+              <div className='landing__anchor3'></div>
+            </ScrollableAnchor>
+            <div className="landing__section landing__section--4">
+              <div className='landing__section__subsection--top'>
                 <div className='landing__section__subsection--content'>
                   <div className='landing__section__title'>Powerful Graphing</div>
                   <div className='landing__section__description'>
@@ -152,10 +173,16 @@ class Landing extends React.Component {
                   </div>
                 </div>
               </div>
-            </ScrollableAnchor>
+              <div className='landing__section__subsection--bottom'>
+                <a className='' href='#landing__anchor4'><i className='large black-text material-icons'>keyboard_arrow_down</i></a>
+              </div>
+            </div>
 
-            <ScrollableAnchor id={'landing__section--5'}>
-              <div className="landing__section landing__section--5 ">
+            <ScrollableAnchor id={'landing__anchor4'}>
+              <div className='landing__anchor4'></div>
+            </ScrollableAnchor>
+            <div className="landing__section landing__section--5 ">
+              <div className='landing__section__subsection--top'>
                 <div className='landing__section__subsection--preview'>
                   <div className='landing__section__preview-image__wrapper'>
                     <Slider dots={true} arrows={false} autoplay={true}>
@@ -174,13 +201,22 @@ class Landing extends React.Component {
                   </div>
                 </div>
               </div>
-            </ScrollableAnchor>
-
-            <ScrollableAnchor id={'landing__section--l-com'}>
-              <div className="landing__section landing__section--l-com">
-                <h4>Share you thoughts or ask questions in the Lyme Comunity</h4>
+              <div className='landing__section__subsection--bottom'>
+                <a className='' href='#landing__anchor5'><i className='large black-text material-icons'>keyboard_arrow_down</i></a>
               </div>
+            </div>
+
+            <ScrollableAnchor id={'landing__anchor5'}>
+              <div className='landing__anchor5'></div>
             </ScrollableAnchor>
+            <div className="landing__section landing__section--l-com">
+              <div className='landing__section__subsection--top'>
+                <h4 className=''>Share you thoughts or ask questions in the Lyme Comunity</h4>
+              </div>
+              <div className='landing__section__subsection--bottom'>
+                <a href='#landing__anchor--top'>Back to Top</a>
+              </div>
+            </div>
 
           </div>
         }

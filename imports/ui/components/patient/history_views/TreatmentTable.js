@@ -5,21 +5,13 @@ import moment from 'moment';
 import { Row, Input, Button } from 'react-materialize';
 import {capitalizePhrase} from '/imports/utils/utils';
 
-export default class SymptomHistoryTable extends React.Component {
-  // constructor(props) {
-  //   super(props);
-  //
-  //   this.state = {
-  //     graphedSymptoms: [],
-  //   }
-  // }
 
+export default class TreatmentTable extends React.Component {
   render() {
-    console.log(this.props.checkins);
     return (
       <div className='symptom-history__graph-view'>
         <Row>
-          <div className='symptom-history__title col s5'>Symptom Table</div>
+          <div className='symptom-history__title col s5'>Treatment Table</div>
           <Input s={2} type='select' label='Date Range' value={this.props.dateRangeOption} onChange={(e) => this.props.handleDateRangeChange(undefined, e.target.value)}>
             <option value='all_dates'>All Dates</option>
             <option value='seven_days'>Last 7 Days</option>
@@ -60,7 +52,7 @@ export default class SymptomHistoryTable extends React.Component {
           {this.props.checkins.map(checkin =>
             <div className="section" key={checkin.date}>
               <h4>{checkin.date}</h4>
-              { checkin.symptoms === undefined ?
+              { checkin.treatments === undefined ?
                 <div>
                   <p>You didn't check in on this date</p>
                   <Link
@@ -69,8 +61,8 @@ export default class SymptomHistoryTable extends React.Component {
                       pathname: "/patient/checkin",
                       state: {
                         checkinDate: checkin.date,
-                        symptoms: this.props.currentSymptoms,
-                        treatments: this.props.currentTreatments,
+                        symptoms: this.props.userSymptoms,
+                        treatments: this.props.userTreatments,
                         position: (this.props.checkins.length - checkin.index - 1)
                       },
                     }}>
@@ -95,6 +87,8 @@ export default class SymptomHistoryTable extends React.Component {
                             return {
                               name: treatment.name,
                               dateSelectMode: 'daily',
+                              // dateSelectMode: 'from now on',
+                              // daysOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
                             };
                           }) : undefined
                         },
@@ -105,18 +99,24 @@ export default class SymptomHistoryTable extends React.Component {
                   <table className='striped'>
                     <thead>
                       <tr>
-                        <th>Symptom</th>
-                        <th>Severity</th>
+                        <th>Treatment</th>
+                        <th>Compliance</th>
                       </tr>
                     </thead>
 
                     <tbody>
-                      {checkin.symptoms.map(checkinSymptom =>
-                        <tr key={checkinSymptom.name}>
-                          <td>{capitalizePhrase(checkinSymptom.name)}</td>
-                          <td>{checkinSymptom.severity === 0 ? 'N/A' : checkinSymptom.severity}</td>
+                      { checkin.treatments.length === 0 ?
+                        <tr>
+                          <td className="grey-text">No Treatments This Day</td>
                         </tr>
-                      )}
+                      :
+                        checkin.treatments.map(checkinTreatment =>
+                          <tr key={checkinTreatment.name}>
+                            <td>{checkinTreatment.name}</td>
+                            <td>{checkinTreatment.compliance === null ? 'Not Specified' : checkinTreatment.compliance === 'NPD' ? "Not Prescribed Today" : checkinTreatment.compliance}</td>
+                          </tr>
+                        )
+                      }
                     </tbody>
                   </table>
                 </div>
