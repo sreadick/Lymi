@@ -7,7 +7,6 @@ import { Session } from 'meteor/session';
 class NotableEvents extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       date: props.checkins[props.checkins.length - 1].date
     };

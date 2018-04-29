@@ -135,7 +135,7 @@ const PrivateHeader = (props) => {
                         to={{
                           pathname: '/patient/account',
                           state: {
-                            activeTab: 'medicalInfo'
+                            activeTab: 'practitioner'
                           }
                         }}>
                         Select Lyme Doctor

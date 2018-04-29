@@ -18,10 +18,14 @@
 }
 
 .treatment-chart__container {
-  // display: inline-block;
-  // width: 80%;
-  // padding: 0 1rem;
+  display: inline-block;
+  width: 100%;
 
+  &.rx-display {
+    width: 79%;
+  }
+
+  // padding: 0 1rem;
 }
 
 .treatment-chart__label__container {
@@ -35,13 +39,15 @@
   margin: 0 .7rem 0 .5rem;
 
   // max-width: 17%;
-  max-width: 19%;
+  // max-width: 19%;
   // width: 10rem;
   // background: pink;
   overflow-x: auto;
   overflow-y: hidden;
   // overflow-y: hidden;
   white-space: nowrap;
+
+  width: 17%;
 }
 .treatment-chart__label {
   height: calc(2rem + 1px);
@@ -186,7 +192,10 @@
 }
 
 .treatment-chart__legend__wrapper {
-
+  // background: green;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .treatment-chart__legend {
@@ -199,7 +208,6 @@
   // margin: $space 0 0 0;
   margin-top: $space;
   float: right;
-
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;

@@ -5,6 +5,8 @@ import { Row, Input, Button } from 'react-materialize';
 
 import SymptomChart from '../SymptomChart';
 
+// Todo: fix include symptom checkbox glitch //
+
 export default class SymptomSelectGraph extends React.Component {
   constructor(props) {
     super(props);
@@ -12,57 +14,29 @@ export default class SymptomSelectGraph extends React.Component {
     this.state = {
       graphedSymptoms: [],
     }
-    // this.handleChange = this.handleChange.bind(this);
   }
 
-  // handleChange(e) {
-  //   this.setState({
-  //     [e.target.name]: e.target.value
-  //   });
-  // }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.includeDeletedSymptoms === true && this.props.includeDeletedSymptoms === false) {
+      const graphedSymptoms = this.state.graphedSymptoms.slice();
+      // const deletedSymptoms = prevProps.symptoms.filter(symptom => !prevProps.currentSymptomNames.includes(symptom.name))
+      const currentGraphedSymptoms = graphedSymptoms.filter(symptom => prevProps.currentSymptomNames.includes(symptom.name))
+      // deletedSymptoms.forEach((deletedSymptom) => {
+      //   if (graphedSymptoms.map(graphedSymptom => graphedSymptom.name).includes(deletedSymptom.name)) {
+      //     const deletedSymptomIndex = graphedSymptoms.indexOf(deletedSymptom);
+      //     graphedSymptoms.splice(deletedSymptomIndex, 1);
+      //   }
+      // });
+      // console.log(graphedSymptoms);
+      // console.log(currentGraphedSymptoms);
+      this.setState({graphedSymptoms: currentGraphedSymptoms});
+    }
+  }
 
   render() {
     return (
-      <div className='symptom-history__graph-view'>
-        <Row>
-          <div className='symptom-history__title col s5'>Select up to 5 symptoms to graph:</div>
-          <Input s={2} type='select' label='Date Range' value={this.props.dateRangeOption} onChange={(e) => this.props.handleDateRangeChange(undefined, e.target.value)}>
-            <option value='all_dates'>All Dates</option>
-            <option value='seven_days'>Last 7 Days</option>
-            <option value='thirty_days'>Last 30 Days</option>
-            <option value='twelve_months'>Last 12 Months</option>
-            <option value='year_to_current'>Year to Date</option>
-            {Meteor.user().profile.medical.appointments &&
-              <option value='prev_appt_to_current'>Since Last Appointment</option>
-            }
-            <option value='custom'>Custom Range</option>
-          </Input>
-          {this.props.dateRangeOption === 'custom' &&
-            <div>
-              <Input s={2} type='select' label='Start Date' value={this.props.startDate || ''} onChange={(e) => this.props.handleDateRangeChange('graphStartDate', e.target.value)}>
-                {this.props.checkinDates.map(date =>
-                  <option
-                    key={date}
-                    value={date}
-                    disabled={moment(date, 'MMMM Do YYYY').isAfter(moment(this.props.endDate, "MMMM Do YYYY"), 'day')}>
-                    {date}
-                  </option>
-                )}
-              </Input>
-              <Input s={2} type='select' label='End Date' value={this.props.endDate || ''} onChange={(e) => this.props.handleDateRangeChange('graphEndDate', e.target.value)}>
-                {this.props.checkinDates.map(date =>
-                  <option
-                    key={date}
-                    value={date}
-                    disabled={moment(date, 'MMMM Do YYYY').isBefore(moment(this.props.startDate, "MMMM Do YYYY"), 'day')}>
-                    {date}
-                  </option>
-                )}
-              </Input>
-            </div>
-          }
-        </Row>
-        <div className='card'>
+      <div className='symptom-history__wrapper--select-five card'>
+        <div className='symptom-history__symptom-list--select-five'>
           {this.props.symptoms.map(symptom =>
             <Input
               key={symptom.name}
@@ -70,7 +44,7 @@ export default class SymptomSelectGraph extends React.Component {
               name='graphedSymptoms'
               value={symptom.name}
               label={symptom.name}
-              defaultChecked={this.state.graphedSymptoms.includes(symptom.name)}
+              isChecked={this.state.graphedSymptoms.includes(symptom.name)}
               disabled={this.state.graphedSymptoms.map(graphedSymptom => graphedSymptom.name).includes(symptom.name) === false && this.state.graphedSymptoms.length >= 5}
               onChange={() => {
                 const graphedSymptoms = this.state.graphedSymptoms.slice();
@@ -84,6 +58,8 @@ export default class SymptomSelectGraph extends React.Component {
               }}
             />
           )}
+        </div>
+        <div className='symptom-history__chart-wrapper--select-five'>
           <SymptomChart
             symptomNames={this.state.graphedSymptoms.map(symptom => symptom.name)}
             symptomColors={this.state.graphedSymptoms.map(symptom => symptom.color)}
@@ -92,6 +68,7 @@ export default class SymptomSelectGraph extends React.Component {
             startDate={this.props.startDate}
             endDate={this.props.endDate}
             padding={{top: 30, right: 30, bottom: 10, left: 0}}
+            height={150}
           />
         </div>
       </div>

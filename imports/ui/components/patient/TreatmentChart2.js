@@ -53,7 +53,7 @@ export default TreatmentChart2 = (props) => {
           })}
         </div>
       }
-      <div className='treatment-chart__container'>
+      <div className={`treatment-chart__container ${props.showLabels !== false && 'rx-display'}`}>
         <div className='treatment-chart__item__container z-depth-3'>
           {props.treatments.map((treatment, treatmentIndex) =>
             <div key={treatment.name} className='treatment-chart__item'>
@@ -154,7 +154,7 @@ export default TreatmentChart2 = (props) => {
           )}
         </div>
       </div>
-      {/* <div className='treatment-chart__legend__wrapper'> */}
+      <div className='treatment-chart__legend__wrapper'>
         <div className='treatment-chart__legend'>
           <div className='treatment-chart__legend__item'>
             <div className='treatment-chart__legend__item__block yes'></div>
@@ -191,7 +191,7 @@ export default TreatmentChart2 = (props) => {
             </span>
           </div>
         </div>
-      {/* </div> */}
+      </div>
     </div>
   );
 };

@@ -7,6 +7,22 @@
   display: flex;
   flex-direction: row;
 }
+.symptom-history__wrapper--select-five {
+  display: flex;
+  justify-content: space-between;
+  padding: 2rem 0 2rem 1.4rem;
+  // height: 30rem;
+  width: 100%;
+
+  .symptom-history__symptom-list--select-five {
+    margin-top: 2rem;
+    width: 20%;
+  }
+  .symptom-history__chart-wrapper--select-five {
+    height: 100%;
+    width: 80%;
+  }
+}
 
 .symptom-history__navbar__container {
   width: 15%;
@@ -88,4 +104,15 @@
 .symptom-history__title--system {
   font-size: 2rem;
   margin: 0;
+}
+
+.symptom-history__toggle-link {
+  text-decoration: underline;
+  color: #23f;
+  font-size: 1.1rem;
+  cursor: pointer;
+  width: 10rem;
+  &.active {
+    color: #999;
+  }
 }

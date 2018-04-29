@@ -67,7 +67,7 @@ const SxRxDisplay = (props) => {
                 </i>
               </Link>
               <ReactTooltip id='fullSymptomHistory' effect='solid'>
-                Full Symptom History
+                View Full History
               </ReactTooltip>
             </div>
           }
@@ -77,7 +77,10 @@ const SxRxDisplay = (props) => {
                 symptomNames={props.userSymptoms.filter(symptom => symptom.system === props.activeSymptomGroup).map(symptom => symptom.name)}
                 checkins={props.modifiedSymptomCheckins}
                 symptomColors={props.userSymptoms.filter(symptom => symptom.system === props.activeSymptomGroup).map(symptom => symptom.color)}
-                height={125}
+                startDate={props.startDate || undefined}
+                endDate={props.endDate  || undefined}
+                height={100}
+                // height={125}
                 // padding={{top: 0, right: 0, bottom: 10, left: 0}}
               />
               // <div className='jklsz'>
@@ -112,7 +115,9 @@ const SxRxDisplay = (props) => {
               <TreatmentChart2
                 treatments={props.userTreatments}
                 currentTreatmentNames={props.userTreatments.map(treatment => treatment.name)}
-                checkins={props.extendedCheckins.length > 13 ? props.extendedCheckins.slice(-14) : props.extendedCheckins}
+                // checkins={props.extendedCheckins.length > 13 ? props.extendedCheckins.slice(-14) : props.extendedCheckins}
+                // checkins={props.filteredCheckins ? props.filteredCheckins : props.extendedCheckins.length > 13 ? props.extendedCheckins.slice(-14) : props.extendedCheckins}
+                checkins={props.filteredCheckins ? props.filteredCheckins : props.extendedCheckins.length <= 14 ? props.extendedCheckins : props.extendedCheckins.slice(-14)}
                 showLabels={false}
               />
               // <div className='bhgjs'>
@@ -130,15 +135,15 @@ const SxRxDisplay = (props) => {
   );
 }
 
-export default createContainer(() => {
+export default createContainer((props) => {
   const symptomsHandle = Meteor.subscribe('userSymptoms');
   const treatmentsHandle = Meteor.subscribe('userTreatments');
   const checkinHandle = Meteor.subscribe('checkinHistories');
 
   const checkinHistory =  CheckinHistories.findOne();
   const userTreatments = UserTreatments.find().fetch();
-  const userSymptoms =  UserSymptoms.find().fetch();
-
+  // const userSymptoms =  UserSymptoms.find().fetch();
+  const userSymptoms =  props.displayedSymptoms || UserSymptoms.find().fetch();
   const userInfo = Meteor.user();
 
   const checkins = checkinHandle.ready() ? checkinHistory.checkins : [];
@@ -172,7 +177,6 @@ export default createContainer(() => {
     const GroupBLength = userSymptoms.filter(symptom => symptom.system === symptomSystemB).length;
     return GroupALength - GroupBLength;
   })
-
   return {
     userSymptoms: userSymptoms.map((symptom, index) => (
       {
