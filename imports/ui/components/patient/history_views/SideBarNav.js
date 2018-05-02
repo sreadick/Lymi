@@ -34,8 +34,14 @@ export default SideBarNav = (props) => (
       <div className={`symptom-history__navbar__tab ${props.selectedTab === 'symptomWorstGraph' && 'active'}`} onClick={() => props.handleTabChange('symptomWorstGraph', 'Most Severe')}>
         Most Severe
       </div>
-      <div className={`symptom-history__navbar__tab ${props.selectedTab === 'symptomChangesGraph' && 'active'}`} onClick={() => props.handleTabChange('symptomChangesGraph', 'Greatest Changes')}>
+      {/* <div className={`symptom-history__navbar__tab ${props.selectedTab === 'symptomChangesGraph' && 'active'}`} onClick={() => props.handleTabChange('symptomChangesGraph', 'Greatest Changes')}>
         Biggest Changes
+      </div> */}
+      <div className={`symptom-history__navbar__tab ${props.selectedTab === 'symptomMostImprovedGraph' && 'active'}`} onClick={() => props.handleTabChange('symptomMostImprovedGraph', 'Most Improved')}>
+        Most Improved
+      </div>
+      <div className={`symptom-history__navbar__tab ${props.selectedTab === 'symptomLeastImprovedGraph' && 'active'}`} onClick={() => props.handleTabChange('symptomLeastImprovedGraph', 'Least Improved')}>
+        Least Improved
       </div>
       <div className={`symptom-history__navbar__tab ${props.selectedTab === 'symptomHistoryTable' && 'active'}`} onClick={() => props.handleTabChange('symptomHistoryTable', 'Symptom Table')}>
         Symptom Table

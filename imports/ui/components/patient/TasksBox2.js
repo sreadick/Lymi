@@ -265,7 +265,7 @@ class TasksBox2 extends React.Component {
               </Link>
             </div>
           }
-          <div className='task-box__item'>
+          {/* <div className='task-box__item'>
             <p className='grey-text'>Daily Completion: {this.props.checkinComplianceData.roundedCheckinPercentage}%</p>
             <CheckinPieChart
               daysCheckedIn={this.props.checkinComplianceData.daysCheckedIn}
@@ -275,7 +275,7 @@ class TasksBox2 extends React.Component {
               height={130}
               padding={{top: 10}}
             />
-          </div>
+          </div> */}
         </div>
 
 

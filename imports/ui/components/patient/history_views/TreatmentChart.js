@@ -9,7 +9,7 @@ import TreatmentChartUI from '../TreatmentChart2';
 export default class TreatmentChart extends React.Component {
   render() {
     return (
-      <div className='card'>
+      <div className=''>
         <TreatmentChartUI
           treatments={this.props.userTreatments}
           currentTreatmentNames={this.props.userTreatments.map(treatment => treatment.name)}

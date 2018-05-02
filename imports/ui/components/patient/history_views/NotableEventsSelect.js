@@ -12,7 +12,7 @@ export default class NotableEventsSelect extends React.Component {
     return (
       <div>
         {notableEventCheckins.length > 0 ?
-          <div className='card'>
+          <div className=''>
             <NotableEvents
               checkins={notableEventCheckins}
              />

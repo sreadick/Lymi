@@ -6,8 +6,12 @@ import {capitalizePhrase, getColor} from '/imports/utils/utils';
 
 import SymptomChart from '../SymptomChart';
 
-export default class SymptomChangesGraph extends React.Component {
+export default class SymptomMostImprovedGraph extends React.Component {
   render() {
+    const graphedDays = moment(this.props.endDate, 'MMMM Do YYYY').diff(moment(this.props.startDate, 'MMMM Do YYYY'), 'days') + 1;
+    if (graphedDays < 14) {
+      return <p>Two weeks of data are required for this graph.</p>
+    }
     return (
       <div className=''>
         {this.props.symptoms.map((symptom, index) => (

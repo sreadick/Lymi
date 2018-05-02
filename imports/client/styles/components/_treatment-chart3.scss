@@ -55,6 +55,7 @@
   // height: 2rem;
   // line-height: 2rem;
   text-align: right;
+  margin-right: .3rem;
   // min-width: 1rem;
   // width: auto;
   // overflow-x: auto;
@@ -140,6 +141,9 @@
     // color: #222;
     // font-weight: 400;
   }
+  &.half span {
+    transform:scale(1.1, 1.8);
+  }
 }
 .treatment-chart__block-segment.Some {
   // background: $some-checkin-answer-primary;
@@ -182,7 +186,13 @@
     // color: #00F;
     font-weight: 800;
     line-height: normal;
-
+  }
+  &.half {
+    font-size: .6rem;
+    color: #222;
+    -ms-transform: rotate(-45deg); /* IE 9 */
+    -webkit-transform: rotate(-45deg); /* Chrome, Safari, Opera */
+    transform: rotate(-45deg);
   }
 }
 

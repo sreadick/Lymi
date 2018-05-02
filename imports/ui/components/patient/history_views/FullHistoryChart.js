@@ -18,6 +18,8 @@ export default class FullHistoryChart extends React.Component {
           filteredCheckins={this.props.extendedCheckins}
           // showFullHistory={this.props.showFullHistory}
           displayedSymptoms={this.props.displayedSymptoms}
+          showHeader={false}
+          rxlabelType='normal'
         />
       </div>
     );

@@ -2,20 +2,24 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import moment from 'moment';
 import { Row, Input, Button } from 'react-materialize';
-import {capitalizePhrase} from '/imports/utils/utils';
+import {capitalizePhrase, getColor} from '/imports/utils/utils';
 
 import SymptomChart from '../SymptomChart';
 
 export default class SymptomWorstGraph extends React.Component {
   render() {
+    const graphedDays = moment(this.props.endDate, 'MMMM Do YYYY').diff(moment(this.props.startDate, 'MMMM Do YYYY'), 'days') + 1;
+    if (graphedDays < 14) {
+      return <p>Two weeks of data are required for this graph.</p>
+    }
     return (
-      <div className='card'>
+      <div className=''>
         {this.props.symptoms.map((symptom, index) => (
           <div key={symptom._id}>
             <span
               className={`checkin-symptom-item ${!this.props.currentSymptomNames.find(userSymptomName => userSymptomName === symptom.name) ? 'deleted' : ''}`}
               style={{
-                color: symptom.color,
+                color: getColor(index)
               }}>
               {capitalizePhrase(symptom.name)}
             </span>
@@ -23,7 +27,7 @@ export default class SymptomWorstGraph extends React.Component {
         ))}
         <SymptomChart
           symptomNames={this.props.symptoms.map(symptom => symptom.name)}
-          symptomColors={this.props.symptoms.map(symptom => symptom.color)}
+          symptomColors={this.props.symptoms.map((symptom, index) => getColor(index))}
           checkins={this.props.checkins}
           currentSymptomNames={this.props.currentSymptomNames}
           startDate={this.props.startDate}

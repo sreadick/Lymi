@@ -12,11 +12,10 @@ export default class HistoryHeader extends React.Component {
       return <div></div>
     }
     return (
-      <div>
-        <Row>
-          <div className='symptom-history__title col'>{this.props.title}</div>
-          {/* <div className='symptom-history__title col s5'>{this.props.title}</div> */}
-          <Input s={2} type='select' label='Date Range' value={this.props.dateRangeOption} onChange={(e) => this.props.handleDateRangeChange(undefined, e.target.value)}>
+      <div className='symptom-history__header'>
+        <div className='symptom-history__title'>{this.props.title}</div>
+        <Row className=''>
+          <Input s={this.props.dateRangeOption === 'custom' ? 4 : 12} type='select' label='Date Range' value={this.props.dateRangeOption} onChange={(e) => this.props.handleDateRangeChange(undefined, e.target.value)}>
             <option value='all_dates'>All Dates</option>
             <option
               value='seven_days'
@@ -46,46 +45,46 @@ export default class HistoryHeader extends React.Component {
             <option value='custom'>Custom Range</option>
           </Input>
           {this.props.dateRangeOption === 'custom' &&
-            <div>
-              <Input s={2} type='select' label='Start Date' value={this.props.startDate || ''} onChange={(e) => this.props.handleDateRangeChange('graphStartDate', e.target.value)}>
-                {/* {this.props.checkinDates.map(date => */}
-                {this.props.allDates.map(date =>
-                  <option
-                    key={date}
-                    value={date}
-                    disabled={moment(date, 'MMMM Do YYYY').isAfter(moment(this.props.endDate, "MMMM Do YYYY"), 'day')}>
-                    {date}
-                  </option>
-                )}
-              </Input>
-              <Input s={2} type='select' label='End Date' value={this.props.endDate || ''} onChange={(e) => this.props.handleDateRangeChange('graphEndDate', e.target.value)}>
-                {/* {this.props.checkinDates.map(date => */}
-                {this.props.allDates.map(date =>
-                  <option
-                    key={date}
-                    value={date}
-                    disabled={moment(date, 'MMMM Do YYYY').isBefore(moment(this.props.startDate, "MMMM Do YYYY"), 'day')}>
-                    {date}
-                  </option>
-                )}
-              </Input>
-            </div>
+            // <div>
+            <Input s={4} type='select' label='Start Date' value={this.props.startDate || ''} onChange={(e) => this.props.handleDateRangeChange('graphStartDate', e.target.value)}>
+              {/* {this.props.checkinDates.map(date => */}
+              {this.props.allDates.map(date =>
+                <option
+                  key={date}
+                  value={date}
+                  disabled={moment(date, 'MMMM Do YYYY').isAfter(moment(this.props.endDate, "MMMM Do YYYY"), 'day')}>
+                  {date}
+                </option>
+              )}
+            </Input>
           }
-          {this.props.showDeletedSymptomTab &&
-            <p
-              className={`col symptom-history__toggle-link ${this.props.includeDeletedSymptoms && 'active'}`}
-              onClick={() => Session.set('includeDeletedSymptoms', !Session.get('includeDeletedSymptoms'))}>
-              {this.props.includeDeletedSymptoms ?  'Hide Deleted Symptoms' : 'Show Deleted Symptoms'}
-            </p>
-          }
-          {this.props.showDeletedTreatmentTab &&
-            <p
-              className={`col symptom-history__toggle-link ${this.props.includeDeletedTreatments && 'active'}`}
-              onClick={() => Session.set('includeDeletedTreatments', !Session.get('includeDeletedTreatments'))}>
-              {this.props.includeDeletedTreatments ?  'Hide Deleted Treatments' : 'Show Deleted Treatments'}
-            </p>
+          {this.props.dateRangeOption === 'custom' &&
+            <Input s={4} type='select' label='End Date' value={this.props.endDate || ''} onChange={(e) => this.props.handleDateRangeChange('graphEndDate', e.target.value)}>
+              {this.props.allDates.map(date =>
+                <option
+                  key={date}
+                  value={date}
+                  disabled={moment(date, 'MMMM Do YYYY').isBefore(moment(this.props.startDate, "MMMM Do YYYY"), 'day')}>
+                  {date}
+                </option>
+              )}
+            </Input>
           }
         </Row>
+        {this.props.showDeletedSymptomTab &&
+          <p
+            className={`symptom-history__toggle-link ${this.props.includeDeletedSymptoms && 'active'}`}
+            onClick={() => Session.set('includeDeletedSymptoms', !Session.get('includeDeletedSymptoms'))}>
+            {this.props.includeDeletedSymptoms ?  'Hide Deleted Symptoms' : 'Show Deleted Symptoms'}
+          </p>
+        }
+        {this.props.showDeletedTreatmentTab &&
+          <p
+            className={`symptom-history__toggle-link ${this.props.includeDeletedTreatments && 'active'}`}
+            onClick={() => Session.set('includeDeletedTreatments', !Session.get('includeDeletedTreatments'))}>
+            {this.props.includeDeletedTreatments ?  'Hide Deleted Treatments' : 'Show Deleted Treatments'}
+          </p>
+        }
       </div>
     );
   }

@@ -3,10 +3,28 @@
   padding: 4rem 0 0 0;
 }
 
+.symptom-history__header {
+  // background: green;
+  width: 100%;
+  height: 6rem;
+  display: flex;
+  align-items: center;
+  background: #fff;
+  // padding: 0 1rem;
+  .row {
+    margin-bottom: 0 !important;
+    margin-left: 0 !important;
+    // background: blue;
+  }
+
+
+}
+
 .symptom-history__flex-wrapper {
   display: flex;
   flex-direction: row;
 }
+
 .symptom-history__wrapper--select-five {
   display: flex;
   justify-content: space-between;
@@ -91,15 +109,19 @@
   min-height: calc(100vh - 4rem);
   width: 85%;
   padding-top: 2rem;
+  padding: 2rem 2rem 0 2rem;
+
 }
 
 .symptom-history__graph-view {
-  padding: 0 2rem;
+  // padding: 0 2rem;
+  padding: 0 1.3rem;
 }
 
 .symptom-history__title {
-  font-size: 1.6rem;
-  color: #335;
+  font-size: 1.5rem;
+  color: #336;
+  width: 22%;
 }
 .symptom-history__title--system {
   font-size: 2rem;
@@ -107,11 +129,14 @@
 }
 
 .symptom-history__toggle-link {
-  text-decoration: underline;
   color: #23f;
+  color: #000;
   font-size: 1.1rem;
   cursor: pointer;
   width: 10rem;
+  &:hover {
+    text-decoration: underline;
+  }
   &.active {
     color: #999;
   }

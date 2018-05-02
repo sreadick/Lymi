@@ -51,7 +51,7 @@ const SxRxDisplay = (props) => {
         </div>
 
         <div className="dashboard__chart__container">
-          {props.checkins.length > 0 &&
+          {(props.checkins.length > 0 && props.showHeader) &&
             <div className="dashboard__chart__header">
               <span className=''>
                 { props.modifiedSymptomCheckins.length >= 14 ? 'Past 2 Weeks'
@@ -79,7 +79,8 @@ const SxRxDisplay = (props) => {
                 symptomColors={props.userSymptoms.filter(symptom => symptom.system === props.activeSymptomGroup).map(symptom => symptom.color)}
                 startDate={props.startDate || undefined}
                 endDate={props.endDate  || undefined}
-                height={100}
+                showXAxisLabels={false}
+                height={115}
                 // height={125}
                 // padding={{top: 0, right: 0, bottom: 10, left: 0}}
               />
@@ -101,13 +102,24 @@ const SxRxDisplay = (props) => {
         <div className='dashboard__section'>
           <div className="dashboard__list__container">
             <ul className='collection dashboard__list'>
-              {props.userTreatments.map((treatment) =>
-                <TreatmentCollapsible
-                  key={treatment._id}
-                  treatment={treatment}
-                  takeTreatmentToday={!!props.todayTreatments.find(todayTreatment => todayTreatment._id === treatment._id)}
-                />
-              )}
+              {props.userTreatments.map((treatment) => {
+                if (props.rxlabelType === 'dropdown') {
+                  return (
+                    <TreatmentCollapsible
+                      key={treatment._id}
+                      treatment={treatment}
+                      takeTreatmentToday={!!props.todayTreatments.find(todayTreatment => todayTreatment._id === treatment._id)}
+                    />
+                  );
+                }
+                return (
+                  <div
+                    key={treatment._id}
+                    className='treatment-chart__label'>
+                    {treatment.name}
+                  </div>
+                )
+              })}
             </ul>
           </div>
           <div className='dashboard__chart__container'>
@@ -119,6 +131,7 @@ const SxRxDisplay = (props) => {
                 // checkins={props.filteredCheckins ? props.filteredCheckins : props.extendedCheckins.length > 13 ? props.extendedCheckins.slice(-14) : props.extendedCheckins}
                 checkins={props.filteredCheckins ? props.filteredCheckins : props.extendedCheckins.length <= 14 ? props.extendedCheckins : props.extendedCheckins.slice(-14)}
                 showLabels={false}
+                rxlabelType={props.rxlabelType}
               />
               // <div className='bhgjs'>
               //   <TreatmentChart3

@@ -26,6 +26,7 @@ import EventsInfo from '../../components/doctor/patient-info/EventsInfo';
 
 // Todo: App crashes if no check-ins or specific check-in items (e.g. notable events).
 // Todo: Make configureAnchors offset dynamic).
+// Todo: History bar breaks pt name is too long
 
 configureAnchors({offset: -120, scrollDuration: 800});
 
@@ -130,7 +131,14 @@ class PatientSummary2 extends React.Component {
     } else if (!props.patient) {
       return (
         <div className='page-content doctor'>
-          <h2>Patient Not Found</h2>
+          <h2 className='white-text'>Patient Not Found</h2>
+          <Link className='blue btn' to='/doctor/home'>Go Back</Link>
+        </div>
+      )
+    } else if (!props.patientCheckinHistory.checkins || props.patientCheckinHistory.checkins.length === 0) {
+      return (
+        <div className='page-content doctor'>
+          <h2 className='white-text'>No Patient History</h2>
           <Link className='blue btn' to='/doctor/home'>Go Back</Link>
         </div>
       )
@@ -345,7 +353,7 @@ export default createContainer(props => {
     }
   })
 
-  const symptomsExtendedData = (currentPatientsHandle.ready() && patientCheckinHistoriesHandle.ready()) ? sortSymptoms(patientSymptoms, patientCheckinHistory.checkins, patientCheckinHistory.checkins[0].date, patientCheckinHistory.checkins[patientCheckinHistory.checkins.length - 1].date) : [];
+  const symptomsExtendedData = (currentPatientsHandle.ready() && patientCheckinHistoriesHandle.ready() && patientCheckinHistory && patientCheckinHistory.checkins.length > 0) ? sortSymptoms(patientSymptoms, patientCheckinHistory.checkins, patientCheckinHistory.checkins[0].date, patientCheckinHistory.checkins[patientCheckinHistory.checkins.length - 1].date) : [];
   const symptomsSeveritySorted = symptomsExtendedData.slice().sort((symptomA, symptomB) => symptomB.severityAverage - symptomA.severityAverage);
   const symptomsChangeSorted = symptomsExtendedData.slice().sort((symptomA, symptomB) => symptomB.biggestChangeAverage - symptomA.biggestChangeAverage);
 

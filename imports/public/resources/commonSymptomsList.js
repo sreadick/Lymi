@@ -1711,262 +1711,302 @@ export const commonSymptomsList = [
   {
     name: 'Joint Pain',
     system: 'Musculoskeletal',
-    group: 'Joints and Muscles',
+    group: 'Musculoskeletal',
     description: '',
     dx: ['Lyme', 'Bartonella', 'Mycoplasma']
   },
   {
     name: 'Back Pain',
     system: 'Musculoskeletal',
-    group: 'Joints and Muscles',
-    description: 'Neck or Back Pain',
+    group: 'Musculoskeletal',
+    description: '',
     dx: ['Lyme', 'Bartonella']
-  },
-  {
-    name: 'Neck Creaks',
-    system: 'Musculoskeletal',
-    group: 'Joints and Muscles',
-    description: 'Neck creaks and cracks',
-    dx: ['Lyme']
-  },
-  {
-    name: 'Hip Pain',
-    system: 'Musculoskeletal',
-    group: 'Joints and Muscles',
-    description: 'Hip pain when walking or standing',
-    dx: ['Lyme', 'Bartonella', 'Mycoplasma']
   },
   {
     name: 'Swollen Joints',
     system: 'Musculoskeletal',
-    group: 'Joints and Muscles',
+    group: 'Musculoskeletal',
     description: '',
     dx: ['Lyme', 'Bartonella', 'Mycoplasma']
   },
   {
-    name: 'TMJ Pain',
+    name: 'TJM Pain',
     system: 'Musculoskeletal',
-    group: 'Joints and Muscles',
-    description: 'Jaw or TMJ pain',
+    group: 'Musculoskeletal',
+    description: 'Pain in jaw joint',
     dx: ['Lyme', 'Bartonella', 'Mycoplasma']
   },
   {
-    name: 'Stiffness',
+    name: 'Joint Stiffness',
     system: 'Musculoskeletal',
-    group: 'Joints and Muscles',
-    description: 'Stiffness in spine or other joints',
+    group: 'Musculoskeletal',
+    description: 'Stiffness in joints of limbs or hands',
+    dx: ['Lyme', 'Bartonella', 'Mycoplasma']
+  },
+  {
+    name: 'Spine Stiffness',
+    system: 'Musculoskeletal',
+    group: 'Musculoskeletal',
+    description: '',
     dx: ['Lyme', 'Bartonella', 'Mycoplasma']
   },
   {
     name: 'Muscle Cramps',
     system: 'Musculoskeletal',
-    group: 'Joints and Muscles',
+    group: 'Musculoskeletal',
     description: '',
     dx: ['Lyme', 'Bartonella', 'Mycoplasma']
   },
   {
     name: 'Muscle Weakness',
     system: 'Musculoskeletal',
-    group: 'Joints and Muscles',
+    group: 'Musculoskeletal',
     description: '',
-    dx: ['Lyme', 'Bartonella', 'Mycoplasma']},
+    dx: ['Lyme', 'Bartonella', 'Mycoplasma']
+  },
   {
-    name: 'Muscle Twitches',
+    name: 'Muscle Spasms',
     system: 'Musculoskeletal',
-    group: 'Joints and Muscles',
+    group: 'Musculoskeletal',
+    description: 'Twitching or spasming',
+    dx: ['Lyme', 'Bartonella', 'Mycoplasma']
+  },
+  {
+    name: 'Muscle Pain',
+    system: 'Musculoskeletal',
+    group: 'Musculoskeletal',
     description: '',
     dx: ['Lyme', 'Bartonella', 'Mycoplasma']
   },
 
+
   // Neuromuscular //
   {
-    name: 'Balance or Gait Problems',
+    name: 'Unsteady Gait',
     system: 'Neurological',
-    description: 'Balance problems, "tippiness", or need to walk with wide gait',
+    group: 'Neurological',
+    description: '',
     dx: ['Lyme', 'Bartonella']
   },
   {
     name: 'Vertigo',
     system: 'Neurological',
+    group: 'Neurological',
     description: 'A sense that things are spinning',
     dx: ['Lyme', 'Bartonella']
   },
   {
-    name: 'Postural Dizziness',
+    name: 'Dizziness',
     system: 'Neurological',
-    description: 'Dizziness when rising up',
-    dx: ['Lyme', 'Bartonella', 'Babesia']
-  },
-  {
-    name: 'POTS',
-    system: 'Neurological',
-    description: 'Very rapid pulse when standing up from sitting',
+    group: 'Neurological',
+    description: 'Postural or exertional lightheadedness or blacking out',
     dx: ['Lyme', 'Bartonella', 'Babesia']
   },
   {
     name: 'Shooting Pains',
     system: 'Neurological',
-    description: 'Shooting pain in limbs',
+    group: 'Neurological',
+    description: '',
     dx: ['Lyme', 'Bartonella']
   },
   {
     name: 'Numbness in Hands or Feet',
     system: 'Neurological',
+    group: 'Neurological',
     description: '',
     dx: ['Lyme', 'Bartonella']
   },
   {
     name: 'Tingling of Fingers or Toes',
     system: 'Neurological',
+    group: 'Neurological',
     description: '',
     dx: ['Lyme', 'Bartonella']
   },
   {
     name: 'Vibratory Feelings',
     system: 'Neurological',
+    group: 'Neurological',
     description: '',
     dx: ['Lyme', 'Bartonella', 'Babesia']
   },
   {
-    name: 'Foot Pain',
+    name: 'Burning Soles',
     system: 'Neurological',
-    description: 'Pain in soles of feet especially in morning',
+    group: 'Neurological',
+    description: '',
     dx: ['Bartonella']
   },
 
   // Cognitive //
   {
-    name: 'Slow Processing',
+    name: 'Brain Fog',
     system: 'Cognitive',
-    description: 'Slowed thinking and responding',
+    group: 'Cognitive',
+    description: 'Inability to think a respond quickly',
     dx: ['Lyme', 'Bartonella', 'Babesia']
   },
   {
-    name: 'Problems concentration/distractible',
+    name: 'Problems Concentating',
     system: 'Cognitive',
-    description: '',
+    group: 'Cognitive',
+    description: 'Easily distractable ',
     dx: ['Lyme', 'Bartonella', 'Babesia']
   },
   {
-    name: 'Problem Learning New Information',
+    name: 'Difficulty Learning',
     system: 'Cognitive',
-    description: '',
+    group: 'Cognitive',
+    description: 'Difficulty taking in new information',
     dx: ['Lyme', 'Bartonella', 'Babesia']
   },
   {
-    name: 'Poor Short Term Memory',
+    name: 'Memory Problems',
     system: 'Cognitive',
+    group: 'Cognitive',
     description: '',
     dx: ['Lyme', 'Bartonella', 'Babesia']
   },
   {
     name: 'Mispeaking/Word Errors',
     system: 'Cognitive',
-    description: 'Problems finding words/mispeaking  ',
+    group: 'Cognitive',
+    description: '',
     dx: ['Lyme', 'Bartonella', 'Babesia']
   },
   {
-    name: 'Easily Overwhelmed',
+    name: 'Cognitive Fatigue',
     system: 'Cognitive',
-    description: 'Overwhelmed by cognitive tasks/decisions',
+    group: 'Cognitive',
+    description: 'Tired after lots of thinknig tasks',
     dx: ['Lyme', 'Bartonella', 'Babesia']
   },
   {
     name: 'Difficulty in Planning and Organizing',
     system: 'Cognitive',
+    group: 'Cognitive',
     description: '',
     dx: ['Lyme', 'Bartonella', 'Babesia']
   },
   {
-    name: 'Difficulty with Judgment/Impulsively',
+    name: 'Impulsively',
     system: 'Cognitive',
+    group: 'Cognitive',
+    description: 'Acting before you think',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+  {
+    name: 'Difficulty Starting a Project',
+    system: 'Cognitive',
+    group: 'Cognitive',
     description: '',
     dx: ['Lyme', 'Bartonella', 'Babesia']
   },
   {
-    name: 'Difficulty Starting or Completing a Project',
+    name: 'Indecisiveness',
     system: 'Cognitive',
+    group: 'Cognitive',
     description: '',
     dx: ['Lyme', 'Bartonella', 'Babesia']
   },
 
   // Psychiatric
   {
-    name: 'Emotionally Labile',
+    name: 'Mood Swings',
     system: 'Psychiatric',
-    description: 'Overly-reactive emotionally (lability)',
+    group: 'Psychiatric',
+    description: '',
     dx: ['Lyme', 'Bartonella', 'Babesia']
   },
   {
     name: 'Irritable',
     system: 'Psychiatric',
-    description: 'Irritable, agitated or euphoric mood',
+    group: 'Psychiatric',
+    description: 'Annoyed without reasonable cause',
     dx: ['Lyme', 'Bartonella', 'Babesia']
   },
   {
-    name: 'Depressed Mood',
+    name: 'Low or Blue Mood',
     system: 'Psychiatric',
+    group: 'Psychiatric',
     description: '',
     dx: ['Lyme', 'Bartonella', 'Babesia']
   },
   {
     name: 'Suicidal Thoughts',
     system: 'Psychiatric',
+    group: 'Psychiatric',
     description: '',
     dx: ['Lyme', 'Bartonella', 'Babesia']
   },
   {
-    name: 'Rages',
+    name: 'Easily Annoyed',
     system: 'Psychiatric',
+    group: 'Psychiatric',
     description: '',
     dx: ['Lyme', 'Bartonella', 'Babesia']
   },
   {
-    name: 'Anxious',
+    name: 'Anxierty',
     system: 'Psychiatric',
+    group: 'Psychiatric',
     description: '',
     dx: ['Lyme', 'Bartonella', 'Babesia']
   },
   {
     name: 'Panic attacks',
     system: 'Psychiatric',
-    description: '',
+    group: 'Psychiatric',
+    description: 'Sudden sense of fear or doom for no reason',
     dx: ['Lyme', 'Bartonella', 'Babesia']
   },
   {
-    name: 'Depersonalization',
+    name: 'Depersonalization or Derealization',
     system: 'Psychiatric',
+    group: 'Psychiatric',
     description: 'Feeling unreal or distant from the world',
     dx: ['Lyme', 'Bartonella', 'Babesia']
   },
   {
     name: 'Intrusive/Obsessional Thoughts',
     system: 'Psychiatric',
-    description: 'Unwanted thoughts, words,nonsense, or music',
+    group: 'Psychiatric',
+    description: 'Unwanted thoughts, words, nonsense, or music',
     dx: ['Lyme', 'Bartonella', 'Babesia']
   },
   {
-    name: 'Hallucinations',
+    name: 'Auditory Hallucinations',
     system: 'Psychiatric',
-    description: 'Hearing voices in your head',
+    group: 'Psychiatric',
+    description: 'Hearing voices unrelated to exterior noises',
+    dx: ['Lyme', 'Bartonella', 'Babesia']
+  },
+  {
+    name: 'Illustions',
+    system: 'Psychiatric',
+    group: 'Psychiatric',
+    description: 'Shapes or sounds resembling objects or words',
     dx: ['Lyme', 'Bartonella', 'Babesia']
   },
   {
     name: 'Violent Urges',
     system: 'Psychiatric',
+    group: 'Psychiatric',
     description: '',
     dx: ['Lyme', 'Bartonella', 'Babesia']
   },
   {
-    name: 'Fear of Germs/Need to Wash',
+    name: 'Phobias',
     system: 'Psychiatric',
-    description: '',
+    group: 'Psychiatric',
+    description: 'Unreasonable fears (germs, small spaces, crowds, etc.)',
     dx: ['Lyme', 'Bartonella', 'Babesia']
   },
   {
-    name: 'Checking OCD',
+    name: 'OCD',
     system: 'Psychiatric',
-    description: 'Need to check and recheck',
+    group: 'Psychiatric',
+    description: 'Need for rituals that seam unreasonable to others',
     dx: ['Lyme', 'Bartonella', 'Babesia']
   },
 

@@ -49,7 +49,10 @@ const Dashboard3 = (props) => {
       <div className="dashboard__flex-wrapper">
         <div className="dashboard__page__content">
 
-          <SxRxDisplay />
+          <SxRxDisplay
+            showHeader={true}
+            rxlabelType='dropdown'
+          />
           {/* <div className='dashboard__section z-depth-2'>
             <div className="dashboard__chart__symptom-group__list">
               {props.userSymptomGroups.map((symptomGroup, index, array) => {

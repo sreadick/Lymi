@@ -166,15 +166,19 @@ export const sortSymptoms = (symptoms, checkins, startDate, endDate) => {
     const biggestChangeAverage = biggestChangeScoresSum === 0 ? 0 : biggestChangeScoresSum / biggestChangeScores.length
     const severityAverage = weeklySeverityScores.reduce((acc, currentVal) => (acc + currentVal) / weeklySeverityScores.length);
 
+
+
     // console.log(symptom.name);
     // console.log(weeklySeverityScoreSet);
     // console.log(weeklySeverityScores);
     // console.log(severityAverage);
     // console.log(biggestChangeScores);
+    const improvementAverage = weeklySeverityScores.length >= 2 ? weeklySeverityScores[0] - weeklySeverityScores[weeklySeverityScores.length-1] : undefined;
     return {
       ...symptom,
       biggestChangeAverage,
-      severityAverage
+      severityAverage,
+      improvementAverage
     }
   });
     // return symptomsWithChangeAttr.sort((a, b) => b.biggestChangeAverage - a.biggestChangeAverage);
@@ -365,8 +369,15 @@ export const getExtendedSymptomHistory = (symptoms, checkins) => {
   return modifiedSymptomCheckins;
 }
 
-export const getExtendedHistory = (symptoms, treatments, checkins) => {
-  let dateArray = [...Array(14).keys()].map(index => moment().subtract(index, 'days').format("MMMM Do YYYY")).reverse();
+export const getExtendedHistory = (symptoms, treatments, checkins, historyDuration) => {
+  let numDays;
+  if (historyDuration === 'full') {
+    numDays = moment().startOf('day').diff(moment(Meteor.user().account.createdAt).startOf('day'), 'days') + 1;
+  } else {
+    numDays = 14;
+  }
+  // const b = moment(Meteor.user().account.createdAt).startOf('day');
+  let dateArray = [...Array(numDays).keys()].map(index => moment().subtract(index, 'days').format("MMMM Do YYYY")).reverse();
   if (dateArray.find(date => date === moment(Meteor.user().account.createdAt).format('MMMM Do YYYY'))) {
     dateArray = dateArray.slice(dateArray.indexOf(moment(Meteor.user().account.createdAt).format('MMMM Do YYYY')))
   }

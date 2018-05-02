@@ -414,6 +414,13 @@
 
 .treatment-collection-item__wrapper {
   padding: 10px 5px !important;
+  padding: 0 5px !important;
+
+  .Collapsible__trigger {
+    // padding: 0 !important;
+    // padding-top: 0;
+    // padding-bottom: 0;
+  }
 }
 .treatment-collection-item {
   .treatment-collection-item__name {
@@ -423,6 +430,7 @@
     span {
       position: relative;
       bottom: 10px;
+      bottom: 5px;
       // right: 2px;
       i {
         // margin-left: .3rem;

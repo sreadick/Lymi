@@ -79,17 +79,11 @@ class Profile extends React.Component {
             <div className='section'>
               {/* Daily check-in completion {Math.round(this.props.checkinComplianceData.checkinPercentage * 100) / 100}% */}
               Daily check-in completion: {this.props.checkinComplianceData.roundedCheckinPercentage}%
-              <CheckinPieChart
+              {/* <CheckinPieChart
                 daysCheckedIn={this.props.checkinComplianceData.daysCheckedIn}
                 daysNotCheckedIn={this.props.checkinComplianceData.daysNotCheckedIn}
                 animate={true}
                 showLegend={true}
-                height={70}
-               />
-              {/* Daily check-in completion {Math.round(this.checkinComplianceData().checkinPercentage * 100) / 100}%
-              <CheckinPieChart
-                daysCheckedIn={this.checkinComplianceData().daysCheckedIn}
-                daysNotCheckedIn={this.checkinComplianceData().daysNotCheckedIn}
                 height={70}
                /> */}
             </div>

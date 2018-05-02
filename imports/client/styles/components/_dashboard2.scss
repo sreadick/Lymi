@@ -86,6 +86,7 @@ background: linear-gradient(135deg, #8ab66b 2%,#398235 100%); /* W3C, IE10+, FF1
 }
 
 .dashboard__list__container {
+  margin-top: .8rem;
   width: 20%;
   // height: 100rem;
   border-right: 1px solid #aaa;
@@ -127,7 +128,7 @@ background: linear-gradient(135deg, #8ab66b 2%,#398235 100%); /* W3C, IE10+, FF1
   flex-direction: column;
   width: 20%;
   overflow-y: auto;
-  height: 25rem
+  height: 22rem;
 }
 
 .dashboard__chart__symptom-group {
@@ -188,7 +189,7 @@ background: linear-gradient(135deg, #8ab66b 2%,#398235 100%); /* W3C, IE10+, FF1
 
 .dashboard__list {
   // clear: both;
-  border-top: 0 !important;
+  // border-top: 0 !important;
   margin: 0 !important;
 }
 

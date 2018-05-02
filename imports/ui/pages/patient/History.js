@@ -23,7 +23,9 @@ import SideBarNav from '../../components/patient/history_views/SideBarNav';
 import SymptomSelectGraph from '../../components/patient/history_views/SymptomSelectGraph';
 import SymptomSystemGraph from '../../components/patient/history_views/SymptomSystemGraph';
 import SymptomWorstGraph from '../../components/patient/history_views/SymptomWorstGraph';
-import SymptomChangesGraph from '../../components/patient/history_views/SymptomChangesGraph';
+// import SymptomChangesGraph from '../../components/patient/history_views/SymptomChangesGraph';
+import SymptomMostImprovedGraph from '../../components/patient/history_views/SymptomMostImprovedGraph';
+import SymptomLeastImprovedGraph from '../../components/patient/history_views/SymptomLeastImprovedGraph';
 import SymptomHistoryTable from '../../components/patient/history_views/SymptomHistoryTable';
 
 import FullHistoryChart from '../../components/patient/history_views/FullHistoryChart';
@@ -37,6 +39,7 @@ import NotableEventsTable from '../../components/patient/history_views/NotableEv
 
 // Todo: Refine extendedTreatmentCheckins to account for current day missed check-in
 // Todo: Include deleted Sx/Rx
+// Todo: Make severityAverage weekly moving average (rather than day to day)
 
 class History extends React.Component {
   constructor(props) {
@@ -165,7 +168,7 @@ class History extends React.Component {
           </div>
 
           <div className='symptom-history__graph-view__container'>
-            <div className='symptom-history__graph-view'>
+            <div className='symptom-history__graph-view card'>
               <HistoryHeader
                 handleDateRangeChange={this.handleDateRangeChange}
                 title={this.state.selectedTabTitle}
@@ -173,10 +176,11 @@ class History extends React.Component {
                 endDate={this.props.graphEndDate}
                 dateRangeOption={this.props.dateRangeOption}
                 allDates={this.props.allDates}
-                showDeletedSymptomTab={this.props.showDeletedSymptomTab}
+                showDeletedSymptomTab={(this.props.showDeletedSymptomTab && (this.state.selectedTab === "fullHistorySummary" || this.state.selectedTab === "symptomSelectGraph" || this.state.selectedTab === "symptomSystemGraph" || this.state.selectedTab === "symptomWorstGraph" || this.state.selectedTab === "symptomChangesGraph" || this.state.selectedTab === "symptomMostImprovedGraph" || this.state.selectedTab === "symptomLeastImprovedGraph"))}
                 includeDeletedSymptoms={this.props.includeDeletedSymptoms}
 
-                showDeletedTreatmentTab={this.props.showDeletedTreatmentTab}
+                // showDeletedTreatmentTab={(this.props.showDeletedTreatmentTab && (this.state.selectedTab === "fullHistorySummary" || this.state.selectedTab === "treatmentChart"))}
+                showDeletedTreatmentTab={false}
                 includeDeletedTreatments={this.props.includeDeletedTreatments}
 
                 // checkinDates={this.props.checkinHistory.checkins.map(checkin => checkin.date)}
@@ -225,9 +229,25 @@ class History extends React.Component {
                   startDate={this.props.graphStartDate}
                   endDate={this.props.graphEndDate}
                 />
-              : this.state.selectedTab === 'symptomChangesGraph' ?
-                <SymptomChangesGraph
-                  symptoms={this.props.symptomsByChanges}
+              // : this.state.selectedTab === 'symptomChangesGraph' ?
+              //   <SymptomChangesGraph
+              //     symptoms={this.props.symptomsByChanges}
+              //     checkins={this.props.checkinHistory.checkins}
+              //     currentSymptomNames={this.props.currentSymptoms.map(symptom => symptom.name)}
+              //     startDate={this.props.graphStartDate}
+              //     endDate={this.props.graphEndDate}
+              //   />
+              : this.state.selectedTab === 'symptomMostImprovedGraph' ?
+                <SymptomMostImprovedGraph
+                  symptoms={this.props.mostImprovedSymptoms}
+                  checkins={this.props.checkinHistory.checkins}
+                  currentSymptomNames={this.props.currentSymptoms.map(symptom => symptom.name)}
+                  startDate={this.props.graphStartDate}
+                  endDate={this.props.graphEndDate}
+                />
+              : this.state.selectedTab === 'symptomLeastImprovedGraph' ?
+                <SymptomLeastImprovedGraph
+                  symptoms={this.props.leastImprovedSymptoms}
                   checkins={this.props.checkinHistory.checkins}
                   currentSymptomNames={this.props.currentSymptoms.map(symptom => symptom.name)}
                   startDate={this.props.graphStartDate}
@@ -397,9 +417,12 @@ export default createContainer((props) => {
       checkin.treatments.forEach((treatment) => {
         if (!currentAndDeletedTreatments.map(anyTreatment => anyTreatment.name).includes(treatment.name)) {
           currentAndDeletedTreatments.push({
-            color: getNextColor(currentAndDeletedTreatments.length),
-            _id: checkin.date + '_' + treatment.name,
-            ...treatment
+            // color: getNextColor(currentAndDeletedTreatments.length),
+            _id: treatment.name,
+            // _id: checkin.date + '_' + treatment.name,
+            userId: Meteor.userId(),
+            name: treatment.name
+            // ...treatment
           });
         }
       });
@@ -466,8 +489,9 @@ export default createContainer((props) => {
     moment(graphStartDate, 'MMMM Do YYYY').add(dateOffset, "d").format('MMMM Do YYYY')
   ) : [];
   const symptomsWithScoreDetails = checkinHistoryIsReady ? sortSymptoms(displayedSymptoms, CheckinHistories.findOne().checkins, graphStartDate, graphEndDate) : undefined;
-
-  const symptomsSeveritySorted = symptomsWithScoreDetails ? symptomsWithScoreDetails.sort((a, b) => b.severityAverage - a.severityAverage) : []
+  // console.log(symptomsWithScoreDetails);
+  const symptomsSeveritySorted = symptomsWithScoreDetails ? symptomsWithScoreDetails.slice().sort((a, b) => b.severityAverage - a.severityAverage) : []
+  const symptomsImprovementSorted = symptomsWithScoreDetails ? symptomsWithScoreDetails.slice().sort((a, b) => b.improvementAverage - a.improvementAverage) : []
   if (checkinHistoryIsReady) {
     symptomSystems.sort((a, b) => {
       const systemASymptoms = symptomsWithScoreDetails.filter(symptom => symptom.system === a);
@@ -482,8 +506,8 @@ export default createContainer((props) => {
       }
     });
   }
-
-  let extendedCheckins = (symptomsHandle.ready() && treatmentsHandle.ready() && checkinHandle.ready() && CheckinHistories.findOne().checkins.length > 0) ? getExtendedHistory(currentSymptoms, currentTreatments, CheckinHistories.findOne().checkins) : []
+  
+  let extendedCheckins = (symptomsHandle.ready() && treatmentsHandle.ready() && checkinHandle.ready() && CheckinHistories.findOne().checkins.length > 0) ? getExtendedHistory(currentSymptoms, currentTreatments, CheckinHistories.findOne().checkins, 'full') : []
   extendedCheckins = extendedCheckins.filter(checkin => moment(checkin.date, "MMMM Do YYYY").isBetween(moment(graphStartDate, "MMMM Do YYYY"), moment(graphEndDate, "MMMM Do YYYY"), null, '[]'));
   return {
     displayedSymptoms: displayedSymptomsExtended,
@@ -502,6 +526,8 @@ export default createContainer((props) => {
     // worstSymptoms: !checkinHistoryIsReady ? [] : sortSymptoms('highest', displayedSymptoms, CheckinHistories.findOne().checkins, graphStartDate, graphEndDate).slice(0, 5),
     // symptomsByChanges: !checkinHistoryIsReady ? [] : sortSymptoms('changes', displayedSymptoms, CheckinHistories.findOne().checkins, graphStartDate, graphEndDate).slice(0, 5),
     worstSymptoms: symptomsSeveritySorted.slice(0, 5),
+    leastImprovedSymptoms: symptomsImprovementSorted.filter(symptom => symptom.improvementAverage !== undefined).slice(0, 5),
+    mostImprovedSymptoms: symptomsImprovementSorted.filter(symptom => symptom.improvementAverage !== undefined).reverse().slice(0, 5),
     symptomsByChanges: symptomsWithScoreDetails ? symptomsWithScoreDetails.sort((a, b) => b.biggestChangeAverage - a.biggestChangeAverage).slice(0, 5) : [],
     dateRangeOption: Session.get('dateRangeOption') || 'all_dates',
     graphStartDate,

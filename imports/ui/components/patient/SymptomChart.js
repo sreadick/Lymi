@@ -38,6 +38,9 @@ export default class SymptomChart extends React.Component {
 				scales: {
 					xAxes: [{
 						display: true,
+            ticks: {
+              display: this.props.showXAxisLabels === false ? false : true
+            }
 					}],
 					yAxes: [{
 						display: true,
@@ -48,7 +51,8 @@ export default class SymptomChart extends React.Component {
 						},
             ticks: {
               min: 1,
-              max: 10,
+              // max: 10,
+              max: 7,
               stepSize: 1
             }
 					}]
