@@ -1,0 +1,82 @@
+// Colors
+$navy: #0F1626;
+$leather: #AB987A;
+$violet: #A58EB7;
+$coral: #E57373;
+$eggshell: #F5F5F5;
+$brand-primary: $leather;
+$grey: #dddddd;
+$light-grey: #f9f9f9;
+$dark-grey: #777777;
+
+//net
+$dark-blue: #1f2b54;
+$lime: rgb(181, 255, 221);
+
+$deep-purple: #673ab7;
+$deep-purple-lighten-1: #7e57c2;
+$deep-purple-lighten-2: #9575cd;
+$deep-purple-lighten-3: #b39ddb;
+$deep-purple-lighten-4: #d1c4e9;
+$deep-purple-lighten-5: #ede7f6;
+$deep-purple-darken-1: #5e35b1;
+$deep-purple-accent-1: #b388ff;
+
+$green: #4caf50;
+$green-lighten-1: #66bb6a;
+$green-lighten-2: #81c784;
+$green-lighten-3: #a5d6a7;
+$green-lighten-4: #c8e6c9;
+$green-lighten-5: #e8f5e9;
+$green-darken-1: #43a047;
+$green-darken-2: #388e3c;
+$green-darken-3: #43a047;
+$green-darken-4: #2e7d32;
+$green-accent-1: #b9f6ca;
+$green-accent-2: #69f0ae;
+
+
+ // Spacing
+ $space: 1.4rem;
+ $site-max-width: 91rem;
+
+// Font sizes
+$base-font-size: 1.4rem;
+$large-font-size: 1.8rem;
+
+ // Form inputs
+$input-border: $grey;
+$input-spacing: 1rem;
+
+// Boxed view
+$boxed-view-overlay-bg: $navy;
+$boxed-view-bg: $eggshell;
+
+// Button
+$button-bg: $brand-primary;
+$button-color: white;
+$button-pill-color: $brand-primary;
+$button-secondary-bg: $light-grey;
+$button-secondary-color: $dark-grey;
+$button-secondary-border-color: $grey;
+
+// Header
+$header-bg: $eggshell;
+$header-color: $leather;
+$header-height: 4rem;
+
+// item
+$item-bg: $light-grey;
+$item-border: darken($item-bg, 8%);
+$item-text-color: $dark-grey;
+
+// Checkin Items
+$severity-checkin-answer-primary: #8DB2E3;
+$yes-checkin-answer-primary: #93D94D;
+$no-checkin-answer-primary: #D84D4D;
+$some-checkin-answer-primary: #FFD740;
+$npd-checkin-answer-primary: #9E9E9E;
+
+// Breakpoints
+$tablet-breakpoint: 768px;
+$desktop-breakpoint: 1024px;

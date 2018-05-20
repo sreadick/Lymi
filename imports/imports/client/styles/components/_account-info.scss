@@ -1,0 +1,59 @@
+.account-info {
+  width: 90%;
+  // height: 200px;
+  // overflow-y: auto;
+  margin: $space * 2 auto 0 auto;
+  border: 2px solid black;
+  border-radius: 15px;
+  padding: $space $space * 2 0 $space * 2;
+}
+
+.account-info__heading {
+  color: black;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.account-info__subheading {
+  color: #aaa;
+  font-size: 2.3rem;
+  font-weight: 600;
+  border-bottom: 1px solid #444;
+}
+
+.account-info__form-category {
+  color: $navy;
+  font-weight: 500;
+  font-size: 1.2rem;
+  text-decoration: underline;
+  margin-left: 9px;
+  margin-bottom: $space / 2;
+}
+
+.account-info__form-submit-response {
+  text-align: center;
+  color: $deep-purple;
+  visibility: hidden;
+}
+
+.account-info__form-submit-response.show {
+  visibility: visible;
+}
+
+.account-info__section {
+  margin: 2rem 0;
+  h5 {
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+}
+
+.account-info__section--list {
+
+  .row:last-of-type {
+    margin-bottom: 0;
+  }
+  i {
+    cursor: pointer;
+  }
+}

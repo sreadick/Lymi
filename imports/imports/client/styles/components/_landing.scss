@@ -1,0 +1,150 @@
+// $navy: #0F1626;
+// $leather: #AB987A;
+// $violet: #FF533D;
+// $eggshell: #F5F5F5;
+
+@mixin link-font-style {
+  // font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  padding: .9rem 1.3rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+* {
+  // font-family: 'Source Sans Pro', sans-serif;
+}
+
+.landing__section {
+  height: 100vh;
+  background: #9999ff;
+
+
+  // background: linear-gradient(270deg, #0f1626, $eggshell, #ab987a);
+  // background-size: 380% 380%;
+  //
+  // -webkit-animation: AnimationName 55s ease infinite;
+  // -moz-animation: AnimationName 55s ease infinite;
+  // -o-animation: AnimationName 55s ease infinite;
+  // animation: AnimationName 55s ease infinite;
+  //
+  // @-webkit-keyframes AnimationName {
+  //   0%{background-position:0% 50%}
+  //   50%{background-position:100% 50%}
+  //   100%{background-position:0% 50%}
+  // }
+  // @-moz-keyframes AnimationName {
+  //   0%{background-position:0% 50%}
+  //   50%{background-position:100% 50%}
+  //   100%{background-position:0% 50%}
+  // }
+  // @-o-keyframes AnimationName {
+  //   0%{background-position:0% 50%}
+  //   50%{background-position:100% 50%}
+  //   100%{background-position:0% 50%}
+  // }
+  // @keyframes AnimationName {
+  //   0%{background-position:0% 50%}
+  //   50%{background-position:100% 50%}
+  //   100%{background-position:0% 50%}
+  // }
+
+  // background: #4568DC;  /* fallback for old browsers */
+  // background: -webkit-linear-gradient(to top, #B06AB3, #4568DC);  /* Chrome 10-25, Safari 5.1-6 */
+  // background: linear-gradient(to top, #B06AB3, #4568DC); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+  background: #F0F2F0;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to top, #000C40, #F0F2F0);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to top, #000C40, #F0F2F0); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+  // background: #E8CBC0;  /* fallback for old browsers */
+  // background: -webkit-linear-gradient(to top, #636FA4, #E8CBC0);  /* Chrome 10-25, Safari 5.1-6 */
+  // background: linear-gradient(to top, #636FA4, #E8CBC0); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+
+.landing__section__flex-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100%;
+  max-width: 90%;
+  margin: 0 auto;
+}
+
+.landing__main-heading {
+  color: $navy;
+  font-weight: 300;
+  font-size: 2.8rem;
+  margin: 0;
+  margin-bottom: 3rem;
+
+
+  span {
+    color: $violet;
+    // font-size: 39px;
+  }
+}
+
+.landing__section p {
+  color: #252236;
+  line-height: 2.4rem;
+  font-size: 18px;
+  font-weight: 400;
+  margin: 0;
+  margin-bottom: 3rem;
+  display: none;
+
+  @media screen and (min-width: $tablet-breakpoint) {
+    display: block;
+  }
+}
+
+.landing__caption {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: white;
+}
+
+.landing__button {
+  // background: transparent;
+  // border: 1px solid $navy;
+  background: white;
+  color: purple;
+  width: 11rem;
+  @include link-font-style;
+  border-radius: 140px;
+  -webkit-transition: background .5s ease, color .5s ease;
+  transition: background .5s ease, color .5s ease;
+}
+
+.landing__button:hover, {
+  background: $navy;
+  color: $violet;
+}
+
+.down_icon {
+  color: $violet;
+
+  position: absolute;
+  top: 90vh;
+}
+
+.down_icon:hover {
+  cursor: pointer;
+}
+
+
+.landing__section2 {
+  height: 100vh;
+  // background: $leather;
+}
+
+.graph-screen-shot {
+  width: 40rem;
+  border: 15px solid #333;
+  border-radius: 20px;
+}

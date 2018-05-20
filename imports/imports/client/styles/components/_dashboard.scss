@@ -1,0 +1,216 @@
+.dashboard__page {
+  background: #69bf5f;
+  background: #5bc44f;
+  // min-height: 100vh;
+  // width: 100vw;
+  padding-top: 4rem;
+  // background: #c8e6c9;
+  // background: #a5d6a7;
+  // background: #81c784;
+  // background: #66bb6a;
+  background: #4caf50;
+  // background: #43a047; +
+  // background: #388e3c;
+  // background: #2e7d32;
+
+  // background: #69f0ae;
+  // background: #00e676;
+  // background: #00c853;
+
+
+
+//   background: #11998e;  /* fallback for old browsers */
+// background: -webkit-linear-gradient(to right, #38ef7d, #11998e);  /* Chrome 10-25, Safari 5.1-6 */
+// background: linear-gradient(to right, #38ef7d, #11998e); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+
+
+// background: #1D976C;  /* fallback for old browsers */
+// background: -webkit-linear-gradient(to right, #93F9B9, #1D976C);  /* Chrome 10-25, Safari 5.1-6 */
+// background: linear-gradient(to right, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+
+// background: #76b852;  /* fallback for old browsers */
+// background: -webkit-linear-gradient(to right, #8DC26F, #76b852);  /* Chrome 10-25, Safari 5.1-6 */
+// background: linear-gradient(to right, #8DC26F, #76b852); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+// background: #b4ddb4; /* Old browsers */
+// background: -moz-linear-gradient(-45deg, #b4ddb4 4%, #83c783 17%, #52b152 33%, #008a00 64%, #005700 99%); /* FF3.6-15 */
+// background: -webkit-linear-gradient(-45deg, #b4ddb4 4%,#83c783 17%,#52b152 33%,#008a00 64%,#005700 99%); /* Chrome10-25,Safari5.1-6 */
+// background: linear-gradient(135deg, #b4ddb4 4%,#83c783 17%,#52b152 33%,#008a00 64%,#005700 99%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+
+
+background: #8ab66b; /* Old browsers */
+background: -moz-linear-gradient(-45deg, #8ab66b 2%, #398235 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(-45deg, #8ab66b 2%,#398235 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(135deg, #8ab66b 2%,#398235 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+
+// background: rgb(47, 63, 67);
+}
+
+.dashboard__flex-wrapper {
+  display: flex;
+  // flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  // height: 100%;
+  min-height: 100vh;
+}
+
+.dashboard__page__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  // align-items: flex-start;
+  width: 80%;
+  height: 100%;
+  // background: blue;
+  padding: 3rem;
+}
+
+.dashboard__section {
+  // height: 100rem;
+  // height: 100%;
+  display: flex;
+  width: 100%;
+  background: #eee;
+  margin-bottom: 2rem;
+
+  background: #fff;
+  // border-radius: 10px;
+  border-radius: 3px;
+}
+
+.dashboard__list__container {
+  width: 20%;
+  // height: 100rem;
+  border-right: 1px solid #aaa;
+  // padding: 1rem 1.3rem;
+  // padding: 1rem 0;
+}
+
+.dashboard__chart__container {
+  width: 80%;
+  padding: 1rem;
+}
+
+.dashboard__chart__header {
+  span {
+    // float: left;
+
+    font-size: 1.1rem;
+    color: #444;
+    margin-right: 1rem;
+  }
+  a {
+    float: right;
+    i {
+      font-size: 2rem;
+      vertical-align: middle;
+    }
+  }
+}
+
+.dashboard__chart__header--treatments {
+  margin-bottom: 1rem;
+}
+
+.dashboard__chart__symptom-group__list {
+  display: flex;
+  // align-items: flex-start;
+  justify-content: flex-start;
+  // justify-content: space-around;
+  // justify-content: center;
+  flex-wrap: wrap;
+
+}
+
+.dashboard__chart__symptom-group {
+  // display: inline-block;
+  // flex: 1;
+  height: auto;
+  // width: 25%;
+  // min-width: 15%;
+  width: 33.33%;
+  padding: .5rem .5rem .5rem 1rem !important;
+  padding: .5rem 1rem .5rem 1rem !important;
+
+  cursor: pointer;
+  border: 1px solid transparent;
+  &:hover {
+    border: 1px solid #bbb;
+  }
+  &.active {
+    border: 1px solid #888;
+  }
+  &.stretch {
+    min-width: 33.33%;
+    width: auto;
+  }
+}
+
+.dashboard__chart__symptom-group__title {
+  font-size: 1.1rem;
+  text-decoration: underline;
+}
+
+.dashboard__chart__symptom-group__symptom {
+  font-weight: 600;
+}
+
+.dashboard__chart {
+  // width: 80%;
+}
+
+.dashboard__list__header {
+  padding: 1rem 1.3rem;
+  // background: pink;
+  border-bottom: 1px solid #ddd;
+
+  h5 {
+    // color: pink;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #555;
+    width: 70%;
+    display: inline;
+  }
+  a {
+    float: right;
+  }
+}
+
+.dashboard__list {
+  // clear: both;
+  border-top: 0 !important;
+  margin: 0 !important;
+}
+
+.dashboard__list__item {
+  padding: .4rem 1rem;
+  font-weight: 400;
+  // font-size: 1.1rem;
+  color: #444;
+}
+
+
+
+// dashboard mobile //
+.dashboard__section--mobile--main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+
+  height: calc(100vh - 4rem);
+  margin-top: 4rem;
+  padding: 0;
+  padding: 2rem 1rem;
+  background: #8ab66b; /* Old browsers */
+  background: -moz-linear-gradient(-45deg, #8ab66b 2%, #398235 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(-45deg, #8ab66b 2%,#398235 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(135deg, #8ab66b 2%,#398235 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+}
+
+.dashboard__section--mobile--main__edit-checkin {
+  align-self: flex-end;
+}
