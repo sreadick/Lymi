@@ -60,6 +60,7 @@ class History extends React.Component {
     this.handleDateRangeChange = this.handleDateRangeChange.bind(this);
     this.handleGroupChange = this.handleGroupChange.bind(this);
     this.handleTabChange = this.handleTabChange.bind(this);
+
   }
   //
   // componentDidMount() {
@@ -192,7 +193,7 @@ class History extends React.Component {
                   endDate={this.props.graphEndDate}
                   // filteredCheckins={this.props.checkinHistory.checkins.filter(checkin => this.props.checkinDates.includes(checkin.date))}
                   extendedCheckins={this.props.extendedCheckins}
-                  showFullHistory={true}
+                  // showFullHistory={true}
                   displayedSymptoms={this.props.displayedSymptoms}
                 />
               : this.state.selectedTab === 'fullHistoryTable' ?
@@ -506,7 +507,7 @@ export default createContainer((props) => {
       }
     });
   }
-  
+
   let extendedCheckins = (symptomsHandle.ready() && treatmentsHandle.ready() && checkinHandle.ready() && CheckinHistories.findOne().checkins.length > 0) ? getExtendedHistory(currentSymptoms, currentTreatments, CheckinHistories.findOne().checkins, 'full') : []
   extendedCheckins = extendedCheckins.filter(checkin => moment(checkin.date, "MMMM Do YYYY").isBetween(moment(graphStartDate, "MMMM Do YYYY"), moment(graphEndDate, "MMMM Do YYYY"), null, '[]'));
   return {
@@ -526,8 +527,8 @@ export default createContainer((props) => {
     // worstSymptoms: !checkinHistoryIsReady ? [] : sortSymptoms('highest', displayedSymptoms, CheckinHistories.findOne().checkins, graphStartDate, graphEndDate).slice(0, 5),
     // symptomsByChanges: !checkinHistoryIsReady ? [] : sortSymptoms('changes', displayedSymptoms, CheckinHistories.findOne().checkins, graphStartDate, graphEndDate).slice(0, 5),
     worstSymptoms: symptomsSeveritySorted.slice(0, 5),
-    leastImprovedSymptoms: symptomsImprovementSorted.filter(symptom => symptom.improvementAverage !== undefined).slice(0, 5),
-    mostImprovedSymptoms: symptomsImprovementSorted.filter(symptom => symptom.improvementAverage !== undefined).reverse().slice(0, 5),
+    mostImprovedSymptoms: symptomsImprovementSorted.filter(symptom => symptom.improvementAverage !== undefined).slice(0, 5),
+    leastImprovedSymptoms: symptomsImprovementSorted.filter(symptom => symptom.improvementAverage !== undefined).reverse().slice(0, 5),
     symptomsByChanges: symptomsWithScoreDetails ? symptomsWithScoreDetails.sort((a, b) => b.biggestChangeAverage - a.biggestChangeAverage).slice(0, 5) : [],
     dateRangeOption: Session.get('dateRangeOption') || 'all_dates',
     graphStartDate,

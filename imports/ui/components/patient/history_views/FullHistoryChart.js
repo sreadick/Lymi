@@ -9,6 +9,7 @@ import SxRxDisplay from '../../../components/patient/SxRxDisplay';
 
 export default class FullHistoryChart extends React.Component {
   render() {
+    console.log(this.props.extendedCheckins);
     return (
       <div>
         <SxRxDisplay
@@ -16,7 +17,7 @@ export default class FullHistoryChart extends React.Component {
           endDate={this.props.endDate}
           // filteredCheckins={this.props.filteredCheckins}
           filteredCheckins={this.props.extendedCheckins}
-          // showFullHistory={this.props.showFullHistory}
+          showFullHistory={true}
           displayedSymptoms={this.props.displayedSymptoms}
           showHeader={false}
           rxlabelType='normal'

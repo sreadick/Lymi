@@ -11,6 +11,8 @@ import { Topics } from '/imports/api/forum';
 import { SubForums } from '/imports/api/forum';
 
 import ForumTopicForm from '/imports/ui/components/forum/ForumTopicForm';
+import ForumSearch from '/imports/ui/components/forum/ForumSearch';
+
 import Loader from '/imports/ui/components/Loader';
 
 class ForumHome extends React.Component {
@@ -45,17 +47,12 @@ class ForumHome extends React.Component {
         <div className='forum-nav-box forum-nav-box--home'>
           <h2>Welcome to Lyme Share</h2>
           <p>Search for a topic or <span onClick={() => Session.set('showForumTopicForm', true)}>start a new one</span>.</p>
-          <Row>
-            <Input s={8} value={this.state.searchText} placeholder='Search' />
-            {/* <Autocomplete s={8} value={this.state.searchText} placeholder='Search'
-              data={
-                this.props.topics.map(topic =>
-                  {
-                    ['topic.title']: null
-                  }
-                )
-              }
-            /> */}
+          <ForumSearch
+            subforums={this.props.subforums}
+            history={this.props.history}
+          />
+          {/* <Row>
+            <Input s={8} value={this.state.searchText} placeholder='Search' onChange={(e) => this.setState({searchText: e.target.value})} />
             <Input s={4} type='select' defaultValue={this.state.searchBoard}>
               <option value='all' onChange={() => this.setState({searchBoard: 'all'})}>All Boards</option>
               {this.props.subforums.map((subforum, index, array) =>
@@ -67,7 +64,7 @@ class ForumHome extends React.Component {
                 </option>
               )}
             </Input>
-          </Row>
+          </Row> */}
         </div>
         <div className='forum__flex-wrapper--home'>
           <div className='forum-table z-depth-1'>

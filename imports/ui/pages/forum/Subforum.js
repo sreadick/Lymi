@@ -9,6 +9,7 @@ import { Session } from 'meteor/session';
 import Loader from '/imports/ui/components/Loader';
 import ForumTopicForm from '/imports/ui/components/forum/ForumTopicForm';
 import { TopicPagination } from '/imports/ui/components/forum/TopicPagination';
+import ForumSearch from '/imports/ui/components/forum/ForumSearch';
 
 import { SubForums } from '/imports/api/forum';
 import { Topics } from '/imports/api/forum';
@@ -58,7 +59,12 @@ class Subforum extends React.Component {
           {/* <div className='forum-nav-box--subforum__flex-wrapper'> */}
             <div className='forum-nav-box--subforum--top'>
               <h4>{this.props.subforum.name}</h4>
-              <input className='forum-nav-box__input' placeholder='Search'/>
+              {/* <input className='forum-nav-box__input' placeholder='Search'/> */}
+              <ForumSearch
+                defaultSearchBoard={this.props.subforum._id}
+                subforums={this.props.allSubforums}
+                history={this.props.history}
+              />
             </div>
 
             <nav className='forum-breadcrumb__wrapper forum-breadcrumb__wrapper--subforum'>
@@ -196,9 +202,9 @@ export default createContainer(props => {
   const subforum = SubForums.findOne(subforumId);
   const topics = subforumsHandle.ready() ? Topics.find({subforumId: subforumId}, {sort: {createdAt: -1}}).fetch() : [];
 
-  // const userData = Meteor.user() ? Meteor.user() : undefined;
   return {
     subforum,
+    allSubforums: SubForums.find().fetch(),
     topics,
     totalTopicListGroups: Math.ceil(topics.length / 10),
     // topics: subforumsHandle.ready() ? Topics.find({subforumId: subforumId}).fetch() : [],

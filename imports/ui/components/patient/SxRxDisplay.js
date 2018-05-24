@@ -54,9 +54,11 @@ const SxRxDisplay = (props) => {
           {(props.checkins.length > 0 && props.showHeader) &&
             <div className="dashboard__chart__header">
               <span className=''>
-                { props.modifiedSymptomCheckins.length >= 14 ? 'Past 2 Weeks'
+                {/* { props.modifiedSymptomCheckins.length >= 14 ? 'Past 2 Weeks' */}
+                { props.extendedCheckins.length >= 14 ? 'Past 2 Weeks'
                   :
-                  `Past ${props.modifiedSymptomCheckins.length} ${props.modifiedSymptomCheckins.length === 1 ? 'Day' : 'Days'}`
+                  // `Past ${props.modifiedSymptomCheckins.length} ${props.modifiedSymptomCheckins.length === 1 ? 'Day' : 'Days'}`
+                  `Past ${props.extendedCheckins.length} ${props.extendedCheckins.length === 1 ? 'Day' : 'Days'}`
                 }
               </span>
               <Link
@@ -75,12 +77,13 @@ const SxRxDisplay = (props) => {
             {props.checkins.length > 0 &&
               <SymptomChart
                 symptomNames={props.userSymptoms.filter(symptom => symptom.system === props.activeSymptomGroup).map(symptom => symptom.name)}
-                checkins={props.modifiedSymptomCheckins}
+                // checkins={props.modifiedSymptomCheckins}
+                checkins={props.extendedCheckins}
                 symptomColors={props.userSymptoms.filter(symptom => symptom.system === props.activeSymptomGroup).map(symptom => symptom.color)}
                 startDate={props.startDate || undefined}
                 endDate={props.endDate  || undefined}
                 showXAxisLabels={false}
-                height={115}
+                // height={115}
                 // height={125}
                 // padding={{top: 0, right: 0, bottom: 10, left: 0}}
               />
@@ -209,7 +212,8 @@ export default createContainer((props) => {
     modifiedSymptomCheckins: (symptomsHandle.ready() && checkinHandle.ready() && checkins.length > 0) ? getExtendedSymptomHistory(userSymptoms, checkins) : [],
 
     // extendedCheckins: (treatmentsHandle.ready() && checkinHandle.ready() && checkins.length > 0) ? getExtendedHistory(userTreatments, checkins) : [],
-    extendedCheckins: (symptomsHandle.ready() && treatmentsHandle.ready() && checkinHandle.ready() && checkins.length > 0) ? getExtendedHistory(userSymptoms, userTreatments, checkins) : [],
+    // extendedCheckins: (symptomsHandle.ready() && treatmentsHandle.ready() && checkinHandle.ready() && checkins.length > 0) ? getExtendedHistory(userSymptoms, userTreatments, checkins) : [],
+    extendedCheckins: (symptomsHandle.ready() && treatmentsHandle.ready() && checkinHandle.ready() && checkins.length > 0) ? getExtendedHistory(userSymptoms, userTreatments, checkins, props.showFullHistory ? 'full' : '') : [],
     userInfo,
     isFetching: (!symptomsHandle.ready() || !treatmentsHandle.ready() || !checkinHandle.ready() || !userInfo)
   };

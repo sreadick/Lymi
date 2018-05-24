@@ -39,6 +39,7 @@ import PtProfile from '../pages/patient/Profile';
 import ForumHome from '../pages/forum/ForumHome';
 import Subforum from '../pages/forum/Subforum';
 import ForumTopic from '../pages/forum/ForumTopic';
+import ForumSearchPage from '../pages/forum/ForumSearchPage';
 
 import Doctor from './Doctor';
 import DoctorHomepage from '../pages/doctor/Home';
@@ -91,6 +92,7 @@ const App = appProps => {
         <AuthForumRoute exact path="/forum" component={ForumHome} {...appProps} />
         <AuthForumRoute path="/forum/subforum/:subforumId/topic/:topicId" component={ForumTopic} {...appProps} />
         <AuthForumRoute path="/forum/subforum/:subforumId" component={Subforum} {...appProps} />
+        <AuthForumRoute path="/forum/search/subforum/:subforumId/q/:query" component={ForumSearchPage} {...appProps} />
 
         <AuthDoctorRoute exact path="/doctor" component={Doctor} {...appProps} />
         <AuthDoctorRoute exact path="/doctor/home" component={DoctorHomepage} {...appProps} />
