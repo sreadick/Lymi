@@ -14,7 +14,7 @@ import { CheckinHistories } from '/imports/api/checkin-histories';
 import SymptomChart from './SymptomChart';
 import SymptomChart2 from './charts/SymptomChart2';
 import TreatmentChart2 from './TreatmentChart2';
-import TreatmentChart3 from './charts/TreatmentChart3';
+// import TreatmentChart3 from './charts/TreatmentChart3';
 import TreatmentCollapsible from './TreatmentCollapsible';
 import Loader from '../Loader';
 
@@ -85,7 +85,7 @@ const SxRxDisplay = (props) => {
                 showXAxisLabels={false}
                 // height={115}
                 // height={125}
-                // padding={{top: 0, right: 0, bottom: 10, left: 0}}
+                // padding={{top: 0, right: 0, bottom: 10, left: 100}}
               />
               // <div className='jklsz'>
               //   <SymptomChart2

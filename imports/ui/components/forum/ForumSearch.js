@@ -18,7 +18,7 @@ class ForumSearch extends React.Component {
 
   handleSubmit() {
     if (this.state.searchText.trim()) {
-      this.props.history.push(`/forum/search/subforum/${this.state.searchBoard}/q/${this.state.searchText}`)
+      // this.props.history.push(`/forum/search/subforum/${this.state.searchBoard}/q/${this.state.searchText}`)
       // this.props.history.push({
       //   pathname: `/forum/search/subforum/${this.state.searchBoard}/q/${this.state.searchText}`,
       //   state: {
@@ -44,11 +44,16 @@ class ForumSearch extends React.Component {
             </option>
           )}
         </Input>
-        {/* <Button className={`col s1 grey ${!this.state.searchText.trim() && 'disabled'}`} onClick={() => this.handleSubmit()}><i className='material-icons'>search</i></Button> */}
+        {/* <Button
+          // className={`col s1 grey ${!this.state.searchText.trim() && 'disabled'}`}
+          className={`col s1 grey`}
+          onClick={() => this.handleSubmit()}>
+          <i className='material-icons'>search</i>
+        </Button> */}
         <Link
           className={`col s1 ${!this.state.searchText.trim() && 'disabled'}`}
           to={{
-            pathname: `/forum/search/subforum/${this.state.searchBoard}/q/${this.state.searchText}`,
+            pathname: this.state.searchText.trim() ? `/forum/search/subforum/${this.state.searchBoard}/q/${this.state.searchText}` : '',
             state: {
               searchBoard: this.state.searchBoard,
               searchText: this.state.searchText,

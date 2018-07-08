@@ -6,11 +6,10 @@ import { capitalizePhrase, isTreatmentPrescribed, getColor, shadeColor } from '.
 
 // const colorsArray = ['#b39ddb', '#e57373', '#90caf9', '#ffab91', '#81C784', '#A1887F', '#F06292', '#7986CB', '#E0E0E0', '#4DB6AC', '#BA68C8', '#DCE775', '#90A4AE', '#FFB74D', '#AED581', '#4FC3F7', '#FFD54F'];
 
-export default class TreatmentChart2 extends React.Component {
+export default class TreatmentChart4 extends React.Component {
   renderDates() {
     const { props } = this;
-    // const divide = props.checkins.length >= 60 ? 'quarter' : props.checkins.length > 30 ? 'half' : '';
-    const divide = props.checkins.length > 30 ? 'half' : '';
+    const divide = props.checkins.length >= 60 ? 'quarter' : props.checkins.length > 30 ? 'half' : '';
     return props.checkins.map((checkin, index) => {
       if (divide === 'half') {
         if (index % 2) {
@@ -80,8 +79,7 @@ export default class TreatmentChart2 extends React.Component {
   }
   render() {
     const { props } = this;
-    // const divide = props.checkins.length >= 60 ? 'quarter' : props.checkins.length > 30 ? 'half' : '';
-    const divide = props.checkins.length > 30 ? 'half' : '';
+    const divide = props.checkins.length >= 60 ? 'quarter' : props.checkins.length > 30 ? 'half' : '';
     return (
       <div className='treatment-chart'>
         {props.showLabels !== false &&
@@ -145,29 +143,24 @@ export default class TreatmentChart2 extends React.Component {
                       style={
                         {background:
                           (!isTreatmentPrescribed(treatment, checkin.date)) ?
-                          // Fix //
-                          // (!!treatment.createdAt && !isTreatmentPrescribed(treatment, checkin.date)) ?
-                            // treatment.color
                             '#fff'
                           :
                           checkinTreatment ?
                             (checkinTreatment.compliance === 'NPD' || !checkinTreatment.prescribedToday) ? '#fff'
                             :
-                            // checkinTreatment.compliance === 'Some' ? `repeating-linear-gradient(-55deg, ${treatment.color}, ${treatment.color} 3px, #f5f5f5 6px, #f5f5f5 9px)`
-                            // checkinTreatment.compliance === 'Some' ? `repeating-linear-gradient(-55deg, ${getColor(treatmentIndex)}, ${getColor(treatmentIndex)} 3px, #999 6px)`
-                            checkinTreatment.compliance === 'Some' ? `repeating-linear-gradient(-55deg, ${getColor(treatmentIndex)}, ${shadeColor(getColor(treatmentIndex), 40)} 9px)`
+                            // checkinTreatment.compliance === 'Some' ? `repeating-linear-gradient(-55deg, ${getColor(treatmentIndex)}, ${shadeColor(getColor(treatmentIndex), 40)} 9px)`
+                            checkinTreatment.compliance === 'Yes' ? 'green'
                             :
-                            getColor(treatmentIndex)
-                            // (checkinTreatment.compliance === 'Yes' || checkinTreatment.compliance === 'No' || checkinTreatment.compliance === 'NPD') ? treatment.color
-
-                            // checkinTreatment.compliance === 'No' ? 'red' :
+                            checkinTreatment.compliance === 'Some' ? 'yellow'
+                            :
+                            checkinTreatment.compliance === 'No' ? 'red'
+                            :
+                            'grey'
+                            // getColor(treatmentIndex)
                           :
-                          getColor(treatmentIndex),
-                          color: shadeColor(getColor(treatmentIndex), 70)
-
-                        // treatment.color
-                        // '#fff'
-
+                          'grey'
+                          // getColor(treatmentIndex)
+                          // color: shadeColor(getColor(treatmentIndex), 70)
                       }} >
                       {(checkinTreatment && checkinTreatment.compliance !== 'NPD' && isTreatmentPrescribed(treatment, checkin.date)) &&
                         <ReactTooltip id={`${checkin.date}_${treatment.name}`} effect='float'>
@@ -182,19 +175,18 @@ export default class TreatmentChart2 extends React.Component {
                           </div>
                         </ReactTooltip>
                       }
-                      {
+                      {/* {
                         checkinTreatment && (!checkinTreatment.prescribedToday || checkinTreatment.compliance === "Yes" || checkinTreatment.compliance === "Some" || checkinTreatment.compliance === "NPD") ?
                           <span></span>
                         :
                         checkinTreatment && checkinTreatment.compliance === "No" ?
                           <span>X</span>
                         :
-                        // !checkinTreatment || checkinTreatment.compliance === null ?
                         ((checkinTreatment && checkinTreatment.compliance === null) || isTreatmentPrescribed(treatment, checkin.date)) ?
                           <span>?</span>
                         :
                         <span></span>
-                      }
+                      } */}
                     </div>
                   );
                 })}

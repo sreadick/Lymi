@@ -38,9 +38,9 @@ export default class SymptomChart extends React.Component {
 				scales: {
 					xAxes: [{
 						display: true,
-            ticks: {
-              display: this.props.showXAxisLabels === false ? false : true
-            }
+            // ticks: {
+            //   display: this.props.showXAxisLabels === false ? false : true
+            // }
 					}],
 					yAxes: [{
 						display: true,
@@ -97,7 +97,7 @@ export default class SymptomChart extends React.Component {
     }
     const totalDatesNumber = endDate.diff(startDate , 'days') + 1;
     const dateLabels = [...Array(totalDatesNumber).keys()].map((dateOffset) =>
-      moment(startDate).add(dateOffset, "d").format('M/D/YY')
+      this.props.showXAxisLabels === false ? '' : moment(startDate).add(dateOffset, "d").format('M/D/YY')
     );
     // const colorsArray = this.props.symptomColors || ['#E17575', '#E275E2', '#7575E2', '#75E2E2', '#75E275', '#E2E275', '#E2AC75', '#B26161', '#5B5B8C', '#707070', '#26622E'];
     // const colorsArray = this.props.symptomColors;

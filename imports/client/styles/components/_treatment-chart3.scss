@@ -20,9 +20,11 @@
 .treatment-chart__container {
   display: inline-block;
   width: 100%;
+  padding-left: 1.3rem;
 
   &.rx-display {
     width: 79%;
+    padding-left: 0;
   }
 
   // padding: 0 1rem;
